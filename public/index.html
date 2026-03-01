@@ -18,7 +18,7 @@
     /* Blurry backdrop using same image (no blue letterbox) */
     #bg-blur {
       position: fixed; inset: 0; z-index: 0;
-      background-image: url("Gemini_Generated_Image_uxvyu8uxvyu8uxvy.png");
+      background-image: url("assets/bg.png");
       background-size: cover;
       background-position: center;
       filter: blur(22px) saturate(1.05) brightness(0.85);
@@ -188,6 +188,21 @@
     .modal.q-bl { transform: translate(-100%,   10%) scale(0.985); }
     .modal.q-br { transform: translate(   0%,   10%) scale(0.985); }
 
+    .profile-pfp {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border: 2px solid var(--beacon);
+    box-shadow: 2px 2px 0px #000;
+    image-rendering: pixelated;
+}
+.profile-pfp {
+    width: 48px;
+    height: 48px;
+}
+.profile-pfp {
+    box-shadow: 0 0 6px var(--beacon);
+}
     @media (prefers-reduced-motion: reduce){
       .modal, .modal.active { transition:none; }
     }
@@ -237,8 +252,7 @@
   <div id="toast">Copied to Clipboard!</div>
 
   <div class="profile-card">
-    <div style="width:40px; height:40px; background:#222; border:2px solid var(--beacon);"></div>
-    <div>
+<img src="assets/me.png" alt="Jacob Harris" class="profile-pfp">    <div>
       <h1 style="margin:0; font-size:1.4rem;">Jacob Harris</h1>
       <p style="margin:0; color:var(--lava); font-size:0.9rem;">aka hackatoa</p>
     </div>
@@ -246,8 +260,7 @@
 
   <div id="ambient">
     <div><span class="k">Island Uptime:</span> <span class="v" id="amb-uptime">--</span></div>
-    <div><span class="k">Views:</span> <span class="v" id="amb-visitors">--</span></div>
-    <div><span class="k">Build:</span> <span class="v" id="amb-build">0.9.7</span></div>
+<div><span class="k">Build:</span> <span class="v" id="amb-build">--</span></div>
   </div>
 
   <div id="map-container"><canvas id="islandCanvas"></canvas></div>
@@ -451,7 +464,7 @@
     const canvas = document.getElementById('islandCanvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
-    img.src = 'Gemini_Generated_Image_uxvyu8uxvyu8uxvy.png';
+    img.src = 'assets/bg.png';
 
     const poiLayer = document.getElementById('poi-layer');
 
@@ -812,32 +825,18 @@
     // Ambient stats
     async function initAmbient() {
   const uptimeEl = document.getElementById("amb-uptime");
-  const viewsEl = document.getElementById("amb-visitors"); // keep id
   const buildEl = document.getElementById("amb-build");
 
-  // default placeholders
   uptimeEl.textContent = "--";
-  viewsEl.textContent = "--";
   buildEl.textContent = "--";
 
   try {
-    // Increment total views (ignore response)
-    // Use POST so browsers/proxies are less likely to cache it
-    fetch("/view", { method: "POST" }).catch(() => {});
-
-    // Read status
-    const res = await fetch("/status", { cache: "no-store" });
-    if (!res.ok) throw new Error("status failed");
+    const res = await fetch("/status.json", { cache: "no-store" });
+    if (!res.ok) throw new Error();
     const data = await res.json();
 
-    // Build
     buildEl.textContent = data.build || "--";
 
-    // Views
-    const views = Number(data.views || 0);
-    viewsEl.textContent = views.toLocaleString();
-
-    // Uptime (since started)
     const startedMs = new Date(data.started).getTime();
     const renderUptime = () => {
       const ms = Date.now() - startedMs;
@@ -850,7 +849,7 @@
     renderUptime();
     setInterval(renderUptime, 60_000);
   } catch {
-    // stay as "--" (no console spam)
+    // keep "--" with no console spam
   }
 }
 

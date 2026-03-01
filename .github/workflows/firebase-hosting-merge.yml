@@ -2,7 +2,7 @@ name: Deploy to Firebase Hosting on merge
 on:
   push:
     branches:
-      - Main   # change to 'main' if your branch is lowercase
+      - Main
 
 jobs:
   build_and_deploy:
@@ -10,28 +10,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Hosting deploy (existing)
+      - name: Write deploy status.json
+        run: |
+          BUILD="$(git rev-parse --short HEAD)"
+          STARTED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          cat > public/status.json << EOF
+          {
+            "build": "${BUILD}",
+            "started": "${STARTED}"
+          }
+          EOF
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_HACKATOA_COM }}
           channelId: live
           projectId: hackatoa-com
-
-      - name: Write service account key
-        run: |
-          cat > $RUNNER_TEMP/gcp_key.json << 'EOF'
-          ${{ secrets.FIREBASE_SERVICE_ACCOUNT_HACKATOA_COM }}
-          EOF
-
-      - name: Install functions dependencies
-        working-directory: functions
-        run: npm ci
-
-      - name: Deploy Firebase Functions
-        run: |
-          npm i -g firebase-tools
-          firebase deploy --only functions --project hackatoa-com
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/gcp_key.json
-          GCLOUD_PROJECT: hackatoa-com
