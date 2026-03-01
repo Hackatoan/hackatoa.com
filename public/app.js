@@ -357,26 +357,22 @@ function positionModalNearPOI(modalEl, poiId, modalIdOverride = null) {
   const x = dotRect.left + dotRect.width / 2;
   const y = dotRect.top + dotRect.height / 2;
 
-  // Place anchor point
+  // anchor at dot center
   modalEl.style.left = `${x}px`;
   modalEl.style.top = `${y}px`;
 
   requestAnimationFrame(() => {
-    // Measure once
     const r = modalEl.getBoundingClientRect();
     const modalW = r.width;
     const modalH = r.height;
 
     const prevQ = modalPlacement[key];
     const q = chooseQuadrantFor(x, y, modalW, modalH, prevQ);
-
     modalPlacement[key] = q;
 
-    // Apply quadrant classes
     modalEl.classList.remove("q-tl", "q-tr", "q-bl", "q-br");
     modalEl.classList.add(q);
 
-    // Clamp by shifting the anchor point (left/top) if needed
     requestAnimationFrame(() => {
       const rr = modalEl.getBoundingClientRect();
       const pad = 10;
@@ -384,21 +380,17 @@ function positionModalNearPOI(modalEl, poiId, modalIdOverride = null) {
       let newLeft = x;
       let newTop = y;
 
-      // Horizontal clamp
-      if (rr.left < pad) newLeft = x + (pad - rr.left);
+      if (rr.left < pad) newLeft += (pad - rr.left);
       if (rr.right > window.innerWidth - pad)
-        newLeft = x - (rr.right - (window.innerWidth - pad));
+        newLeft -= (rr.right - (window.innerWidth - pad));
 
-      // Vertical clamp
-      // For q-t* (above), if top clips, push down; for q-b* (below), if bottom clips, push up
-      if (rr.top < pad) newTop = y + (pad - rr.top);
+      if (rr.top < pad) newTop += (pad - rr.top);
       if (rr.bottom > window.innerHeight - pad)
-        newTop = y - (rr.bottom - (window.innerHeight - pad));
+        newTop -= (rr.bottom - (window.innerHeight - pad));
 
       modalEl.style.left = `${newLeft}px`;
       modalEl.style.top = `${newTop}px`;
     });
-    
   });
 }
 
