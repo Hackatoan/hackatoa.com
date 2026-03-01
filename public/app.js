@@ -51,6 +51,8 @@ const GH_USER = "hackatoan";
 const NOW_WORKING_REPO = "infinisweeper";
 const MC_HOST = "mc.hackatoa.com";
 
+// "Island uptime" start (pick a date you like)
+
 
 const canvas = document.getElementById("islandCanvas");
 const ctx = canvas.getContext("2d");
@@ -82,15 +84,13 @@ function showToast() {
   }, 1400);
 }
 
-// Clipboard copy with feedback (used by multiple modals)
+// used by onclick in HTML, so can’t be an arrow function or it won’t be global
 // eslint-disable-next-line no-unused-vars
 function copyTxt(t) {
   navigator.clipboard.writeText(t);
   showToast();
 }
-
-// required for modal close buttons
-// eslint-disable-next-line no-unused-vars
+//eslint-disable-next-line no-unused-vars
 function forceClose() {
   lockedId = null;
   isOverModal = false;
@@ -398,7 +398,7 @@ function positionModalNearPOI(modalEl, poiId, modalIdOverride = null) {
       modalEl.style.left = `${newLeft}px`;
       modalEl.style.top = `${newTop}px`;
     });
-    // final position is set above via `newLeft`/`newTop` and already clamped where necessary
+    
   });
 }
 
@@ -448,7 +448,7 @@ async function initAmbient() {
   buildEl.textContent = "--";
 
   try {
-    const res = await fetch("/status.json", { cache: "no-store" });
+    const res = await fetch("status.json", { cache: "no-store" });
     if (!res.ok) throw new Error();
     const data = await res.json();
 
@@ -510,72 +510,145 @@ function typeModalTitle(modalEl) {
  **********************/
 
 // 1) Latest YT upload (avoid live/VOD when possible) + nocookie + clean allow list
+// Put this somewhere global (or pass it in)
+const YT_API_KEY = "AIzaSyDyJW6U0NXE09Ha45Oi2gV8giDfwm6kxXE";
+
 async function fetchLatestYouTube() {
   const container = document.getElementById("yt-video");
   if (!container) return;
 
   try {
-    const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`;
-    const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-    const res = await fetch(api);
+    // Grab a few newest videos, then pick the first non-live/non-upcoming
+    const url = new URL("https://www.googleapis.com/youtube/v3/search");
+    url.searchParams.set("part", "snippet");
+    url.searchParams.set("channelId", YT_CHANNEL_ID);
+    url.searchParams.set("order", "date");
+    url.searchParams.set("type", "video");
+    url.searchParams.set("maxResults", "6");
+    url.searchParams.set("key", YT_API_KEY);
+
+    const res = await fetch(url.toString(), { cache: "no-store" });
+    if (!res.ok) throw new Error(`YouTube API error: ${res.status}`);
+
     const data = await res.json();
-    if (!data.items || !data.items.length) return;
+    const items = Array.isArray(data?.items) ? data.items : [];
+    if (!items.length) throw new Error("No results");
 
-    const LIVE_TITLE_RE = /\b(live|livestream|stream|vod|replay|premiere)\b/i;
-
-    const getVideoId = (item) => {
-      const link = item.link || "";
-      const m = link.match(/[?&]v=([^&]+)/);
-      if (m && m[1]) return m[1];
-      const guid = item.guid || "";
-      const g = guid.match(/yt:video:([A-Za-z0-9_-]+)/);
-      if (g && g[1]) return g[1];
-      return null;
-    };
-
+    // liveBroadcastContent: "none" | "live" | "upcoming"
     const pick =
-      data.items.find((it) => !LIVE_TITLE_RE.test(it.title || "")) ||
-      data.items[0];
+      items.find((it) => (it?.snippet?.liveBroadcastContent || "none") === "none") || items[0];
 
-    const videoId = getVideoId(pick);
-    if (!videoId) return;
+    const videoId = pick?.id?.videoId;
+    if (!videoId) throw new Error("Missing videoId");
 
     container.innerHTML = `
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/${videoId}"
-            frameborder="0"
-            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-            allowfullscreen>
-          </iframe>
-        `;
-  } catch {
-    // no console spam
+      <div style="position:relative; width:100%; padding-top:56.25%;">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/${videoId}"
+          title="Latest YouTube video"
+          frameborder="0"
+          allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+          allowfullscreen
+          style="position:absolute; inset:0; width:100%; height:100%; border:0;">
+        </iframe>
+      </div>
+    `;
+  } catch (err) {
+    console.error("fetchLatestYouTube failed:", err);
+    container.innerHTML = `<div class="muted">Video unavailable</div>`;
   }
 }
 
+window.addEventListener("load", fetchLatestYouTube);
+
+
+
+
+async function ghFetchJson(url, { ttlMs = 10 * 60 * 1000, key = url } = {}) {
+  const now = Date.now();
+  const cacheKey = `ghcache:${key}`;
+  const etagKey = `ghetag:${key}`;
+
+  // Serve fresh cache
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) {
+    try {
+      const { t, data } = JSON.parse(cached);
+      if (now - t < ttlMs) return data;
+    } catch {
+      // Ignore malformed cache entries
+    }
+  }
+
+  // If we were rate-limited recently, don't hammer
+  const rlKey = `ghrl:${key}`;
+  const rlUntil = Number(localStorage.getItem(rlKey) || "0");
+  if (rlUntil && now < rlUntil) {
+    if (cached) return JSON.parse(cached).data;
+    throw new Error("rate_limited_cached_miss");
+  }
+
+  const headers = { Accept: "application/vnd.github+json" };
+  const etag = localStorage.getItem(etagKey);
+  if (etag) headers["If-None-Match"] = etag;
+
+  const res = await fetch(url, { headers });
+
+  // Handle secondary rate limit / primary rate limit
+  if (res.status === 403) {
+    const reset = res.headers.get("X-RateLimit-Reset"); // unix seconds (sometimes present)
+    const retryAfter = res.headers.get("Retry-After");  // seconds (sometimes present)
+    let waitMs = 15 * 60 * 1000; // default 15m backoff
+
+    if (retryAfter) waitMs = Number(retryAfter) * 1000;
+    else if (reset) waitMs = Math.max(60_000, Number(reset) * 1000 - now);
+
+    localStorage.setItem(rlKey, String(now + waitMs));
+    if (cached) return JSON.parse(cached).data;
+    throw new Error("rate_limited");
+  }
+
+  if (res.status === 304 && cached) {
+    // Not modified; refresh timestamp and return cached
+    const parsed = JSON.parse(cached);
+    localStorage.setItem(cacheKey, JSON.stringify({ t: now, data: parsed.data }));
+    return parsed.data;
+  }
+
+  if (!res.ok) {
+    if (cached) return JSON.parse(cached).data;
+    throw new Error(`GitHub error ${res.status}`);
+  }
+
+  const newEtag = res.headers.get("ETag");
+  if (newEtag) localStorage.setItem(etagKey, newEtag);
+
+  const data = await res.json();
+  localStorage.setItem(cacheKey, JSON.stringify({ t: now, data }));
+  return data;
+}
 // 2) Now Working On: infinisweeper repo + short description
 async function renderNowWorking() {
   const el = document.getElementById("now-working");
   if (!el) return;
 
   try {
-    const repoRes = await fetch(
+    const repo = await ghFetchJson(
       `https://api.github.com/repos/${GH_USER}/${NOW_WORKING_REPO}`,
+      { ttlMs: 30 * 60 * 1000, key: `repo:${GH_USER}/${NOW_WORKING_REPO}` }
     );
-    if (!repoRes.ok) throw new Error();
-    const repo = await repoRes.json();
 
     el.innerHTML = `
-          <strong>Now Working On</strong><br>
-          <a href="${repo.html_url}" target="_blank" rel="noopener">${repo.name}</a>
-          ${repo.description ? `<div class="tiny muted" style="margin-top:6px;">${escapeHtml(repo.description)}</div>` : ""}
-          <div class="tiny" style="margin-top:10px;">
-            ⭐ ${repo.stargazers_count} &nbsp; • &nbsp; 🍴 ${repo.forks_count} &nbsp; • &nbsp;
-            Updated: ${new Date(repo.pushed_at).toLocaleDateString()}
-          </div>
-        `;
+      <strong>Now Working On</strong><br>
+      <a href="${repo.html_url}" target="_blank" rel="noopener">${escapeHtml(repo.name)}</a>
+      ${repo.description ? `<div class="tiny muted" style="margin-top:6px;">${escapeHtml(repo.description)}</div>` : ""}
+      <div class="tiny" style="margin-top:10px;">
+        ⭐ ${repo.stargazers_count} &nbsp; • &nbsp; 🍴 ${repo.forks_count} &nbsp; • &nbsp;
+        Updated: ${new Date(repo.pushed_at).toLocaleDateString()}
+      </div>
+    `;
   } catch {
-// no console spam, just fail silently with no content
+    el.innerHTML = `<strong>Now Working On</strong><br><span class="muted">infinisweeper</span>`;
   }
 }
 
@@ -585,11 +658,10 @@ async function renderTerminalLog() {
   if (!el) return;
 
   try {
-    const res = await fetch(
+    const events = await ghFetchJson(
       `https://api.github.com/users/${GH_USER}/events/public`,
+      { ttlMs: 5 * 60 * 1000, key: `events:${GH_USER}` }
     );
-    if (!res.ok) throw new Error();
-    const events = await res.json();
 
     const pushes = events.filter((e) => e.type === "PushEvent").slice(0, 5);
     if (!pushes.length) throw new Error();
@@ -601,14 +673,21 @@ async function renderTerminalLog() {
       const msg = p.payload?.commits?.[0]?.message?.split("\n")[0] || "update";
       const when = new Date(p.created_at).toLocaleDateString();
       lines.push(
-        `<span class="muted">> git push</span> <span>${escapeHtml(repo)}</span> <span class="muted">(${when})</span>`,
+        `<span class="muted">> git push</span> <span>${escapeHtml(repo)}</span> <span class="muted">(${when})</span>`
       );
       lines.push(`<span class="tiny">  ${escapeHtml(msg)}</span>`);
     });
 
     el.innerHTML = lines.join("<br>");
   } catch {
-    el.innerHTML = `<strong>Activity Log</strong><br><span class="muted">Unavailable</span>`;}
+    el.innerHTML = `
+      <strong>Activity Log</strong><br>
+      <span class="muted">> git status</span><br>
+      <span class="tiny">  working tree clean</span><br>
+      <span class="muted">> next</span><br>
+      <span class="tiny">  ship infinisweeper improvements</span>
+    `;
+  }
 }
 
 // 4) GitHub latest commit for the latest-pushed repo (single repo)
@@ -617,36 +696,35 @@ async function renderGitHubLatestRepo() {
   if (!el) return;
 
   try {
-    const repoRes = await fetch(
-      `https://api.github.com/users/${GH_USER}/repos?sort=pushed&per_page=1`,
-    );
-    if (!repoRes.ok) throw new Error();
-    const repos = await repoRes.json();
-    if (!repos.length) throw new Error();
+    const [repos, events] = await Promise.all([
+      ghFetchJson(`https://api.github.com/users/${GH_USER}/repos?sort=pushed&per_page=1`, {
+        ttlMs: 10 * 60 * 1000,
+        key: `repos_latest:${GH_USER}`,
+      }),
+      ghFetchJson(`https://api.github.com/users/${GH_USER}/events/public`, {
+        ttlMs: 5 * 60 * 1000,
+        key: `events:${GH_USER}`,
+      }),
+    ]);
 
-    const repo = repos[0];
+    const repo = repos?.[0];
+    if (!repo) throw new Error();
 
-    const commitRes = await fetch(
-      `https://api.github.com/repos/${repo.full_name}/commits?per_page=1`,
-    );
-    if (!commitRes.ok) throw new Error();
-    const commits = await commitRes.json();
-    const latest = commits[0];
+    const push = (events || []).find((e) => e.type === "PushEvent" && e.repo?.name === repo.full_name)
+      || (events || []).find((e) => e.type === "PushEvent");
 
-    const message = latest?.commit?.message?.split("\n")[0] || "update";
-    const date = latest?.commit?.author?.date
-      ? new Date(latest.commit.author.date).toLocaleString()
-      : "";
+    const message = push?.payload?.commits?.[0]?.message?.split("\n")[0] || "update";
+    const date = push?.created_at ? new Date(push.created_at).toLocaleString() : "";
 
     el.innerHTML = `
-          <strong>Latest Commit</strong><br>
-          <div style="margin-top:6px;">
-            <a href="${repo.html_url}" target="_blank" rel="noopener">${escapeHtml(repo.name)}</a>
-          </div>
-          <div class="mono" style="margin-top:10px;">"${escapeHtml(message)}"</div>
-          <div class="tiny muted" style="margin-top:8px;">${escapeHtml(date)}</div>
-        `;
-  } catch  {
+      <strong>Latest Commit</strong><br>
+      <div style="margin-top:6px;">
+        <a href="${repo.html_url}" target="_blank" rel="noopener">${escapeHtml(repo.name)}</a>
+      </div>
+      <div class="mono" style="margin-top:10px;">"${escapeHtml(message)}"</div>
+      <div class="tiny muted" style="margin-top:8px;">${escapeHtml(date)}</div>
+    `;
+  } catch {
     el.innerHTML = `<strong>Latest Commit</strong><br><span class="muted">Unavailable</span>`;
   }
 }
@@ -681,7 +759,7 @@ async function fetchMinecraftStatus() {
           🧩 Version: ${escapeHtml(version)}<br>
           ${motd ? `<div class="tiny muted" style="margin-top:10px;">${escapeHtml(motd)}</div>` : ""}
         `;
-  } catch  {
+  } catch {
     el.innerHTML = `<strong>Server Status</strong><br><span class="muted">Unavailable</span>`;
   }
 }
@@ -694,20 +772,18 @@ function escapeHtml(str) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
-
 img.onload = () => {
   initAmbient();
-
   relayoutAll();
-
-  // content widgets
+};
+window.addEventListener("load", () => {
+  // content widgets (run once)
   fetchLatestYouTube();
   renderNowWorking();
   renderTerminalLog();
   renderGitHubLatestRepo();
   fetchMinecraftStatus();
-};
-
+});
 window.addEventListener("resize", relayoutAll);
 
 function bindAllPOIs() {
@@ -725,29 +801,17 @@ document.addEventListener("DOMContentLoaded", () => {
   if (img.complete && img.naturalWidth) {
     relayoutAll();
   }
-  // ensure content widgets run even if image load doesn't trigger onload
-  fetchLatestYouTube();
-  renderNowWorking();
-  renderTerminalLog();
-  renderGitHubLatestRepo();
-  fetchMinecraftStatus();
 });
 
 img.onerror = () => {
   initAmbient();
   // still bind + show modals via POIs even if map image fails
   relayoutAll();
-  // still attempt to load content widgets when the background image fails
-  fetchLatestYouTube();
-  renderNowWorking();
-  renderTerminalLog();
-  renderGitHubLatestRepo();
-  fetchMinecraftStatus();
 };
 
 // Use your existing reference here:
 
-const spriteFrames = [
+const bgFrames = [
   { src: "assets/sprite/sprite_0.png", duration: 5000 },
   { src: "assets/sprite/sprite_1.png", duration: 400 },
   { src: "assets/sprite/sprite_2.png", duration: 50 },
@@ -755,7 +819,7 @@ const spriteFrames = [
 ];
 
 // --- Preload to avoid flashing/flicker ---
-const preloaded = spriteFrames.map((f) => {
+const preloaded = bgFrames.map((f) => {
   const im = new Image();
   im.src = f.src;
   return im;
@@ -783,9 +847,9 @@ function tick(t) {
   elapsed += dt;
 
   // Advance through frames even if the browser hiccups / tab was hidden
-  while (elapsed >= spriteFrames[i].duration) {
-    elapsed -= spriteFrames[i].duration;
-    i = (i + 1) % spriteFrames.length;
+  while (elapsed >= bgFrames[i].duration) {
+    elapsed -= bgFrames[i].duration;
+    i = (i + 1) % bgFrames.length;
     applyFrame(i);
   }
 
@@ -816,3 +880,18 @@ document.addEventListener("visibilitychange", () => {
 
 // Start it
 startBgAnim();
+
+let widgetsInitialized = false;
+
+function initWidgetsOnce() {
+  if (widgetsInitialized) return;
+  widgetsInitialized = true;
+
+  fetchLatestYouTube();
+  renderNowWorking();
+  renderTerminalLog();
+  renderGitHubLatestRepo();
+  fetchMinecraftStatus();
+}
+
+window.addEventListener("load", initWidgetsOnce);
