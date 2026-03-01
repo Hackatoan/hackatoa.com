@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<browserconfig>
+  <msapplication>
+    <tile>
+      <square150x150logo src="/assets/favicons/mstile-150x150.png"/>
+      <TileColor>#ff4500</TileColor>
+    </tile>
+    <notification>
+      <polling-uri src="https://hackatoa.com/"/>
+      <polling-uri2 src="https://hackatoa.com/"/>
+      <polling-uri3 src="https://hackatoa.com/"/>
+      <polling-uri4 src="https://hackatoa.com/"/>
+      <polling-uri5 src="https://hackatoa.com/"/>
+      <period>1440</period>
+      <lastchanged>2026-03-01T00:00:00Z</lastchanged>
+    </notification>
+  </msapplication>
+</browserconfig>

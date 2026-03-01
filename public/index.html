@@ -13,6 +13,16 @@
     <meta name="theme-color" content="#ff4500" />
     <link rel="canonical" href="https://hackatoa.com/" />
 
+    <!-- Browser Compatibility & Mobile App Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Hackatoa" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="x-ua-compatible" content="IE=edge" />
+    <meta name="msapplication-TileColor" content="#ff4500" />
+    <meta name="msapplication-config" content="browserconfig.xml" />
+
     <!-- DNS Prefetch & Preconnect for External Services -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -89,93 +99,103 @@
   </head>
 
   <body>
-    <div id="bg-blur"></div>
+    <!-- Skip to main content link for keyboard users -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <div id="bg-blur" role="img" aria-label="Animated background"></div>
     <div id="bg-dim"></div>
 
-    <div id="toast">Copied to Clipboard!</div>
+    <div id="toast" role="status" aria-live="polite" aria-atomic="true">Copied to Clipboard!</div>
 
-    <div class="profile-card">
-      <img src="assets/me.png" alt="Jacob Harris" class="profile-pfp" />
+    <!-- Header with profile -->
+    <header class="profile-card" role="banner">
+      <img src="assets/me.png" alt="Jacob Harris profile photo" class="profile-pfp" />
       <div>
         <h1 style="margin: 0; font-size: 1.4rem">Jacob Harris</h1>
         <p style="margin: 0; color: var(--lava); font-size: 0.9rem">
           aka hackatoa
         </p>
       </div>
-    </div>
+    </header>
 
-    <div id="ambient">
+    <!-- Status information -->
+    <aside id="ambient" aria-label="Island status information">
       <div>
         <span class="k">Island Uptime:</span>
-        <span class="v" id="amb-uptime">--</span>
+        <span class="v" id="amb-uptime" aria-live="polite">--</span>
       </div>
       <div>
-        <span class="k">Build:</span> <span class="v" id="amb-build">--</span>
+        <span class="k">Build:</span> <span class="v" id="amb-build" aria-live="polite">--</span>
       </div>
-    </div>
+    </aside>
 
-    <div id="map-container"><canvas id="islandCanvas"></canvas></div>
+    <!-- Interactive map -->
+    <main id="main-content">
+      <div id="map-container">
+        <canvas id="islandCanvas" aria-label="Interactive island map with points of interest. Use mouse to explore locations: Dev Terminal, Broadcasting, Game Hub, Uplink, and Support."></canvas>
+      </div>
 
-    <div id="poi-layer">
+      <nav id="poi-layer" aria-label="Interactive navigation points">
       <div class="poi" id="poi-dev">
         <div class="anchor">
-          <svg class="leader-svg">
+          <svg class="leader-svg" aria-hidden="true">
             <path class="leader-hit" d=""></path>
             <path class="leader-path" d=""></path>
           </svg>
-          <div class="poi-ui"><span class="label-text">Dev Terminal</span></div>
-          <div class="dot"></div>
+          <div class="poi-ui" role="button" tabindex="0" aria-label="Dev Terminal - Click to view development and terminal information"><span class="label-text" aria-hidden="true">Dev Terminal</span></div>
+          <div class="dot" aria-hidden="true"></div>
         </div>
       </div>
 
       <div class="poi" id="poi-social">
         <div class="anchor">
-          <svg class="leader-svg">
+          <svg class="leader-svg" aria-hidden="true">
             <path class="leader-hit" d=""></path>
             <path class="leader-path" d=""></path>
           </svg>
-          <div class="poi-ui"><span class="label-text">Broadcasting</span></div>
-          <div class="dot"></div>
+          <div class="poi-ui" role="button" tabindex="0" aria-label="Broadcasting - Click to view streaming platforms and content"><span class="label-text" aria-hidden="true">Broadcasting</span></div>
+          <div class="dot" aria-hidden="true"></div>
         </div>
       </div>
 
       <div class="poi" id="poi-servers">
         <div class="anchor">
-          <svg class="leader-svg">
+          <svg class="leader-svg" aria-hidden="true">
             <path class="leader-hit" d=""></path>
             <path class="leader-path" d=""></path>
           </svg>
-          <div class="poi-ui"><span class="label-text">Game Hub</span></div>
-          <div class="dot"></div>
+          <div class="poi-ui" role="button" tabindex="0" aria-label="Game Hub - Click to view gaming servers and Minecraft information"><span class="label-text" aria-hidden="true">Game Hub</span></div>
+          <div class="dot" aria-hidden="true"></div>
         </div>
       </div>
 
       <div class="poi" id="poi-contact">
         <div class="anchor">
-          <svg class="leader-svg">
+          <svg class="leader-svg" aria-hidden="true">
             <path class="leader-hit" d=""></path>
             <path class="leader-path" d=""></path>
           </svg>
-          <div class="poi-ui"><span class="label-text">Uplink</span></div>
-          <div class="dot"></div>
+          <div class="poi-ui" role="button" tabindex="0" aria-label="Uplink - Click to view contact information"><span class="label-text" aria-hidden="true">Uplink</span></div>
+          <div class="dot" aria-hidden="true"></div>
         </div>
       </div>
 
       <div class="poi" id="poi-donate">
         <div class="anchor">
-          <svg class="leader-svg">
+          <svg class="leader-svg" aria-hidden="true">
             <path class="leader-hit" d=""></path>
             <path class="leader-path" d=""></path>
           </svg>
-          <div class="poi-ui"><span class="label-text">Support</span></div>
-          <div class="dot"></div>
+          <div class="poi-ui" role="button" tabindex="0" aria-label="Support - Click to view sponsorship and support options"><span class="label-text" aria-hidden="true">Support</span></div>
+          <div class="dot" aria-hidden="true"></div>
         </div>
       </div>
-    </div>
+    </nav>
+    </main>
 
     <!-- Modals -->
-    <div id="ui-stack">
-      <div
+    <div id="ui-stack" role="region" aria-label="Information panels">
+      <dialog
         id="m-dev"
         class="modal q-tr"
         onmouseenter="isOverModal = true"
@@ -184,7 +204,7 @@
           unhoverBox();
         "
       >
-        <button class="close-btn" onclick="forceClose()">[X]</button>
+        <button class="close-btn" onclick="forceClose()" aria-label="Close Dev Terminal panel">✕</button>
         <h2 data-title="Dev Terminal">Dev Terminal</h2>
 
         <div class="widget" id="now-working">
@@ -204,7 +224,7 @@
 
         <div class="social-entry">
           🎬 Teamspeak:
-          <span class="clickable" onclick="copyTxt('ts.hackatoa.com')"
+          <span class="clickable" role="button" tabindex="0" onclick="copyTxt('ts.hackatoa.com')" aria-label="Copy TeamSpeak address"
             >ts.hackatoa.com</span
           >
         </div>
@@ -220,9 +240,9 @@
             >hackatoa.com</a
           >
         </div>
-      </div>
+      </dialog>
 
-      <div
+      <dialog
         id="m-social"
         class="modal q-tl"
         onmouseenter="isOverModal = true"
@@ -231,7 +251,7 @@
           unhoverBox();
         "
       >
-        <button class="close-btn" onclick="forceClose()">[X]</button>
+        <button class="close-btn" onclick="forceClose()" aria-label="Close Broadcasting panel">✕</button>
         <h2 data-title="Broadcasting">Broadcasting</h2>
 
         <div class="social-entry">
@@ -278,9 +298,9 @@
             >
           </div>
         </div>
-      </div>
+      </dialog>
 
-      <div
+      <dialog
         id="m-servers"
         class="modal q-br"
         onmouseenter="isOverModal = true"
@@ -289,12 +309,12 @@
           unhoverBox();
         "
       >
-        <button class="close-btn" onclick="forceClose()">[X]</button>
+        <button class="close-btn" onclick="forceClose()" aria-label="Close Game Hub panel">✕</button>
         <h2 data-title="Game Hub">Game Hub</h2>
 
         <div class="widget">
           Minecraft:
-          <span class="clickable" onclick="copyTxt('mc.hackatoa.com')"
+          <span class="clickable" role="button" tabindex="0" onclick="copyTxt('mc.hackatoa.com')" aria-label="Copy Minecraft server address"
             >mc.hackatoa.com</span
           >
         </div>
@@ -307,9 +327,9 @@
         <div class="widget mono tiny">
           Tip: use <span class="muted">/spawn</span> if you get lost.
         </div>
-      </div>
+      </dialog>
 
-      <div
+      <dialog
         id="m-contact"
         class="modal q-tr"
         onmouseenter="isOverModal = true"
@@ -318,13 +338,13 @@
           unhoverBox();
         "
       >
-        <button class="close-btn" onclick="forceClose()">[X]</button>
+        <button class="close-btn" onclick="forceClose()" aria-label="Close Uplink panel">✕</button>
         <h2 data-title="Uplink">Uplink</h2>
 
         <div class="social-entry">
           📧 Email:
           <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>
-          <span class="clickable" onclick="copyTxt('jacob@hackatoa.com')"
+          <span class="clickable" role="button" tabindex="0" onclick="copyTxt('jacob@hackatoa.com')" aria-label="Copy email address"
             >[copy]</span
           >
         </div>
@@ -341,9 +361,9 @@
             470B B798 38B6 127B AB6B 259C 67D6 7C1C 7678 C912
           </div>
         </div>
-      </div>
+      </dialog>
 
-      <div
+      <dialog
         id="m-donate"
         class="modal q-bl"
         onmouseenter="isOverModal = true"
@@ -352,7 +372,7 @@
           unhoverBox();
         "
       >
-        <button class="close-btn" onclick="forceClose()">[X]</button>
+        <button class="close-btn" onclick="forceClose()" aria-label="Close Support panel">✕</button>
         <h2 data-title="Support">Support</h2>
 
         <div class="widget">
@@ -375,7 +395,7 @@
             />
           </a>
         </div>
-      </div>
+      </dialog>
     </div>
 
     <script src="app.js"></script>

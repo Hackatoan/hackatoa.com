@@ -4,6 +4,30 @@
         --ui-bg: rgba(10, 20, 30, 0.98);
       }
 
+      /* Accessibility: Skip to content link */
+      .skip-to-content {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #000;
+        color: #fff;
+        padding: 8px;
+        z-index: 100;
+        text-decoration: underline;
+      }
+      .skip-to-content:focus {
+        top: 0;
+      }
+
+      /* Keyboard focus styles for accessibility */
+      button:focus-visible,
+      [role="button"]:focus-visible,
+      a:focus-visible,
+      [tabindex]:focus-visible {
+        outline: 3px solid var(--beacon);
+        outline-offset: 2px;
+      }
+
       html,
       body {
         margin: 0;
@@ -438,4 +462,54 @@
       .modal {
         max-height: calc(100vh - 80px);
         overflow-y: auto;
+      }
+
+      /* Accessibility enhancements */
+      dialog {
+        border: inherit;
+        padding: 0;
+        background: transparent;
+      }
+
+      dialog[open] {
+        display: block !important;
+      }
+
+      dialog:not([open]) {
+        display: none;
+      }
+
+      /* Improved focus indicators */
+      .close-btn:focus-visible {
+        outline: 2px solid var(--beacon);
+        outline-offset: -4px;
+      }
+
+      .poi-ui:focus-visible {
+        outline: 2px solid var(--beacon);
+        outline-offset: 4px;
+        border-radius: 2px;
+      }
+
+      /* Screen reader text for canvas description */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* Print styles for better accessibility */
+      @media print {
+        #map-container,
+        #poi-layer,
+        #bg-blur,
+        #bg-dim {
+          display: none;
+        }
       }

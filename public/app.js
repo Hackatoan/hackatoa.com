@@ -76,6 +76,13 @@ window.addEventListener("mousemove", (e) => {
   lastMouse.y = e.clientY;
 });
 
+// Keyboard accessibility: Close modals with Escape key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && lockedId) {
+    forceClose();
+  }
+});
+
 function showToast() {
   const toast = document.getElementById("toast");
   toast.style.display = "block";
@@ -418,6 +425,15 @@ function bindPOIInteractions(poiId, modalId) {
     el.addEventListener("click", (e) => {
       e.stopPropagation();
       lockBox(modalId, poiId);
+    });
+    // Keyboard support for accessibility
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        e.stopPropagation();
+        lockBox(modalId, poiId);
+      }
+    });
     });
   });
 }
@@ -797,6 +813,16 @@ document.addEventListener("DOMContentLoaded", () => {
   if (img.complete && img.naturalWidth) {
     relayoutAll();
   }
+
+  // Add keyboard support to clickable elements for accessibility
+  document.querySelectorAll(".clickable").forEach((el) => {
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        e.click();
+      }
+    });
+  });
 });
 
 img.onerror = () => {
