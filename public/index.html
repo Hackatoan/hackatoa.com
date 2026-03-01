@@ -1,216 +1,1095 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hackatoa</title>
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="assets/imgs/favicon/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="assets/imgs/favicon/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="assets/imgs/favicon/favicon-16x16.png"
-    />
-    <link rel="manifest" href="assets/imgs/favicon/site.webmanifest" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="assets/styles/styles.css" />
-  </head>
-  <body>
-    <div class="overlay" id="overlay">
-      <section class="intro white">
-        <h1>Hackatoa</h1>
-        <img class="bigimg" src="assets/imgs/me.jpg" alt="Jacob P. Harris" />
-        <h3>Jacob P. Harris</h3>
-      </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>hackatoa.com</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
-      <hr class="rounded" />
+  <style>
+    :root { --lava:#ff4500; --beacon:#00ffcc; --ui-bg:rgba(10,20,30,.98); }
 
-      <section class="about white center">
-        <h2>About Me</h2>
-        <p>
-          Hey, I’m Jacob. I'm a developer diving into cybersecurity and seeing
-          what life has in store for me. I love everything about computer
-          science, especially networking. While I may not be the best, I’m
-          always learning and working on cool projects when I can. I also have a
-          few hobbies, which might pop up occasionally—whether it's driving,
-          gaming, or content creation. Follow my journey on my socials below.
-        </p>
-      </section>
-      <hr class="rounded" />
-      <iframe
-        src="https://jandee.vercel.app/hackatoan/"
-        width="100%"
-        height="150"
-        frameborder="0"
-        id="iframe"
-      ></iframe>
-      <hr class="rounded" />
+    html, body {
+      margin:0; padding:0; width:100%; height:100%;
+      font-family:'VT323', monospace; color:#fff;
+      overflow:hidden; background:#000;
+    }
 
-      <section class="socials-info white center">
-        <h2>Socials</h2>
-        <p>
-          I’m most active on Discord and Instagram, but I use all my socials
-          frequently. Click any of the icons to visit the respective page.
-        </p>
-      </section>
+    /* Blurry backdrop using same image (no blue letterbox) */
+    #bg-blur {
+      position: fixed; inset: 0; z-index: 0;
+      background-image: url("Gemini_Generated_Image_uxvyu8uxvyu8uxvy.png");
+      background-size: cover;
+      background-position: center;
+      filter: blur(22px) saturate(1.05) brightness(0.85);
+      transform: scale(1.08);
+    }
+    #bg-dim {
+      position: fixed; inset: 0; z-index: 0;
+      background: rgba(0,0,0,0.25);
+      pointer-events:none;
+    }
 
-      <section class="socials-section">
-        <div class="icons">
-          <a
-            href="https://discord.gg/su7Wx79eZG"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fab fa-discord"></i><span>Discord</span>
-          </a>
-          <a
-            href="https://www.instagram.com/hackatoa/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fab fa-instagram"></i><span>Hackatoa</span>
-          </a>
-          <a
-            href="https://www.instagram.com/_baecob/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fab fa-instagram"></i><span>_baecob</span>
-          </a>
-          <a
-            href="https://www.twitch.tv/hackatoa"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fab fa-twitch"></i><span>Twitch</span>
-          </a>
-          <a
-            href="https://youtube.com/hackatoa"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fab fa-youtube"></i><span>Youtube</span>
-          </a>
-          <a
-            href="https://twitter.com/JHackatoa"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fab fa-twitter"></i><span>Twitter</span>
-          </a>
-          <a
-            href="https://www.threads.net/@_baecob"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fab fa-threads"></i><span>Threads</span>
-          </a>
-          <a
-            href="https://snapchat.com/add/hackatoa"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fab fa-snapchat"></i><span>Snapchat</span>
-          </a>
-          <a
-            href="https://www.youtube.com/playlist?list=PLZG0CvngYU9i8BQVur9DtUyOGOALdtorK"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fas fa-music"></i><span>Playlist</span>
-          </a>
-        </div>
-      </section>
+    /* Foreground map */
+    #map-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+    canvas { width: 100vw; height: 100vh; display:block; image-rendering: pixelated; }
 
-      <hr class="rounded" />
+    /* POI layer */
+    #poi-layer {
+      position: fixed; inset: 0; z-index: 8000;
+      pointer-events: none;
+      will-change: transform;
+      transform: translate(0,0);
+    }
 
-      <section class="discord">
-        <widgetbot
-          server="838836392334327898"
-          channel="1112148631261302816"
-          width="100%"
-          height="600"
-        ></widgetbot>
-        <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
-      </section>
+    /* POI anchor at DOT center */
+    .poi{
+      position:absolute;
+      left:0; top:0;
+      width:0; height:0;
+      pointer-events:none;
+    }
+    .anchor{ position:absolute; left:0; top:0; width:0; height:0; pointer-events:none; }
 
-      <hr class="rounded" />
+    .leader-svg{
+      position:absolute;
+      left:0; top:0;
+      overflow: visible;
+      pointer-events:none;
+      filter: drop-shadow(0 0 4px var(--beacon));
+      z-index: 1;
+    }
+    .leader-path{
+      stroke:#fff;
+      stroke-width:2.5;
+      fill:none;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      pointer-events: stroke;
+      cursor: pointer;
+    }
+    /* fat invisible hit stroke so line has no blind spots */
+    .leader-hit{
+      stroke: rgba(0,0,0,0);
+      stroke-width: 18;
+      fill:none;
+      pointer-events: stroke;
+      cursor: pointer;
+    }
 
-      <section>
-        <div class="center white">
-          <h2>Playlist</h2>
-          <p>
-            This is my
-            <a
-              href="https://www.youtube.com/playlist?list=PLZG0CvngYU9i8BQVur9DtUyOGOALdtorK"
-              target="_blank"
-              rel="noopener noreferrer"
-              >playlist</a
-            >. It's my go-to place where I put pretty much every song I listen
-            to.
-          </p>
-        </div>
-        <div class="playlist-container">
-          <div id="playlist" class="playlist"></div>
-        </div>
-      </section>
+    .poi-ui{
+      position:absolute;
+      left:0; top:0;
+      transform: translate(0,0);
+      pointer-events:auto;
+      cursor:pointer;
+      z-index: 3;
+    }
 
-      <hr class="rounded" />
+    .label-text{
+      font-size: 1.8rem;
+      color: var(--beacon);
+      text-transform: uppercase;
+      -webkit-text-stroke: 1.5px black;
+      paint-order: stroke fill;
+      text-shadow: 2px 2px 0px #000;
+      white-space: nowrap;
+      border-bottom: none;
+      display:inline-block;
+      line-height: 1;
+    }
 
-      <section>
-        <img
-          id="hike1"
-          class="bigimg"
-          src="assets/imgs/hike1.jpg"
-          alt="Jacob P. Harris on a hike"
-        />
-      </section>
+    .dot{
+      position:absolute;
+      width:14px; height:14px;
+      border-radius:50%;
+      background:#fff;
+      box-shadow:0 0 10px var(--beacon);
+      transform: translate(-50%, -50%);
+      left:0; top:0;
+      pointer-events:auto;
+      cursor:pointer;
+      z-index: 2;
+    }
 
-      <footer id="footer">
-        <img class="imgleft" src="assets/imgs/logo.png" alt="Logo" />
-        <div class="footer-content">
-          <p>&copy; 2024 Hackatoa. All rights reserved.</p>
-          <a href="https://www.buymeacoffee.com/hackatoa" target="_blank">
-            <img
-              src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
-              alt="Buy Me A Coffee"
-              style="height: 60px; width: 217px"
-            />
-          </a>
-        </div>
-        <img
-          class="imgright"
-          src="assets/imgs/hershey.jpg"
-          alt="Saint Bernard"
-        />
-      </footer>
+    .poi.hovering .dot { background: var(--lava); box-shadow: 0 0 15px var(--lava); }
+    .poi.hovering .label-text { color: var(--lava); }
+
+    /* HUD */
+    .profile-card{
+      position:fixed; top:25px; left:25px; z-index:9999;
+      background: var(--ui-bg);
+      border:2px solid #fff;
+      padding:12px;
+      display:flex; align-items:center; gap:12px;
+      box-shadow:4px 4px 0 #000;
+    }
+
+    /* Ambient stats */
+    #ambient {
+      position: fixed;
+      left: 25px;
+      bottom: 22px;
+      z-index: 9999;
+      background: rgba(10,20,30,0.85);
+      border: 2px solid rgba(255,255,255,0.65);
+      box-shadow: 4px 4px 0 #000;
+      padding: 10px 12px;
+      font-size: 1.15rem;
+      line-height: 1.15;
+      pointer-events: none;
+      backdrop-filter: blur(6px);
+    }
+    #ambient .k { color: var(--beacon); }
+    #ambient .v { color: #fff; }
+
+    /* Toast */
+    #toast{
+      position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
+      background:var(--ui-bg); border:2px solid var(--beacon);
+      padding:10px 20px; z-index:9999; display:none; color:var(--beacon);
+      box-shadow:4px 4px 0 #000;
+    }
+
+    /* Modals (desktop: positioned near POI) */
+    .modal{
+      background: var(--ui-bg);
+      border:3px solid #fff;
+      padding:26px;
+      width: min(520px, calc(100vw - 32px));
+      box-shadow:10px 10px 0 #000;
+      z-index: 9000;
+      pointer-events: none;
+
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.985);
+      transition: opacity 120ms ease, transform 120ms ease;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      display: block;
+      will-change: transform, opacity;
+    }
+    .modal.active{
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Bias + quadrant placement helpers */
+    .modal.q-tl.active { transform: translate(-100%, -110%) scale(1) rotate(-0.35deg); }
+    .modal.q-tr.active { transform: translate(   0%, -110%) scale(1) rotate( 0.35deg); }
+    .modal.q-bl.active { transform: translate(-100%,   10%) scale(1) rotate( 0.35deg); }
+    .modal.q-br.active { transform: translate(   0%,   10%) scale(1) rotate(-0.35deg); }
+
+    /* baseline (inactive) should match quadrant so fade looks consistent */
+    .modal.q-tl { transform: translate(-100%, -110%) scale(0.985); }
+    .modal.q-tr { transform: translate(   0%, -110%) scale(0.985); }
+    .modal.q-bl { transform: translate(-100%,   10%) scale(0.985); }
+    .modal.q-br { transform: translate(   0%,   10%) scale(0.985); }
+
+    @media (prefers-reduced-motion: reduce){
+      .modal, .modal.active { transition:none; }
+    }
+
+    @media (max-width: 768px){
+      #bg-blur, #bg-dim, #map-container, #poi-layer, #ambient { display:none !important; }
+      body{ overflow-y: scroll; background:#0c141f; }
+      #ui-stack{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:30px;
+        padding:120px 20px 50px 20px;
+      }
+      .modal{
+        position: static !important;
+        left:auto; top:auto;
+        transform:none !important;
+        opacity:1 !important;
+        pointer-events:auto !important;
+        transition:none !important;
+        width:100%;
+        max-width:520px;
+      }
+      .profile-card{ width: calc(100% - 75px); box-sizing:border-box; }
+      .close-btn{ display:none; }
+    }
+
+    /* widgets */
+    h2{ color: var(--lava); margin-top:0; border-bottom:2px solid #444; text-transform:uppercase; letter-spacing: 0.5px; }
+    .widget{ background: rgba(255,255,255,0.05); padding:15px; border-left:4px solid var(--beacon); margin-bottom:16px; font-size:1.2rem; }
+    .social-entry{ margin-bottom:10px; font-size:1.35rem; display:flex; align-items:center; flex-wrap: wrap; gap: 8px; }
+    a, .clickable{ color:#fff; text-decoration:none; border-bottom:1px dashed var(--beacon); cursor:pointer; }
+    .yt-container{ position:relative; padding-bottom:56.25%; height:0; overflow:hidden; margin-top:10px; border:1px solid var(--beacon); }
+    .yt-container iframe{ position:absolute; top:0; left:0; width:100%; height:100%; }
+    .close-btn{ float:right; cursor:pointer; color:var(--lava); border:none; background:none; font-size:1.5rem; }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .muted{ opacity: 0.86; }
+    .tiny{ font-size: 1.05rem; opacity: 0.85; }
+  </style>
+</head>
+
+<body>
+  <div id="bg-blur"></div>
+  <div id="bg-dim"></div>
+
+  <div id="toast">Copied to Clipboard!</div>
+
+  <div class="profile-card">
+    <div style="width:40px; height:40px; background:#222; border:2px solid var(--beacon);"></div>
+    <div>
+      <h1 style="margin:0; font-size:1.4rem;">Jacob Harris</h1>
+      <p style="margin:0; color:var(--lava); font-size:0.9rem;">aka hackatoa</p>
+    </div>
+  </div>
+
+  <div id="ambient">
+    <div><span class="k">Island Uptime:</span> <span class="v" id="amb-uptime">--</span></div>
+    <div><span class="k">Views:</span> <span class="v" id="amb-visitors">--</span></div>
+    <div><span class="k">Build:</span> <span class="v" id="amb-build">0.9.7</span></div>
+  </div>
+
+  <div id="map-container"><canvas id="islandCanvas"></canvas></div>
+
+  <div id="poi-layer">
+    <div class="poi" id="poi-dev">
+      <div class="anchor">
+        <svg class="leader-svg">
+          <path class="leader-hit" d=""></path>
+          <path class="leader-path" d=""></path>
+        </svg>
+        <div class="poi-ui"><span class="label-text">Dev Terminal</span></div>
+        <div class="dot"></div>
+      </div>
     </div>
 
-    <div id="instruction-text">Click the Volcano</div>
-    <div id="hwa">Enable Hardware Acceleration for Best Experience</div>
+    <div class="poi" id="poi-social">
+      <div class="anchor">
+        <svg class="leader-svg">
+          <path class="leader-hit" d=""></path>
+          <path class="leader-path" d=""></path>
+        </svg>
+        <div class="poi-ui"><span class="label-text">Broadcasting</span></div>
+        <div class="dot"></div>
+      </div>
+    </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script src="assets/scripts/script.js"></script>
-  </body>
+    <div class="poi" id="poi-servers">
+      <div class="anchor">
+        <svg class="leader-svg">
+          <path class="leader-hit" d=""></path>
+          <path class="leader-path" d=""></path>
+        </svg>
+        <div class="poi-ui"><span class="label-text">Game Hub</span></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <div class="poi" id="poi-contact">
+      <div class="anchor">
+        <svg class="leader-svg">
+          <path class="leader-hit" d=""></path>
+          <path class="leader-path" d=""></path>
+        </svg>
+        <div class="poi-ui"><span class="label-text">Uplink</span></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <div class="poi" id="poi-donate">
+      <div class="anchor">
+        <svg class="leader-svg">
+          <path class="leader-hit" d=""></path>
+          <path class="leader-path" d=""></path>
+        </svg>
+        <div class="poi-ui"><span class="label-text">Support</span></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="ui-stack">
+    <div id="m-dev" class="modal q-tr"
+         onmouseenter="isOverModal=true"
+         onmouseleave="isOverModal=false; unhoverBox()">
+      <button class="close-btn" onclick="forceClose()">[X]</button>
+      <h2 data-title="Dev Terminal">Dev Terminal</h2>
+
+      <div class="widget" id="now-working">
+        <strong>Now Working On</strong><br>
+        <span class="muted">Loading…</span>
+      </div>
+
+      <div class="widget mono" id="terminal-log">
+        <strong>Activity Log</strong><br>
+        <span class="muted">Loading…</span>
+      </div>
+
+      <div class="widget" id="github-card">
+        <strong>Latest Commit</strong><br>
+        <span class="muted">Loading…</span>
+      </div>
+
+      <div class="social-entry">🎬 Teamspeak:
+        <span class="clickable" onclick="copyTxt('ts.hackatoa.com')">ts.hackatoa.com</span>
+      </div>
+      <div class="social-entry">📁 GitHub:
+        <a href="https://github.com/hackatoan" target="_blank" rel="noopener">hackatoan</a>
+      </div>
+      <div class="social-entry">🌐 Website:
+        <a href="https://hackatoa.com" target="_blank" rel="noopener">hackatoa.com</a>
+      </div>
+    </div>
+
+    <div id="m-social" class="modal q-tl"
+         onmouseenter="isOverModal=true"
+         onmouseleave="isOverModal=false; unhoverBox()">
+      <button class="close-btn" onclick="forceClose()">[X]</button>
+      <h2 data-title="Broadcasting">Broadcasting</h2>
+
+      <div class="social-entry">🎬 YouTube:
+        <a href="https://youtube.com/@hackatoa" target="_blank" rel="noopener">@hackatoa</a>
+      </div>
+      <div class="yt-container" id="yt-video"></div>
+
+      <div class="widget">
+        <strong>Broadcast Nodes</strong><br>
+        <div class="tiny">📺 Twitch: <a href="https://twitch.tv/hackatoa" target="_blank" rel="noopener">twitch.tv/hackatoa</a></div>
+        <div class="tiny">📸 IG: <a href="https://instagram.com/_baecob" target="_blank" rel="noopener">@_baecob</a></div>
+        <div class="tiny">📸 IG: <a href="https://instagram.com/hackatoa" target="_blank" rel="noopener">@hackatoa</a></div>
+        <div class="tiny">🐦 X: <a href="https://twitter.com/JHackatoa" target="_blank" rel="noopener">@JHackatoa</a></div>
+      </div>
+    </div>
+
+    <div id="m-servers" class="modal q-br"
+         onmouseenter="isOverModal=true"
+         onmouseleave="isOverModal=false; unhoverBox()">
+      <button class="close-btn" onclick="forceClose()">[X]</button>
+      <h2 data-title="Game Hub">Game Hub</h2>
+
+      <div class="widget">
+        Minecraft: <span class="clickable" onclick="copyTxt('mc.hackatoa.com')">mc.hackatoa.com</span>
+      </div>
+
+      <div class="widget" id="mc-status">
+        <strong>Server Status</strong><br>
+        <span class="muted">Querying mcsrvstat.us…</span>
+      </div>
+
+      <div class="widget mono tiny">
+        Tip: use <span class="muted">/spawn</span> if you get lost.
+      </div>
+    </div>
+
+    <div id="m-contact" class="modal q-tr"
+         onmouseenter="isOverModal=true"
+         onmouseleave="isOverModal=false; unhoverBox()">
+      <button class="close-btn" onclick="forceClose()">[X]</button>
+      <h2 data-title="Uplink">Uplink</h2>
+
+      <div class="social-entry">📧 Email:
+        <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>
+        <span class="clickable" onclick="copyTxt('jacob@hackatoa.com')">[copy]</span>
+      </div>
+
+      <div class="widget">
+        <strong>Preferred Contact</strong><br>
+        <div class="tiny">• Email for collabs + business</div>
+        <div class="tiny">• Discord/TS for quick pings</div>
+      </div>
+
+      <div class="widget">
+        <strong>PGP Fingerprint</strong><br>
+        <div class="mono tiny">470B B798 38B6 127B AB6B  259C 67D6 7C1C 7678 C912</div>
+      </div>
+    </div>
+
+    <div id="m-donate" class="modal q-bl"
+         onmouseenter="isOverModal=true"
+         onmouseleave="isOverModal=false; unhoverBox()">
+      <button class="close-btn" onclick="forceClose()">[X]</button>
+      <h2 data-title="Support">Support</h2>
+
+      <div class="widget">
+        Support keeps the lights on and the servers running.<br><br>
+        ❤️ Hosting<br>
+        ❤️ Dev Time<br>
+        ❤️ Game Infrastructure
+      </div>
+
+      <div style="text-align: center;">
+        <a href="https://www.buymeacoffee.com/hackatoa" target="_blank" rel="noopener">
+          <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" style="height: 55px; width: 200px" alt="Buy me a coffee">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**********************
+     * EASY-EDIT POI DATA
+     **********************/
+    const POIS = {
+      // Dev forced other way:
+      "poi-dev":    { imgX: 1250, imgY: 900,  labelX:  10, labelY: -62, lineGap: 8, minDx: 45, side: "right" },
+      "poi-social": { imgX: 2000, imgY: 800,  labelX: -10, labelY: -62, lineGap: 8, minDx: 45 },
+      "poi-servers":{ imgX: 620,  imgY: 550,  labelX:  10, labelY: -62, lineGap: 8, minDx: 45 },
+      "poi-contact":{ imgX: 1690, imgY: 450,  labelX: -10, labelY: -62, lineGap: 8, minDx: 45 },
+      "poi-donate": { imgX: 270,  imgY: 720,  labelX:  10, labelY: -62, lineGap: 8, minDx: 45 }
+    };
+
+    const YT_CHANNEL_ID = "UC4DtXR4xqvJIUsYbBKyju8g";
+    const GH_USER = "hackatoan";
+    const NOW_WORKING_REPO = "infinisweeper";
+    const MC_HOST = "mc.hackatoa.com";
+
+    // "Island uptime" start (pick a date you like)
+    const ISLAND_EPOCH = "2025-10-01T00:00:00Z";
+
+    const canvas = document.getElementById('islandCanvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = 'Gemini_Generated_Image_uxvyu8uxvyu8uxvy.png';
+
+    const poiLayer = document.getElementById('poi-layer');
+
+    let lockedId = null;
+    let isOverModal = false;
+    let closeTimer = null;
+    let lastMouse = { x: 0, y: 0 };
+    let lastAnchorPoiId = null;
+
+    // Modal placement memory to prevent bouncing
+    const modalPlacement = {}; // modalId -> quadrant class
+    const FLIP_MARGIN = 28;    // hysteresis px
+
+    window.addEventListener('mousemove', (e) => {
+      lastMouse.x = e.clientX;
+      lastMouse.y = e.clientY;
+    });
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 1400);
+    }
+
+    function copyTxt(t) {
+      navigator.clipboard.writeText(t);
+      showToast();
+    }
+
+    function forceClose() {
+      lockedId = null;
+      isOverModal = false;
+      document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+    }
+
+    function scheduleClose() {
+      if (closeTimer) clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        if (!lockedId && !isOverModal && window.innerWidth > 768) {
+          document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+        }
+      }, 90);
+    }
+
+    function unhoverBox() {
+      scheduleClose();
+    }
+
+    function hoverBox(modalId, anchorPoiId = null) {
+      const target = document.getElementById(modalId);
+      if (!target) return;
+
+      if (closeTimer) clearTimeout(closeTimer);
+
+      if (!lockedId && window.innerWidth > 768) {
+        document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+        target.classList.add('active');
+
+        if (anchorPoiId) {
+          lastAnchorPoiId = anchorPoiId;
+          positionModalNearPOI(target, anchorPoiId, target.id);
+        }
+
+        typeModalTitle(target);
+
+        // if modal appears under cursor, prevent immediate close
+        requestAnimationFrame(() => {
+          const el = document.elementFromPoint(lastMouse.x, lastMouse.y);
+          if (el && el.closest && el.closest('.modal') === target) {
+            isOverModal = true;
+          }
+        });
+      }
+    }
+
+    function lockBox(modalId, anchorPoiId = null) {
+      const target = document.getElementById(modalId);
+      if (!target) return;
+
+      if (window.innerWidth > 768) {
+        lockedId = (lockedId === modalId) ? null : modalId;
+        document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+
+        if (lockedId) {
+          target.classList.add('active');
+          if (anchorPoiId) {
+            lastAnchorPoiId = anchorPoiId;
+            positionModalNearPOI(target, anchorPoiId, target.id);
+          }
+          typeModalTitle(target);
+        }
+      }
+    }
+
+    // Draw contain so POIs stay accurate
+    function drawContain() {
+      const dpr = window.devicePixelRatio || 1;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      canvas.width = Math.floor(vw * dpr);
+      canvas.height = Math.floor(vh * dpr);
+      canvas.style.width = vw + "px";
+      canvas.style.height = vh + "px";
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, vw, vh);
+
+      const scale = Math.min(vw / img.width, vh / img.height);
+      const drawW = img.width * scale;
+      const drawH = img.height * scale;
+      const offX = (vw - drawW) / 2;
+      const offY = (vh - drawH) / 2;
+
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(img, offX, offY, drawW, drawH);
+
+      return { scale, offX, offY, vw, vh };
+    }
+
+    // inward default (unless overridden)
+    function inwardSideFor(conf) {
+      const mid = img.width / 2;
+      return (conf.imgX < mid) ? "right" : "left";
+    }
+
+    // Layout leader (never backtracks)
+    function layoutPOI(poiEl, conf, t) {
+      const { scale, offX, offY } = t;
+
+      // Place POI at dot center (origin)
+      const sx = offX + conf.imgX * scale;
+      const sy = offY + conf.imgY * scale;
+      poiEl.style.left = `${sx}px`;
+      poiEl.style.top  = `${sy}px`;
+      poiEl.style.zIndex = String(8000 + Math.round(sy)); // lower draws on top
+
+      const label = poiEl.querySelector('.label-text');
+      const ui = poiEl.querySelector('.poi-ui');
+      const svg = poiEl.querySelector('.leader-svg');
+      const hit = poiEl.querySelector('.leader-hit');
+      const path = poiEl.querySelector('.leader-path');
+
+      const gap = conf.lineGap ?? 8;
+      const minDx = conf.minDx ?? 16;
+
+      const labelW = Math.ceil(label.offsetWidth);
+      const labelH = Math.ceil(label.offsetHeight);
+
+      const side = conf.side ?? inwardSideFor(conf);
+
+      let labelX = conf.labelX ?? (side === "right" ? 10 : -10);
+      let labelY = conf.labelY ?? -62;
+
+      if (side === "left") {
+        const kneeXWanted = labelX + labelW; // knee at right edge
+        if (kneeXWanted > -minDx) labelX = -labelW - minDx;
+      } else {
+        const kneeXWanted = labelX; // knee at left edge
+        if (kneeXWanted < minDx) labelX = minDx;
+      }
+
+      ui.style.transform = `translate(${labelX}px, ${labelY}px)`;
+
+      const y = labelY + labelH + gap;
+
+      let startX, kneeX;
+      if (side === "left") {
+        startX = labelX;
+        kneeX  = labelX + labelW;
+      } else {
+        startX = labelX + labelW;
+        kneeX  = labelX;
+      }
+
+      const startY = y, kneeY = y;
+      const dotX = 0, dotY = 0;
+
+      const pts = [{x:startX,y:startY},{x:kneeX,y:kneeY},{x:dotX,y:dotY}];
+      const pad = 14;
+      const minXb = Math.min(...pts.map(p=>p.x)) - pad;
+      const minYb = Math.min(...pts.map(p=>p.y)) - pad;
+      const maxXb = Math.max(...pts.map(p=>p.x)) + pad;
+      const maxYb = Math.max(...pts.map(p=>p.y)) + pad;
+
+      svg.style.left = `${minXb}px`;
+      svg.style.top  = `${minYb}px`;
+      svg.setAttribute('width',  (maxXb - minXb));
+      svg.setAttribute('height', (maxYb - minYb));
+
+      const d =
+        `M ${startX-minXb} ${startY-minYb} ` +
+        `L ${kneeX-minXb}  ${kneeY-minYb} ` +
+        `L ${dotX-minXb}   ${dotY-minYb}`;
+
+      if (hit) hit.setAttribute('d', d);
+      path.setAttribute('d', d);
+    }
+
+    function relayoutAll() {
+      if (!img.complete || !img.naturalWidth) return;
+      const t = drawContain();
+      for (const [id, conf] of Object.entries(POIS)) {
+        const el = document.getElementById(id);
+        if (el) layoutPOI(el, conf, t);
+      }
+
+      // if something is locked open, keep it pinned near its POI
+      if (lockedId && lastAnchorPoiId) {
+        const modal = document.getElementById(lockedId);
+        if (modal) positionModalNearPOI(modal, lastAnchorPoiId, lockedId);
+      }
+    }
+
+    // Choose a quadrant near POI but biased away from screen center.
+    function chooseQuadrantFor(x, y, modalW, modalH, prevQuadrant) {
+      const pad = 10;
+
+      // Candidates: tl,tr,bl,br. Each gives a top-left corner relative to point.
+      const candidates = [
+        { q: "q-tl", dx: -modalW - 12, dy: -modalH - 14 },
+        { q: "q-tr", dx:  12,         dy: -modalH - 14 },
+        { q: "q-bl", dx: -modalW - 12, dy:  14 },
+        { q: "q-br", dx:  12,          dy:  14 }
+      ];
+
+      // Score each candidate:
+      // - prefer not clipping (heavy penalty)
+      // - prefer moving away from center (small bonus)
+      // - hysteresis: prefer previous unless meaningfully better
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+
+      function clipPenalty(left, top) {
+        const right = left + modalW;
+        const bottom = top + modalH;
+        let p = 0;
+        if (left < pad) p += (pad - left) * 4;
+        if (top < pad) p += (pad - top) * 4;
+        if (right > window.innerWidth - pad) p += (right - (window.innerWidth - pad)) * 4;
+        if (bottom > window.innerHeight - pad) p += (bottom - (window.innerHeight - pad)) * 4;
+        return p;
+      }
+
+      function awayFromCenterBonus(left, top) {
+        const mx = left + modalW/2;
+        const my = top + modalH/2;
+        const dist = Math.hypot(mx - cx, my - cy);
+        return dist * 0.02; // tiny
+      }
+
+      const scored = candidates.map(c => {
+        const left = x + c.dx;
+        const top = y + c.dy;
+        const penalty = clipPenalty(left, top);
+        const bonus = awayFromCenterBonus(left, top);
+        let score = penalty - bonus;
+        if (prevQuadrant && c.q === prevQuadrant) score -= FLIP_MARGIN; // hysteresis (prefer staying)
+        return { ...c, score, left, top };
+      });
+
+      scored.sort((a,b) => a.score - b.score);
+      return scored[0].q;
+    }
+
+    // Position modal near POI dot with quadrant bias + hysteresis.
+    function positionModalNearPOI(modalEl, poiId, modalIdOverride = null) {
+      const poi = document.getElementById(poiId);
+      if (!poi) return;
+
+      const dot = poi.querySelector('.dot');
+      if (!dot) return;
+
+      const key = modalIdOverride || modalEl.id;
+
+      const dotRect = dot.getBoundingClientRect();
+      const x = dotRect.left + dotRect.width / 2;
+      const y = dotRect.top + dotRect.height / 2;
+
+      // Place anchor point
+      modalEl.style.left = `${x}px`;
+      modalEl.style.top  = `${y}px`;
+
+      requestAnimationFrame(() => {
+        // Measure once
+        const r = modalEl.getBoundingClientRect();
+        const modalW = r.width;
+        const modalH = r.height;
+
+        const prevQ = modalPlacement[key];
+        const q = chooseQuadrantFor(x, y, modalW, modalH, prevQ);
+
+        modalPlacement[key] = q;
+
+        // Apply quadrant classes
+        modalEl.classList.remove('q-tl','q-tr','q-bl','q-br');
+        modalEl.classList.add(q);
+
+        // Clamp by shifting the anchor point (left/top) if needed
+        requestAnimationFrame(() => {
+          const rr = modalEl.getBoundingClientRect();
+          const pad = 10;
+
+          let newLeft = x;
+          let newTop = y;
+
+          // Horizontal clamp
+          if (rr.left < pad) newLeft = x + (pad - rr.left);
+          if (rr.right > window.innerWidth - pad) newLeft = x - (rr.right - (window.innerWidth - pad));
+
+          // Vertical clamp
+          // For q-t* (above), if top clips, push down; for q-b* (below), if bottom clips, push up
+          if (rr.top < pad) newTop = y + (pad - rr.top);
+          if (rr.bottom > window.innerHeight - pad) newTop = y - (rr.bottom - (window.innerHeight - pad));
+
+          modalEl.style.left = `${newLeft}px`;
+          modalEl.style.top = `${newTop}px`;
+        });
+      });
+    }
+
+    // Interactions: only dot / label / line trigger
+    function bindPOIInteractions(poiId, modalId) {
+      const poi = document.getElementById(poiId);
+      if (!poi) return;
+
+      const dot   = poi.querySelector('.dot');
+      const label = poi.querySelector('.poi-ui');
+      const line  = poi.querySelector('.leader-hit') || poi.querySelector('.leader-path');
+
+      const targets = [dot, label, line].filter(Boolean);
+
+      targets.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          poi.classList.add('hovering');
+          hoverBox(modalId, poiId);
+        });
+        el.addEventListener('mouseleave', () => {
+          poi.classList.remove('hovering');
+          unhoverBox();
+        });
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          lockBox(modalId, poiId);
+        });
+      });
+    }
+
+    // POI parallax only
+    window.addEventListener('mousemove', (e) => {
+      if (window.innerWidth > 768) {
+        const x = (e.clientX / window.innerWidth - 0.5) * 14;
+        const y = (e.clientY / window.innerHeight - 0.5) * 14;
+        poiLayer.style.transform = `translate(${-x}px, ${-y}px)`;
+      }
+    });
+
+    // Ambient stats
+    async function initAmbient() {
+  const uptimeEl = document.getElementById("amb-uptime");
+  const viewsEl = document.getElementById("amb-visitors"); // keep id
+  const buildEl = document.getElementById("amb-build");
+
+  // default placeholders
+  uptimeEl.textContent = "--";
+  viewsEl.textContent = "--";
+  buildEl.textContent = "--";
+
+  try {
+    // Increment total views (ignore response)
+    // Use POST so browsers/proxies are less likely to cache it
+    fetch("/view", { method: "POST" }).catch(() => {});
+
+    // Read status
+    const res = await fetch("/status", { cache: "no-store" });
+    if (!res.ok) throw new Error("status failed");
+    const data = await res.json();
+
+    // Build
+    buildEl.textContent = data.build || "--";
+
+    // Views
+    const views = Number(data.views || 0);
+    viewsEl.textContent = views.toLocaleString();
+
+    // Uptime (since started)
+    const startedMs = new Date(data.started).getTime();
+    const renderUptime = () => {
+      const ms = Date.now() - startedMs;
+      const days = Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)));
+      const hrs  = Math.max(0, Math.floor((ms / (1000 * 60 * 60)) % 24));
+      const mins = Math.max(0, Math.floor((ms / (1000 * 60)) % 60));
+      uptimeEl.textContent = `${days}d ${hrs}h ${mins}m`;
+    };
+
+    renderUptime();
+    setInterval(renderUptime, 60_000);
+  } catch {
+    // stay as "--" (no console spam)
+  }
+}
+
+    // Typing effect for modal title (fast + subtle)
+    const typingState = new Map(); // modalId -> timer
+    function typeModalTitle(modalEl) {
+      if (!modalEl || window.innerWidth <= 768) return;
+
+      const h2 = modalEl.querySelector("h2[data-title]");
+      if (!h2) return;
+
+      const full = h2.getAttribute("data-title") || h2.textContent;
+      const key = modalEl.id;
+
+      // Don’t retrigger if already fully typed and active
+      if (h2.textContent === full && modalEl.classList.contains("active")) return;
+
+      // Clear any existing timer
+      if (typingState.has(key)) {
+        clearInterval(typingState.get(key));
+        typingState.delete(key);
+      }
+
+      h2.textContent = "";
+      let i = 0;
+
+      const timer = setInterval(() => {
+        i++;
+        h2.textContent = full.slice(0, i);
+        if (i >= full.length) {
+          clearInterval(timer);
+          typingState.delete(key);
+        }
+      }, 14); // speed
+
+      typingState.set(key, timer);
+    }
+
+    /**********************
+     * DATA WIDGETS (no API keys)
+     **********************/
+
+    // 1) Latest YT upload (avoid live/VOD when possible) + nocookie + clean allow list
+    async function fetchLatestYouTube() {
+      const container = document.getElementById("yt-video");
+      if (!container) return;
+
+      try {
+        const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`;
+        const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+        const res = await fetch(api);
+        const data = await res.json();
+        if (!data.items || !data.items.length) return;
+
+        const LIVE_TITLE_RE = /\b(live|livestream|stream|vod|replay|premiere)\b/i;
+
+        const getVideoId = (item) => {
+          const link = item.link || "";
+          const m = link.match(/[?&]v=([^&]+)/);
+          if (m && m[1]) return m[1];
+          const guid = item.guid || "";
+          const g = guid.match(/yt:video:([A-Za-z0-9_-]+)/);
+          if (g && g[1]) return g[1];
+          return null;
+        };
+
+        const pick =
+          data.items.find(it => !LIVE_TITLE_RE.test(it.title || "")) ||
+          data.items[0];
+
+        const videoId = getVideoId(pick);
+        if (!videoId) return;
+
+        container.innerHTML = `
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/${videoId}"
+            frameborder="0"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowfullscreen>
+          </iframe>
+        `;
+      } catch (_) {
+        // no console spam
+      }
+    }
+
+    // 2) Now Working On: infinisweeper repo + short description
+    async function renderNowWorking() {
+      const el = document.getElementById("now-working");
+      if (!el) return;
+
+      try {
+        const repoRes = await fetch(`https://api.github.com/repos/${GH_USER}/${NOW_WORKING_REPO}`);
+        if (!repoRes.ok) throw new Error();
+        const repo = await repoRes.json();
+
+        el.innerHTML = `
+          <strong>Now Working On</strong><br>
+          <a href="${repo.html_url}" target="_blank" rel="noopener">${repo.name}</a>
+          ${repo.description ? `<div class="tiny muted" style="margin-top:6px;">${escapeHtml(repo.description)}</div>` : ""}
+          <div class="tiny" style="margin-top:10px;">
+            ⭐ ${repo.stargazers_count} &nbsp; • &nbsp; 🍴 ${repo.forks_count} &nbsp; • &nbsp;
+            Updated: ${new Date(repo.pushed_at).toLocaleDateString()}
+          </div>
+        `;
+      } catch (_) {
+        el.innerHTML = `<strong>Now Working On</strong><br><span class="muted">infinisweeper</span>`;
+      }
+    }
+
+    // 3) Terminal-style activity log (real via public events API)
+    async function renderTerminalLog() {
+      const el = document.getElementById("terminal-log");
+      if (!el) return;
+
+      try {
+        const res = await fetch(`https://api.github.com/users/${GH_USER}/events/public`);
+        if (!res.ok) throw new Error();
+        const events = await res.json();
+
+        const pushes = events.filter(e => e.type === "PushEvent").slice(0, 5);
+        if (!pushes.length) throw new Error();
+
+        const lines = [];
+        lines.push(`<strong>Activity Log</strong>`);
+        pushes.forEach(p => {
+          const repo = p.repo?.name || "repo";
+          const msg = p.payload?.commits?.[0]?.message?.split("\n")[0] || "update";
+          const when = new Date(p.created_at).toLocaleDateString();
+          lines.push(`<span class="muted">> git push</span> <span>${escapeHtml(repo)}</span> <span class="muted">(${when})</span>`);
+          lines.push(`<span class="tiny">  ${escapeHtml(msg)}</span>`);
+        });
+
+        el.innerHTML = lines.join("<br>");
+      } catch (_) {
+        // Visual fallback (still looks intentional)
+        el.innerHTML = `
+          <strong>Activity Log</strong><br>
+          <span class="muted">> git status</span><br>
+          <span class="tiny">  working tree clean</span><br>
+          <span class="muted">> next</span><br>
+          <span class="tiny">  ship infinisweeper improvements</span>
+        `;
+      }
+    }
+
+    // 4) GitHub latest commit for the latest-pushed repo (single repo)
+    async function renderGitHubLatestRepo() {
+      const el = document.getElementById("github-card");
+      if (!el) return;
+
+      try {
+        const repoRes = await fetch(`https://api.github.com/users/${GH_USER}/repos?sort=pushed&per_page=1`);
+        if (!repoRes.ok) throw new Error();
+        const repos = await repoRes.json();
+        if (!repos.length) throw new Error();
+
+        const repo = repos[0];
+
+        const commitRes = await fetch(`https://api.github.com/repos/${repo.full_name}/commits?per_page=1`);
+        if (!commitRes.ok) throw new Error();
+        const commits = await commitRes.json();
+        const latest = commits[0];
+
+        const message = latest?.commit?.message?.split("\n")[0] || "update";
+        const date = latest?.commit?.author?.date ? new Date(latest.commit.author.date).toLocaleString() : "";
+
+        el.innerHTML = `
+          <strong>Latest Commit</strong><br>
+          <div style="margin-top:6px;">
+            <a href="${repo.html_url}" target="_blank" rel="noopener">${escapeHtml(repo.name)}</a>
+          </div>
+          <div class="mono" style="margin-top:10px;">"${escapeHtml(message)}"</div>
+          <div class="tiny muted" style="margin-top:8px;">${escapeHtml(date)}</div>
+        `;
+      } catch (_) {
+        el.innerHTML = `<strong>Latest Commit</strong><br><span class="muted">Unavailable</span>`;
+      }
+    }
+
+    // 5) Minecraft server status via mcsrvstat.us
+    async function fetchMinecraftStatus() {
+      const el = document.getElementById("mc-status");
+      if (!el) return;
+
+      try {
+        const res = await fetch(`https://api.mcsrvstat.us/2/${encodeURIComponent(MC_HOST)}`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+
+        if (!data.online) {
+          el.innerHTML = `<strong>Server Status</strong><br><span class="muted">🔴 Offline</span>`;
+          return;
+        }
+
+        const players = data.players ? `${data.players.online} / ${data.players.max}` : "—";
+        const version = data.version || "—";
+        const motd = data.motd?.clean ? data.motd.clean.join(" ") : "";
+
+        el.innerHTML = `
+          <strong>Server Status</strong><br>
+          🟢 Online<br>
+          👥 Players: ${players}<br>
+          🧩 Version: ${escapeHtml(version)}<br>
+          ${motd ? `<div class="tiny muted" style="margin-top:10px;">${escapeHtml(motd)}</div>` : ""}
+        `;
+      } catch (_) {
+        el.innerHTML = `<strong>Server Status</strong><br><span class="muted">Unavailable</span>`;
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    img.onload = () => {
+      initAmbient();
+
+      relayoutAll();
+      bindPOIInteractions('poi-dev', 'm-dev');
+      bindPOIInteractions('poi-social', 'm-social');
+      bindPOIInteractions('poi-servers', 'm-servers');
+      bindPOIInteractions('poi-contact', 'm-contact');
+      bindPOIInteractions('poi-donate', 'm-donate');
+
+      // content widgets
+      fetchLatestYouTube();
+      renderNowWorking();
+      renderTerminalLog();
+      renderGitHubLatestRepo();
+      fetchMinecraftStatus();
+    };
+
+    window.addEventListener('resize', relayoutAll);
+  </script>
+</body>
 </html>
