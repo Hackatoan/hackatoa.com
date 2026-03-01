@@ -434,7 +434,6 @@ function bindPOIInteractions(poiId, modalId) {
         lockBox(modalId, poiId);
       }
     });
-    });
   });
 }
 
