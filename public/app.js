@@ -7,8 +7,8 @@ const POIS = {
     imgX: 1250,
     imgY: 900,
     labelX: 10,
-    labelY: -62,
-    lineGap: 8,
+    labelY: -72,
+    lineGap: 6,
     minDx: 45,
     side: "right",
   },
@@ -16,32 +16,32 @@ const POIS = {
     imgX: 2000,
     imgY: 800,
     labelX: -10,
-    labelY: -62,
-    lineGap: 8,
+    labelY: -72,
+    lineGap: 6,
     minDx: 45,
   },
   "poi-servers": {
     imgX: 620,
     imgY: 550,
     labelX: 10,
-    labelY: -62,
-    lineGap: 8,
+    labelY: -72,
+    lineGap: 6,
     minDx: 45,
   },
   "poi-contact": {
     imgX: 1690,
     imgY: 450,
     labelX: -10,
-    labelY: -62,
-    lineGap: 8,
+    labelY: -72,
+    lineGap: 6,
     minDx: 45,
   },
   "poi-donate": {
     imgX: 270,
     imgY: 720,
     labelX: 10,
-    labelY: -62,
-    lineGap: 8,
+    labelY: -72,
+    lineGap: 6,
     minDx: 45,
   },
 };
@@ -51,8 +51,6 @@ const GH_USER = "hackatoan";
 const NOW_WORKING_REPO = "infinisweeper";
 const MC_HOST = "mc.hackatoa.com";
 
-// "Island uptime" start (pick a date you like)
-const ISLAND_EPOCH = "2025-10-01T00:00:00Z";
 
 const canvas = document.getElementById("islandCanvas");
 const ctx = canvas.getContext("2d");
@@ -84,11 +82,15 @@ function showToast() {
   }, 1400);
 }
 
+// Clipboard copy with feedback (used by multiple modals)
+// eslint-disable-next-line no-unused-vars
 function copyTxt(t) {
   navigator.clipboard.writeText(t);
   showToast();
 }
 
+// required for modal close buttons
+// eslint-disable-next-line no-unused-vars
 function forceClose() {
   lockedId = null;
   isOverModal = false;
@@ -396,22 +398,7 @@ function positionModalNearPOI(modalEl, poiId, modalIdOverride = null) {
       modalEl.style.left = `${newLeft}px`;
       modalEl.style.top = `${newTop}px`;
     });
-    const margin = 20;
-
-    // Clamp horizontally
-    left = Math.max(
-      margin,
-      Math.min(left, window.innerWidth - modal.offsetWidth - margin),
-    );
-
-    // Clamp vertically
-    top = Math.max(
-      margin,
-      Math.min(top, window.innerHeight - modal.offsetHeight - margin),
-    );
-
-    modal.style.left = `${left}px`;
-    modal.style.top = `${top}px`;
+    // final position is set above via `newLeft`/`newTop` and already clamped where necessary
   });
 }
 
@@ -561,7 +548,7 @@ async function fetchLatestYouTube() {
             allowfullscreen>
           </iframe>
         `;
-  } catch (_) {
+  } catch {
     // no console spam
   }
 }
@@ -587,8 +574,8 @@ async function renderNowWorking() {
             Updated: ${new Date(repo.pushed_at).toLocaleDateString()}
           </div>
         `;
-  } catch (_) {
-    el.innerHTML = `<strong>Now Working On</strong><br><span class="muted">infinisweeper</span>`;
+  } catch {
+// no console spam, just fail silently with no content
   }
 }
 
@@ -620,16 +607,8 @@ async function renderTerminalLog() {
     });
 
     el.innerHTML = lines.join("<br>");
-  } catch (_) {
-    // Visual fallback (still looks intentional)
-    el.innerHTML = `
-          <strong>Activity Log</strong><br>
-          <span class="muted">> git status</span><br>
-          <span class="tiny">  working tree clean</span><br>
-          <span class="muted">> next</span><br>
-          <span class="tiny">  ship infinisweeper improvements</span>
-        `;
-  }
+  } catch {
+    el.innerHTML = `<strong>Activity Log</strong><br><span class="muted">Unavailable</span>`;}
 }
 
 // 4) GitHub latest commit for the latest-pushed repo (single repo)
@@ -667,7 +646,7 @@ async function renderGitHubLatestRepo() {
           <div class="mono" style="margin-top:10px;">"${escapeHtml(message)}"</div>
           <div class="tiny muted" style="margin-top:8px;">${escapeHtml(date)}</div>
         `;
-  } catch (_) {
+  } catch  {
     el.innerHTML = `<strong>Latest Commit</strong><br><span class="muted">Unavailable</span>`;
   }
 }
@@ -702,7 +681,7 @@ async function fetchMinecraftStatus() {
           🧩 Version: ${escapeHtml(version)}<br>
           ${motd ? `<div class="tiny muted" style="margin-top:10px;">${escapeHtml(motd)}</div>` : ""}
         `;
-  } catch (_) {
+  } catch  {
     el.innerHTML = `<strong>Server Status</strong><br><span class="muted">Unavailable</span>`;
   }
 }
@@ -746,17 +725,29 @@ document.addEventListener("DOMContentLoaded", () => {
   if (img.complete && img.naturalWidth) {
     relayoutAll();
   }
+  // ensure content widgets run even if image load doesn't trigger onload
+  fetchLatestYouTube();
+  renderNowWorking();
+  renderTerminalLog();
+  renderGitHubLatestRepo();
+  fetchMinecraftStatus();
 });
 
 img.onerror = () => {
   initAmbient();
   // still bind + show modals via POIs even if map image fails
   relayoutAll();
+  // still attempt to load content widgets when the background image fails
+  fetchLatestYouTube();
+  renderNowWorking();
+  renderTerminalLog();
+  renderGitHubLatestRepo();
+  fetchMinecraftStatus();
 };
 
 // Use your existing reference here:
 
-const frames = [
+const spriteFrames = [
   { src: "assets/sprite/sprite_0.png", duration: 5000 },
   { src: "assets/sprite/sprite_1.png", duration: 400 },
   { src: "assets/sprite/sprite_2.png", duration: 50 },
@@ -764,7 +755,7 @@ const frames = [
 ];
 
 // --- Preload to avoid flashing/flicker ---
-const preloaded = frames.map((f) => {
+const preloaded = spriteFrames.map((f) => {
   const im = new Image();
   im.src = f.src;
   return im;
@@ -792,9 +783,9 @@ function tick(t) {
   elapsed += dt;
 
   // Advance through frames even if the browser hiccups / tab was hidden
-  while (elapsed >= frames[i].duration) {
-    elapsed -= frames[i].duration;
-    i = (i + 1) % frames.length;
+  while (elapsed >= spriteFrames[i].duration) {
+    elapsed -= spriteFrames[i].duration;
+    i = (i + 1) % spriteFrames.length;
     applyFrame(i);
   }
 
