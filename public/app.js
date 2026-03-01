@@ -770,7 +770,6 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 img.onload = () => {
-  initAmbient();
   relayoutAll();
 };
 window.addEventListener("load", () => {
