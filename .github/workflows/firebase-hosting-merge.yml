@@ -18,12 +18,16 @@ jobs:
           channelId: live
           projectId: hackatoa-com
 
-      # ✅ NEW: write service account json for firebase-tools
       - name: Write service account key
         run: |
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HACKATOA_COM }}' > $RUNNER_TEMP/gcp_key.json
+          cat > $RUNNER_TEMP/gcp_key.json << 'EOF'
+          ${{ secrets.FIREBASE_SERVICE_ACCOUNT_HACKATOA_COM }}
+          EOF
 
-      # ✅ NEW: deploy functions
+      - name: Install functions dependencies
+        working-directory: functions
+        run: npm ci
+
       - name: Deploy Firebase Functions
         run: |
           npm i -g firebase-tools
