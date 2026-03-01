@@ -520,8 +520,15 @@ async function fetchLatestYouTube() {
     url.searchParams.set("key", YT_API_KEY);
 
     const res = await fetch(url.toString(), { cache: "no-store" });
-    if (!res.ok) throw new Error(`YouTube API error: ${res.status}`);
+const bodyText = await res.text();
+let body;
+try { body = JSON.parse(bodyText); } catch { body = { raw: bodyText }; }
 
+if (!res.ok) {
+  console.error("YouTube API status:", res.status);
+  console.error("YouTube API error body:", body);
+  throw new Error(`YouTube API error: ${res.status}`);
+}
     const data = await res.json();
     const items = Array.isArray(data?.items) ? data.items : [];
     if (!items.length) throw new Error("No results");
