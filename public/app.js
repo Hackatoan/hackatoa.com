@@ -510,7 +510,6 @@ async function fetchLatestYouTube() {
   if (!container) return;
 
   try {
-    // Grab a few newest videos, then pick the first non-live/non-upcoming
     const url = new URL("https://www.googleapis.com/youtube/v3/search");
     url.searchParams.set("part", "snippet");
     url.searchParams.set("channelId", YT_CHANNEL_ID);
@@ -520,25 +519,24 @@ async function fetchLatestYouTube() {
     url.searchParams.set("key", YT_API_KEY);
 
     const res = await fetch(url.toString(), { cache: "no-store" });
-const bodyText = await res.text();
-let body;
-try { body = JSON.parse(bodyText); } catch { body = { raw: bodyText }; }
+    const bodyText = await res.text();
 
-if (!res.ok) {
-  console.error("YouTube API status:", res.status);
-  console.error("YouTube API error body:", body);
-  throw new Error(`YouTube API error: ${res.status}`);
-}
-    const data = await res.json();
+    let data;
+    try { data = JSON.parse(bodyText); } catch { data = {}; }
+
+    if (!res.ok) {
+      console.error("YouTube API error details:", data);
+      throw new Error(`YouTube API error: ${res.status}`);
+    }
+
     const items = Array.isArray(data?.items) ? data.items : [];
-    if (!items.length) throw new Error("No results");
+    if (!items.length) return;
 
-    // liveBroadcastContent: "none" | "live" | "upcoming"
     const pick =
       items.find((it) => (it?.snippet?.liveBroadcastContent || "none") === "none") || items[0];
 
     const videoId = pick?.id?.videoId;
-    if (!videoId) throw new Error("Missing videoId");
+    if (!videoId) return;
 
     container.innerHTML = `
       <div style="position:relative; width:100%; padding-top:56.25%;">
