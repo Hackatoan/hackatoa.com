@@ -14,9 +14,11 @@
         padding: 8px;
         z-index: 100;
         text-decoration: underline;
+        display: block;
       }
       .skip-to-content:focus {
         top: 0;
+        display: block;
       }
 
       /* Keyboard focus styles for accessibility */
@@ -332,13 +334,54 @@
         #bg-blur,
         #bg-dim,
         #map-container,
-        #poi-layer,
         #ambient {
           display: none;
         }
         body {
           overflow-y: scroll;
           background: #0c141f;
+        }
+        /* Show POI layer on mobile so users can click items */
+        #poi-layer {
+          pointer-events: auto;
+          position: static;
+          height: auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+          padding: 20px;
+        }
+        .poi {
+          position: static !important;
+          width: auto !important;
+          height: auto !important;
+          margin-bottom: 10px;
+        }
+        .anchor {
+          position: static !important;
+          width: auto !important;
+          height: auto !important;
+        }
+        .poi-ui {
+          display: inline-block;
+          padding: 12px 20px;
+          background: rgba(255, 255, 255, 0.1);
+          border: 2px solid var(--beacon);
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        .poi-ui:hover {
+          background: rgba(255, 255, 255, 0.2);
+        }
+        .label-text {
+          display: inline;
+          font-size: 1.2rem;
+          -webkit-text-stroke: 0;
+        }
+        .dot,
+        .leader-svg {
+          display: none;
         }
         #ui-stack {
           display: flex;
@@ -355,13 +398,18 @@
           position: static;
           left: auto;
           top: auto;
-          transform: none;
+          transform: none !important;
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+          transition: opacity 150ms ease, visibility 150ms ease;
+          width: 100%;
+          max-width: 520px;
+        }
+        body #ui-stack .modal.active {
           opacity: 1;
           visibility: visible;
           pointer-events: auto;
-          transition: none;
-          width: 100%;
-          max-width: 520px;
         }
         .profile-card {
           width: calc(100% - 75px);
@@ -464,20 +512,8 @@
         overflow-y: auto;
       }
 
-      /* Accessibility enhancements */
-      dialog {
-        border: inherit;
-        padding: 0;
-        background: transparent;
-      }
-
-      dialog[open] {
-        display: block !important;
-      }
-
-      dialog:not([open]) {
-        display: none;
-      }
+      /* Accessibility enhancements - dialogs */
+      /* Note: Modals use div elements with .modal class for compatibility */
 
       /* Improved focus indicators */
       .close-btn:focus-visible {
