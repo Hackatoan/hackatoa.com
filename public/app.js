@@ -155,6 +155,7 @@ function lockBox(modalId, anchorPoiId = null) {
   if (!target) return;
 
   if (window.innerWidth > 768) {
+    // Desktop: lock modal near its POI and allow hover/close behavior
     lockedId = lockedId === modalId ? null : modalId;
     document
       .querySelectorAll(".modal")
@@ -168,6 +169,14 @@ function lockBox(modalId, anchorPoiId = null) {
       }
       typeModalTitle(target);
     }
+  } else {
+    // Mobile: keep all panels expanded; tapping a POI just scrolls
+    document.querySelectorAll(".modal").forEach((m) => {
+      m.classList.add("active");
+    });
+
+    // Scroll the tapped panel into view for better UX on small screens
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
 
@@ -283,6 +292,40 @@ function layoutPOI(poiEl, conf, t) {
 }
 
 function relayoutAll() {
+  // On mobile, show POIs as a simple vertical list and
+  // avoid canvas-based positioning / leader lines.
+  if (window.innerWidth <= 768) {
+    for (const id of Object.keys(POIS)) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+
+      // Reset any inline positioning set for desktop layout
+      el.style.left = "";
+      el.style.top = "";
+      el.style.zIndex = "";
+
+      const ui = el.querySelector(".poi-ui");
+      const svg = el.querySelector(".leader-svg");
+
+      if (ui) {
+        ui.style.transform = "";
+      }
+
+      if (svg) {
+        svg.style.left = "0";
+        svg.style.top = "0";
+        svg.setAttribute("width", 0);
+        svg.setAttribute("height", 0);
+      }
+    }
+
+    // Ensure all modals are expanded in mobile view
+    document.querySelectorAll(".modal").forEach((m) => {
+      m.classList.add("active");
+    });
+    return;
+  }
+
   if (!img.complete || !img.naturalWidth) return;
   const t = drawContain();
   for (const [id, conf] of Object.entries(POIS)) {
