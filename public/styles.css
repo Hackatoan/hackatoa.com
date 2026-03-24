@@ -386,22 +386,23 @@ canvas {
   }
 
   body #ui-stack .modal {
-    position: static;
-    left: auto;
-    top: auto;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    display: block !important;
     transform: none !important;
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transition: none;
-    width: 100%;
-    max-width: 520px;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transition: none !important;
+    width: 100% !important;
+    max-width: 520px !important;
   }
 
   body #ui-stack .modal.active {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
   }
 
   .profile-card {
@@ -497,27 +498,8 @@ a,
   background: var(--beacon);
 }
 
-.modal {
-  max-height: calc(100vh - 80px);
-  overflow-y: auto;
-}
-
-#ui-stack {
-  pointer-events: none;
-}
-
-.modal {
-  pointer-events: none;
-}
-
-.modal.active {
-  pointer-events: auto;
-}
-
-.modal {
-  max-height: calc(100vh - 80px);
-  overflow-y: auto;
-}
+/* Global default already sets modal max-height/overflow; avoid duplicating
+   pointer-event gating here to keep mobile behavior simple. */
 
 /* Accessibility enhancements - dialogs */
 /* Note: Modals use div elements with .modal class for compatibility */
