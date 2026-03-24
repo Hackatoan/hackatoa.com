@@ -263,9 +263,9 @@ canvas {
   z-index: 9000;
 
   /* ✅ hidden state */
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 
   position: fixed;
   left: 50%;
@@ -383,10 +383,10 @@ canvas {
     left: auto;
     top: auto;
     transform: none !important;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 150ms ease, visibility 150ms ease;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: none;
     width: 100%;
     max-width: 520px;
   }
