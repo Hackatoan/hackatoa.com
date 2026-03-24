@@ -556,65 +556,31 @@ function typeModalTitle(modalEl) {
 }
 
 /**********************
- * DATA WIDGETS (no API keys)
- **********************/
+* DATA WIDGETS (no API keys)
+**********************/
 
-// 1) Latest YT upload (avoid live/VOD when possible) + nocookie + clean allow list
-// Put this somewhere global (or pass it in)
-const YT_API_KEY = "AIzaSyDyJW6U0NXE09Ha45Oi2gV8giDfwm6kxXE";
-
-async function fetchLatestYouTube() {
+// 1) YouTube embed (static latest/featured video, no API calls)
+function renderStaticYouTube() {
   const container = document.getElementById("yt-video");
   if (!container) return;
 
-  try {
-    const url = new URL("https://www.googleapis.com/youtube/v3/search");
-    url.searchParams.set("part", "snippet");
-    url.searchParams.set("channelId", YT_CHANNEL_ID);
-    url.searchParams.set("order", "date");
-    url.searchParams.set("type", "video");
-    url.searchParams.set("maxResults", "6");
-    url.searchParams.set("key", YT_API_KEY);
+  // Uses a fixed video ID; update here whenever you want to feature
+  // a different upload, without needing the YouTube Data API.
+  const videoId = "es9Zjjaql7Y";
 
-    const res = await fetch(url.toString(), { cache: "no-store" });
-    const bodyText = await res.text();
-
-    let data;
-    try { data = JSON.parse(bodyText); } catch { data = {}; }
-
-    if (!res.ok) {
-      console.error("YouTube API error details:", data);
-      throw new Error(`YouTube API error: ${res.status}`);
-    }
-
-    const items = Array.isArray(data?.items) ? data.items : [];
-    if (!items.length) return;
-
-    const pick =
-      items.find((it) => (it?.snippet?.liveBroadcastContent || "none") === "none") || items[0];
-
-    const videoId = pick?.id?.videoId;
-    if (!videoId) return;
-
-    container.innerHTML = `
-      <div style="position:relative; width:100%; padding-top:56.25%;">
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/${videoId}"
-          title="Latest YouTube video"
-          frameborder="0"
-          allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-          allowfullscreen
-          style="position:absolute; inset:0; width:100%; height:100%; border:0;">
-        </iframe>
-      </div>
-    `;
-  } catch (err) {
-    console.error("fetchLatestYouTube failed:", err);
-    container.innerHTML = `<div class="muted">Video unavailable</div>`;
-  }
+  container.innerHTML = `
+    <div style="position:relative; width:100%; padding-top:56.25%;">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/${videoId}"
+        title="YouTube video"
+        frameborder="0"
+        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+        allowfullscreen
+        style="position:absolute; inset:0; width:100%; height:100%; border:0;">
+      </iframe>
+    </div>
+  `;
 }
-
-window.addEventListener("load", fetchLatestYouTube);
 
 
 
@@ -832,7 +798,7 @@ img.onload = () => {
 };
 window.addEventListener("load", () => {
   // content widgets (run once)
-  fetchLatestYouTube();
+  renderStaticYouTube();
   renderNowWorking();
   renderTerminalLog();
   renderGitHubLatestRepo();
@@ -951,7 +917,7 @@ function initWidgetsOnce() {
   if (widgetsInitialized) return;
   widgetsInitialized = true;
 
-  fetchLatestYouTube();
+  renderStaticYouTube();
   renderNowWorking();
   renderTerminalLog();
   renderGitHubLatestRepo();
