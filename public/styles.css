@@ -262,10 +262,10 @@ canvas {
   box-shadow: 10px 10px 0px #000;
   z-index: 9000;
 
-  /* ✅ hidden state */
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+  /* hidden by default; shown via .active or mobile override */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 
   position: fixed;
   left: 50%;
@@ -352,6 +352,13 @@ canvas {
 
 @media (max-width: 768px) {
 
+  html,
+  body {
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
   #bg-blur,
   #bg-dim,
   #map-container,
@@ -361,7 +368,7 @@ canvas {
   }
 
   body {
-    overflow-y: scroll;
+    overflow-y: auto;
     background: #0c141f;
   }
 
