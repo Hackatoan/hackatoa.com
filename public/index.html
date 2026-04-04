@@ -1,334 +1,390 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Hackatoa - Developer, Streamer & Minecraft Host</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hackatoa · Night Volcano Portfolio</title>
   <meta name="description"
-    content="Jacob Harris - Developer, streamer, and game infrastructure enthusiast. Explore my projects, latest work, and gaming community." />
-  <meta name="keywords" content="developer, streamer, minecraft, gaming, software engineer" />
-  <meta name="author" content="Jacob Harris" />
-  <meta name="theme-color" content="#ff4500" />
-  <link rel="canonical" href="https://hackatoa.com/" />
-
-  <!-- Browser Compatibility & Mobile App Meta Tags -->
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Hackatoa" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="x-ua-compatible" content="IE=edge" />
-  <meta name="msapplication-TileColor" content="#ff4500" />
-  <meta name="msapplication-config" content="browserconfig.xml" />
-
-  <!-- DNS Prefetch & Preconnect for External Services -->
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="dns-prefetch" href="https://www.googleapis.com" />
-  <link rel="dns-prefetch" href="https://api.github.com" />
-  <link rel="dns-prefetch" href="https://www.youtube.com" />
-  <link rel="dns-prefetch" href="https://mcsrvstat.us" />
-
-  <!-- Open Graph / Social Sharing -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://hackatoa.com/" />
-  <meta property="og:title" content="Hackatoa - Developer, Streamer & Minecraft Host" />
-  <meta property="og:description" content="Explore my projects, streaming content, and gaming servers." />
-  <meta property="og:image" content="https://hackatoa.com/assets/me.png" />
-  <meta property="og:site_name" content="Hackatoa" />
-  <meta property="og:locale" content="en_US" />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:url" content="https://hackatoa.com/" />
-  <meta name="twitter:title" content="Hackatoa - Developer, Streamer & Minecraft Host" />
-  <meta name="twitter:description" content="Explore my projects, streaming content, and gaming servers." />
-  <meta name="twitter:image" content="https://hackatoa.com/assets/me.png" />
-  <meta name="twitter:creator" content="@JHackatoa" />
-
-  <!-- JSON-LD Structured Data -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Jacob Harris",
-      "jobTitle": "Software Developer",
-      "url": "https://hackatoa.com",
-      "image": "https://hackatoa.com/assets/me.png",
-      "sameAs": [
-        "https://github.com/hackatoan",
-        "https://twitter.com/JHackatoa",
-        "https://youtube.com/@hackatoa",
-        "https://twitch.tv/hackatoa"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "email": "jacob@hackatoa.com",
-        "contactType": "General"
-      }
-    }
-    </script>
-
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicons/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicons/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicons/favicon-16x16.png" />
-  <link rel="manifest" href="assets/favicons/site.webmanifest" />
+    content="Personal portfolio, dev links, and late-night ramblings at the edge of a volcano." />
+  <link rel="icon" href="assets/me.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="assets/me.ico" type="image/x-icon" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://alexgama11.github.io/GitGlue/css/gitstyle.css" />
 </head>
 
 <body>
-  <!-- Skip to main content link for keyboard users -->
-  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+  <div class="volcano-bg" aria-hidden="true">
+    <video class="volcano-video" src="assets/bg.mp4" autoplay muted loop playsinline></video>
+  </div>
 
-  <div id="bg-blur" role="img" aria-label="Animated background"></div>
-  <div id="bg-dim"></div>
+  <main>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="brand">
+          <div class="brand-mark"></div>
+          <div>
+            <div class="brand-text-main">HACKATOA</div>
+            <div class="brand-text-sub">Night-side dev & lava logs</div>
+          </div>
+        </div>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="#intro">Intro</a>
+          <a href="#portfolio">Projects</a>
+          <a href="#links">Links</a>
+          <a href="#blog">Ramblings</a>
+          <a href="#support">Support</a>
+          <a href="#mycology">Mycology</a>
+          <a href="#contact" class="nav-pill-primary">Contact</a>
+        </nav>
+      </header>
 
-  <div id="toast" role="status" aria-live="polite" aria-atomic="true">Copied to Clipboard!</div>
+      <div class="slides-viewport">
+        <div class="slides-track">
 
-  <!-- Header with profile -->
-  <header class="profile-card" role="banner">
-    <img src="assets/me.png" alt="Jacob Harris profile photo" class="profile-pfp" />
-    <div>
-      <h1 style="margin: 0; font-size: 1.4rem">Jacob Harris</h1>
-      <p style="margin: 0; color: var(--lava); font-size: 0.9rem">
-        aka hackatoa
-      </p>
+          <section id="intro" class="hero slide" aria-labelledby="hero-title">
+            <div class="slide-inner">
+              <div class="hero-copy">
+                <div class="hero-copy-tag">
+                  <span class="hero-copy-tag-dot"></span>
+                  <span>Night build in progress</span>
+                </div>
+                <h1 id="hero-title" class="hero-title">
+                  A <span class="highlight">volcanic</span> little corner
+                  for experiments, projects, and late night ideas.
+                </h1>
+                <p class="hero-subtitle">
+                  I am Jacob P Harris (aka <strong>hackatoa</strong>): Linux-first
+                  developer, cyber security tinkerer, and occasional mycologist.
+                  This is the living version of my portfolio, built on the
+                  night side of a volcano.
+                </p>
+                <div class="hero-cta-row">
+                  <a class="button button-primary" href="#portfolio">View projects</a>
+                  <a class="button button-secondary" href="#blog">Read ramblings</a>
+                </div>
+                <div class="hero-metadata">
+                  <div>
+                    <strong>Currently tinkering</strong>
+                    <div>Linux tooling, web experiments, and security labs.</div>
+                  </div>
+                  <div>
+                    <strong>Time of day</strong>
+                    <div>Perpetual midnight over a lava field.</div>
+                  </div>
+                </div>
+              </div>
+
+              <aside class="hero-panel" aria-label="Developer snapshot">
+                <div class="hero-panel-label">Lava-side status</div>
+                <div class="hero-panel-row">
+                  <div class="hero-panel-ident">
+                    <img src="assets/me.png" alt="Portrait of Jacob P Harris" class="hero-avatar" loading="lazy" />
+                    <div class="hero-panel-name">Jacob P Harris</div>
+                  </div>
+                  <div class="hero-panel-badge">Portfolio · v0.1</div>
+                </div>
+                <div class="hero-panel-tags">
+                  <span class="chip chip-hot">Developer</span>
+                  <span class="chip">Cyber security</span>
+                  <span class="chip">Linux user</span>
+                  <span class="chip">Mycology side quests</span>
+                </div>
+                <div class="hero-panel-divider"></div>
+                <dl class="hero-panel-meta">
+                  <div>
+                    <dt class="label">Primary stack</dt>
+                    <dd class="value">Linux · Web · Security</dd>
+                  </div>
+                  <div>
+                    <dt class="label">Focus</dt>
+                    <dd class="value">Dev, infra, hardening</dd>
+                  </div>
+                  <div>
+                    <dt class="label">Mood</dt>
+                    <dd class="value">Smoldering</dd>
+                  </div>
+                </dl>
+                <div class="hero-panel-footer">
+                  <div>
+                    <span class="dot"></span>
+                    <span>Dynamic bits will grow over time.</span>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </section>
+
+          <section id="portfolio" class="section slide" aria-labelledby="portfolio-title">
+            <div class="slide-inner">
+              <div class="section-header">
+                <div>
+                  <div class="section-kicker">Portfolio</div>
+                  <h2 class="section-title" id="portfolio-title">Recent & favorite builds</h2>
+                </div>
+                <div class="section-caption">A mix of infrastructure, tooling, and tinkering.</div>
+              </div>
+              <div class="grid-2">
+                <article class="card">
+                  <h3 class="card-title">Hackatoa.com · main site</h3>
+                  <p class="card-body">
+                    The volcanic-night home base: this portfolio, experiments,
+                    and links to the rest of the ecosystem.
+                  </p>
+                  <div class="link-row">
+                    <a class="pill-link" href="https://hackatoa.com" target="_blank" rel="noreferrer">Live</a>
+                    <a class="pill-link" href="https://github.com/Hackatoan/hackatoa.com" target="_blank"
+                      rel="noreferrer">Source</a>
+                  </div>
+                </article>
+                <article class="card">
+                  <h3 class="card-title">Lab tooling & security notes</h3>
+                  <p class="card-body">
+                    A rotating set of small tools, scripts, and write-ups for
+                    Linux, infra, and cyber security practice.
+                  </p>
+                  <div class="link-row">
+                    <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noreferrer">GitHub
+                      profile</a>
+                  </div>
+                </article>
+                <article class="card card-wide">
+                  <h3 class="card-title">In-progress experiments</h3>
+                  <p class="card-body">
+                    Live GitHub repos embedded from my profile.
+                  </p>
+                  <div data="https://github.com/Hackatoan?tab=repositories" class="github-pinner"
+                    style="visibility: hidden;"></div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section id="links" class="section slide" aria-labelledby="links-title">
+            <div class="slide-inner">
+              <div class="section-header">
+                <div>
+                  <div class="section-kicker">Dev links</div>
+                  <h2 class="section-title" id="links-title">Socials & dev places</h2>
+                </div>
+                <div class="section-caption">Main website, code, streams, and voice.</div>
+              </div>
+              <div class="grid-2">
+                <article class="card">
+                  <h3 class="card-title">Core places</h3>
+                  <p class="card-body">Where to find the main content.</p>
+                  <div class="link-row">
+                    <a class="pill-link" href="https://hackatoa.com" target="_blank" rel="noreferrer">Hackatoa.com</a>
+                    <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noreferrer">GitHub</a>
+                    <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank"
+                      rel="noreferrer">YouTube</a>
+                  </div>
+                </article>
+                <article class="card">
+                  <h3 class="card-title">Live & voice</h3>
+                  <p class="card-body">Places where things happen in real time.</p>
+                  <div class="link-row">
+                    <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank"
+                      rel="noreferrer">Twitch</a>
+                    <a class="pill-link" href="ts3server://ts.hackatoa.com" target="_blank" rel="noreferrer">TeamSpeak ·
+                      ts.hackatoa.com</a>
+                  </div>
+                </article>
+                <article class="card card-wide">
+                  <h3 class="card-title">Twitch · Live Stream</h3>
+                  <p class="card-body">
+                    Watch me code, play games, and ramble about cyber security and mycology.
+                  </p>
+                  <div class="embed-frame embed-16x9">
+                    <iframe
+                      src="https://player.twitch.tv/?channel=hackatoa&parent=hackatoa.com&parent=localhost&parent=127.0.0.1"
+                      title="Hackatoa Twitch Stream" frameborder="0" allowfullscreen="true" scrolling="no" height="378"
+                      width="620"></iframe>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section id="blog" class="section slide" aria-labelledby="blog-title">
+            <div class="slide-inner">
+              <div class="section-header">
+                <div>
+                  <div class="section-kicker">Ramblings</div>
+                  <h2 class="section-title" id="blog-title">Lava log / blog</h2>
+                </div>
+                <div class="section-caption">Loose notes, late-night ideas, and half-formed plans.</div>
+              </div>
+              <div class="blog-list" id="blog-list"></div>
+            </div>
+          </section>
+
+          <section id="contact" class="section slide" aria-labelledby="contact-title">
+            <div class="slide-inner">
+              <div class="section-header">
+                <div>
+                  <div class="section-kicker">Contact</div>
+                  <h2 class="section-title" id="contact-title">Ping the volcano</h2>
+                </div>
+                <div class="section-caption">Swap in real contact info or a form later.</div>
+              </div>
+              <div class="card">
+                <p class="card-body">
+                  Best way to reach me is by email at
+                  <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>. I tend to
+                  live on Linux, and I split my time between development,
+                  cyber security practice, and mycology experiments.
+                </p>
+                <div class="contact-times" aria-label="Local and Hackatoa time">
+                  <div class="contact-time-row">
+                    <span class="contact-time-label">Your local time</span>
+                    <span class="contact-time-value" id="contact-local-time">--:--</span>
+                  </div>
+                  <div class="contact-time-row">
+                    <span class="contact-time-label">Hackatoa time (PT)</span>
+                    <span class="contact-time-value" id="contact-pt-time">--:--</span>
+                  </div>
+                </div>
+                <form class="contact-form" action="mailto:jacob@hackatoa.com" method="GET">
+                  <label class="contact-label" for="contact-message">Quick email from the volcano</label>
+                  <textarea id="contact-message" name="body" class="contact-input" rows="3"
+                    placeholder="Drop a short message and your contact details…"></textarea>
+                  <div class="contact-actions">
+                    <button class="button button-primary" type="submit">Open email app</button>
+                    <span class="contact-hint">You can also reach me on TeamSpeak at
+                      <a href="ts3server://ts.hackatoa.com">ts.hackatoa.com</a>.
+                    </span>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </section>
+
+          <section id="support" class="section slide" aria-labelledby="support-title">
+            <div class="slide-inner">
+              <div class="section-header">
+                <div>
+                  <div class="section-kicker">Support</div>
+                  <h2 class="section-title" id="support-title">Fuel the volcano</h2>
+                </div>
+                <div class="section-caption">Optional, but always appreciated.</div>
+              </div>
+              <div class="card">
+                <p class="card-body">
+                  If you want to support experiments, infrastructure, or just
+                  the vibe here, you can send Monero (XMR) to this wallet:
+                </p>
+                <div class="wallet-address-box">
+                  87Dj6Y48BTyYemYGEtTWkvJXf2YCszQZuQWWdGhk9PE6RVHYAfLnXbbCMSeEhb3f4n1op9CKFH6D3N2Mj8Xn6dELLYycPMQ
+                </div>
+                <div class="wallet-qr-container">
+                  <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=450x450&data=87Dj6Y48BTyYemYGEtTWkvJXf2YCszQZuQWWdGhk9PE6RVHYAfLnXbbCMSeEhb3f4n1op9CKFH6D3N2Mj8Xn6dELLYycPMQ&bgcolor=FFFFFF&color=050816&margin=0"
+                    alt="QR code for Monero wallet address" loading="lazy" />
+                  <div class="wallet-qr-text">
+                    Scan with a wallet app that supports scanning QR codes for XMR addresses.<br />
+                    The same address is shown in the copyable text block above.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="mycology" class="section slide" aria-labelledby="mycology-title">
+            <div class="slide-inner">
+              <div class="section-header">
+                <div>
+                  <div class="section-kicker">Mycology</div>
+                  <h2 class="section-title" id="mycology-title">Fungi side quests</h2>
+                </div>
+                <div class="section-caption">A future gallery of cultures, grows, and notes.</div>
+              </div>
+              <div class="card">
+                <p class="card-body">
+                  I also do mycology. This is where photos, logs, and
+                  experiments will live once I drop images into the project.
+                  For now this is a placeholder to mark the space.
+                </p>
+                <div class="myco-carousel" aria-label="Mycology image carousel">
+                  <div class="myco-carousel-window">
+                    <div class="myco-carousel-track" id="myco-carousel-track"></div>
+                  </div>
+                  <div class="myco-carousel-nav">
+                    <button class="myco-arrow" type="button" data-dir="prev">Prev</button>
+                    <div class="myco-dots" id="myco-dots"></div>
+                    <button class="myco-arrow" type="button" data-dir="next">Next</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="servers" class="section slide" aria-labelledby="servers-title" data-hidden="true">
+            <div class="slide-inner">
+              <div class="section-header">
+                <div>
+                  <div class="section-kicker">Game servers</div>
+                  <h2 class="section-title" id="servers-title">Hidden lava instances</h2>
+                </div>
+                <div class="section-caption">Reserved for when servers go live again.</div>
+              </div>
+              <div class="card">
+                <p class="card-body">
+                  No public game servers are online right now. When I spin new
+                  ones up, this slide will unhide with connection details,
+                  rules, and status.
+                </p>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+      <footer class="site-footer">
+        <div class="site-footer-row">
+          <div>Built as a living portfolio. Theme: volcano at midnight.</div>
+          <div class="footer-links">
+            <a href="#intro">Back to top</a>
+          </div>
+        </div>
+      </footer>
     </div>
-  </header>
+  </main>
 
-  <!-- Status information -->
-  <aside id="ambient" aria-label="Island status information">
-    <div>
-      <span class="k">Island Uptime:</span>
-      <span class="v" id="amb-uptime" aria-live="polite">--</span>
+  <aside class="music-widget" aria-label="Ambient music widget">
+    <div class="music-card">
+      <div class="music-wave" aria-hidden="true">
+        <div class="music-bar" data-bar="1"></div>
+        <div class="music-bar" data-bar="2"></div>
+        <div class="music-bar" data-bar="3"></div>
+        <div class="music-bar" data-bar="4"></div>
+      </div>
+      <div class="music-meta">
+        <div class="music-title">Loading track...</div>
+
+      </div>
+      <input type="range" id="music-volume" class="music-volume" min="0" max="100" value="25" aria-label="Volume">
+      <button class="music-skip" id="music-skip" type="button" aria-label="Skip Track"
+        title="Skip">&#x23ED;&#xFE0E;</button>
+      <button class="music-toggle" id="music-toggle" type="button" data-state="paused">
+        Play
+      </button>
     </div>
-    <div>
-      <span class="k">Build:</span> <span class="v" id="amb-build" aria-live="polite">--</span>
+    <div id="music-player-wrapper" class="music-player-wrapper" aria-hidden="true">
+      <div id="music-player"></div>
     </div>
   </aside>
 
-  <!-- Interactive map -->
-  <main id="main-content">
-    <div id="map-container">
-      <canvas id="islandCanvas"
-        aria-label="Interactive island map with points of interest. Use mouse to explore locations: Dev Terminal, Broadcasting, Game Hub, Uplink, and Support."></canvas>
-    </div>
-
-    <nav id="poi-layer" aria-label="Interactive navigation points">
-      <div class="poi" id="poi-dev">
-        <div class="anchor">
-          <svg class="leader-svg" aria-hidden="true">
-            <path class="leader-hit" d=""></path>
-            <path class="leader-path" d=""></path>
-          </svg>
-          <div class="poi-ui" role="button" tabindex="0"
-            aria-label="Dev Terminal - Click to view development and terminal information"><span class="label-text"
-              aria-hidden="true">Dev Terminal</span></div>
-          <div class="dot" aria-hidden="true"></div>
-        </div>
-      </div>
-
-      <div class="poi" id="poi-social">
-        <div class="anchor">
-          <svg class="leader-svg" aria-hidden="true">
-            <path class="leader-hit" d=""></path>
-            <path class="leader-path" d=""></path>
-          </svg>
-          <div class="poi-ui" role="button" tabindex="0"
-            aria-label="Broadcasting - Click to view streaming platforms and content"><span class="label-text"
-              aria-hidden="true">Broadcasting</span></div>
-          <div class="dot" aria-hidden="true"></div>
-        </div>
-      </div>
-
-      <div class="poi" id="poi-servers">
-        <div class="anchor">
-          <svg class="leader-svg" aria-hidden="true">
-            <path class="leader-hit" d=""></path>
-            <path class="leader-path" d=""></path>
-          </svg>
-          <div class="poi-ui" role="button" tabindex="0"
-            aria-label="Game Hub - Click to view gaming servers and Minecraft information"><span class="label-text"
-              aria-hidden="true">Game Hub</span></div>
-          <div class="dot" aria-hidden="true"></div>
-        </div>
-      </div>
-
-      <div class="poi" id="poi-contact">
-        <div class="anchor">
-          <svg class="leader-svg" aria-hidden="true">
-            <path class="leader-hit" d=""></path>
-            <path class="leader-path" d=""></path>
-          </svg>
-          <div class="poi-ui" role="button" tabindex="0" aria-label="Uplink - Click to view contact information"><span
-              class="label-text" aria-hidden="true">Uplink</span></div>
-          <div class="dot" aria-hidden="true"></div>
-        </div>
-      </div>
-
-      <div class="poi" id="poi-donate">
-        <div class="anchor">
-          <svg class="leader-svg" aria-hidden="true">
-            <path class="leader-hit" d=""></path>
-            <path class="leader-path" d=""></path>
-          </svg>
-          <div class="poi-ui" role="button" tabindex="0"
-            aria-label="Support - Click to view sponsorship and support options"><span class="label-text"
-              aria-hidden="true">Support</span></div>
-          <div class="dot" aria-hidden="true"></div>
-        </div>
-      </div>
-    </nav>
-  </main>
-
-  <!-- Modals -->
-  <div id="ui-stack" role="region" aria-label="Information panels">
-    <div id="m-dev" class="modal q-tr" onmouseenter="isOverModal = true" onmouseleave="
-          isOverModal = false;
-          unhoverBox();
-        ">
-      <button class="close-btn" onclick="forceClose()" aria-label="Close Dev Terminal panel">✕</button>
-      <h2 data-title="Dev Terminal">Dev Terminal</h2>
-
-      <div class="widget" id="now-working">
-        <strong>Now Working On</strong><br />
-        <span class="muted">Loading…</span>
-      </div>
-
-      <div class="widget mono" id="terminal-log">
-        <strong>Activity Log</strong><br />
-        <span class="muted">Loading…</span>
-      </div>
-
-      <div class="widget" id="github-card">
-        <strong>Latest Commit</strong><br />
-        <span class="muted">Loading…</span>
-      </div>
-
-      <div class="social-entry">
-        🎬 Teamspeak:
-        <span class="clickable" role="button" tabindex="0" onclick="copyTxt('ts.hackatoa.com')"
-          aria-label="Copy TeamSpeak address">ts.hackatoa.com</span>
-      </div>
-      <div class="social-entry">
-        📁 GitHub:
-        <a href="https://github.com/hackatoan" target="_blank" rel="noopener">hackatoan</a>
-      </div>
-      <div class="social-entry">
-        🌐 Website:
-        <a href="https://hackatoa.com" target="_blank" rel="noopener">hackatoa.com</a>
-      </div>
-    </div>
-
-    <div id="m-social" class="modal q-tl" onmouseenter="isOverModal = true" onmouseleave="
-          isOverModal = false;
-          unhoverBox();
-        ">
-      <button class="close-btn" onclick="forceClose()" aria-label="Close Broadcasting panel">✕</button>
-      <h2 data-title="Broadcasting">Broadcasting</h2>
-
-      <div class="social-entry">
-        🎬 YouTube:
-        <a href="https://youtube.com/@hackatoa" target="_blank" rel="noopener">@hackatoa</a>
-      </div>
-      <div class="yt-container" id="yt-video"></div>
-
-      <div class="widget">
-        <strong>Broadcast Nodes</strong><br />
-        <div class="tiny">
-          📺 Twitch:
-          <a href="https://twitch.tv/hackatoa" target="_blank" rel="noopener">twitch.tv/hackatoa</a>
-        </div>
-        <div class="tiny">
-          📸 IG:
-          <a href="https://instagram.com/hackatoa" target="_blank" rel="noopener">@hackatoa</a>
-        </div>
-        <div class="tiny">
-          🐦 X:
-          <a href="https://twitter.com/JHackatoa" target="_blank" rel="noopener">@JHackatoa</a>
-        </div>
-      </div>
-    </div>
-
-    <div id="m-servers" class="modal q-br" onmouseenter="isOverModal = true" onmouseleave="
-          isOverModal = false;
-          unhoverBox();
-        ">
-      <button class="close-btn" onclick="forceClose()" aria-label="Close Game Hub panel">✕</button>
-      <h2 data-title="Game Hub">Game Hub</h2>
-
-      <div class="widget">
-        Minecraft:
-        <span class="clickable" role="button" tabindex="0" onclick="copyTxt('mc.hackatoa.com')"
-          aria-label="Copy Minecraft server address">mc.hackatoa.com</span>
-      </div>
-
-      <div class="widget" id="mc-status">
-        <strong>Server Status</strong><br />
-        <span class="muted">Querying mcsrvstat.us…</span>
-      </div>
-
-      <div class="widget mono tiny">
-        Tip: use <span class="muted">/spawn</span> if you get lost.
-      </div>
-    </div>
-
-    <div id="m-contact" class="modal q-tr" onmouseenter="isOverModal = true" onmouseleave="
-          isOverModal = false;
-          unhoverBox();
-        ">
-      <button class="close-btn" onclick="forceClose()" aria-label="Close Uplink panel">✕</button>
-      <h2 data-title="Uplink">Uplink</h2>
-
-      <div class="social-entry">
-        📧 Email:
-        <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>
-        <span class="clickable" role="button" tabindex="0" onclick="copyTxt('jacob@hackatoa.com')"
-          aria-label="Copy email address">[copy]</span>
-      </div>
-
-      <div class="widget">
-        <strong>Preferred Contact</strong><br />
-        <div class="tiny">• Email for collabs + business</div>
-        <div class="tiny">• Discord/TS for quick pings</div>
-      </div>
-
-      <div class="widget">
-        <strong>PGP Fingerprint</strong><br />
-        <div class="mono tiny">
-          470B B798 38B6 127B AB6B 259C 67D6 7C1C 7678 C912
-        </div>
-      </div>
-    </div>
-
-    <div id="m-donate" class="modal q-bl" onmouseenter="isOverModal = true" onmouseleave="
-          isOverModal = false;
-          unhoverBox();
-        ">
-      <button class="close-btn" onclick="forceClose()" aria-label="Close Support panel">✕</button>
-      <h2 data-title="Support">Support</h2>
-
-      <div class="widget">
-        Support keeps the lights on and the servers running.<br /><br />
-        ❤️ Hosting<br />
-        ❤️ Dev Time<br />
-        ❤️ Game Infrastructure
-      </div>
-
-      <div style="text-align: center">
-        <a href="https://www.buymeacoffee.com/hackatoa" target="_blank" rel="noopener">
-          <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" style="height: 55px; width: 200px"
-            alt="Buy me a coffee" />
-        </a>
-      </div>
-    </div>
+  <div class="bg-toggle-wrapper" aria-hidden="true">
+    <button class="bg-toggle" id="bg-toggle" type="button" aria-label="Toggle background view"></button>
   </div>
 
-  <script src="app.js"></script>
+  <script src="blog-data.js" defer></script>
+  <script src="mushrooms-data.js" defer></script>
+  <script src="songs-data.js" defer></script>
+  <script src="https://alexgama11.github.io/GitGlue/GitHubPinner.js"></script>
+  <script src="app.js" defer></script>
 </body>
 
 </html>
