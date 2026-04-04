@@ -5,23 +5,41 @@
 
 window.MUSHROOMS_DATA = [
     {
-        image: 'https://picsum.photos/seed/myco1/1200/800',
-        alt: 'Placeholder mycology-style texture 1',
-        title: 'Culture Sample A',
-        meta: 'Placeholder image 1',
+        image: 'assets/mycology/20260309_165413.jpg',
+        alt: 'Mushroom collection image 1',
+        title: 'Mushroom Log 1',
+        meta: '2026-03-09',
     },
     {
-        image: 'https://picsum.photos/seed/myco2/1200/800',
-        alt: 'Placeholder mycology-style texture 2',
-        title: 'Culture Sample B',
-        meta: 'Placeholder image 2',
+        image: 'assets/mycology/20260312_182654.jpg',
+        alt: 'Mushroom collection image 2',
+        title: 'Mushroom Log 2',
+        meta: '2026-03-12',
     },
     {
-        image: 'https://picsum.photos/seed/myco3/1200/800',
-        alt: 'Placeholder mycology-style texture 3',
-        title: 'Culture Sample C',
-        meta: 'Placeholder image 3',
+        image: 'assets/mycology/20260323_235936.jpg',
+        alt: 'Mushroom collection image 3',
+        title: 'Mushroom Log 3',
+        meta: '2026-03-23',
     },
+    {
+        image: 'assets/mycology/20260324_030243.jpg',
+        alt: 'Mushroom collection image 4',
+        title: 'Mushroom Log 4',
+        meta: '2026-03-24',
+    },
+    {
+        image: 'assets/mycology/20260328_201955.jpg',
+        alt: 'Mushroom collection image 5',
+        title: 'Mushroom Log 5',
+        meta: '2026-03-28',
+    },
+    {
+        image: 'assets/mycology/20260401_233154.jpg',
+        alt: 'Mushroom collection image 6',
+        title: 'Mushroom Log 6',
+        meta: '2026-04-01',
+    }
 ];
 
 // New Entry Append Idea
