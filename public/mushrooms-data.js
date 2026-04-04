@@ -23,3 +23,6 @@ window.MUSHROOMS_DATA = [
         meta: 'Placeholder image 3',
     },
 ];
+
+// New Entry Append Idea
+/* CMS added files [20260309_165413.jpg, 20260312_182654.jpg, 20260323_235936.jpg, 20260324_030243.jpg, 20260328_201955.jpg, 20260401_233154.jpg] : mushupload - collection of mushroom images */
