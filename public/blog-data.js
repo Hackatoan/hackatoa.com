@@ -38,3 +38,6 @@ window.BLOG_ENTRIES = [
         body: 'The volcano starts rumbling. Moving away from standard bloated web portfolios to something that feels a bit more terminal, dark, and uniquely me. Decided on a horizontal scroll mechanic to mimic sliding through a deck or desktop panes.',
     }
 ];
+
+// New Blog Entry Appended
+/* Title: blog tool\nDate: 2026-04-04T12:28:57.884Z\nContent: I just made a new blog tool hopefully this works but we will see.  */
