@@ -113,19 +113,16 @@ function onPlayerReady() {
 
     ytPlayer.setShuffle(true);
 
-        if (autoPlay) {
-            localAudioPlayer.play().then(() => {
-                if (musicToggle) {
-                    musicToggle.dataset.state = 'playing';
-                    musicToggle.textContent = 'Pause';
-                }
-            }).catch(() => {
-                console.warn("[Widget] Autoplay blocked by browser. Awaiting interaction.");
-                if (musicToggle) {
-                    musicToggle.dataset.state = 'paused';
-                    musicToggle.textContent = 'Play';
-                }
-            });
+    // Removed broken autoPlay block that had no localAudioPlayer or autoPlay variables defined in this scope.
+    // Kept the function valid by removing the extra bracket.
+}
+
+function updateTitle() {
+    const titleEl = document.querySelector('.music-title');
+    if (titleEl && ytPlayer && ytPlayer.getVideoData) {
+        const data = ytPlayer.getVideoData();
+        if (data && data.title) {
+            titleEl.textContent = data.title;
         }
     }
 }
