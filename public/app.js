@@ -81,9 +81,16 @@ function handleKey(e) {
 // YouTube Music widget
 /* global YT */
 let ytPlayer;
+let hasPlayedRandomOnce = false;
 
 window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
-    const randomIndex = Math.floor(Math.random() * 200); // The playlist has ~326 videos
+    const randomIndex = Math.floor(Math.random() * 15);
+
+    const heroEmbed = document.getElementById('hero-yt-embed');
+    if (heroEmbed) {
+        heroEmbed.src = `https://www.youtube.com/embed/videoseries?list=PLZG0CvngYU9ihzPO2JTRe17DQDUI0Z6vC&index=${randomIndex}`;
+    }
+
     ytPlayer = new YT.Player('music-player', {
         height: '0',
         width: '0',
@@ -95,8 +102,7 @@ window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
             'disablekb': 1,
             'fs': 0,
             'modestbranding': 1,
-            'playsinline': 1,
-            'index': randomIndex
+            'playsinline': 1
         },
         events: {
             'onReady': onPlayerReady,
@@ -115,9 +121,6 @@ function onPlayerReady() {
     }
 
     ytPlayer.setShuffle(true);
-
-    // Removed broken autoPlay block that had no localAudioPlayer or autoPlay variables defined in this scope.
-    // Kept the function valid by removing the extra bracket.
 }
 
 function updateTitle() {
@@ -130,7 +133,41 @@ function updateTitle() {
     }
 }
 
+function syncHeroEmbed() {
+    if (ytPlayer && ytPlayer.getPlaylistIndex) {
+        const index = ytPlayer.getPlaylistIndex();
+        if (index >= 0) {
+            const heroEmbed = document.getElementById('hero-yt-embed');
+            if (heroEmbed) {
+                const baseSrc = "https://www.youtube.com/embed/videoseries?list=PLZG0CvngYU9ihzPO2JTRe17DQDUI0Z6vC";
+                const newSrc = `${baseSrc}&index=${index}`;
+                if (!heroEmbed.src.includes(`index=${index}`)) {
+                    heroEmbed.src = newSrc;
+                }
+                return;
+            }
+        }
+    }
+
+    if (ytPlayer && ytPlayer.getVideoData) {
+        const data = ytPlayer.getVideoData();
+        if (data && data.video_id) {
+            const heroEmbed = document.getElementById('hero-yt-embed');
+            if (heroEmbed) {
+                const currentSrc = heroEmbed.src;
+                if (currentSrc.includes('videoseries') || !currentSrc.includes(data.video_id)) {
+                     heroEmbed.src = `https://www.youtube.com/embed/${data.video_id}`;
+                }
+            }
+        }
+    }
+}
+
 function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING || event.data === YT.PlayerState.CUED) {
+        syncHeroEmbed();
+    }
+
     if (event.data === YT.PlayerState.PLAYING) {
         if (musicToggle) {
             musicToggle.dataset.state = 'playing';
@@ -172,7 +209,13 @@ function initMusicWidget() {
             if (state === YT.PlayerState.PLAYING) {
                 ytPlayer.pauseVideo();
             } else {
-                ytPlayer.playVideo();
+                if (!hasPlayedRandomOnce && ytPlayer.playVideoAt) {
+                    const randomIndex = Math.floor(Math.random() * 200); // The playlist has ~326 videos
+                    ytPlayer.playVideoAt(randomIndex);
+                    hasPlayedRandomOnce = true;
+                } else {
+                    ytPlayer.playVideo();
+                }
             }
         });
     }
