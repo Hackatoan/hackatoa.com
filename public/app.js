@@ -1,7 +1,6 @@
 // Basic scroll interaction and music widget wiring
 
 const musicToggle = document.getElementById('music-toggle');
-const musicPlayer = document.getElementById('music-player');
 const bgToggle = document.getElementById('bg-toggle');
 const slidesTrack = document.querySelector('.slides-track');
 const slides = slidesTrack
@@ -12,15 +11,6 @@ let currentSlideIndex = 0;
 let isSliding = false;
 const SLIDE_DURATION_MS = 550;
 
-let lastTime = performance.now();
-
-function frame(now) {
-    const dt = (now - lastTime) / 1000;
-    const t = now / 1000;
-    lastTime = now;
-
-    window.requestAnimationFrame(frame);
-}
 
 function goToSlide(index) {
     // On mobile we fall back to natural vertical scrolling; skip carousel logic.
@@ -120,7 +110,7 @@ function initMusicWidget() {
                     musicToggle.dataset.state = 'playing';
                     musicToggle.textContent = 'Pause';
                 }
-            }).catch(err => {
+            }).catch(() => {
                 console.warn("[Widget] Autoplay blocked by browser. Awaiting interaction.");
                 if (musicToggle) {
                     musicToggle.dataset.state = 'paused';
@@ -523,5 +513,4 @@ window.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('keydown', handleKey);
     if (window.innerWidth > 768) goToSlide(0);
-    window.requestAnimationFrame(frame);
 });
