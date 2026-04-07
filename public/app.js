@@ -83,6 +83,7 @@ function handleKey(e) {
 let ytPlayer;
 
 window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
+    const randomIndex = Math.floor(Math.random() * 200); // The playlist has ~326 videos
     ytPlayer = new YT.Player('music-player', {
         height: '0',
         width: '0',
@@ -94,7 +95,8 @@ window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
             'disablekb': 1,
             'fs': 0,
             'modestbranding': 1,
-            'playsinline': 1
+            'playsinline': 1,
+            'index': randomIndex
         },
         events: {
             'onReady': onPlayerReady,
