@@ -27,6 +27,7 @@ function goToSlide(index) {
         const offset = -currentSlideIndex * width;
         slidesTrack.style.transition = `transform ${SLIDE_DURATION_MS}ms ease`;
         slidesTrack.style.transform = `translateX(${offset}px)`;
+        window.scrollTo(0, 0);
         window.setTimeout(() => {
             isSliding = false;
         }, SLIDE_DURATION_MS);
@@ -521,5 +522,34 @@ window.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('keydown', handleKey);
-    if (window.innerWidth > 768) goToSlide(0);
+
+    if (window.innerWidth > 768 && slides.length) {
+        // Immediately kill any browser-native hash scroll that fired before JS ran
+        window.scrollTo(0, 0);
+
+        // If there's a hash in the URL, land on that slide instead of always #0
+        const initHash = window.location.hash?.slice(1);
+        const initIndex = initHash ? slides.findIndex(s => s.id === initHash) : -1;
+        currentSlideIndex = initIndex >= 0 ? initIndex : 0;
+
+        // Apply position instantly (no animation on first load)
+        const viewport = document.querySelector('.slides-viewport');
+        if (viewport && slidesTrack) {
+            const offset = -currentSlideIndex * viewport.clientWidth;
+            slidesTrack.style.transition = 'none';
+            slidesTrack.style.transform = `translateX(${offset}px)`;
+        }
+    }
+
+    // Handle back/forward browser navigation via hash changes
+    window.addEventListener('hashchange', () => {
+        if (window.innerWidth <= 768) return;
+        const hash = window.location.hash?.slice(1);
+        if (!hash) return;
+        const index = slides.findIndex(s => s.id === hash);
+        if (index !== -1) {
+            window.scrollTo(0, 0);
+            goToSlide(index);
+        }
+    });
 });
