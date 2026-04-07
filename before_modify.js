@@ -97,7 +97,7 @@ function copyTxt(t) {
   navigator.clipboard.writeText(t);
   showToast();
 }
-//eslint-disable-next-line no-unused-vars
+
 function forceClose() {
   lockedId = null;
   isOverModal = false;
