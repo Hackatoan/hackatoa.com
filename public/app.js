@@ -65,11 +65,7 @@ function handleWheel(e) {
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (Math.abs(delta) < 10) return;
     e.preventDefault();
-    if (delta > 0) {
-        goToSlide(currentSlideIndex + 1);
-    } else if (delta < 0) {
-        goToSlide(currentSlideIndex - 1);
-    }
+    goToSlide(currentSlideIndex + (delta > 0 ? 1 : -1));
 }
 
 function handleKey(e) {
@@ -127,10 +123,10 @@ function onPlayerReady() {
 
 function updateTitle() {
     const titleEl = document.querySelector('.music-title');
-    if (titleEl && ytPlayer && ytPlayer.getVideoData) {
-        const data = ytPlayer.getVideoData();
-        if (data && data.title) {
-            titleEl.textContent = data.title;
+    if (titleEl) {
+        const title = ytPlayer?.getVideoData?.()?.title;
+        if (title) {
+            titleEl.textContent = title;
         }
     }
 }
@@ -254,7 +250,7 @@ function renderBlogFromData() {
             const linksRow = document.createElement('div');
             linksRow.className = 'link-row';
             entry.links.forEach((link) => {
-                if (!link || !link.href) return;
+                if (!link?.href) return;
                 const a = document.createElement('a');
                 a.className = 'pill-link';
                 a.href = link.href;
@@ -329,12 +325,9 @@ function initMycoCarousel() {
 
     arrows.forEach((btn) => {
         btn.addEventListener('click', () => {
-            const dir = btn.dataset.dir;
-            if (dir === 'prev') {
-                currentMycoIndex = Math.max(0, currentMycoIndex - 1);
-            } else {
-                currentMycoIndex = Math.min(items.length - 1, currentMycoIndex + 1);
-            }
+            currentMycoIndex = btn.dataset.dir === 'prev'
+                ? Math.max(0, currentMycoIndex - 1)
+                : Math.min(items.length - 1, currentMycoIndex + 1);
             updateMycoCarousel(track, dotsContainer, currentMycoIndex);
         });
     });
@@ -429,7 +422,7 @@ function initGitHubFeed() {
                 const date = new Date(event.created_at).toLocaleDateString();
 
                 let commitMsg = '';
-                if (event.type === 'PushEvent' && event.payload.commits && event.payload.commits.length > 0) {
+                if (event.type === 'PushEvent' && event.payload.commits?.length > 0) {
                     // Escape message to prevent XSS
                     const escapedMessage = event.payload.commits[0].message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     commitMsg = `<div class="gh-commit">${escapedMessage}</div>`;
