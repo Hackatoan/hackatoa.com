@@ -21,7 +21,6 @@
   <link rel="icon" href="assets/me.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="assets/me.ico" type="image/x-icon" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="https://alexgama11.github.io/GitGlue/css/gitstyle.css" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -196,13 +195,21 @@
                       profile</a>
                   </div>
                 </article>
+                <article class="card">
+                  <h3 class="card-title">Mycology Tracking</h3>
+                  <p class="card-body">
+                    Beyond digital infrastructure, I study mycology. This involves cultivating different species, refining sterile lab techniques, and mapping environmental data to fruiting triggers.
+                  </p>
+                  <div class="link-row">
+                    <a class="pill-link" href="#mycology">View cultures</a>
+                  </div>
+                </article>
                 <article class="card card-wide">
-                  <h3 class="card-title">Active Repositories</h3>
+                  <h3 class="card-title">Active Repositories & Contributions</h3>
                   <p class="card-body">
                     A live feed of my latest commits, security tools, and open source contributions pulled directly from GitHub.
                   </p>
-                  <div data="https://github.com/Hackatoan?tab=repositories" class="github-pinner"
-                    style="visibility: hidden;"></div>
+                  <div class="github-pinner"></div>
                 </article>
               </div>
             </div>
@@ -407,10 +414,14 @@
     <button class="bg-toggle" id="bg-toggle" type="button" aria-label="Toggle background view"></button>
   </div>
 
+  <div id="myco-modal" class="modal" aria-hidden="true">
+    <span id="myco-modal-close" class="modal-close">&times;</span>
+    <img id="myco-modal-img" class="modal-content" src="" alt="Full screen preview" />
+  </div>
+
   <script src="blog-data.js" defer></script>
   <script src="mushrooms-data.js" defer></script>
   <script src="songs-data.js" defer></script>
-  <script src="https://alexgama11.github.io/GitGlue/GitHubPinner.js"></script>
   <script src="app.js" defer></script>
 </body>
 
