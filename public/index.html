@@ -253,13 +253,21 @@
                       profile</a>
                   </div>
                 </article>
+                <article class="card">
+                  <h3 class="card-title">Mycology Tracking</h3>
+                  <p class="card-body">
+                    Beyond digital infrastructure, I study mycology. This involves cultivating different species, refining sterile lab techniques, and mapping environmental data to fruiting triggers.
+                  </p>
+                  <div class="link-row">
+                    <a class="pill-link" href="#mycology">View cultures</a>
+                  </div>
+                </article>
                 <article class="card card-wide">
-                  <h3 class="card-title">Active Repositories</h3>
+                  <h3 class="card-title">Active Repositories & Contributions</h3>
                   <p class="card-body">
                     A live feed of my latest commits, security tools, and open source contributions pulled directly from GitHub.
                   </p>
-                  <div data="https://github.com/Hackatoan?tab=repositories" class="github-pinner"
-                    style="visibility: hidden;"></div>
+                  <div class="github-pinner"></div>
                 </article>
               </div>
             </div>
@@ -283,6 +291,8 @@
                     <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noreferrer">GitHub</a>
                     <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank"
                       rel="noreferrer">YouTube</a>
+                    <a class="pill-link" href="https://instagram.com/hackatoa.99" target="_blank"
+                      rel="noreferrer">Instagram</a>
                   </div>
                 </article>
                 <article class="card">
@@ -357,7 +367,7 @@
                   <div class="contact-actions">
                     <button class="button button-primary" type="submit">Open email app</button>
                     <span class="contact-hint">You can also reach me on TeamSpeak at
-                      <a href="ts3server://ts.hackatoa.com">ts.hackatoa.com</a>.
+                      <a href="ts3server://ts.hackatoa.com">ts.hackatoa.com</a>, or message me on <a href="https://signal.me/#eu/ZqxSe8D4lgvz9D6rUI0cq7cjTyPXb086bWiagELkPQIsEpzDs2JLeIC1aGF-ByHj" target="_blank" rel="noreferrer">Signal</a>.
                     </span>
                   </div>
                 </form>
@@ -376,8 +386,13 @@
               </div>
               <div class="card">
                 <p class="card-body">
-                  If you find value in my security research, tooling, or simply want to support the ongoing development of this infrastructure, you can send Monero (XMR) to this address:
+                  If you find value in my security research, tooling, or simply want to support the ongoing development of this infrastructure, you can buy me a coffee or send Monero (XMR) to the address below.
                 </p>
+                <div style="margin-top: 1rem; margin-bottom: 2rem;">
+                  <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noreferrer">
+                    <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" />
+                  </a>
+                </div>
                 <div class="wallet-address-box">
                   87Dj6Y48BTyYemYGEtTWkvJXf2YCszQZuQWWdGhk9PE6RVHYAfLnXbbCMSeEhb3f4n1op9CKFH6D3N2Mj8Xn6dELLYycPMQ
                 </div>
@@ -464,10 +479,14 @@
     <button class="bg-toggle" id="bg-toggle" type="button" aria-label="Toggle background view"></button>
   </div>
 
+  <div id="myco-modal" class="modal" aria-hidden="true">
+    <span id="myco-modal-close" class="modal-close">&times;</span>
+    <img id="myco-modal-img" class="modal-content" src="" alt="Full screen preview" />
+  </div>
+
   <script src="blog-data.js" defer></script>
   <script src="mushrooms-data.js" defer></script>
   <script src="songs-data.js" defer></script>
-  <script src="https://alexgama11.github.io/GitGlue/GitHubPinner.js"></script>
   <script src="app.js" defer></script>
   <script src="background.js" defer></script>
 </body>

@@ -299,6 +299,15 @@ function initMycoCarousel() {
         slide.appendChild(overlay);
         track.appendChild(slide);
 
+        img.addEventListener('click', () => {
+            const modal = document.getElementById('myco-modal');
+            const modalImg = document.getElementById('myco-modal-img');
+            if (modal && modalImg) {
+                modalImg.src = img.src;
+                modal.classList.add('show');
+            }
+        });
+
         const dot = document.createElement('span');
         dot.className = index === 0 ? 'myco-dot active' : 'myco-dot';
         dot.dataset.index = index;
@@ -322,6 +331,21 @@ function initMycoCarousel() {
             updateMycoCarousel(track, dotsContainer, currentMycoIndex);
         });
     });
+
+    // Modal close logic
+    const modal = document.getElementById('myco-modal');
+    const modalCloseBtn = document.getElementById('myco-modal-close');
+
+    if (modal && modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+    }
 }
 
 function updateMycoCarousel(track, dotsContainer, currentMycoIndex) {
@@ -370,6 +394,57 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function initGitHubFeed() {
+    const container = document.querySelector('.github-pinner');
+    if (!container) return;
+
+    fetch('https://api.github.com/users/Hackatoan/events/public')
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(events => {
+            container.innerHTML = '';
+            // Filter push and create events, limit to 5
+            const relevantEvents = events.filter(e => e.type === 'PushEvent' || e.type === 'CreateEvent').slice(0, 5);
+
+            if (relevantEvents.length === 0) {
+                container.innerHTML = '<div class="gh-placeholder">No recent activity found.</div>';
+                return;
+            }
+
+            relevantEvents.forEach(event => {
+                const item = document.createElement('div');
+                item.className = 'gh-event';
+
+                const typeLabel = event.type === 'PushEvent' ? 'Pushed to' : 'Created';
+                const repoName = event.repo.name;
+                const date = new Date(event.created_at).toLocaleDateString();
+
+                let commitMsg = '';
+                if (event.type === 'PushEvent' && event.payload.commits && event.payload.commits.length > 0) {
+                    // Escape message to prevent XSS
+                    const escapedMessage = event.payload.commits[0].message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    commitMsg = `<div class="gh-commit">${escapedMessage}</div>`;
+                }
+
+                item.innerHTML = `
+                    <div class="gh-header">
+                        <span class="gh-type">${typeLabel}</span>
+                        <a href="https://github.com/${repoName}" target="_blank" rel="noreferrer" class="gh-repo">${repoName}</a>
+                        <span class="gh-time">${date}</span>
+                    </div>
+                    ${commitMsg}
+                `;
+                container.appendChild(item);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching GitHub events:', error);
+            container.innerHTML = '<div class="gh-placeholder">Could not load GitHub activity.</div>';
+        });
+}
+
 // Contact time loop
 function updateTimes() {
     const localEl = document.getElementById('contact-local-time');
@@ -406,6 +481,7 @@ window.addEventListener('DOMContentLoaded', () => {
     initBackgroundToggle();
     renderBlogFromData();
     initMycoCarousel();
+    initGitHubFeed();
     initContactTimes();
 
     const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
