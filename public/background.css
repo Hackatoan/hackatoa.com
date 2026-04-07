@@ -222,120 +222,7 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   z-index: 3;
 }
 
-/* Volcano Geometry */
-.volcano {
-  position: absolute;
-  bottom: 40px;
-  left: 150px;
-  width: 500px;
-  height: 280px;
-  z-index: 4;
-}
 
-.volcano-base {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--volcano-base);
-  clip-path: polygon(40% 0%, 60% 0%, 90% 100%, 10% 100%);
-  z-index: 1;
-}
-
-.volcano-shadow {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--volcano-dark);
-  clip-path: polygon(50% 0%, 60% 0%, 90% 100%, 40% 100%);
-  z-index: 2;
-  opacity: 0.8;
-}
-
-.volcano-highlight {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--volcano-light);
-  clip-path: polygon(40% 0%, 50% 0%, 35% 100%, 10% 100%);
-  z-index: 2;
-  opacity: 0.6;
-}
-
-.volcano-crater {
-  position: absolute;
-  top: -5px;
-  left: 38%;
-  width: 24%;
-  height: 15px;
-  background: var(--volcano-crater);
-  border-radius: 50%;
-  z-index: 3;
-}
-
-/* High Fidelity Lava */
-.lava-flows {
-  position: absolute;
-  top: 5px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  filter: drop-shadow(0 0 10px var(--lava-glow));
-}
-
-.lava-main {
-  position: absolute;
-  top: 0;
-  left: 48%;
-  width: 18px;
-  height: 140px;
-  background: linear-gradient(to bottom, var(--lava-hot), var(--lava));
-  border-radius: 10px;
-  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-  animation: flowLava 3s ease-in-out infinite;
-}
-
-.lava-branch-1 {
-  position: absolute;
-  top: 60px;
-  left: 50%;
-  width: 40px;
-  height: 60px;
-  background: var(--lava);
-  border-radius: 8px;
-  transform: rotate(-30deg);
-  clip-path: polygon(0% 0%, 30% 0%, 100% 100%, 60% 100%);
-}
-
-.lava-branch-2 {
-  position: absolute;
-  top: 80px;
-  left: 45%;
-  width: 30px;
-  height: 50px;
-  background: var(--lava);
-  border-radius: 6px;
-  transform: rotate(25deg);
-  clip-path: polygon(70% 0%, 100% 0%, 40% 100%, 0% 100%);
-}
-
-.lava-pool {
-  position: absolute;
-  top: -3px;
-  left: 42%;
-  width: 16%;
-  height: 8px;
-  background: var(--lava-hot);
-  border-radius: 50%;
-  box-shadow: 0 0 15px var(--lava-glow);
-  animation: pulseLava 2s alternate infinite;
-}
 
 /* Forest */
 .forest {
@@ -473,4 +360,94 @@ body.stormy .cloud, body.stormy .cloud::before, body.stormy .cloud::after {
 
 @keyframes fall {
   to { transform: translateY(100vh); }
+}
+
+/* New Volcano CSS */
+
+#stage, #smoke {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* Make canvases non-blocking for page interactions */
+}
+
+#stage {
+  z-index: 20;
+}
+
+#smoke {
+  z-index: 5;
+}
+
+.volcano-container {
+  z-index: 10;
+  position: absolute;
+  bottom: 30px; /* Move it up to sit on the island */
+  left: 0;
+  right: 0;
+  margin: auto;
+  pointer-events: auto; /* Allow interactions here */
+  width: 760px; /* Adjust to size of volcano */
+  height: 200px;
+}
+
+.volcano {
+  position: absolute;
+  border: 240px solid transparent; /* scaled down */
+  border-left: 100px solid transparent;
+  border-bottom: 140px solid #240904;
+  width: 0;
+  height: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.volcano.flipped {
+  transform: scaleX(-1);
+}
+
+.lip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 180px;
+  height: 144px;
+  background-color: #240904;
+  border-radius: 120px;
+}
+
+.lip .lava {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 6px;
+  margin: auto;
+  width: 162px;
+  height: 138px;
+  background-color: #fa7510;
+  border-radius: 120px;
+  clip-path: ellipse(72px 36px at top);
+}
+
+.lip .mask {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: #240904;
+  width: 174px;
+  height: 180px;
+}
+
+.toggle {
+  display: none;
+  z-index: 100;
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }

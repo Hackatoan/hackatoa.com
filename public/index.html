@@ -70,19 +70,22 @@
       <div class="beach-right"></div>
       <div class="island-terrain"></div>
 
-      <div class="volcano">
-        <div class="volcano-base"></div>
-        <div class="volcano-shadow"></div>
-        <div class="volcano-highlight"></div>
-        <div class="volcano-crater"></div>
+      <canvas id="smoke"></canvas>
+      <canvas id="stage"></canvas>
 
-        <div class="lava-flows">
-          <div class="lava-main"></div>
-          <div class="lava-branch-1"></div>
-          <div class="lava-branch-2"></div>
-          <div class="lava-pool"></div>
-          <div class="lava-sparks"></div>
+      <div class="volcano-container">
+        <div class="volcano"></div>
+        <div class="volcano flipped"></div>
+        <div class="lip">
+          <div class="lava"></div>
+          <div class="mask"></div>
         </div>
+      </div>
+
+      <div class="toggle">
+        <label for="awesome">
+          <input type="checkbox" id="awesome" /> <strong>AWESOME MODE</strong>
+        </label>
       </div>
 
       <div class="forest">

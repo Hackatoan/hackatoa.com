@@ -137,3 +137,320 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for random weather changes every 30 seconds
     setInterval(randomWeatherToggle, 30000);
 });
+
+//=============================
+// Consts
+//=============================
+const MAX_WIDTH = 12;
+const FPS = 60;
+
+//=============================
+// Helpers
+//=============================
+const getTimestamp = () => {
+  return (new Date()).getTime();
+};
+
+const random = (max = 1, signed = false) => {
+  return signed ? ((Math.random() - 0.5) * 2) * max : Math.random() * max;
+};
+
+let mouseStart = getTimestamp();
+
+const getPower = () => {
+  const power = (getTimestamp() - mouseStart) / 150;
+  return power > 30 ? 30 : power;
+};
+
+//=============================
+// Main
+//=============================
+document.addEventListener('DOMContentLoaded', () => {
+    const targetDelta = 1000 / FPS;
+
+    const stage = document.getElementById('stage');
+    if (!stage) return; // Skip if not on page with volcano
+    const ctx = stage.getContext('2d');
+    const smoke = document.getElementById('smoke');
+    const ctx2 = smoke.getContext('2d');
+
+    let particles = [];
+
+    let AWESOME_MODE = false;
+    let mouseDown = false;
+    let isExploding = false;
+    let stageWidth = 0;
+    let stageHeight = 0;
+    let previousTimestamp = getTimestamp();
+    let previousPower = 0;
+
+    const volcanoContainer = document.querySelector('.volcano-container');
+    const lavaEl = document.querySelector('.volcano-container .lava');
+
+    const shakeVolcano = (power) => {
+      if (volcanoContainer && lavaEl) {
+          volcanoContainer.style.left = `${random(power, true)}px`;
+          volcanoContainer.style.bottom = `${30 + (-1 * random(power))}px`;
+
+          lavaEl.style.left = `${random(power, true)}px`;
+          lavaEl.style.top = `${6 + (random(power) / 2)}px`;
+          lavaEl.style.width = `${random(power) + 162}px`;
+      }
+    };
+
+    const generateParticles = (amount = 20, power) => {
+      for (let i = 0; i < amount; i++) {
+        particles.push(new Particle(power));
+      }
+    };
+
+    const loop = () => {
+      if (getTimestamp() - previousTimestamp < targetDelta) {
+        requestAnimationFrame(loop);
+        return;
+      }
+
+      ctx.globalCompositeOperation = 'lighter';
+
+      if (!AWESOME_MODE) {
+        ctx.clearRect(0, 0, stageWidth, stageHeight);
+      }
+
+      ctx2.clearRect(0, 0, stageWidth, stageHeight);
+
+      if (mouseDown) {
+        generateParticles(random(2) + 1, getPower() / 2);
+        shakeVolcano(getPower());
+      }
+
+      if (isExploding && previousPower > 0 && !mouseDown) {
+        shakeVolcano(previousPower);
+        previousPower -= 0.35;
+
+        if (previousPower < 1) {
+          isExploding = false;
+          // Reset positioning
+          if (volcanoContainer && lavaEl) {
+            volcanoContainer.style.left = '0px';
+            volcanoContainer.style.bottom = '30px';
+            lavaEl.style.left = '0px';
+            lavaEl.style.top = '6px';
+            lavaEl.style.width = '162px';
+          }
+        }
+      }
+
+      // constant particles
+      if (random() < 0.3) {
+        generateParticles(1, 1);
+      }
+
+      // smoke effects
+      if (random() < 0.08) {
+        particles.push(new Smoke());
+      }
+
+      // animate
+      particles.forEach((particle) => {
+        particle.animate();
+        particle.render();
+      });
+
+      // remove out of bounds particles
+      particles = particles.filter(particle => {
+        if (
+          particle instanceof Smoke &&
+          particle.y + particle.width > 0
+        ) {
+          return true;
+        } else if (
+          particle instanceof Particle &&
+          particle.y < stageHeight &&
+          particle.x > 0 - particle.width &&
+          particle.x < stageWidth + particle.width
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      previousTimestamp = getTimestamp();
+      requestAnimationFrame(loop);
+    };
+
+    class Particle {
+      constructor(oPower) {
+        const power = oPower || random(5);
+
+        this.x = (stageWidth / 2) + random(80, true);
+        this.y = (stageHeight - 150) + random(20, true); // Adjusted starting y
+
+        this.width = random(MAX_WIDTH) + 1;
+        this.red = Math.floor(210 + (this.width * 2));
+        this.green = Math.floor(90 + (this.width * 3));
+        this.blue = Math.floor(30 + (this.width * 2));
+        this.alpha = 1;
+        this.speed = power / (this.width * 0.13);
+        this.angle = random(45);
+        this.hasBounced = false;
+
+        this.velocityY = Math.abs(Math.sin(this.angle)) * this.speed;
+        this.velocityX = Math.cos(this.angle) * this.speed / 2;
+
+        this.xDirection = this.velocityX > 0;
+
+        if (Math.abs(this.velocityX) > 2) {
+          this.velocityX = this.velocityX / 2;
+        }
+      }
+
+      animate() {
+        this.x -= this.velocityX;
+        this.y -= this.velocityY;
+
+        // add gravity
+        this.velocityY -= this.width / (this.hasBounced ? 170 : 100);
+
+        if (
+          !this.hasBounced &&
+          random() < 0.1 &&
+          this.y > stageHeight - 150 &&
+          this.x > (stageWidth / 2) - 180 &&
+          this.x < (stageWidth / 2) + 180
+        ) {
+          this.hasBounced = true;
+          this.velocityX = Math.sin(random(45)) + (random(2) * this.xDirection);
+          this.velocityY /= 8;
+        }
+      }
+
+      render() {
+        const colour = this.getColour();
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.width, 0, Math.PI * 2, true);
+        ctx.lineWidth = this.width;
+        ctx.fillStyle = colour;
+        ctx.fill();
+      }
+
+      getColour(red, green, blue, alpha) {
+        return `rgba(${red || this.red}, ${green || this.green}, ${blue || this.blue}, ${alpha || this.alpha})`;
+      }
+    }
+
+    class Smoke {
+      constructor() {
+        this.x = (stageWidth / 2) + random(75, true);
+        this.y = stageHeight - 100; // Adjusted starting y
+
+        this.width = random(80) + 50;
+        this.red = 100;
+        this.green = 100;
+        this.blue = 100;
+        this.alpha = random() + 0.3;
+        this.speed = random(2) + 1;
+      }
+
+      animate() {
+        this.y -= this.speed;
+      }
+
+      render() {
+        const colour = this.getColour();
+
+        ctx2.beginPath();
+        ctx2.arc(this.x, this.y, this.width, 0, Math.PI * 2, true);
+        ctx2.lineWidth = this.width;
+        ctx2.fillStyle = colour;
+        ctx2.fill();
+      }
+
+      getColour(red, green, blue, alpha) {
+        return `rgba(${red || this.red}, ${green || this.green}, ${blue || this.blue}, ${alpha || this.alpha})`;
+      }
+    }
+
+    const updateCanvasSize = () => {
+      stageWidth = window.innerWidth;
+      stageHeight = window.innerHeight;
+
+      stage.width = stageWidth;
+      stage.height = stageHeight;
+
+      smoke.width = stageWidth;
+      smoke.height = stageHeight;
+
+      particles = [];
+    };
+
+    if (volcanoContainer) {
+      volcanoContainer.addEventListener('mousedown', () => {
+        mouseStart = getTimestamp();
+        mouseDown = true;
+
+        if (AWESOME_MODE) {
+          particles = [];
+          ctx.clearRect(0, 0, stageWidth, stageHeight);
+        }
+      });
+
+      volcanoContainer.addEventListener('touchstart', () => {
+        mouseStart = getTimestamp();
+        mouseDown = true;
+
+        if (AWESOME_MODE) {
+          particles = [];
+          ctx.clearRect(0, 0, stageWidth, stageHeight);
+        }
+      });
+    }
+
+    const handleMouseUp = () => {
+      if (!mouseDown) return;
+
+      const power = getPower();
+
+      isExploding = true;
+      mouseDown = false;
+      previousPower = power;
+
+      generateParticles((random(16) + 30) * power, power / 1.1);
+
+      setTimeout(() => {
+        generateParticles(14 * power, power / 1.4);
+      }, 100);
+
+      setTimeout(() => {
+        generateParticles(6 * power, power / 2);
+      }, 200);
+
+      setTimeout(() => {
+        generateParticles(4 * power, power / 2);
+      }, 400);
+    };
+
+    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('touchend', handleMouseUp);
+
+    updateCanvasSize();
+    window.addEventListener('resize', updateCanvasSize);
+
+    const toggleWrapper = document.querySelector('.toggle');
+    if (toggleWrapper) {
+      setTimeout(() => {
+        toggleWrapper.style.display = 'block';
+      }, 6000);
+
+      const awesomeCheckbox = document.getElementById('awesome');
+      if (awesomeCheckbox) {
+        awesomeCheckbox.addEventListener('change', (e) => {
+          AWESOME_MODE = e.target.checked;
+        });
+      }
+    }
+
+    generateParticles(200, 8);
+    loop();
+});
