@@ -288,6 +288,9 @@ function initMycoCarousel() {
         img.src = item.image;
         img.alt = item.alt || 'Mycology image';
         img.loading = 'lazy';
+        img.tabIndex = 0;
+        img.role = 'button';
+        img.setAttribute('aria-label', 'Open image in modal');
 
         const overlay = document.createElement('div');
         overlay.className = 'myco-overlay';
@@ -312,15 +315,33 @@ function initMycoCarousel() {
             if (modal && modalImg) {
                 modalImg.src = img.src;
                 modal.classList.add('show');
+                const closeBtn = document.getElementById('myco-modal-close');
+                if (closeBtn) closeBtn.focus();
+            }
+        });
+        img.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                img.click();
             }
         });
 
         const dot = document.createElement('span');
         dot.className = index === 0 ? 'myco-dot active' : 'myco-dot';
         dot.dataset.index = index;
+        dot.tabIndex = 0;
+        dot.role = 'button';
+        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+        if (index === 0) dot.setAttribute('aria-current', 'true');
         dot.addEventListener('click', () => {
             currentMycoIndex = index;
             updateMycoCarousel(track, dotsContainer, currentMycoIndex);
+        });
+        dot.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                dot.click();
+            }
         });
         dotsContainer.appendChild(dot);
     });
@@ -347,8 +368,19 @@ function initMycoCarousel() {
         modalCloseBtn.addEventListener('click', () => {
             modal.classList.remove('show');
         });
+        modalCloseBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                modalCloseBtn.click();
+            }
+        });
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
                 modal.classList.remove('show');
             }
         });
@@ -364,8 +396,10 @@ function updateMycoCarousel(track, dotsContainer, currentMycoIndex) {
     allDots.forEach((d, i) => {
         if (i === currentMycoIndex) {
             d.classList.add('active');
+            d.setAttribute('aria-current', 'true');
         } else {
             d.classList.remove('active');
+            d.removeAttribute('aria-current');
         }
     });
 
