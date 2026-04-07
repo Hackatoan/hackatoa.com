@@ -11,9 +11,6 @@ let currentSlideIndex = 0;
 let isSliding = false;
 const SLIDE_DURATION_MS = 550;
 
-function frame() {
-    window.requestAnimationFrame(frame);
-}
 
 function goToSlide(index) {
     // On mobile we fall back to natural vertical scrolling; skip carousel logic.
@@ -116,16 +113,19 @@ function onPlayerReady() {
 
     ytPlayer.setShuffle(true);
 
-    // Attempt autoplay if user has interacted before (browsers usually block this otherwise)
-    ytPlayer.playVideoAt(0);
-}
-
-function updateTitle() {
-    const titleEl = document.querySelector('.music-title');
-    if (titleEl && ytPlayer && ytPlayer.getVideoData) {
-        const data = ytPlayer.getVideoData();
-        if (data && data.title) {
-            titleEl.textContent = data.title;
+        if (autoPlay) {
+            localAudioPlayer.play().then(() => {
+                if (musicToggle) {
+                    musicToggle.dataset.state = 'playing';
+                    musicToggle.textContent = 'Pause';
+                }
+            }).catch(() => {
+                console.warn("[Widget] Autoplay blocked by browser. Awaiting interaction.");
+                if (musicToggle) {
+                    musicToggle.dataset.state = 'paused';
+                    musicToggle.textContent = 'Play';
+                }
+            });
         }
     }
 }
@@ -525,14 +525,4 @@ window.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('keydown', handleKey);
     if (window.innerWidth > 768) goToSlide(0);
-    window.requestAnimationFrame(frame);
-
-    const heroEmbed = document.getElementById('hero-yt-embed');
-    if (heroEmbed) {
-        const randomYtIndex = Math.floor(Math.random() * 326);
-        const currentSrc = heroEmbed.src;
-        if (!currentSrc.includes('&index=')) {
-            heroEmbed.src = currentSrc + '&index=' + randomYtIndex;
-        }
-    }
 });
