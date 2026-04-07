@@ -42,6 +42,8 @@ main {
 .video-bg {
     position: fixed;
     inset: 0;
+    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     pointer-events: none;
     z-index: 0;
@@ -1285,9 +1287,10 @@ body.bg-viewing .site-header {
 
     .nav-links {
         display: flex;
-        overflow-x: auto;
+        flex-wrap: wrap;
+        overflow-x: visible;
         padding-bottom: 0.25rem;
-        justify-content: flex-start;
+        justify-content: center;
         -webkit-overflow-scrolling: touch;
         gap: 0.5rem;
     }
