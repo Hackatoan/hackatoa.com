@@ -401,9 +401,67 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function renderGitHubEvents(container, events) {
+    container.innerHTML = '';
+    // Filter push and create events, limit to 5
+    const relevantEvents = events.filter(e => e.type === 'PushEvent' || e.type === 'CreateEvent').slice(0, 5);
+
+    if (relevantEvents.length === 0) {
+        container.innerHTML = '<div class="gh-placeholder">No recent activity found.</div>';
+        return;
+    }
+
+    relevantEvents.forEach(event => {
+        const item = document.createElement('div');
+        item.className = 'gh-event';
+
+        const typeLabel = event.type === 'PushEvent' ? 'Pushed to' : 'Created';
+        const repoName = event.repo.name;
+        const date = new Date(event.created_at).toLocaleDateString();
+
+        let commitMsg = '';
+        if (event.type === 'PushEvent' && event.payload.commits && event.payload.commits.length > 0) {
+            // Escape message to prevent XSS
+            const escapedMessage = event.payload.commits[0].message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            commitMsg = `<div class="gh-commit">${escapedMessage}</div>`;
+        }
+
+        item.innerHTML = `
+            <div class="gh-header">
+                <span class="gh-type">${typeLabel}</span>
+                <a href="https://github.com/${repoName}" target="_blank" rel="noreferrer" class="gh-repo">${repoName}</a>
+                <span class="gh-time">${date}</span>
+            </div>
+            ${commitMsg}
+        `;
+        container.appendChild(item);
+    });
+}
+
 function initGitHubFeed() {
     const container = document.querySelector('.github-pinner');
     if (!container) return;
+
+    const cacheKey = 'github-events-cache';
+    const cacheTimeKey = 'github-events-cache-time';
+    const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+
+    let cachedData = null;
+    let cachedTime = null;
+
+    try {
+        const cachedRaw = localStorage.getItem(cacheKey);
+        if (cachedRaw) cachedData = JSON.parse(cachedRaw);
+        cachedTime = localStorage.getItem(cacheTimeKey);
+    } catch {
+        // Ignore localStorage access or parse errors
+    }
+
+    // Use cached data to save API call and speed up rendering
+    if (cachedData && cachedTime && (Date.now() - parseInt(cachedTime, 10)) < CACHE_DURATION_MS) {
+        renderGitHubEvents(container, cachedData);
+        return;
+    }
 
     fetch('https://api.github.com/users/Hackatoan/events/public')
         .then(response => {
@@ -411,44 +469,23 @@ function initGitHubFeed() {
             return response.json();
         })
         .then(events => {
-            container.innerHTML = '';
-            // Filter push and create events, limit to 5
-            const relevantEvents = events.filter(e => e.type === 'PushEvent' || e.type === 'CreateEvent').slice(0, 5);
-
-            if (relevantEvents.length === 0) {
-                container.innerHTML = '<div class="gh-placeholder">No recent activity found.</div>';
-                return;
+            // Cache the result for future visits
+            try {
+                localStorage.setItem(cacheKey, JSON.stringify(events));
+                localStorage.setItem(cacheTimeKey, Date.now().toString());
+            } catch {
+                // Ignore localStorage quota or access errors
             }
-
-            relevantEvents.forEach(event => {
-                const item = document.createElement('div');
-                item.className = 'gh-event';
-
-                const typeLabel = event.type === 'PushEvent' ? 'Pushed to' : 'Created';
-                const repoName = event.repo.name;
-                const date = new Date(event.created_at).toLocaleDateString();
-
-                let commitMsg = '';
-                if (event.type === 'PushEvent' && event.payload.commits && event.payload.commits.length > 0) {
-                    // Escape message to prevent XSS
-                    const escapedMessage = event.payload.commits[0].message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                    commitMsg = `<div class="gh-commit">${escapedMessage}</div>`;
-                }
-
-                item.innerHTML = `
-                    <div class="gh-header">
-                        <span class="gh-type">${typeLabel}</span>
-                        <a href="https://github.com/${repoName}" target="_blank" rel="noreferrer" class="gh-repo">${repoName}</a>
-                        <span class="gh-time">${date}</span>
-                    </div>
-                    ${commitMsg}
-                `;
-                container.appendChild(item);
-            });
+            renderGitHubEvents(container, events);
         })
         .catch(error => {
             console.error('Error fetching GitHub events:', error);
-            container.innerHTML = '<div class="gh-placeholder">Could not load GitHub activity.</div>';
+            // Fallback to stale cache if API fails
+            if (cachedData) {
+                renderGitHubEvents(container, cachedData);
+            } else {
+                container.innerHTML = '<div class="gh-placeholder">Could not load GitHub activity.</div>';
+            }
         });
 }
 
