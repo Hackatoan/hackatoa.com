@@ -1,4 +1,4 @@
-/* CSS Background Art Variables - High Fidelity */
+css_content = """/* CSS Background Art Variables - High Fidelity */
 :root {
   --sky-night: #050813;
 }
@@ -23,3 +23,9 @@
   height: 100vh;
   object-fit: cover;
 }
+"""
+
+with open('public/background.css', 'w') as f:
+    f.write(css_content)
+
+print("Done")

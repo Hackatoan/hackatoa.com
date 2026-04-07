@@ -1,7 +1,7 @@
-/* global gsap */
-document.addEventListener('DOMContentLoaded', () => {
+js_content = """document.addEventListener('DOMContentLoaded', () => {
     // Make sure gsap is defined
     if (typeof gsap !== 'undefined') {
+        const bubbleColours = ['#946EB5','#4F4791', '#946EB5'];
 
         gsap.fromTo('#bubbleGroup > *',
           {
@@ -35,3 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }).seek(500);
     }
 });
+"""
+
+with open('public/background.js', 'w') as f:
+    f.write(js_content)
+
+print("Done")
