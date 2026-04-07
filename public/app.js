@@ -114,8 +114,10 @@ function onPlayerReady() {
         }
     }
 
+    ytPlayer.setShuffle(true);
+
     // Attempt autoplay if user has interacted before (browsers usually block this otherwise)
-    ytPlayer.playVideo();
+    ytPlayer.playVideoAt(0);
 }
 
 function updateTitle() {
