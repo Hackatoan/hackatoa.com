@@ -1,12 +1,20 @@
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/hackatoa)
-
 # hackatoa.com
 
 Welcome to the GitHub repository for [hackatoa.com](https://hackatoa.com), my personal website! This README provides a quick overview of the project and the technologies used.
 
 ## Introduction
 
-hackatoa.com is my personal website where I showcase my portfolio, blog, and other projects. It's designed to be a central hub for my online presence.
+hackatoa.com is my central digital hub where I showcase my portfolio, technical research, and personal interests. The site is tailored to focus on my ongoing work in **Cybersecurity**, **Linux infrastructure**, and **Mycology**.
+
+It serves as a portal to all my ongoing projects, including live coding and gaming on Twitch, discussions on TeamSpeak, and logging environmental data for mushroom cultivation.
+
+## Features
+
+- **Personalized Content:** Dedicated sections for cyber security research, live streams (Twitch/TeamSpeak), and mycology tracking.
+- **Embedded Media:** Integrated Twitch stream player, YouTube playlist for mycology logs, and a dynamic GitHub pin widget.
+- **Ambient Player:** A custom ambient music player to provide a relaxing browsing experience.
+- **Support Links:** Options to support my infrastructure through Monero (XMR) and Buy Me A Coffee.
+- **Optimized SEO:** Fully loaded with Open Graph tags, JSON-LD structured data, and Twitter cards for better search visibility.
 
 ## Technologies Used
 
@@ -21,7 +29,7 @@ hackatoa.com is my personal website where I showcase my portfolio, blog, and oth
 
 ## Contact & Links
 
-If you have any questions, feel free to contact me:
+If you want to collaborate, have questions about infrastructure, or just want to discuss the finer points of growing mushrooms, feel free to contact me:
 
 - **Email:** jacob@hackatoa.com
 - **Twitter:** [@jhackatoa](https://twitter.com/jhackatoa)
