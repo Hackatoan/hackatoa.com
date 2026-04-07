@@ -4,18 +4,45 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hackatoa · Night Volcano Portfolio</title>
+  <title>Hackatoa · Jacob P Harris</title>
   <meta name="description"
-    content="Personal portfolio, dev links, and late-night ramblings at the edge of a volcano." />
+    content="Personal portfolio and development projects by Jacob P Harris." />
+  <meta property="og:title" content="Hackatoa · Jacob P Harris Portfolio" />
+  <meta property="og:description" content="Personal portfolio and development projects by Jacob P Harris." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://hackatoa.com/" />
+  <meta property="og:image" content="https://hackatoa.com/assets/me.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Hackatoa · Jacob P Harris Portfolio" />
+  <meta name="twitter:description" content="Personal portfolio and development projects by Jacob P Harris." />
+  <meta name="twitter:image" content="https://hackatoa.com/assets/me.png" />
+  <meta name="twitter:site" content="@jhackatoa" />
+  <link rel="canonical" href="https://hackatoa.com/" />
   <link rel="icon" href="assets/me.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="assets/me.ico" type="image/x-icon" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://alexgama11.github.io/GitGlue/css/gitstyle.css" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Jacob P Harris",
+      "alternateName": "Hackatoa",
+      "url": "https://hackatoa.com",
+      "image": "https://hackatoa.com/assets/me.png",
+      "sameAs": [
+        "https://github.com/Hackatoan",
+        "https://twitter.com/jhackatoa",
+        "https://www.youtube.com/@Hackatoa",
+        "https://www.twitch.tv/hackatoa"
+      ]
+    }
+  </script>
 </head>
 
 <body>
-  <div class="volcano-bg" aria-hidden="true">
-    <video class="volcano-video" src="https://github.com/Hackatoan/hackatoa.com/blob/Main/public/assets/bg.mp4?raw=true"
+  <div class="video-bg" aria-hidden="true">
+    <video class="video-bg-element" src="https://github.com/Hackatoan/hackatoa.com/blob/Main/public/assets/bg.mp4?raw=true"
       autoplay muted loop playsinline></video>
   </div>
 
@@ -26,7 +53,7 @@
           <div class="brand-mark"></div>
           <div>
             <div class="brand-text-main">HACKATOA</div>
-            <div class="brand-text-sub">Night-side dev & lava logs</div>
+            <div class="brand-text-sub">Security, Linux & Mycology</div>
           </div>
         </div>
         <nav class="nav-links" aria-label="Primary">
@@ -48,17 +75,16 @@
               <div class="hero-copy">
                 <div class="hero-copy-tag">
                   <span class="hero-copy-tag-dot"></span>
-                  <span>Night build in progress</span>
+                  <span>Active Development</span>
                 </div>
                 <h1 id="hero-title" class="hero-title">
-                  A <span class="highlight">volcanic</span> little corner
-                  for experiments, projects, and late night ideas.
+                  Exploring <span class="highlight">infrastructure</span>,
+                  security research, and applied mycology.
                 </h1>
                 <p class="hero-subtitle">
                   I am Jacob P Harris (aka <strong>hackatoa</strong>): Linux-first
-                  developer, cyber security tinkerer, and occasional mycologist.
-                  This is the living version of my portfolio, built on the
-                  night side of a volcano.
+                  developer, cyber security tinkerer, and mycologist.
+                  This is my living portfolio and technical repository. I specialize in building robust infrastructure, exploring security hardening strategies, and documenting the intersections of code and natural systems.
                 </p>
                 <div class="hero-cta-row">
                   <a class="button button-primary" href="#portfolio">View projects</a>
@@ -66,18 +92,18 @@
                 </div>
                 <div class="hero-metadata">
                   <div>
-                    <strong>Currently tinkering</strong>
-                    <div>Linux tooling, web experiments, and security labs.</div>
+                    <strong>Primary Focus</strong>
+                    <div>Linux hardening, CMS architecture, and mycology tracking.</div>
                   </div>
                   <div>
-                    <strong>Time of day</strong>
-                    <div>Perpetual midnight over a lava field.</div>
+                    <strong>Active Projects</strong>
+                    <div>Developing custom headless CMS and automated deployment pipelines.</div>
                   </div>
                 </div>
               </div>
 
               <aside class="hero-panel" aria-label="Developer snapshot">
-                <div class="hero-panel-label">Lava-side status</div>
+                <div class="hero-panel-label">Current Status</div>
                 <div class="hero-panel-row">
                   <div class="hero-panel-ident">
                     <img src="assets/me.png" alt="Portrait of Jacob P Harris" class="hero-avatar" loading="lazy" />
@@ -102,8 +128,8 @@
                     <dd class="value">Dev, infra, hardening</dd>
                   </div>
                   <div>
-                    <dt class="label">Mood</dt>
-                    <dd class="value">Smoldering</dd>
+                    <dt class="label">Status</dt>
+                    <dd class="value">Building</dd>
                   </div>
                 </dl>
                 <div class="hero-panel-footer">
@@ -130,7 +156,7 @@
                   <h3 class="card-title">Hackatoa.com · main site</h3>
                   <p class="card-body">
                     The volcanic-night home base: this portfolio, experiments,
-                    and links to the rest of the ecosystem.
+                    and links to the rest of the ecosystem. Features a custom CMS architecture for managing assets and content seamlessly via GitHub actions and Firebase hosting. Built with responsive, animated UI to provide a dark, modern experience.
                   </p>
                   <div class="link-row">
                     <a class="pill-link" href="https://hackatoa.com" target="_blank" rel="noreferrer">Live</a>
@@ -142,7 +168,17 @@
                   <h3 class="card-title">Lab tooling & security notes</h3>
                   <p class="card-body">
                     A rotating set of small tools, scripts, and write-ups for
-                    Linux, infra, and cyber security practice.
+                    Linux, infra, and cyber security practice. Includes configurations for hardening environments, automating deployments, and documenting vulnerability research and mitigation strategies.
+                  </p>
+                  <div class="link-row">
+                    <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noreferrer">GitHub
+                      profile</a>
+                  </div>
+                </article>
+                <article class="card">
+                  <h3 class="card-title">Hackatoa CMS</h3>
+                  <p class="card-body">
+                    A standalone Node.js Express dashboard app that acts as a headless CMS for my main portfolio website. It automatically commits and pushes updates to assets, music, and blog posts directly to the repository using Git integration.
                   </p>
                   <div class="link-row">
                     <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noreferrer">GitHub
@@ -150,9 +186,9 @@
                   </div>
                 </article>
                 <article class="card card-wide">
-                  <h3 class="card-title">In-progress experiments</h3>
+                  <h3 class="card-title">Active Repositories</h3>
                   <p class="card-body">
-                    Live GitHub repos embedded from my profile.
+                    A live feed of my latest commits, security tools, and open source contributions pulled directly from GitHub.
                   </p>
                   <div data="https://github.com/Hackatoan?tab=repositories" class="github-pinner"
                     style="visibility: hidden;"></div>
@@ -173,7 +209,7 @@
               <div class="grid-2">
                 <article class="card">
                   <h3 class="card-title">Core places</h3>
-                  <p class="card-body">Where to find the main content.</p>
+                  <p class="card-body">Where to find the main content, repositories, and longer format videos documenting my journey and projects.</p>
                   <div class="link-row">
                     <a class="pill-link" href="https://hackatoa.com" target="_blank" rel="noreferrer">Hackatoa.com</a>
                     <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noreferrer">GitHub</a>
@@ -183,7 +219,7 @@
                 </article>
                 <article class="card">
                   <h3 class="card-title">Live & voice</h3>
-                  <p class="card-body">Places where things happen in real time.</p>
+                  <p class="card-body">Places where things happen in real time. Join me for live coding, security challenges, gaming, and general technical discussions.</p>
                   <div class="link-row">
                     <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank"
                       rel="noreferrer">Twitch</a>
@@ -212,9 +248,9 @@
               <div class="section-header">
                 <div>
                   <div class="section-kicker">Ramblings</div>
-                  <h2 class="section-title" id="blog-title">Lava log / blog</h2>
+                  <h2 class="section-title" id="blog-title">Research & Logs</h2>
                 </div>
-                <div class="section-caption">Loose notes, late-night ideas, and half-formed plans.</div>
+                <div class="section-caption">Technical notes, vulnerability research, and personal thoughts.</div>
               </div>
               <div class="blog-list" id="blog-list"></div>
             </div>
@@ -225,16 +261,16 @@
               <div class="section-header">
                 <div>
                   <div class="section-kicker">Contact</div>
-                  <h2 class="section-title" id="contact-title">Ping the volcano</h2>
+                  <h2 class="section-title" id="contact-title">Get in touch</h2>
                 </div>
-                <div class="section-caption">Swap in real contact info or a form later.</div>
+                <div class="section-caption">Reach out for collaborations, questions, or just to chat.</div>
               </div>
               <div class="card">
                 <p class="card-body">
-                  Best way to reach me is by email at
+                  The best way to reach me is by email at
                   <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>. I tend to
                   live on Linux, and I split my time between development,
-                  cyber security practice, and mycology experiments.
+                  cyber security practice, and mycology experiments. Whether you have a project in mind, need help with infrastructure, or want to discuss the finer points of growing mushrooms, feel free to drop a message.
                 </p>
                 <div class="contact-times" aria-label="Local and Hackatoa time">
                   <div class="contact-time-row">
@@ -247,7 +283,7 @@
                   </div>
                 </div>
                 <form class="contact-form" action="mailto:jacob@hackatoa.com" method="GET">
-                  <label class="contact-label" for="contact-message">Quick email from the volcano</label>
+                  <label class="contact-label" for="contact-message">Send a quick message</label>
                   <textarea id="contact-message" name="body" class="contact-input" rows="3"
                     placeholder="Drop a short message and your contact details…"></textarea>
                   <div class="contact-actions">
@@ -266,14 +302,13 @@
               <div class="section-header">
                 <div>
                   <div class="section-kicker">Support</div>
-                  <h2 class="section-title" id="support-title">Fuel the volcano</h2>
+                  <h2 class="section-title" id="support-title">Support My Work</h2>
                 </div>
-                <div class="section-caption">Optional, but always appreciated.</div>
+                <div class="section-caption">Help keep the infrastructure running.</div>
               </div>
               <div class="card">
                 <p class="card-body">
-                  If you want to support experiments, infrastructure, or just
-                  the vibe here, you can send Monero (XMR) to this wallet:
+                  If you find value in my security research, tooling, or simply want to support the ongoing development of this infrastructure, you can send Monero (XMR) to this address:
                 </p>
                 <div class="wallet-address-box">
                   87Dj6Y48BTyYemYGEtTWkvJXf2YCszQZuQWWdGhk9PE6RVHYAfLnXbbCMSeEhb3f4n1op9CKFH6D3N2Mj8Xn6dELLYycPMQ
@@ -296,16 +331,17 @@
               <div class="section-header">
                 <div>
                   <div class="section-kicker">Mycology</div>
-                  <h2 class="section-title" id="mycology-title">Fungi side quests</h2>
+                  <h2 class="section-title" id="mycology-title">Fungi & Spores</h2>
                 </div>
-                <div class="section-caption">A future gallery of cultures, grows, and notes.</div>
+                <div class="section-caption">Tracking cultures, grows, and environmental data.</div>
               </div>
               <div class="card">
                 <p class="card-body">
-                  I also do mycology. This is where photos, logs, and
-                  experiments will live once I drop images into the project.
-                  For now this is a placeholder to mark the space.
+                  Beyond digital infrastructure, I study mycology. This involves cultivating different species, refining sterile lab techniques, and attempting to map environmental data points to fruiting triggers. It’s an organic counterpart to hacking—requiring patience, observation, and an understanding of complex natural networks.
                 </p>
+                <div class="embed-frame embed-16x9" style="margin-bottom: 1rem;">
+                  <iframe width="100%" height="100%" src="https://www.youtube.com/embed/videoseries?list=PL4s455Q21T-9k1rPcwk1yQ47c-N5tWfI7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
                 <div class="myco-carousel" aria-label="Mycology image carousel">
                   <div class="myco-carousel-window">
                     <div class="myco-carousel-track" id="myco-carousel-track"></div>
@@ -320,31 +356,13 @@
             </div>
           </section>
 
-          <section id="servers" class="section slide" aria-labelledby="servers-title" data-hidden="true">
-            <div class="slide-inner">
-              <div class="section-header">
-                <div>
-                  <div class="section-kicker">Game servers</div>
-                  <h2 class="section-title" id="servers-title">Hidden lava instances</h2>
-                </div>
-                <div class="section-caption">Reserved for when servers go live again.</div>
-              </div>
-              <div class="card">
-                <p class="card-body">
-                  No public game servers are online right now. When I spin new
-                  ones up, this slide will unhide with connection details,
-                  rules, and status.
-                </p>
-              </div>
-            </div>
-          </section>
 
         </div>
       </div>
 
       <footer class="site-footer">
         <div class="site-footer-row">
-          <div>Built as a living portfolio. Theme: volcano at midnight.</div>
+          <div>Built by Jacob P Harris. Constantly evolving infrastructure.</div>
           <div class="footer-links">
             <a href="#intro">Back to top</a>
           </div>

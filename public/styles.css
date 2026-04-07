@@ -2,8 +2,8 @@
 :root {
     --bg-night: #050813;
     --bg-night-deep: #020309;
-    --lava: #ff4b3a;
-    --lava-glow: #ff8a4a;
+    --primary: #ff4b3a;
+    --primary-glow: #ff8a4a;
     --accent: #ffdd7c;
     --text-main: #f5f7ff;
     --text-muted: #9ea3c7;
@@ -37,9 +37,9 @@ main {
     padding: 2rem 0 2rem;
 }
 
-/* Volcano background */
+/* Video background */
 
-.volcano-bg {
+.video-bg {
     position: fixed;
     inset: 0;
     overflow: hidden;
@@ -47,7 +47,7 @@ main {
     z-index: 0;
 }
 
-.volcano-video {
+.video-bg-element {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -173,7 +173,7 @@ main {
     width: 32px;
     height: 32px;
     border-radius: 30% 70% 65% 35%;
-    background: radial-gradient(circle at 20% 10%, var(--lava-glow), var(--lava));
+    background: radial-gradient(circle at 20% 10%, var(--primary-glow), var(--primary));
     box-shadow: 0 0 18px rgba(255, 92, 52, 0.8);
 }
 
@@ -212,7 +212,7 @@ main {
 }
 
 .nav-pill-primary {
-    background: linear-gradient(135deg, var(--lava), var(--lava-glow));
+    background: linear-gradient(135deg, var(--primary), var(--primary-glow));
     color: #070911 !important;
     font-weight: 500;
     box-shadow: 0 0 16px rgba(255, 88, 40, 0.7);
@@ -245,7 +245,7 @@ main {
     width: 8px;
     height: 8px;
     border-radius: 999px;
-    background: radial-gradient(circle at 30% 30%, var(--lava-glow), var(--lava));
+    background: radial-gradient(circle at 30% 30%, var(--primary-glow), var(--primary));
     box-shadow: 0 0 12px rgba(255, 92, 52, 0.8);
 }
 
@@ -287,7 +287,7 @@ main {
 }
 
 .button-primary {
-    background: radial-gradient(circle at 0% 0%, #ffd1a1, var(--lava));
+    background: radial-gradient(circle at 0% 0%, #ffd1a1, var(--primary));
     color: #050408;
     box-shadow: 0 0 18px rgba(255, 92, 52, 0.8);
 }
@@ -390,7 +390,7 @@ main {
 .chip-hot {
     background: rgba(255, 92, 52, 0.12);
     border-color: rgba(255, 133, 96, 0.9);
-    color: var(--lava-glow);
+    color: var(--primary-glow);
 }
 
 .hero-panel-divider {
@@ -606,7 +606,7 @@ main {
 
 .contact-input:focus-visible {
     outline: none;
-    border-color: var(--lava-glow);
+    border-color: var(--primary-glow);
     box-shadow: 0 0 0 1px rgba(255, 138, 74, 0.5);
 }
 
@@ -656,7 +656,7 @@ main {
 
 .pill-link:hover,
 .pill-link:focus-visible {
-    border-color: var(--lava-glow);
+    border-color: var(--primary-glow);
     color: var(--accent);
 }
 
@@ -861,7 +861,7 @@ main {
 }
 
 .myco-dot.is-active {
-    background: var(--lava-glow);
+    background: var(--primary-glow);
 }
 
 .myco-carousel-note {
@@ -902,7 +902,7 @@ main {
 .music-bar {
     width: 3px;
     border-radius: 999px;
-    background: linear-gradient(to top, var(--lava), var(--accent));
+    background: linear-gradient(to top, var(--primary), var(--accent));
     height: 10px;
     opacity: 0.3;
     transform-origin: bottom;
@@ -951,7 +951,7 @@ main {
     appearance: none;
     width: 10px;
     height: 10px;
-    background: var(--lava);
+    background: var(--primary);
     border-radius: 50%;
     cursor: pointer;
 }
@@ -993,7 +993,7 @@ main {
     appearance: none;
     width: 10px;
     height: 10px;
-    background: var(--lava);
+    background: var(--primary);
     border-radius: 50%;
     cursor: pointer;
 }
@@ -1031,7 +1031,7 @@ main {
 }
 
 .music-toggle[data-state="playing"] {
-    background: linear-gradient(135deg, var(--lava), var(--lava-glow));
+    background: linear-gradient(135deg, var(--primary), var(--primary-glow));
     color: #04040a;
     border-color: transparent;
 }
@@ -1153,10 +1153,30 @@ body.bg-viewing .site-footer {
     .site-header {
         padding-inline: 0.85rem;
         top: 0.25rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding-block: 0.75rem;
+        border-radius: 1.2rem;
+    }
+
+    .brand {
+        justify-content: center;
     }
 
     .nav-links {
-        display: none;
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 0.25rem;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+        gap: 0.5rem;
+    }
+
+    .nav-links a {
+        padding: 0.6rem 1rem;
+        white-space: nowrap;
+        font-size: 0.9rem;
     }
 
     .slides-viewport {
@@ -1276,7 +1296,7 @@ video {
 .local-playlist-item:hover,
 .local-playlist-item.active {
     background: rgba(255, 150, 115, 0.15);
-    color: var(--lava);
+    color: var(--primary);
     padding-left: 1.5rem;
 }
 
@@ -1313,6 +1333,6 @@ video {
 .local-playlist-item:hover,
 .local-playlist-item.active {
     background: rgba(255, 150, 115, 0.15);
-    color: var(--lava);
+    color: var(--primary);
     padding-left: 1.5rem;
 }
