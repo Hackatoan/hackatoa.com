@@ -32,8 +32,10 @@ It serves as a portal to all my ongoing projects, including live coding and gami
 If you want to collaborate, have questions about infrastructure, or just want to discuss the finer points of growing mushrooms, feel free to contact me:
 
 - **Email:** jacob@hackatoa.com
+- **Signal:** [Message me on Signal](https://signal.me/#eu/ZqxSe8D4lgvz9D6rUI0cq7cjTyPXb086bWiagELkPQIsEpzDs2JLeIC1aGF-ByHj)
 - **TeamSpeak:** ts.hackatoa.com
 - **Twitter:** [@jhackatoa](https://twitter.com/@jhackatoa)
+- **Instagram:** [@hackatoa.99](https://instagram.com/hackatoa.99)
 
 Support the project here: [Buy Me A Coffee](https://buymeacoffee.com/hackatoa) or via Monero (address on site).
 
