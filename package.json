@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "update-songs": "node update-songs.js"
+    "update-songs": "node update-songs.js",
+    "test": "node --test"
   },
   "dependencies": {
     "firebase": "^10.12.2"
