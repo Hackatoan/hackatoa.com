@@ -1,7 +1,5 @@
-// Basic volcano + scroll interaction and music widget wiring
+// Basic scroll interaction and music widget wiring
 
-const volcanoSmoke = document.getElementById('volcano-smoke');
-const lavaParticlesContainer = document.getElementById('lava-particles');
 const musicToggle = document.getElementById('music-toggle');
 const musicPlayer = document.getElementById('music-player');
 const bgToggle = document.getElementById('bg-toggle');
@@ -14,66 +12,12 @@ let currentSlideIndex = 0;
 let isSliding = false;
 const SLIDE_DURATION_MS = 550;
 
-const PARTICLE_COUNT = 36;
-const particles = [];
-
-function createParticles() {
-    if (!lavaParticlesContainer) return;
-    for (let i = 0; i < PARTICLE_COUNT; i += 1) {
-        const el = document.createElement('div');
-        el.className = 'lava-particle';
-        lavaParticlesContainer.appendChild(el);
-        particles.push({
-            el,
-            baseX: 45 + Math.random() * 10,
-            baseY: 50 + Math.random() * 10,
-            ampX: 3 + Math.random() * 6,
-            ampY: 15 + Math.random() * 20,
-            speed: 0.15 + Math.random() * 0.25,
-            phase: Math.random() * Math.PI * 2,
-        });
-    }
-}
-
-function updateParticles(scrollFactor, t) {
-    const intensity = 0.3 + scrollFactor * 0.7;
-    particles.forEach((p, index) => {
-        const localPhase = p.phase + t * p.speed + index * 0.1;
-        const x = p.baseX + Math.sin(localPhase) * p.ampX * intensity;
-        const y = p.baseY - Math.cos(localPhase) * p.ampY * intensity;
-        const scale = 0.6 + intensity * 0.9;
-        const opacity = 0.1 + intensity * 0.6;
-        p.el.style.transform = `translate(-50%, -50%) translate(${x}%, ${y}%) scale(${scale})`;
-        p.el.style.opacity = String(opacity);
-    });
-}
-
-function updateSmoke(scrollFactor, t) {
-    if (!volcanoSmoke) return;
-    const float = Math.sin(t * 0.12) * 4;
-    const widen = 1 + scrollFactor * 0.4;
-    const opacity = 0.45 + scrollFactor * 0.4;
-    volcanoSmoke.style.transform = `translateX(-50%) translateY(${float}px) scale(${widen})`;
-    volcanoSmoke.style.opacity = String(opacity);
-}
-
-// Scroll factor from 0–1 based on main content
-function getScrollFactor() {
-    const totalSlides = slides.length || 1;
-    if (totalSlides <= 1) return 0;
-    return currentSlideIndex / (totalSlides - 1);
-}
-
 let lastTime = performance.now();
 
 function frame(now) {
     const dt = (now - lastTime) / 1000;
     const t = now / 1000;
     lastTime = now;
-
-    const scrollFactor = getScrollFactor();
-    updateParticles(scrollFactor, t);
-    updateSmoke(scrollFactor, t);
 
     window.requestAnimationFrame(frame);
 }
@@ -444,7 +388,6 @@ function initContactTimes() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    createParticles();
     initMusicWidget();
     initBackgroundToggle();
     renderBlogFromData();
