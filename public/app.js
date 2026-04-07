@@ -1,3 +1,10 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const heroYt = document.getElementById("hero-yt-embed");
+  if (heroYt) {
+    const randomHeroBgIdx = Math.floor(Math.random() * 20);
+    heroYt.src = `https://www.youtube.com/embed/videoseries?list=PLZG0CvngYU9ihzPO2JTRe17DQDUI0Z6vC&index=${randomHeroBgIdx}`;
+  }
+});
 // Basic scroll interaction and music widget wiring
 
 const musicToggle = document.getElementById('music-toggle');
