@@ -77,32 +77,41 @@ function handleKey(e) {
     }
 }
 
-// Local music widget
-let localAudioPlayer;
+// YouTube Music widget
+/* global YT */
+let ytPlayer;
 
-function initMusicWidget() {
-    localAudioPlayer = new Audio();
-    localAudioPlayer.volume = 0.25;
-
-    const volumeSlider = document.getElementById('music-volume');
-    const skipBtn = document.getElementById('music-skip');
-    const titleEl = document.querySelector('.music-title');
-
-    function loadRandomSong(autoPlay = false) {
-        if (!window.LOCAL_SONGS || window.LOCAL_SONGS.length === 0) {
-            console.warn("[Widget] No local songs available in window.LOCAL_SONGS.");
-            if (titleEl) titleEl.textContent = 'No songs found';
-            return;
+window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('music-player', {
+        height: '0',
+        width: '0',
+        playerVars: {
+            'listType': 'playlist',
+            'list': 'PLZG0CvngYU9ihzPO2JTRe17DQDUI0Z6vC',
+            'autoplay': 0,
+            'controls': 0,
+            'disablekb': 1,
+            'fs': 0,
+            'modestbranding': 1,
+            'playsinline': 1
+        },
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
         }
+    });
+}
 
-        const randomIndex = Math.floor(Math.random() * window.LOCAL_SONGS.length);
-        const filename = window.LOCAL_SONGS[randomIndex];
-        playSpecificSong(filename, autoPlay);
+function onPlayerReady() {
+    const volumeSlider = document.getElementById('music-volume');
+    if (volumeSlider) {
+        let savedVol = parseInt(volumeSlider.value, 10);
+        if (!isNaN(savedVol)) {
+            ytPlayer.setVolume(savedVol);
+        }
     }
 
-    function playSpecificSong(filename, autoPlay = true) {
-        localAudioPlayer.src = 'assets/songs/' + filename;
-        if (titleEl) titleEl.textContent = filename.replace(/\.[^/.]+$/, "");
+    ytPlayer.setShuffle(true);
 
         if (autoPlay) {
             localAudioPlayer.play().then(() => {
@@ -119,48 +128,51 @@ function initMusicWidget() {
             });
         }
     }
+}
 
-    setTimeout(() => {
-        loadRandomSong(true);
-    }, 200);
-
-    function playRandomSong() {
-        loadRandomSong(true);
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+        if (musicToggle) {
+            musicToggle.dataset.state = 'playing';
+            musicToggle.textContent = 'Pause';
+        }
+        updateTitle();
+    } else if (event.data === YT.PlayerState.PAUSED) {
+        if (musicToggle) {
+            musicToggle.dataset.state = 'paused';
+            musicToggle.textContent = 'Play';
+        }
     }
+}
+
+function initMusicWidget() {
+    const volumeSlider = document.getElementById('music-volume');
+    const skipBtn = document.getElementById('music-skip');
 
     if (volumeSlider) {
-        let savedVol = parseInt(volumeSlider.value, 10);
-        if (!isNaN(savedVol)) {
-            localAudioPlayer.volume = savedVol / 100;
-        }
         volumeSlider.addEventListener('input', (e) => {
-            localAudioPlayer.volume = parseInt(e.target.value, 10) / 100;
+            if (ytPlayer && ytPlayer.setVolume) {
+                ytPlayer.setVolume(parseInt(e.target.value, 10));
+            }
         });
     }
 
     if (skipBtn) {
-        skipBtn.addEventListener('click', () => playRandomSong());
+        skipBtn.addEventListener('click', () => {
+            if (ytPlayer && ytPlayer.nextVideo) {
+                ytPlayer.nextVideo();
+            }
+        });
     }
-
-    localAudioPlayer.addEventListener('ended', () => playRandomSong());
 
     if (musicToggle) {
         musicToggle.addEventListener('click', () => {
-            const isPaused = musicToggle.dataset.state !== 'playing';
-
-            if (isPaused) {
-                if (!localAudioPlayer.src || !localAudioPlayer.src.includes('assets/songs')) {
-                    playRandomSong();
-                } else {
-                    localAudioPlayer.play().then(() => {
-                        musicToggle.dataset.state = 'playing';
-                        musicToggle.textContent = 'Pause';
-                    });
-                }
+            if (!ytPlayer || !ytPlayer.getPlayerState) return;
+            const state = ytPlayer.getPlayerState();
+            if (state === YT.PlayerState.PLAYING) {
+                ytPlayer.pauseVideo();
             } else {
-                localAudioPlayer.pause();
-                musicToggle.dataset.state = 'paused';
-                musicToggle.textContent = 'Play';
+                ytPlayer.playVideo();
             }
         });
     }

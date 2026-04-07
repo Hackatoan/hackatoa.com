@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="player"></div>
+  <div id="title">Loading...</div>
+  <button id="play" onclick="player.playVideo()">Play</button>
+  <button id="skip" onclick="player.nextVideo()">Skip</button>
+  <script>
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '0',
+        width: '0',
+        playerVars: {
+          'listType': 'playlist',
+          'list': 'PLZG0CvngYU9ihzPO2JTRe17DQDUI0Z6vC',
+          'autoplay': 0,
+          'controls': 0
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      console.log("Ready");
+      updateTitle();
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data == YT.PlayerState.PLAYING) {
+         updateTitle();
+      }
+    }
+
+    function updateTitle() {
+      if(player && player.getVideoData) {
+         var data = player.getVideoData();
+         if(data && data.title) {
+           document.getElementById('title').innerText = data.title;
+         }
+      }
+    }
+  </script>
+</body>
+</html>

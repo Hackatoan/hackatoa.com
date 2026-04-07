@@ -19,24 +19,23 @@ It serves as a portal to all my ongoing projects, including live coding and gami
 ## Technologies Used
 
 - **Frontend:**
-  - HTML5 (Optimized semantic markup)
-  - CSS3 (Responsive, mobile-friendly design with custom themes)
-  - Vanilla JavaScript
+  - HTML5
+  - CSS3
+  - JavaScript (with YouTube IFrame API for background music)
     
 - **Hosting and DNS:**
   - Firebase Hosting
   - Cloudflare
 
-## Contact
+## Contact & Links
 
 If you want to collaborate, have questions about infrastructure, or just want to discuss the finer points of growing mushrooms, feel free to contact me:
 
 - **Email:** jacob@hackatoa.com
-- **Signal:** [Message me on Signal](https://signal.me/#eu/ZqxSe8D4lgvz9D6rUI0cq7cjTyPXb086bWiagELkPQIsEpzDs2JLeIC1aGF-ByHj)
+- **Twitter:** [@jhackatoa](https://twitter.com/jhackatoa)
+- **Twitch:** [hackatoa](https://www.twitch.tv/hackatoa)
+- **YouTube:** [Hackatoa](https://www.youtube.com/@Hackatoa)
+- **GitHub:** [Hackatoan](https://github.com/Hackatoan)
 - **TeamSpeak:** ts.hackatoa.com
-- **Twitter:** [@jhackatoa](https://twitter.com/@jhackatoa)
-- **Instagram:** [@hackatoa.99](https://instagram.com/hackatoa.99)
-
-Support the project here: [Buy Me A Coffee](https://buymeacoffee.com/hackatoa) or via Monero (address on site).
 
 Thank you for visiting hackatoa.com!
