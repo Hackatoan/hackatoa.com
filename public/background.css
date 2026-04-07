@@ -1,0 +1,401 @@
+/* CSS Background Art Variables */
+:root {
+  --sky-day: #87CEEB;
+  --sky-night: #050813;
+  --ocean-day: #1ca3ec;
+  --ocean-night: #091b35;
+  --volcano-base: #2a2a2a;
+  --volcano-light: #3a3a3a;
+  --island-color: #2e3b32;
+  --tree-trunk: #3e2723;
+  --tree-leaves: #1b5e20;
+  --lava: #ff4b3a;
+  --lava-glow: #ff8a4a;
+  --smoke: rgba(100, 100, 100, 0.6);
+  --cloud-day: rgba(255, 255, 255, 0.8);
+  --cloud-night: rgba(100, 100, 120, 0.4);
+  --sun-color: #ffde00;
+  --moon-color: #f4f6f0;
+}
+
+.video-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  background-color: var(--sky-night);
+  transition: background-color 2s ease;
+}
+
+/* Sky */
+.sky {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: transparent;
+  z-index: 1;
+}
+
+.celestial-body {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  top: 15%;
+  left: 80%;
+  background: var(--moon-color);
+  box-shadow: 0 0 40px var(--moon-color);
+  transition: all 2s ease;
+  z-index: 2;
+}
+
+/* Clouds */
+.clouds {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+
+.cloud {
+  position: absolute;
+  background: var(--cloud-night);
+  border-radius: 50px;
+  transition: background-color 2s ease;
+}
+
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: var(--cloud-night);
+  border-radius: 50%;
+  transition: background-color 2s ease;
+}
+
+body.is-day .cloud,
+body.is-day .cloud::before,
+body.is-day .cloud::after {
+  background: var(--cloud-day);
+}
+
+body.is-night .cloud,
+body.is-night .cloud::before,
+body.is-night .cloud::after {
+  background: var(--cloud-night);
+}
+
+.cloud-1 {
+  width: 120px;
+  height: 40px;
+  top: 20%;
+  left: -150px;
+  opacity: 0.8;
+}
+.cloud-1::before { width: 50px; height: 50px; top: -20px; left: 15px; }
+.cloud-1::after { width: 60px; height: 60px; top: -30px; right: 15px; }
+
+.cloud-2 {
+  width: 180px;
+  height: 50px;
+  top: 35%;
+  left: -200px;
+  opacity: 0.6;
+}
+.cloud-2::before { width: 70px; height: 70px; top: -30px; left: 20px; }
+.cloud-2::after { width: 90px; height: 90px; top: -45px; right: 25px; }
+
+.cloud-3 {
+  width: 100px;
+  height: 30px;
+  top: 10%;
+  left: -100px;
+  opacity: 0.7;
+}
+.cloud-3::before { width: 40px; height: 40px; top: -15px; left: 10px; }
+.cloud-3::after { width: 50px; height: 50px; top: -20px; right: 10px; }
+
+
+/* Ocean */
+.ocean {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to bottom, var(--ocean-night), #020309);
+  z-index: 4;
+  overflow: hidden;
+  transition: background 2s ease;
+}
+
+.wave {
+  position: absolute;
+  width: 200%;
+  height: 100%;
+  background-image: radial-gradient(circle at 50px 0, transparent 50px, rgba(255,255,255,0.05) 51px, rgba(255,255,255,0.05) 52px, transparent 53px);
+  background-size: 100px 20px;
+  opacity: 0.5;
+}
+
+.wave-1 { top: 0; left: 0; z-index: 1; }
+.wave-2 { top: 10px; left: -25px; z-index: 2; opacity: 0.3; }
+.wave-3 { top: 20px; left: -50px; z-index: 3; opacity: 0.2; }
+
+/* Volcano Island */
+.volcano-island {
+  position: absolute;
+  bottom: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 300px;
+  z-index: 3;
+}
+
+.island-base {
+  position: absolute;
+  bottom: -20px;
+  left: 10%;
+  width: 80%;
+  height: 80px;
+  background: var(--island-color);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.volcano-base {
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  width: 60%;
+  height: 250px;
+  background: linear-gradient(to top, var(--volcano-base), var(--volcano-light));
+  clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
+  z-index: 2;
+}
+
+.volcano-crater {
+  position: absolute;
+  top: 48px;
+  left: 32%;
+  width: 36%;
+  height: 20px;
+  background: #111;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+/* Lava */
+.lava {
+  position: absolute;
+  top: 55px;
+  left: 32%;
+  width: 36%;
+  height: 200px;
+  z-index: 4;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);
+}
+
+.lava-flow {
+  position: absolute;
+  background: var(--lava);
+  box-shadow: 0 0 10px var(--lava-glow);
+  border-radius: 10px;
+}
+
+.lava-flow-1 {
+  width: 20px;
+  height: 80px;
+  top: 0;
+  left: 30%;
+}
+
+.lava-flow-2 {
+  width: 15px;
+  height: 120px;
+  top: 0;
+  left: 60%;
+}
+
+/* Animations */
+@keyframes moveClouds {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(100vw + 300px)); }
+}
+
+@keyframes waveTree {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
+}
+
+@keyframes bubbleLava {
+  0% { transform: translateY(0) scale(1); opacity: 0.8; }
+  50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+  100% { transform: translateY(-40px) scale(0.8); opacity: 0; }
+}
+
+@keyframes flowLava {
+  0% { transform: translateY(-10px); }
+  50% { transform: translateY(10px); }
+  100% { transform: translateY(-10px); }
+}
+
+@keyframes riseSmoke {
+  0% { transform: translateY(0) scale(1); opacity: 0.8; }
+  100% { transform: translateY(-100px) scale(2); opacity: 0; }
+}
+
+@keyframes waveOcean {
+  0% { background-position: 0 0; }
+  100% { background-position: 100px 0; }
+}
+
+/* Clouds Animation */
+.cloud-1 { animation: moveClouds 40s linear infinite; }
+.cloud-2 { animation: moveClouds 60s linear infinite; animation-delay: -20s; }
+.cloud-3 { animation: moveClouds 50s linear infinite; animation-delay: -10s; }
+
+/* Trees Animation */
+.tree { animation: waveTree 4s ease-in-out infinite; }
+.tree-1 { animation-duration: 5s; animation-delay: 0.5s; }
+.tree-2 { animation-duration: 4.5s; animation-delay: 0.2s; }
+.tree-3 { animation-duration: 5.5s; animation-delay: 0.8s; }
+
+/* Ocean Animation */
+.wave-1 { animation: waveOcean 4s linear infinite; }
+.wave-2 { animation: waveOcean 6s linear infinite reverse; }
+.wave-3 { animation: waveOcean 5s linear infinite; }
+
+/* Lava Animation */
+.lava-flow-1 { animation: flowLava 3s ease-in-out infinite; }
+.lava-flow-2 { animation: flowLava 4s ease-in-out infinite; animation-delay: 1s; }
+
+.lava-bubble {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--lava-glow);
+  border-radius: 50%;
+  bottom: 0;
+  opacity: 0;
+}
+.lava-bubble-1 { left: 40%; animation: bubbleLava 2s ease-in infinite; }
+.lava-bubble-2 { left: 60%; animation: bubbleLava 2.5s ease-in infinite; animation-delay: 1s; }
+
+/* Smoke Animation */
+.smoke-puff-1 { animation: riseSmoke 4s ease-in infinite; }
+.smoke-puff-2 { animation: riseSmoke 5s ease-in infinite; animation-delay: 1.5s; }
+.smoke-puff-3 { animation: riseSmoke 4.5s ease-in infinite; animation-delay: 2.5s; }
+
+/* Weather states */
+.weather-effects {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.stormy .video-bg {
+  background-color: #0c0f1d;
+}
+
+.stormy .ocean {
+  background: linear-gradient(to bottom, #071526, #010204);
+}
+
+.stormy .cloud, .stormy .cloud::before, .stormy .cloud::after {
+  background: #3a4052;
+}
+
+.stormy .sky {
+  animation: lightning 10s infinite;
+}
+
+@keyframes lightning {
+  0%, 95%, 98%, 100% { background: transparent; }
+  96%, 99% { background: rgba(255, 255, 255, 0.2); }
+}
+
+/* Rain effect for stormy state */
+.rain {
+  position: absolute;
+  width: 2px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.3);
+  animation: fall 0.5s linear infinite;
+}
+
+@keyframes fall {
+  to { transform: translateY(100vh); }
+}
+
+/* Trees */
+.trees {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  height: 100px;
+  z-index: 5;
+}
+
+.tree {
+  position: absolute;
+  bottom: 0;
+  transform-origin: bottom center;
+}
+
+.tree-1 { left: 15%; transform: scale(0.8); }
+.tree-2 { left: 25%; transform: scale(1.2); }
+.tree-3 { right: 20%; transform: scale(1); }
+
+.trunk {
+  position: absolute;
+  bottom: 0;
+  left: -5px;
+  width: 10px;
+  height: 40px;
+  background: var(--tree-trunk);
+  border-radius: 2px;
+}
+
+.leaves {
+  position: absolute;
+  bottom: 25px;
+  left: -20px;
+  width: 40px;
+  height: 60px;
+  background: var(--tree-leaves);
+  border-radius: 50%;
+}
+
+/* Smoke */
+.smoke {
+  position: absolute;
+  top: -50px;
+  left: 40%;
+  width: 20%;
+  height: 100px;
+  z-index: 1;
+}
+
+.smoke-puff {
+  position: absolute;
+  background: var(--smoke);
+  border-radius: 50%;
+  filter: blur(5px);
+  opacity: 0;
+}
+
+.smoke-puff-1 { width: 40px; height: 40px; left: 10%; bottom: 0; }
+.smoke-puff-2 { width: 60px; height: 60px; left: 40%; bottom: 10px; }
+.smoke-puff-3 { width: 50px; height: 50px; right: 10%; bottom: 5px; }
