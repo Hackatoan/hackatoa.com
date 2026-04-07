@@ -1215,7 +1215,8 @@ main {
 }
 
 body.bg-viewing .slides-viewport,
-body.bg-viewing .site-footer {
+body.bg-viewing .site-footer,
+body.bg-viewing .site-header {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.25s ease;
