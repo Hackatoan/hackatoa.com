@@ -33,9 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update classes for CSS
         document.body.classList.remove('is-day', 'is-night', 'is-sunset');
-        if (state === 'day' || state === 'sunrise') document.body.classList.add('is-day');
-        if (state === 'night') document.body.classList.add('is-night');
-        if (state === 'sunset') document.body.classList.add('is-sunset');
+        document.body.classList.add(`is-${state === 'sunrise' ? 'day' : state}`);
 
         if (state === 'day' || state === 'sunrise' || state === 'sunset') {
             celestialBody.style.background = sunColor;
