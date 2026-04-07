@@ -156,6 +156,7 @@ main {
     border-radius: 999px;
     border: 1px solid rgba(114, 122, 180, 0.3);
     box-shadow: 0 18px 48px rgba(0, 0, 0, 0.7);
+    -webkit-backdrop-filter: blur(18px);
     backdrop-filter: blur(18px);
     position: sticky;
     top: 0.5rem;
@@ -213,7 +214,7 @@ main {
 
 .nav-pill-primary {
     background: linear-gradient(135deg, var(--primary), var(--primary-glow));
-    color: #070911 !important;
+    color: #070911;
     font-weight: 500;
     box-shadow: 0 0 16px rgba(255, 88, 40, 0.7);
 }
@@ -1307,7 +1308,7 @@ body.bg-viewing .site-footer {
 
     .slides-track {
         flex-direction: column;
-        transform: none !important;
+        transform: none;
         gap: 0.75rem;
     }
 

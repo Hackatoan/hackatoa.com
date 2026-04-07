@@ -1,6 +1,5 @@
 {
   "scripts": {
-    "update-songs": "node update-songs.js",
     "test": "node --test"
   },
   "dependencies": {
