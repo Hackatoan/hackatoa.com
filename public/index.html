@@ -5,8 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hackatoa · Jacob P Harris</title>
-  <meta name="description"
-    content="Personal portfolio and development projects by Jacob P Harris." />
+  <meta name="description" content="Personal portfolio and development projects by Jacob P Harris." />
   <meta property="og:title" content="Hackatoa · Jacob P Harris Portfolio" />
   <meta property="og:description" content="Personal portfolio and development projects by Jacob P Harris." />
   <meta property="og:type" content="website" />
@@ -23,7 +22,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="background.css" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6042152415983682"
-     crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -142,7 +141,9 @@
                 <p class="hero-subtitle">
                   I am Jacob P Harris (aka <strong>hackatoa</strong>): Linux-first
                   developer, cyber security tinkerer, and mycologist.
-                  This is my living portfolio and technical repository. I specialize in building robust infrastructure, exploring security hardening strategies, and documenting the intersections of code and natural systems.
+                  This is my living portfolio and technical repository. I specialize in building robust infrastructure,
+                  exploring security hardening strategies, and documenting the intersections of code and natural
+                  systems.
                 </p>
                 <div class="hero-cta-row">
                   <a class="button button-primary" href="#portfolio">View projects</a>
@@ -192,12 +193,28 @@
                 </dl>
 
                 <div class="embed-frame embed-16x9">
-                  <iframe id="hero-yt-embed" src="https://www.youtube.com/embed/videoseries?list=PLZG0CvngYU9ihzPO2JTRe17DQDUI0Z6vC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                  <iframe id="hero-yt-embed" title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+                  <script>
+                    (function () {
+                      const randomHeroBgIdx = Math.floor(Math.random() * 20);
+                      document.getElementById('hero-yt-embed').src = "https://www.youtube.com/embed/videoseries?list=PLZG0CvngYU9ihzPO2JTRe17DQDUI0Z6vC&index=" + randomHeroBgIdx;
+                    })();
+                  </script>
+                  <noscript>
+                    <iframe id="hero-yt-embed-noscript"
+                      src="https://www.youtube.com/embed/videoseries?list=PLZG0CvngYU9ihzPO2JTRe17DQDUI0Z6vC"
+                      title="YouTube video player" frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowfullscreen></iframe>
+                  </noscript>
                 </div>
 
                 <div class="hero-panel-socials">
                   <a href="https://github.com/Hackatoan" class="pill-link" target="_blank" rel="noreferrer">GitHub</a>
-                  <a href="https://www.youtube.com/@Hackatoa" class="pill-link" target="_blank" rel="noreferrer">YouTube</a>
+                  <a href="https://www.youtube.com/@Hackatoa" class="pill-link" target="_blank"
+                    rel="noreferrer">YouTube</a>
                   <a href="https://www.twitch.tv/hackatoa" class="pill-link" target="_blank" rel="noreferrer">Twitch</a>
                 </div>
 
@@ -225,7 +242,9 @@
                   <h3 class="card-title">Hackatoa.com · main site</h3>
                   <p class="card-body">
                     The volcanic-night home base: this portfolio, experiments,
-                    and links to the rest of the ecosystem. Features a custom CMS architecture for managing assets and content seamlessly via GitHub actions and Firebase hosting. Built with responsive, animated UI to provide a dark, modern experience.
+                    and links to the rest of the ecosystem. Features a custom CMS architecture for managing assets and
+                    content seamlessly via GitHub actions and Firebase hosting. Built with responsive, animated UI to
+                    provide a dark, modern experience.
                   </p>
                   <div class="link-row">
                     <a class="pill-link" href="https://hackatoa.com" target="_blank" rel="noreferrer">Live</a>
@@ -237,7 +256,8 @@
                   <h3 class="card-title">Lab tooling & security notes</h3>
                   <p class="card-body">
                     A rotating set of small tools, scripts, and write-ups for
-                    Linux, infra, and cyber security practice. Includes configurations for hardening environments, automating deployments, and documenting vulnerability research and mitigation strategies.
+                    Linux, infra, and cyber security practice. Includes configurations for hardening environments,
+                    automating deployments, and documenting vulnerability research and mitigation strategies.
                   </p>
                   <div class="link-row">
                     <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noreferrer">GitHub
@@ -247,17 +267,22 @@
                 <article class="card">
                   <h3 class="card-title">InfiniSweeper</h3>
                   <p class="card-body">
-                    An infinite, massively multiplayer Minesweeper game where players collectively uncover a global, never-ending board. Features real-time multiplayer cursors, chunk-based board generation, and seamless panning and zooming.
+                    An infinite, massively multiplayer Minesweeper game where players collectively uncover a global,
+                    never-ending board. Features real-time multiplayer cursors, chunk-based board generation, and
+                    seamless panning and zooming.
                   </p>
                   <div class="link-row">
-                    <a class="pill-link" href="https://infinisweeper.hackatoa.com/" target="_blank" rel="noreferrer">Live</a>
-                    <a class="pill-link" href="https://github.com/Hackatoan/infinisweeper" target="_blank" rel="noreferrer">Source</a>
+                    <a class="pill-link" href="https://infinisweeper.hackatoa.com/" target="_blank"
+                      rel="noreferrer">Live</a>
+                    <a class="pill-link" href="https://github.com/Hackatoan/infinisweeper" target="_blank"
+                      rel="noreferrer">Source</a>
                   </div>
                 </article>
                 <article class="card">
                   <h3 class="card-title">Mycology Tracking</h3>
                   <p class="card-body">
-                    Beyond digital infrastructure, I study mycology. This involves cultivating different species, refining sterile lab techniques, and mapping environmental data to fruiting triggers.
+                    Beyond digital infrastructure, I study mycology. This involves cultivating different species,
+                    refining sterile lab techniques, and mapping environmental data to fruiting triggers.
                   </p>
                   <div class="link-row">
                     <a class="pill-link" href="#mycology">View cultures</a>
@@ -266,7 +291,8 @@
                 <article class="card card-wide">
                   <h3 class="card-title">Active Repositories & Contributions</h3>
                   <p class="card-body">
-                    A live feed of my latest commits, security tools, and open source contributions pulled directly from GitHub.
+                    A live feed of my latest commits, security tools, and open source contributions pulled directly from
+                    GitHub.
                   </p>
                   <div class="github-pinner"></div>
                 </article>
@@ -286,7 +312,8 @@
               <div class="grid-2">
                 <article class="card">
                   <h3 class="card-title">Core places</h3>
-                  <p class="card-body">Where to find the main content, repositories, and longer format videos documenting my journey and projects.</p>
+                  <p class="card-body">Where to find the main content, repositories, and longer format videos
+                    documenting my journey and projects.</p>
                   <div class="link-row">
                     <a class="pill-link" href="https://hackatoa.com" target="_blank" rel="noreferrer">Hackatoa.com</a>
                     <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noreferrer">GitHub</a>
@@ -298,7 +325,8 @@
                 </article>
                 <article class="card">
                   <h3 class="card-title">Live & voice</h3>
-                  <p class="card-body">Places where things happen in real time. Join me for live coding, security challenges, gaming, and general technical discussions.</p>
+                  <p class="card-body">Places where things happen in real time. Join me for live coding, security
+                    challenges, gaming, and general technical discussions.</p>
                   <div class="link-row">
                     <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank"
                       rel="noreferrer">Twitch</a>
@@ -349,7 +377,8 @@
                   The best way to reach me is by email at
                   <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>. I tend to
                   live on Linux, and I split my time between development,
-                  cyber security practice, and mycology experiments. Whether you have a project in mind, need help with infrastructure, or want to discuss the finer points of growing mushrooms, feel free to drop a message.
+                  cyber security practice, and mycology experiments. Whether you have a project in mind, need help with
+                  infrastructure, or want to discuss the finer points of growing mushrooms, feel free to drop a message.
                 </p>
                 <div class="contact-times" aria-label="Local and Hackatoa time">
                   <div class="contact-time-row">
@@ -368,7 +397,9 @@
                   <div class="contact-actions">
                     <button class="button button-primary" type="submit">Open email app</button>
                     <span class="contact-hint">You can also reach me on TeamSpeak at
-                      <a href="ts3server://ts.hackatoa.com">ts.hackatoa.com</a>, or message me on <a href="https://signal.me/#eu/ZqxSe8D4lgvz9D6rUI0cq7cjTyPXb086bWiagELkPQIsEpzDs2JLeIC1aGF-ByHj" target="_blank" rel="noreferrer">Signal</a>.
+                      <a href="ts3server://ts.hackatoa.com">ts.hackatoa.com</a>, or message me on <a
+                        href="https://signal.me/#eu/ZqxSe8D4lgvz9D6rUI0cq7cjTyPXb086bWiagELkPQIsEpzDs2JLeIC1aGF-ByHj"
+                        target="_blank" rel="noreferrer">Signal</a>.
                     </span>
                   </div>
                 </form>
@@ -387,7 +418,8 @@
               </div>
               <div class="card">
                 <p class="card-body">
-                  If you find value in my security research, tooling, or simply want to support the ongoing development of this infrastructure, you can buy me a coffee or send Monero (XMR) to the address below.
+                  If you find value in my security research, tooling, or simply want to support the ongoing development
+                  of this infrastructure, you can buy me a coffee or send Monero (XMR) to the address below.
                 </p>
                 <div style="margin-top: 1rem; margin-bottom: 2rem;">
                   <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noreferrer">
@@ -429,7 +461,10 @@
               </div>
               <div class="card">
                 <p class="card-body">
-                  Beyond digital infrastructure, I study mycology. This involves cultivating different species, refining sterile lab techniques, and attempting to map environmental data points to fruiting triggers. It’s an organic counterpart to hacking—requiring patience, observation, and an understanding of complex natural networks.
+                  Beyond digital infrastructure, I study mycology. This involves cultivating different species, refining
+                  sterile lab techniques, and attempting to map environmental data points to fruiting triggers. It’s an
+                  organic counterpart to hacking—requiring patience, observation, and an understanding of complex
+                  natural networks.
                 </p>
                 <div class="myco-carousel" aria-label="Mycology image carousel">
                   <div class="myco-carousel-window">
@@ -469,7 +504,7 @@
         <div class="music-bar" data-bar="4"></div>
       </div>
       <div class="music-meta">
-        <div class="music-title">Loading track...</div>
+        <div class="music-title">Press Play...</div>
 
       </div>
       <input type="range" id="music-volume" class="music-volume" min="0" max="100" value="25" aria-label="Volume">
