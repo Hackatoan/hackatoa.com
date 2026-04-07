@@ -13,17 +13,21 @@ hackatoa.com is my personal website where I showcase my portfolio, blog, and oth
 - **Frontend:**
   - HTML5
   - CSS3
-  - JavaScript
+  - JavaScript (with YouTube IFrame API for background music)
     
 - **Hosting and DNS:**
   - Firebase Hosting
   - Cloudflare
 
-## Contact
+## Contact & Links
 
 If you have any questions, feel free to contact me:
 
 - **Email:** jacob@hackatoa.com
-- **Twitter:** [@jhackatoa](https://twitter.com/@jhackatoa)
+- **Twitter:** [@jhackatoa](https://twitter.com/jhackatoa)
+- **Twitch:** [hackatoa](https://www.twitch.tv/hackatoa)
+- **YouTube:** [Hackatoa](https://www.youtube.com/@Hackatoa)
+- **GitHub:** [Hackatoan](https://github.com/Hackatoan)
+- **TeamSpeak:** ts.hackatoa.com
 
 Thank you for visiting hackatoa.com!
