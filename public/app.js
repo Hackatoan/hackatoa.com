@@ -191,6 +191,20 @@ function renderBlogFromData() {
     const entries = Array.isArray(window.BLOG_ENTRIES) ? window.BLOG_ENTRIES : [];
     container.innerHTML = '';
 
+    if (entries.length === 0) {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'blog-placeholder';
+        placeholder.textContent = 'No entries found';
+        placeholder.style.padding = '2rem';
+        placeholder.style.textAlign = 'center';
+        placeholder.style.color = 'var(--text-muted)';
+        placeholder.style.border = '1px dashed rgba(114, 124, 188, 0.4)';
+        placeholder.style.borderWidth = '1px';
+        placeholder.style.borderRadius = '0.9rem';
+        container.appendChild(placeholder);
+        return;
+    }
+
     entries.forEach((entry) => {
         const article = document.createElement('article');
         article.className = 'blog-entry';
