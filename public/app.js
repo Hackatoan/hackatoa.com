@@ -524,4 +524,13 @@ window.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('keydown', handleKey);
     if (window.innerWidth > 768) goToSlide(0);
     window.requestAnimationFrame(frame);
+
+    const heroEmbed = document.getElementById('hero-yt-embed');
+    if (heroEmbed) {
+        const randomYtIndex = Math.floor(Math.random() * 326);
+        const currentSrc = heroEmbed.src;
+        if (!currentSrc.includes('&index=')) {
+            heroEmbed.src = currentSrc + '&index=' + randomYtIndex;
+        }
+    }
 });
