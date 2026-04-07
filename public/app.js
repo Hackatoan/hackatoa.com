@@ -455,21 +455,38 @@ function initGitHubFeed() {
                 const repoName = event.repo.name;
                 const date = new Date(event.created_at).toLocaleDateString();
 
-                let commitMsg = '';
-                if (event.type === 'PushEvent' && event.payload.commits?.length > 0) {
-                    // Escape message to prevent XSS
-                    const escapedMessage = event.payload.commits[0].message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                    commitMsg = `<div class="gh-commit">${escapedMessage}</div>`;
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'gh-header';
+
+                const typeSpan = document.createElement('span');
+                typeSpan.className = 'gh-type';
+                typeSpan.textContent = typeLabel;
+
+                const repoLink = document.createElement('a');
+                repoLink.href = `https://github.com/${repoName}`;
+                repoLink.target = '_blank';
+                repoLink.rel = 'noreferrer';
+                repoLink.className = 'gh-repo';
+                repoLink.textContent = repoName;
+
+                const timeSpan = document.createElement('span');
+                timeSpan.className = 'gh-time';
+                timeSpan.textContent = date;
+
+                headerDiv.appendChild(typeSpan);
+                headerDiv.appendChild(repoLink);
+                headerDiv.appendChild(timeSpan);
+
+                item.appendChild(headerDiv);
+
+                if (event.type === 'PushEvent' && event.payload.commits && event.payload.commits.length > 0) {
+                    const commitDiv = document.createElement('div');
+                    commitDiv.className = 'gh-commit';
+                    // Using textContent naturally escapes text to prevent XSS
+                    commitDiv.textContent = event.payload.commits[0].message;
+                    item.appendChild(commitDiv);
                 }
 
-                item.innerHTML = `
-                    <div class="gh-header">
-                        <span class="gh-type">${typeLabel}</span>
-                        <a href="https://github.com/${repoName}" target="_blank" rel="noreferrer" class="gh-repo">${repoName}</a>
-                        <span class="gh-time">${date}</span>
-                    </div>
-                    ${commitMsg}
-                `;
                 container.appendChild(item);
             });
         })
