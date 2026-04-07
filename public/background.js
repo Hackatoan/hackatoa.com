@@ -1,18 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     const celestialBody = document.querySelector('.celestial-body');
+    const sunGlow = document.querySelector('.sun-glow');
     const videoBg = document.querySelector('.video-bg');
     const ocean = document.querySelector('.ocean');
-    const clouds = document.querySelectorAll('.cloud');
     const weatherEffects = document.querySelector('.weather-effects');
 
     const sunColor = getComputedStyle(document.documentElement).getPropertyValue('--sun-color').trim();
     const moonColor = getComputedStyle(document.documentElement).getPropertyValue('--moon-color').trim();
     const skyDay = getComputedStyle(document.documentElement).getPropertyValue('--sky-day').trim();
     const skyNight = getComputedStyle(document.documentElement).getPropertyValue('--sky-night').trim();
+    const skySunsetTop = getComputedStyle(document.documentElement).getPropertyValue('--sky-sunset-top').trim();
+    const skySunsetBottom = getComputedStyle(document.documentElement).getPropertyValue('--sky-sunset-bottom').trim();
     const oceanDay = getComputedStyle(document.documentElement).getPropertyValue('--ocean-day').trim();
     const oceanNight = getComputedStyle(document.documentElement).getPropertyValue('--ocean-night').trim();
-    const cloudDay = getComputedStyle(document.documentElement).getPropertyValue('--cloud-day').trim();
-
 
     function updateTimeOfDay() {
         const now = new Date();
@@ -20,52 +20,72 @@ document.addEventListener('DOMContentLoaded', () => {
         const minutes = now.getMinutes();
         const totalMinutes = hours * 60 + minutes;
 
-        // Calculate position based on time. 6 AM to 6 PM is day
-        const isDay = hours >= 6 && hours < 18;
+        // Transitions:
+        // Sunrise: 5:00 - 7:00 (300 - 420 mins)
+        // Day: 7:00 - 17:00 (420 - 1020 mins)
+        // Sunset: 17:00 - 19:00 (1020 - 1140 mins)
+        // Night: 19:00 - 5:00
 
-        if (isDay) {
+        let state = 'night';
+        if (totalMinutes >= 300 && totalMinutes < 420) state = 'sunrise';
+        else if (totalMinutes >= 420 && totalMinutes < 1020) state = 'day';
+        else if (totalMinutes >= 1020 && totalMinutes < 1140) state = 'sunset';
+
+        // Update classes for CSS
+        document.body.classList.remove('is-day', 'is-night', 'is-sunset');
+        if (state === 'day' || state === 'sunrise') document.body.classList.add('is-day');
+        if (state === 'night') document.body.classList.add('is-night');
+        if (state === 'sunset') document.body.classList.add('is-sunset');
+
+        if (state === 'day' || state === 'sunrise' || state === 'sunset') {
             celestialBody.style.background = sunColor;
             celestialBody.style.boxShadow = `0 0 50px ${sunColor}`;
-            videoBg.style.backgroundColor = skyDay;
-            ocean.style.background = `linear-gradient(to bottom, ${oceanDay}, #106ea1)`;
-            clouds.forEach(cloud => {
-                cloud.style.background = cloudDay;
-                cloud.style.setProperty('--cloud-bg', cloudDay); // Might need a generic way if ::before/::after are tricky to select directly
-                // Workaround for pseudo-elements: add a style tag or just use classes
-            });
-            // Apply day styles to pseudo-elements by toggling a class
-            document.body.classList.remove('is-night');
-            document.body.classList.add('is-day');
 
-            // Map 6AM (360 mins) to 0% (left) and 6PM (1080 mins) to 100% (right)
-            const progress = (totalMinutes - 360) / (1080 - 360);
-            const xPos = progress * 100;
-            // Parabola for height
-            const yPos = 100 - (Math.sin(progress * Math.PI) * 80); // 20% to 100%
+            if (state === 'sunset' || state === 'sunrise') {
+                videoBg.style.background = `linear-gradient(to bottom, ${skySunsetTop} 0%, ${skySunsetBottom} 100%)`;
+                ocean.style.background = `linear-gradient(to bottom, #005f73, #020309)`;
+                sunGlow.style.opacity = '1';
+            } else {
+                videoBg.style.background = skyDay;
+                ocean.style.background = `linear-gradient(to bottom, ${oceanDay}, #106ea1)`;
+                sunGlow.style.opacity = '0';
+            }
+
+            // Map 5AM (300 mins) to 0% (left) and 7PM (1140 mins) to 100% (right)
+            const progress = (totalMinutes - 300) / (1140 - 300);
+            // Cap progress to prevent weirdness at edges if exactly matching
+            const p = Math.max(0, Math.min(1, progress));
+            const xPos = p * 100;
+            // Parabola for height: peak in middle
+            const yPos = 100 - (Math.sin(p * Math.PI) * 80);
 
             celestialBody.style.left = `${xPos}%`;
             celestialBody.style.top = `${yPos}%`;
+            sunGlow.style.left = `${xPos}%`;
+            sunGlow.style.top = `${yPos}%`;
 
         } else {
             celestialBody.style.background = moonColor;
             celestialBody.style.boxShadow = `0 0 40px ${moonColor}`;
-            videoBg.style.backgroundColor = skyNight;
+            videoBg.style.background = `linear-gradient(to bottom, ${skyNight} 0%, ${skyNight} 100%)`;
             ocean.style.background = `linear-gradient(to bottom, ${oceanNight}, #020309)`;
-            document.body.classList.remove('is-day');
-            document.body.classList.add('is-night');
+            sunGlow.style.opacity = '0';
 
-            // Map 6PM (1080 mins) to 0% (left) and 6AM (next day) to 100% (right)
+            // Map 7PM (1140 mins) to 0% (left) and 5AM (next day) to 100% (right)
             let progress;
-            if (hours >= 18) {
-                progress = (totalMinutes - 1080) / 720;
+            if (hours >= 19) {
+                progress = (totalMinutes - 1140) / 600;
             } else {
-                progress = (totalMinutes + 360) / 720;
+                progress = (totalMinutes + 300) / 600;
             }
-            const xPos = progress * 100;
-            const yPos = 100 - (Math.sin(progress * Math.PI) * 80);
+            const p = Math.max(0, Math.min(1, progress));
+            const xPos = p * 100;
+            const yPos = 100 - (Math.sin(p * Math.PI) * 80);
 
             celestialBody.style.left = `${xPos}%`;
             celestialBody.style.top = `${yPos}%`;
+            sunGlow.style.left = `${xPos}%`;
+            sunGlow.style.top = `${yPos}%`;
         }
     }
 
