@@ -65,11 +65,7 @@ function handleWheel(e) {
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (Math.abs(delta) < 10) return;
     e.preventDefault();
-    if (delta > 0) {
-        goToSlide(currentSlideIndex + 1);
-    } else if (delta < 0) {
-        goToSlide(currentSlideIndex - 1);
-    }
+    goToSlide(currentSlideIndex + (delta > 0 ? 1 : -1));
 }
 
 function handleKey(e) {
@@ -127,10 +123,10 @@ function onPlayerReady() {
 
 function updateTitle() {
     const titleEl = document.querySelector('.music-title');
-    if (titleEl && ytPlayer && ytPlayer.getVideoData) {
-        const data = ytPlayer.getVideoData();
-        if (data && data.title) {
-            titleEl.textContent = data.title;
+    if (titleEl) {
+        const title = ytPlayer?.getVideoData?.()?.title;
+        if (title) {
+            titleEl.textContent = title;
         }
     }
 }
@@ -254,7 +250,7 @@ function renderBlogFromData() {
             const linksRow = document.createElement('div');
             linksRow.className = 'link-row';
             entry.links.forEach((link) => {
-                if (!link || !link.href) return;
+                if (!link?.href) return;
                 const a = document.createElement('a');
                 a.className = 'pill-link';
                 a.href = link.href;
@@ -288,6 +284,9 @@ function initMycoCarousel() {
         img.src = item.image;
         img.alt = item.alt || 'Mycology image';
         img.loading = 'lazy';
+        img.tabIndex = 0;
+        img.role = 'button';
+        img.setAttribute('aria-label', 'Open image in modal');
 
         const overlay = document.createElement('div');
         overlay.className = 'myco-overlay';
@@ -312,15 +311,33 @@ function initMycoCarousel() {
             if (modal && modalImg) {
                 modalImg.src = img.src;
                 modal.classList.add('show');
+                const closeBtn = document.getElementById('myco-modal-close');
+                if (closeBtn) closeBtn.focus();
+            }
+        });
+        img.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                img.click();
             }
         });
 
         const dot = document.createElement('span');
         dot.className = index === 0 ? 'myco-dot active' : 'myco-dot';
         dot.dataset.index = index;
+        dot.tabIndex = 0;
+        dot.role = 'button';
+        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+        if (index === 0) dot.setAttribute('aria-current', 'true');
         dot.addEventListener('click', () => {
             currentMycoIndex = index;
             updateMycoCarousel(track, dotsContainer, currentMycoIndex);
+        });
+        dot.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                dot.click();
+            }
         });
         dotsContainer.appendChild(dot);
     });
@@ -329,12 +346,9 @@ function initMycoCarousel() {
 
     arrows.forEach((btn) => {
         btn.addEventListener('click', () => {
-            const dir = btn.dataset.dir;
-            if (dir === 'prev') {
-                currentMycoIndex = Math.max(0, currentMycoIndex - 1);
-            } else {
-                currentMycoIndex = Math.min(items.length - 1, currentMycoIndex + 1);
-            }
+            currentMycoIndex = btn.dataset.dir === 'prev'
+                ? Math.max(0, currentMycoIndex - 1)
+                : Math.min(items.length - 1, currentMycoIndex + 1);
             updateMycoCarousel(track, dotsContainer, currentMycoIndex);
         });
     });
@@ -347,8 +361,19 @@ function initMycoCarousel() {
         modalCloseBtn.addEventListener('click', () => {
             modal.classList.remove('show');
         });
+        modalCloseBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                modalCloseBtn.click();
+            }
+        });
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
                 modal.classList.remove('show');
             }
         });
@@ -364,8 +389,10 @@ function updateMycoCarousel(track, dotsContainer, currentMycoIndex) {
     allDots.forEach((d, i) => {
         if (i === currentMycoIndex) {
             d.classList.add('active');
+            d.setAttribute('aria-current', 'true');
         } else {
             d.classList.remove('active');
+            d.removeAttribute('aria-current');
         }
     });
 
@@ -476,7 +503,32 @@ function initGitHubFeed() {
             } catch {
                 // Ignore localStorage quota or access errors
             }
-            renderGitHubEvents(container, events);
+
+            relevantEvents.forEach(event => {
+                const item = document.createElement('div');
+                item.className = 'gh-event';
+
+                const typeLabel = event.type === 'PushEvent' ? 'Pushed to' : 'Created';
+                const repoName = event.repo.name;
+                const date = new Date(event.created_at).toLocaleDateString();
+
+                let commitMsg = '';
+                if (event.type === 'PushEvent' && event.payload.commits?.length > 0) {
+                    // Escape message to prevent XSS
+                    const escapedMessage = event.payload.commits[0].message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    commitMsg = `<div class="gh-commit">${escapedMessage}</div>`;
+                }
+
+                item.innerHTML = `
+                    <div class="gh-header">
+                        <span class="gh-type">${typeLabel}</span>
+                        <a href="https://github.com/${repoName}" target="_blank" rel="noreferrer" class="gh-repo">${repoName}</a>
+                        <span class="gh-time">${date}</span>
+                    </div>
+                    ${commitMsg}
+                `;
+                container.appendChild(item);
+            });
         })
         .catch(error => {
             console.error('Error fetching GitHub events:', error);
