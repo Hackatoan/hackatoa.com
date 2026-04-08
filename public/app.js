@@ -1,10 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const heroYt = document.getElementById("hero-yt-embed");
-  if (heroYt) {
-    const randomHeroBgIdx = Math.floor(Math.random() * 20);
-    heroYt.src = `https://www.youtube.com/embed/videoseries?list=PLZG0CvngYU9ihzPO2JTRe17DQDUI0Z6vC&index=${randomHeroBgIdx}`;
-  }
-});
 // Basic scroll interaction and music widget wiring
 
 const musicToggle = document.getElementById('music-toggle');
@@ -550,6 +543,28 @@ function initGitHubFeed() {
         });
 }
 
+// MOTD System
+async function initMOTD() {
+    const motdBody = document.getElementById('motd-body');
+    if (!motdBody) return;
+
+    try {
+        const response = await fetch('/motd.json');
+        if (!response.ok) {
+            throw new Error('MOTD file not found or unreadable');
+        }
+        const data = await response.json();
+        if (data && data.message) {
+            motdBody.textContent = data.message;
+        } else {
+            motdBody.textContent = "Stay curious. Keep building.";
+        }
+    } catch (error) {
+        console.error('Error fetching MOTD:', error);
+        motdBody.textContent = "Stay curious. Keep building.";
+    }
+}
+
 // Contact time loop
 function updateTimes() {
     const localEl = document.getElementById('contact-local-time');
@@ -582,6 +597,7 @@ function initContactTimes() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+    initMOTD();
     initMusicWidget();
     initBackgroundToggle();
     renderBlogFromData();
