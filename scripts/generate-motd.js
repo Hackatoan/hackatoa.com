@@ -59,4 +59,8 @@ async function generateMOTD() {
     }
 }
 
-generateMOTD();
+if (require.main === module) {
+    generateMOTD();
+} else {
+    module.exports = { generateMOTD };
+}
