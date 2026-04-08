@@ -392,6 +392,12 @@ function initMycoCarousel() {
     }
 }
 
+function updateArrowState(btn, isDisabled) {
+    btn.disabled = isDisabled;
+    btn.style.opacity = isDisabled ? '0.3' : '1';
+    btn.style.cursor = isDisabled ? 'not-allowed' : 'pointer';
+}
+
 // Cache the DOM elements since they do not change after initialization
 let cachedMycoDots = null;
 let cachedMycoArrows = null;
@@ -417,13 +423,9 @@ function updateMycoCarousel(track, currentMycoIndex) {
 
     cachedMycoArrows.forEach((btn) => {
         if (btn.dataset.dir === 'prev') {
-            btn.disabled = currentMycoIndex === 0;
-            btn.style.opacity = currentMycoIndex === 0 ? '0.3' : '1';
-            btn.style.cursor = currentMycoIndex === 0 ? 'not-allowed' : 'pointer';
+            updateArrowState(btn, currentMycoIndex === 0);
         } else {
-            btn.disabled = currentMycoIndex === items.length - 1;
-            btn.style.opacity = currentMycoIndex === items.length - 1 ? '0.3' : '1';
-            btn.style.cursor = currentMycoIndex === items.length - 1 ? 'not-allowed' : 'pointer';
+            updateArrowState(btn, currentMycoIndex === items.length - 1);
         }
     });
 }
@@ -435,13 +437,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = Array.isArray(window.MUSHROOMS_DATA) ? window.MUSHROOMS_DATA : [];
     arrows.forEach((btn) => {
         if (btn.dataset.dir === 'prev') {
-            btn.disabled = true;
-            btn.style.opacity = '0.3';
-            btn.style.cursor = 'not-allowed';
+            updateArrowState(btn, true);
         } else if (items.length <= 1) {
-            btn.disabled = true;
-            btn.style.opacity = '0.3';
-            btn.style.cursor = 'not-allowed';
+            updateArrowState(btn, true);
         }
     });
 });
@@ -591,10 +589,7 @@ async function initMOTD() {
 }
 
 // Contact time loop
-function updateTimes() {
-    const localEl = document.getElementById('contact-local-time');
-    const ptEl = document.getElementById('contact-pt-time');
-
+function updateTimes(localEl, ptEl) {
     if (!localEl || !ptEl) return;
 
     const now = new Date();
@@ -617,8 +612,13 @@ function updateTimes() {
 }
 
 function initContactTimes() {
-    updateTimes();
-    window.setInterval(updateTimes, 30_000);
+    const localEl = document.getElementById('contact-local-time');
+    const ptEl = document.getElementById('contact-pt-time');
+
+    if (!localEl || !ptEl) return;
+
+    updateTimes(localEl, ptEl);
+    window.setInterval(() => updateTimes(localEl, ptEl), 30_000);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -629,34 +629,27 @@ window.addEventListener('DOMContentLoaded', () => {
     initMycoCarousel();
     initGitHubFeed();
     initContactTimes();
-
-    const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
-    navLinks.forEach((link) => {
-        const targetId = link.getAttribute('href')?.slice(1);
-        if (!targetId) return;
-        const targetIndex = slides.findIndex((s) => s.id === targetId);
-        if (targetIndex === -1) return;
-        link.addEventListener('click', (e) => {
-            document.body.classList.remove('bg-viewing');
-            if (window.innerWidth <= 768) return;
-            e.preventDefault();
-            if (!isSliding) goToSlide(targetIndex);
+    function setupSlideNavigation(selector, onBeforeGoToSlide) {
+        const links = Array.from(document.querySelectorAll(selector));
+        links.forEach((link) => {
+            const targetId = link.getAttribute('href')?.slice(1);
+            if (!targetId) return;
+            const targetIndex = slides.findIndex((s) => s.id === targetId);
+            if (targetIndex === -1) return;
+            link.addEventListener('click', (e) => {
+                if (onBeforeGoToSlide) onBeforeGoToSlide();
+                if (window.innerWidth <= 768) return;
+                e.preventDefault();
+                if (!isSliding) goToSlide(targetIndex);
+            });
         });
+    }
+
+    setupSlideNavigation('.nav-links a[href^="#"]', () => {
+        document.body.classList.remove('bg-viewing');
     });
 
-    const slideLinks = Array.from(document.querySelectorAll('.slides-viewport a[href^="#"]'));
-    slideLinks.forEach((link) => {
-        const targetId = link.getAttribute('href')?.slice(1);
-        if (!targetId) return;
-        const targetIndex = slides.findIndex((s) => s.id === targetId);
-        if (targetIndex === -1) return;
-
-        link.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) return;
-            e.preventDefault();
-            if (!isSliding) goToSlide(targetIndex);
-        });
-    });
+    setupSlideNavigation('.slides-viewport a[href^="#"]');
 
     if (window.innerWidth > 768 && slides.length) {
         slides.forEach((slide, index) => {
