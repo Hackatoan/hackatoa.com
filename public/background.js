@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('is-day', 'is-night', 'is-sunset');
         document.body.classList.add(`is-${state === 'sunrise' ? 'day' : state}`);
 
+        let progress;
         if (state === 'day' || state === 'sunrise' || state === 'sunset') {
             celestialBody.style.background = sunColor;
             celestialBody.style.boxShadow = `0 0 50px ${sunColor}`;
@@ -50,18 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Map 5AM (300 mins) to 0% (left) and 7PM (1140 mins) to 100% (right)
-            const progress = (totalMinutes - 300) / (1140 - 300);
-            // Cap progress to prevent weirdness at edges if exactly matching
-            const p = Math.max(0, Math.min(1, progress));
-            const xPos = p * 100;
-            // Parabola for height: peak in middle
-            const yPos = 100 - (Math.sin(p * Math.PI) * 80);
-
-            celestialBody.style.left = `${xPos}%`;
-            celestialBody.style.top = `${yPos}%`;
-            sunGlow.style.left = `${xPos}%`;
-            sunGlow.style.top = `${yPos}%`;
-
+            progress = (totalMinutes - 300) / (1140 - 300);
         } else {
             celestialBody.style.background = moonColor;
             celestialBody.style.boxShadow = `0 0 40px ${moonColor}`;
@@ -70,21 +60,23 @@ document.addEventListener('DOMContentLoaded', () => {
             sunGlow.style.opacity = '0';
 
             // Map 7PM (1140 mins) to 0% (left) and 5AM (next day) to 100% (right)
-            let progress;
             if (hours >= 19) {
                 progress = (totalMinutes - 1140) / 600;
             } else {
                 progress = (totalMinutes + 300) / 600;
             }
-            const p = Math.max(0, Math.min(1, progress));
-            const xPos = p * 100;
-            const yPos = 100 - (Math.sin(p * Math.PI) * 80);
-
-            celestialBody.style.left = `${xPos}%`;
-            celestialBody.style.top = `${yPos}%`;
-            sunGlow.style.left = `${xPos}%`;
-            sunGlow.style.top = `${yPos}%`;
         }
+
+        // Cap progress to prevent weirdness at edges if exactly matching
+        const p = Math.max(0, Math.min(1, progress));
+        const xPos = p * 100;
+        // Parabola for height: peak in middle
+        const yPos = 100 - (Math.sin(p * Math.PI) * 80);
+
+        celestialBody.style.left = `${xPos}%`;
+        celestialBody.style.top = `${yPos}%`;
+        sunGlow.style.left = `${xPos}%`;
+        sunGlow.style.top = `${yPos}%`;
     }
 
     // Initialize and update every minute
