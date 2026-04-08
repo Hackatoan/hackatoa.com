@@ -26,6 +26,24 @@ function addKeyboardClickSupport(element) {
 }
 
 
+/**
+ * Validates a URL to ensure it uses a safe protocol.
+ * Returns the original URL if safe, or a fallback if potentially malicious.
+ * @param {string} urlString The URL to validate.
+ * @param {string} fallback The fallback to use if the URL is unsafe (defaults to '#').
+ * @returns {string} The safe URL or fallback.
+ */
+function sanitizeUrl(urlString, fallback = '#') {
+    if (!urlString) return fallback;
+    const trimmed = urlString.trim();
+    // Allow relative paths, http, and https protocols
+    if (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || /^https?:\/\//i.test(trimmed)) {
+        return trimmed;
+    }
+    return fallback;
+}
+
+
 function goToSlide(index) {
     // On mobile we fall back to natural vertical scrolling; skip carousel logic.
     if (window.innerWidth <= 768) return;
@@ -233,7 +251,7 @@ function renderBlogFromData() {
 
         if (entry.image) {
             const img = document.createElement('img');
-            img.src = entry.image;
+            img.src = sanitizeUrl(entry.image, '');
             img.alt = entry.imageAlt || entry.title || 'Blog entry image';
             img.loading = 'lazy';
             article.appendChild(img);
@@ -248,7 +266,7 @@ function renderBlogFromData() {
         if (entry.audio) {
             const audio = document.createElement('audio');
             audio.controls = true;
-            audio.src = entry.audio;
+            audio.src = sanitizeUrl(entry.audio, '');
             audio.style.marginTop = '0.4rem';
             article.appendChild(audio);
         }
@@ -257,10 +275,11 @@ function renderBlogFromData() {
             const linksRow = document.createElement('div');
             linksRow.className = 'link-row';
             entry.links.forEach((link) => {
-                if (!link?.href) return;
+                const safeHref = sanitizeUrl(link?.href);
+                if (safeHref === '#') return;
                 const a = document.createElement('a');
                 a.className = 'pill-link';
-                a.href = link.href;
+                a.href = safeHref;
                 a.target = '_blank';
                 a.rel = 'noreferrer';
                 a.textContent = link.label || link.href;
@@ -288,7 +307,7 @@ function initMycoCarousel() {
         slide.className = 'myco-slide';
 
         const img = document.createElement('img');
-        img.src = item.image;
+        img.src = sanitizeUrl(item.image, '');
         img.alt = item.alt || 'Mycology image';
         img.loading = 'lazy';
         img.tabIndex = 0;
@@ -316,6 +335,7 @@ function initMycoCarousel() {
             const modal = document.getElementById('myco-modal');
             const modalImg = document.getElementById('myco-modal-img');
             if (modal && modalImg) {
+                // img.src is already sanitized when the slide is created
                 modalImg.src = img.src;
                 modal.classList.add('show');
                 const closeBtn = document.getElementById('myco-modal-close');
