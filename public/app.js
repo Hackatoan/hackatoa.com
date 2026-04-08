@@ -584,10 +584,7 @@ async function initMOTD() {
 }
 
 // Contact time loop
-function updateTimes() {
-    const localEl = document.getElementById('contact-local-time');
-    const ptEl = document.getElementById('contact-pt-time');
-
+function updateTimes(localEl, ptEl) {
     if (!localEl || !ptEl) return;
 
     const now = new Date();
@@ -610,8 +607,13 @@ function updateTimes() {
 }
 
 function initContactTimes() {
-    updateTimes();
-    window.setInterval(updateTimes, 30_000);
+    const localEl = document.getElementById('contact-local-time');
+    const ptEl = document.getElementById('contact-pt-time');
+
+    if (!localEl || !ptEl) return;
+
+    updateTimes(localEl, ptEl);
+    window.setInterval(() => updateTimes(localEl, ptEl), 30_000);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
