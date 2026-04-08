@@ -353,7 +353,7 @@ function initMycoCarousel() {
         if (index === 0) dot.setAttribute('aria-current', 'true');
         dot.addEventListener('click', () => {
             currentMycoIndex = index;
-            updateMycoCarousel(track, dotsContainer, currentMycoIndex);
+            updateMycoCarousel(track, currentMycoIndex);
         });
         addKeyboardClickSupport(dot);
         dotsContainer.appendChild(dot);
@@ -366,7 +366,7 @@ function initMycoCarousel() {
             currentMycoIndex = btn.dataset.dir === 'prev'
                 ? Math.max(0, currentMycoIndex - 1)
                 : Math.min(items.length - 1, currentMycoIndex + 1);
-            updateMycoCarousel(track, dotsContainer, currentMycoIndex);
+            updateMycoCarousel(track, currentMycoIndex);
         });
     });
 
@@ -392,20 +392,24 @@ function initMycoCarousel() {
     }
 }
 
-
 function updateArrowState(btn, isDisabled) {
     btn.disabled = isDisabled;
     btn.style.opacity = isDisabled ? '0.3' : '1';
     btn.style.cursor = isDisabled ? 'not-allowed' : 'pointer';
 }
 
-function updateMycoCarousel(track, dotsContainer, currentMycoIndex) {
+// Cache the DOM elements since they do not change after initialization
+let cachedMycoDots = null;
+let cachedMycoArrows = null;
+
+function updateMycoCarousel(track, currentMycoIndex) {
     const items = Array.isArray(window.MUSHROOMS_DATA) ? window.MUSHROOMS_DATA : [];
     const offset = -(currentMycoIndex * 100);
     track.style.transform = `translateX(${offset}%)`;
 
-    const allDots = dotsContainer.querySelectorAll('.myco-dot');
-    allDots.forEach((d, i) => {
+    if (!cachedMycoDots) cachedMycoDots = document.querySelectorAll('.myco-dot');
+
+    cachedMycoDots.forEach((d, i) => {
         if (i === currentMycoIndex) {
             d.classList.add('active');
             d.setAttribute('aria-current', 'true');
@@ -415,8 +419,9 @@ function updateMycoCarousel(track, dotsContainer, currentMycoIndex) {
         }
     });
 
-    const arrows = document.querySelectorAll('.myco-arrow');
-    arrows.forEach((btn) => {
+    if (!cachedMycoArrows) cachedMycoArrows = document.querySelectorAll('.myco-arrow');
+
+    cachedMycoArrows.forEach((btn) => {
         if (btn.dataset.dir === 'prev') {
             updateArrowState(btn, currentMycoIndex === 0);
         } else {

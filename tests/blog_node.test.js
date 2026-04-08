@@ -17,7 +17,7 @@ function createMockEnv() {
             textContent: '',
             style: {},
             children: [],
-            appendChild(child) {
+            appendChild: function(child) {
               this.children.push(child);
             },
             innerHTML: '',
@@ -44,16 +44,12 @@ function createMockEnv() {
             remove: () => {}
         }
     },
-    createElement(tag) {
-      return {
+    createElement: (tag) => ({
+        tagName: tag,
         style: {},
         appendChild: () => {},
-        classList: { add: () => {} },
-        className: '',
-        textContent: '',
-        tagName: tag.toUpperCase()
-      };
-    }
+        classList: { add: () => {} }
+    })
   };
 
   const win = {
@@ -112,20 +108,36 @@ function createMockEnv() {
 }
 
 describe('renderBlogFromData', () => {
-  test('should display placeholder when BLOG_ENTRIES is empty', async () => {
+  test('should append placeholder when BLOG_ENTRIES is empty', () => {
     const context = createMockEnv();
-    context.window.BLOG_ENTRIES = [];
-
-    context.renderBlogFromData();
-
     const container = context.document.getElementById('blog-list');
 
-    // Test container has 1 child
+    context.window.BLOG_ENTRIES = [];
+
+    // Call the function
+    context.renderBlogFromData();
+
+    // Assert placeholder is appended
     assert.strictEqual(container.children.length, 1);
-
     const placeholder = container.children[0];
+    assert.strictEqual(placeholder.tagName, 'div');
+    assert.strictEqual(placeholder.className, 'blog-placeholder');
+    assert.strictEqual(placeholder.textContent, 'No entries found');
+  });
 
-    // Check if placeholder properties match the expected values
+  test('should append placeholder when BLOG_ENTRIES is not an array', () => {
+    const context = createMockEnv();
+    const container = context.document.getElementById('blog-list');
+
+    context.window.BLOG_ENTRIES = null;
+
+    // Call the function
+    context.renderBlogFromData();
+
+    // Assert placeholder is appended
+    assert.strictEqual(container.children.length, 1);
+    const placeholder = container.children[0];
+    assert.strictEqual(placeholder.tagName, 'div');
     assert.strictEqual(placeholder.className, 'blog-placeholder');
     assert.strictEqual(placeholder.textContent, 'No entries found');
   });
