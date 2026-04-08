@@ -11,6 +11,20 @@ let currentSlideIndex = 0;
 let isSliding = false;
 const SLIDE_DURATION_MS = 550;
 
+/**
+ * Adds keyboard support for interactive elements that should trigger a click on Enter or Space.
+ * @param {HTMLElement} element The element to add keyboard support to.
+ */
+function addKeyboardClickSupport(element) {
+    if (!element) return;
+    element.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            element.click();
+        }
+    });
+}
+
 
 function goToSlide(index) {
     // On mobile we fall back to natural vertical scrolling; skip carousel logic.
@@ -308,12 +322,7 @@ function initMycoCarousel() {
                 if (closeBtn) closeBtn.focus();
             }
         });
-        img.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                img.click();
-            }
-        });
+        addKeyboardClickSupport(img);
 
         const dot = document.createElement('span');
         dot.className = index === 0 ? 'myco-dot active' : 'myco-dot';
@@ -326,12 +335,7 @@ function initMycoCarousel() {
             currentMycoIndex = index;
             updateMycoCarousel(track, dotsContainer, currentMycoIndex);
         });
-        dot.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                dot.click();
-            }
-        });
+        addKeyboardClickSupport(dot);
         dotsContainer.appendChild(dot);
     });
 
@@ -354,12 +358,7 @@ function initMycoCarousel() {
         modalCloseBtn.addEventListener('click', () => {
             modal.classList.remove('show');
         });
-        modalCloseBtn.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                modalCloseBtn.click();
-            }
-        });
+        addKeyboardClickSupport(modalCloseBtn);
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.remove('show');
