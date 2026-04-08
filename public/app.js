@@ -392,6 +392,13 @@ function initMycoCarousel() {
     }
 }
 
+
+function updateArrowState(btn, isDisabled) {
+    btn.disabled = isDisabled;
+    btn.style.opacity = isDisabled ? '0.3' : '1';
+    btn.style.cursor = isDisabled ? 'not-allowed' : 'pointer';
+}
+
 function updateMycoCarousel(track, dotsContainer, currentMycoIndex) {
     const items = Array.isArray(window.MUSHROOMS_DATA) ? window.MUSHROOMS_DATA : [];
     const offset = -(currentMycoIndex * 100);
@@ -411,13 +418,9 @@ function updateMycoCarousel(track, dotsContainer, currentMycoIndex) {
     const arrows = document.querySelectorAll('.myco-arrow');
     arrows.forEach((btn) => {
         if (btn.dataset.dir === 'prev') {
-            btn.disabled = currentMycoIndex === 0;
-            btn.style.opacity = currentMycoIndex === 0 ? '0.3' : '1';
-            btn.style.cursor = currentMycoIndex === 0 ? 'not-allowed' : 'pointer';
+            updateArrowState(btn, currentMycoIndex === 0);
         } else {
-            btn.disabled = currentMycoIndex === items.length - 1;
-            btn.style.opacity = currentMycoIndex === items.length - 1 ? '0.3' : '1';
-            btn.style.cursor = currentMycoIndex === items.length - 1 ? 'not-allowed' : 'pointer';
+            updateArrowState(btn, currentMycoIndex === items.length - 1);
         }
     });
 }
@@ -429,13 +432,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = Array.isArray(window.MUSHROOMS_DATA) ? window.MUSHROOMS_DATA : [];
     arrows.forEach((btn) => {
         if (btn.dataset.dir === 'prev') {
-            btn.disabled = true;
-            btn.style.opacity = '0.3';
-            btn.style.cursor = 'not-allowed';
+            updateArrowState(btn, true);
         } else if (items.length <= 1) {
-            btn.disabled = true;
-            btn.style.opacity = '0.3';
-            btn.style.cursor = 'not-allowed';
+            updateArrowState(btn, true);
         }
     });
 });
