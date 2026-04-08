@@ -8,7 +8,7 @@ async function generateMOTD() {
 
     if (!apiKey) {
         console.warn("GEMINI_API_KEY not found in environment. Using fallback message.");
-        fs.writeFileSync(outputPath, JSON.stringify({ message: fallbackMessage }, null, 2));
+        await fs.promises.writeFile(outputPath, JSON.stringify({ message: fallbackMessage }, null, 2));
         return;
     }
 
@@ -49,13 +49,13 @@ async function generateMOTD() {
         message = message.trim().replace(/^["']|["']$/g, '');
 
         const finalOutput = { message: message };
-        fs.writeFileSync(outputPath, JSON.stringify(finalOutput, null, 2));
+        await fs.promises.writeFile(outputPath, JSON.stringify(finalOutput, null, 2));
         console.log("Successfully generated MOTD:", finalOutput.message);
 
     } catch (error) {
         console.error("Failed to generate MOTD using Gemini API:", error);
         console.log("Writing fallback message to motd.json");
-        fs.writeFileSync(outputPath, JSON.stringify({ message: fallbackMessage }, null, 2));
+        await fs.promises.writeFile(outputPath, JSON.stringify({ message: fallbackMessage }, null, 2));
     }
 }
 
