@@ -622,34 +622,27 @@ window.addEventListener('DOMContentLoaded', () => {
     initMycoCarousel();
     initGitHubFeed();
     initContactTimes();
-
-    const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
-    navLinks.forEach((link) => {
-        const targetId = link.getAttribute('href')?.slice(1);
-        if (!targetId) return;
-        const targetIndex = slides.findIndex((s) => s.id === targetId);
-        if (targetIndex === -1) return;
-        link.addEventListener('click', (e) => {
-            document.body.classList.remove('bg-viewing');
-            if (window.innerWidth <= 768) return;
-            e.preventDefault();
-            if (!isSliding) goToSlide(targetIndex);
+    function setupSlideNavigation(selector, onBeforeGoToSlide) {
+        const links = Array.from(document.querySelectorAll(selector));
+        links.forEach((link) => {
+            const targetId = link.getAttribute('href')?.slice(1);
+            if (!targetId) return;
+            const targetIndex = slides.findIndex((s) => s.id === targetId);
+            if (targetIndex === -1) return;
+            link.addEventListener('click', (e) => {
+                if (onBeforeGoToSlide) onBeforeGoToSlide();
+                if (window.innerWidth <= 768) return;
+                e.preventDefault();
+                if (!isSliding) goToSlide(targetIndex);
+            });
         });
+    }
+
+    setupSlideNavigation('.nav-links a[href^="#"]', () => {
+        document.body.classList.remove('bg-viewing');
     });
 
-    const slideLinks = Array.from(document.querySelectorAll('.slides-viewport a[href^="#"]'));
-    slideLinks.forEach((link) => {
-        const targetId = link.getAttribute('href')?.slice(1);
-        if (!targetId) return;
-        const targetIndex = slides.findIndex((s) => s.id === targetId);
-        if (targetIndex === -1) return;
-
-        link.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) return;
-            e.preventDefault();
-            if (!isSliding) goToSlide(targetIndex);
-        });
-    });
+    setupSlideNavigation('.slides-viewport a[href^="#"]');
 
     if (window.innerWidth > 768 && slides.length) {
         slides.forEach((slide, index) => {
