@@ -18,10 +18,10 @@ async function generateMOTD() {
     const prompt = "Generate a short (1-2 sentences max), insightful, or witty message based on 'Today in History' or current global events for a developer portfolio. Just the message.";
 
     const modelsToTry = [
-        "gemini-2.0-flash",
-        "gemini-2.0-flash-lite",
-        "gemini-1.5-flash-latest",
-        "gemini-1.5-pro-latest",
+        "gemini-3.1-flash-lite-preview", // 500 RPD free tier — highest quota, try first
+        "gemini-3-flash-preview",         // 20 RPD free tier
+        "gemini-2.5-flash",               // 20 RPD free tier
+        "gemini-2.5-flash-lite",          // 20 RPD free tier
     ];
 
     for (const modelName of modelsToTry) {
@@ -40,7 +40,15 @@ async function generateMOTD() {
 
             console.warn(`${modelName} returned empty response, trying next...`);
         } catch (err) {
-            console.error(`Error with ${modelName}:`, err.message);
+            // Parse retry delay from 429 responses and wait before trying next model
+            if (err.message.includes('429')) {
+                const match = err.message.match(/retry in (\d+(\.\d+)?)s/i);
+                const waitMs = match ? Math.ceil(parseFloat(match[1])) * 1000 : 35000;
+                console.warn(`${modelName} quota exceeded. Waiting ${waitMs / 1000}s before next attempt...`);
+                await new Promise(res => setTimeout(res, waitMs));
+            } else {
+                console.error(`Error with ${modelName}:`, err.message);
+            }
         }
     }
 
