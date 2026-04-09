@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # Explicitly tell checkout to use the 'Main' branch
+          ref: Main
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
