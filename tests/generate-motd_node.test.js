@@ -2,11 +2,10 @@ const { test, describe, beforeEach, afterEach } = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
-const { generateMOTD } = require('../scripts/generate-motd');
+const proxyquire = require('proxyquire');
 
 describe('generateMOTD Script', () => {
     let originalEnv;
-    let originalFetch;
     let originalWriteFile;
     let writeFilePath;
     let writtenData;
@@ -16,11 +15,12 @@ describe('generateMOTD Script', () => {
     let originalConsoleWarn;
     let originalConsoleLog;
     let originalConsoleError;
+    let mockGoogleGenerativeAI;
+    let generateMOTD;
 
     beforeEach(() => {
         // Save original environment
         originalEnv = process.env.GEMINI_API_KEY;
-        originalFetch = global.fetch;
         originalWriteFile = fs.promises.writeFile;
 
         // Reset variables
@@ -35,7 +35,6 @@ describe('generateMOTD Script', () => {
         originalConsoleLog = global.console.log;
         originalConsoleError = global.console.error;
 
-
         global.console.warn = (...args) => consoleWarnArgs.push(args);
         global.console.log = (...args) => consoleLogArgs.push(args);
         global.console.error = (...args) => consoleErrorArgs.push(args);
@@ -45,12 +44,19 @@ describe('generateMOTD Script', () => {
             writeFilePath = filePath;
             writtenData = JSON.parse(data);
         };
+
+        mockGoogleGenerativeAI = class {};
+
+        // Use proxyquire to inject the mock SDK
+        const mockedModule = proxyquire('../scripts/generate-motd', {
+            '@google/generative-ai': { GoogleGenerativeAI: mockGoogleGenerativeAI }
+        });
+        generateMOTD = mockedModule.generateMOTD;
     });
 
     afterEach(() => {
         // Restore original environment
         process.env.GEMINI_API_KEY = originalEnv;
-        global.fetch = originalFetch;
         fs.promises.writeFile = originalWriteFile;
 
         global.console.warn = originalConsoleWarn;
@@ -68,69 +74,46 @@ describe('generateMOTD Script', () => {
         await generateMOTD();
 
         assert.strictEqual(writtenData.message, 'Stay curious. Keep building.');
-        assert.ok(consoleWarnArgs.some(args => args[0].includes('GEMINI_API_KEY not found')));
+        assert.ok(consoleErrorArgs.some(args => args[0].includes('GEMINI_API_KEY not found')));
         assert.strictEqual(path.basename(writeFilePath), 'motd.json');
     });
 
     test('should write generated message on successful API call', async () => {
         process.env.GEMINI_API_KEY = 'test_key';
 
-        global.fetch = async () => ({
-            ok: true,
-            json: async () => ({
-                candidates: [{
-                    content: {
-                        parts: [{ text: '"This is a generated test message."' }]
+        mockGoogleGenerativeAI.prototype.getGenerativeModel = function() {
+            return {
+                generateContent: async () => ({
+                    response: {
+                        text: () => '"This is a generated test message."'
                     }
-                }]
-            })
-        });
+                })
+            };
+        };
 
         await generateMOTD();
 
         assert.strictEqual(writtenData.message, 'This is a generated test message.');
-        assert.ok(consoleLogArgs.some(args => args[0].includes('Successfully generated MOTD')));
+        assert.ok(consoleLogArgs.some(args => args[0].includes('Success with')));
     });
 
-    test('should write fallback message when API returns non-ok status', async () => {
+    test('should write fallback message when API returns an error', async () => {
         process.env.GEMINI_API_KEY = 'test_key';
 
-        global.fetch = async () => ({
-            ok: false,
-            status: 500,
-            text: async () => 'Internal Server Error'
-        });
-
-        await generateMOTD();
-
-        assert.strictEqual(writtenData.message, 'Stay curious. Keep building.');
-        assert.ok(consoleErrorArgs.some(args => args[0].includes('Failed to generate MOTD')));
-    });
-
-    test('should write fallback message when message is missing in API response', async () => {
-        process.env.GEMINI_API_KEY = 'test_key';
-
-        global.fetch = async () => ({
-            ok: true,
-            json: async () => ({}) // missing candidates
-        });
-
-        await generateMOTD();
-
-        assert.strictEqual(writtenData.message, 'Stay curious. Keep building.');
-        assert.ok(consoleErrorArgs.some(args => args[0].includes('Failed to generate MOTD')));
-    });
-
-    test('should write fallback message on fetch network error', async () => {
-        process.env.GEMINI_API_KEY = 'test_key';
-
-        global.fetch = async () => {
-            throw new Error('Network failure');
+        mockGoogleGenerativeAI.prototype.getGenerativeModel = function() {
+            return {
+                generateContent: async () => {
+                    throw new Error('API Error');
+                }
+            };
         };
 
         await generateMOTD();
 
         assert.strictEqual(writtenData.message, 'Stay curious. Keep building.');
-        assert.ok(consoleErrorArgs.some(args => args[0].includes('Failed to generate MOTD')));
+        assert.ok(consoleErrorArgs.some(args => args[0].includes('Error with gemini-1.5-flash')));
+        assert.ok(consoleErrorArgs.some(args => args[0].includes('Error with gemini-1.5-pro')));
+        assert.ok(consoleErrorArgs.some(args => args[0].includes('Error with gemini-pro')));
     });
+
 });

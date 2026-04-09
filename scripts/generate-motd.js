@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 async function generateMOTD() {
     const apiKey = process.env.GEMINI_API_KEY;
@@ -15,42 +16,30 @@ async function generateMOTD() {
         return;
     }
 
+    const genAI = new GoogleGenerativeAI(apiKey);
     const prompt = "Generate a short (1-2 sentences max), insightful, or witty message based on 'Today in History' or current global events for a developer portfolio. Just the message.";
 
-    // Switching to the v1beta endpoint and using the models/ prefix
     const modelsToTry = [
         "gemini-1.5-flash",
         "gemini-1.5-pro",
         "gemini-pro"
     ];
 
-    for (const model of modelsToTry) {
+    for (const modelName of modelsToTry) {
         try {
-            console.log(`Attempting: ${model} via v1beta...`);
-            // Note the /v1beta/ prefix and the models/ prefix
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }]
-                })
-            });
+            console.log(`Attempting: ${modelName}...`);
+            const model = genAI.getGenerativeModel({ model: modelName });
+            const result = await model.generateContent(prompt);
+            const message = result.response.text();
 
-            const data = await response.json();
-
-            if (response.ok) {
-                const message = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (message) {
-                    const cleaned = message.trim().replace(/^["']|["']$/g, '');
-                    await writeOutput(outputPath, cleaned, false);
-                    console.log(`Success with ${model}!`);
-                    return;
-                }
-            } else {
-                console.warn(`${model} failed: ${data.error?.message || response.status}`);
+            if (message) {
+                const cleaned = message.trim().replace(/^["']|["']$/g, '');
+                await writeOutput(outputPath, cleaned, false);
+                console.log(`Success with ${modelName}!`);
+                return;
             }
         } catch (err) {
-            console.error(`Fetch error for ${model}:`, err.message);
+            console.error(`Error with ${modelName}:`, err.message);
         }
     }
 
@@ -66,4 +55,8 @@ async function writeOutput(targetPath, message, isError) {
     await fs.promises.writeFile(targetPath, JSON.stringify(finalOutput, null, 2));
 }
 
-generateMOTD();
+if (require.main === module) {
+    generateMOTD();
+}
+
+module.exports = { generateMOTD, writeOutput };
