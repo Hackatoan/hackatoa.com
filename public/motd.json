@@ -1,6 +1,6 @@
 {
-  "message": "On this day in 1959, the Mercury Seven were introduced to the world, proving that small teams can launch giants; I’m here to help you launch yours.",
-  "lastUpdated": "2026-04-09T22:07:41.446Z",
+  "message": "On this day in 1959, NASA announced the original Mercury Seven; like them, I believe the best way to predict the future is to build the craft that reaches it.",
+  "lastUpdated": "2026-04-09T22:11:45.162Z",
   "status": "success",
   "history": [
     {
@@ -9,6 +9,10 @@
     },
     {
       "message": "History is just a long series of bugs being patched in real-time; I'm here to write the next version.",
+      "date": "2026-04-09"
+    },
+    {
+      "message": "On this day in 1959, the Mercury Seven were introduced to the world, proving that small teams can launch giants; I’m here to help you launch yours.",
       "date": "2026-04-09"
     }
   ]
