@@ -16,6 +16,7 @@ jobs:
         with:
           ref: Main
           fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -45,3 +46,5 @@ jobs:
           git diff --staged --quiet && echo "No changes to commit" && exit 0
           git commit -m "chore: automated MOTD update"
           git push origin Main
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
