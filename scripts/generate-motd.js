@@ -21,8 +21,8 @@ async function generateMOTD() {
     const prompt = "Generate a short (1-2 sentences max), insightful, or witty message based on 'Today in History' or current global events. It should be suitable for a developer/cybersecurity enthusiast's portfolio website. Do not include any greeting or conversational filler, just the message itself.";
 
     try {
-        // Updated to stable v1 endpoint
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        // Change this line in scripts/generate-motd.js:
+const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
