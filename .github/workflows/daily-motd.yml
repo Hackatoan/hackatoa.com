@@ -42,9 +42,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
           git add public/motd.json
           git diff --staged --quiet && echo "No changes to commit" && exit 0
           git commit -m "chore: automated MOTD update"
           git push origin Main
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
