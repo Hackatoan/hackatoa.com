@@ -621,6 +621,36 @@ function initContactTimes() {
     window.setInterval(() => updateTimes(localEl, ptEl), 30_000);
 }
 
+
+/**
+ * Fetches and updates the Minecraft server status.
+ */
+async function initMinecraftStatus() {
+    const statusText = document.getElementById('mc-status-text');
+    const statusDot = document.getElementById('mc-status-dot');
+
+    if (!statusText || !statusDot) return;
+
+    try {
+        const response = await fetch('https://api.mcsrvstat.us/3/mc.hackatoa.com');
+        if (!response.ok) throw new Error('API request failed');
+        const data = await response.json();
+
+        if (data.online) {
+            statusDot.classList.add('online');
+            statusDot.classList.remove('offline');
+            statusText.textContent = `Online: ${data.players.online}/${data.players.max} players`;
+        } else {
+            statusDot.classList.add('offline');
+            statusDot.classList.remove('online');
+            statusText.textContent = 'Offline';
+        }
+    } catch (error) {
+        console.error('Failed to fetch Minecraft server status:', error);
+        statusText.textContent = 'Status unavailable';
+    }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     initMOTD();
     initMusicWidget();
@@ -629,6 +659,7 @@ window.addEventListener('DOMContentLoaded', () => {
     initMycoCarousel();
     initGitHubFeed();
     initContactTimes();
+    initMinecraftStatus();
     function setupSlideNavigation(selector, onBeforeGoToSlide) {
         const links = Array.from(document.querySelectorAll(selector));
         links.forEach((link) => {

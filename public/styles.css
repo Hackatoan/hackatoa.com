@@ -1409,3 +1409,50 @@ video {
     max-width: 100%;
     height: auto;
 }
+
+/* Minecraft Status Widget */
+.mc-status-container {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mc-address {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.mc-address span {
+    color: var(--text-body);
+}
+
+.mc-status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.mc-status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+}
+
+.mc-status-dot.online {
+    background-color: #2ecc71; /* Green */
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.5);
+}
+
+.mc-status-dot.offline {
+    background-color: #e74c3c; /* Red */
+}
