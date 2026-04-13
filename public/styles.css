@@ -1409,3 +1409,13 @@ video {
     max-width: 100%;
     height: auto;
 }
+.myco-slide img:focus-visible,
+.myco-arrow:focus-visible,
+.myco-dot:focus-visible,
+.modal-close:focus-visible,
+.music-skip:focus-visible,
+.music-toggle:focus-visible,
+.music-volume:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
