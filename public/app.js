@@ -40,6 +40,10 @@ function sanitizeUrl(urlString, fallback = '#') {
     if (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || /^https?:\/\//i.test(trimmed)) {
         return trimmed;
     }
+    // Allow relative paths without leading prefix, ensuring it doesn't contain a protocol scheme (prevent XSS)
+    if (!/^[a-zA-Z[a-zA-Z0-9+.-]*:/.test(trimmed)) {
+        return trimmed;
+    }
     return fallback;
 }
 
