@@ -72,6 +72,17 @@ function handleWheel(e) {
     if (window.innerWidth <= 768) return;
     if (!slides.length) return;
 
+    // Bolt Performance Optimization:
+    // Move isSliding check BEFORE expensive DOM traversal (e.target.closest)
+    // and layout property reads (scrollTop, clientHeight).
+    // Reading layout properties during a CSS transition forces a synchronous layout
+    // recalculation (layout thrashing), causing main thread blocking and animation jank.
+    // Early return here changes wheel event time complexity during sliding from O(DOM) to O(1).
+    if (isSliding) {
+        e.preventDefault();
+        return;
+    }
+
     // If hovering over a vertically scrollable area and scrolling vertically, let native handle it
     const scrollTarget = e.target.closest('.blog-list, .github-pinner, .contact-input');
     if (scrollTarget && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
@@ -83,10 +94,6 @@ function handleWheel(e) {
         if (e.deltaY < 0 && !isAtTop) return;    // scrolling up, not at top
     }
 
-    if (isSliding) {
-        e.preventDefault();
-        return;
-    }
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (Math.abs(delta) < 10) return;
     e.preventDefault();
