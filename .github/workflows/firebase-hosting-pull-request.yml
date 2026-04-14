@@ -15,16 +15,13 @@ jobs:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
       - uses: FirebaseExtended/action-hosting-deploy@v0
-        env:
-          FIREBASE_CLI_PREVIEWS: hostingchannels
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_HACKATOA_COM }}
           projectId: hackatoa-com
+          channelId: ${{ github.head_ref || github.ref_name }}
