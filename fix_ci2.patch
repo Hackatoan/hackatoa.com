@@ -1,0 +1,12 @@
+--- a/.github/workflows/firebase-hosting-pull-request.yml
++++ b/.github/workflows/firebase-hosting-pull-request.yml
+@@ -6,6 +6,9 @@
+ permissions:
+   checks: write
+   contents: read
+   pull-requests: write
++env:
++  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+ jobs:
+   build_and_preview:
+     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
