@@ -36,8 +36,8 @@ function addKeyboardClickSupport(element) {
 function sanitizeUrl(urlString, fallback = '#') {
     if (!urlString) return fallback;
     const trimmed = urlString.trim();
-    // Allow relative paths, http, and https protocols
-    if (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || /^https?:\/\//i.test(trimmed)) {
+    // Allow relative paths (excluding protocol-relative URLs), http, and https protocols
+    if ((trimmed.startsWith('/') && !trimmed.startsWith('//')) || trimmed.startsWith('./') || trimmed.startsWith('../') || /^https?:\/\//i.test(trimmed)) {
         return trimmed;
     }
     return fallback;
@@ -473,7 +473,7 @@ function renderGitHubEvents(container, events) {
         typeSpan.textContent = typeLabel;
 
         const repoLink = document.createElement('a');
-        repoLink.href = `https://github.com/${repoName}`;
+        repoLink.href = sanitizeUrl(`https://github.com/${repoName}`);
         repoLink.target = '_blank';
         repoLink.rel = 'noreferrer';
         repoLink.className = 'gh-repo';
