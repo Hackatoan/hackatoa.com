@@ -69,6 +69,12 @@ function goToSlide(index) {
 }
 
 function handleWheel(e) {
+    // ⚡ Bolt: Early exit to prevent layout thrashing and animation jank
+    if (isSliding) {
+        e.preventDefault();
+        return;
+    }
+
     if (window.innerWidth <= 768) return;
     if (!slides.length) return;
 
@@ -83,10 +89,6 @@ function handleWheel(e) {
         if (e.deltaY < 0 && !isAtTop) return;    // scrolling up, not at top
     }
 
-    if (isSliding) {
-        e.preventDefault();
-        return;
-    }
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (Math.abs(delta) < 10) return;
     e.preventDefault();
