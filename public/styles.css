@@ -948,6 +948,17 @@ main {
     padding: 0.25rem 0.7rem;
     font-size: 0.9rem;
     cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.myco-arrow:hover:not(:disabled) {
+    background: rgba(12, 18, 40, 0.9);
+    border-color: var(--primary-glow);
+}
+
+.myco-arrow:focus-visible {
+    outline: 2px solid var(--primary-glow);
+    outline-offset: 2px;
 }
 
 .myco-dots {
@@ -960,9 +971,22 @@ main {
     height: 6px;
     border-radius: 999px;
     background: rgba(121, 129, 193, 0.6);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.myco-dot.is-active {
+.myco-dot:hover,
+.myco-dot:focus-visible {
+    background: rgba(121, 129, 193, 0.9);
+    transform: scale(1.2);
+}
+
+.myco-dot:focus-visible {
+    outline: 2px solid var(--primary-glow);
+    outline-offset: 2px;
+}
+
+.myco-dot.active {
     background: var(--primary-glow);
 }
 
