@@ -480,7 +480,7 @@ function renderGitHubEvents(container, events) {
         typeSpan.textContent = typeLabel;
 
         const repoLink = document.createElement('a');
-        repoLink.href = `https://github.com/${repoName}`;
+        repoLink.href = `https://github.com/${encodeURI(repoName)}`;
         repoLink.target = '_blank';
         repoLink.rel = 'noreferrer';
         repoLink.className = 'gh-repo';

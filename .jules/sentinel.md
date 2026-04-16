@@ -5,3 +5,8 @@
 **Vulnerability:** sanitizeUrl strictly filtered out bare relative URLs while permitting protocol-relative URLs.
 **Learning:** URL sanitizers using startsWith conditions might overlook bare relative paths and allow external URLs beginning with //.
 **Prevention:** In sanitizeUrl, explicitly drop protocol-relative URLs (starts with '//') and allow bare relative paths by validating they do not contain colons (!includes(':')), avoiding both open redirects and broken image src attributes.
+
+## 2024-05-24 - [MEDIUM] Unencoded External Data in href
+**Vulnerability:** In `public/app.js`, the `repoName` retrieved from the external GitHub API was directly used in the construction of `repoLink.href = \`https://github.com/${repoName}\`;` without encoding. This could lead to malformed URLs or potential URL-based injection if the API returned unexpected characters.
+**Learning:** Any dynamic or externally sourced data used to construct URLs (especially paths or query parameters) must be properly encoded to ensure that special characters do not break out of the intended URL structure or introduce unintended behaviors.
+**Prevention:** Always use `encodeURI()` (or `encodeURI()` as appropriate) on external or user-controlled strings when embedding them into `href`, `src`, or other URL attributes dynamically constructed in the frontend.
