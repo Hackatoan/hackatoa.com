@@ -36,8 +36,15 @@ function addKeyboardClickSupport(element) {
 function sanitizeUrl(urlString, fallback = '#') {
     if (!urlString) return fallback;
     const trimmed = urlString.trim();
-    // Allow relative paths, http, and https protocols
-    if (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || /^https?:\/\//i.test(trimmed)) {
+
+    // Deny protocol-relative URLs
+    if (trimmed.startsWith('//')) return fallback;
+
+    // Deny malicious protocols
+    if (/^(javascript|data|vbscript):/i.test(trimmed)) return fallback;
+
+    // Allow relative paths, http, and https protocols, and paths without a colon (bare relative paths)
+    if (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || /^https?:\/\//i.test(trimmed) || !trimmed.includes(':')) {
         return trimmed;
     }
     return fallback;
