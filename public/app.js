@@ -316,7 +316,7 @@ function initMycoCarousel() {
         const img = document.createElement('img');
         img.src = sanitizeUrl(item.image, '');
         img.alt = item.alt || 'Mycology image';
-        img.loading = 'lazy';
+        img.loading = 'eager';
         img.tabIndex = 0;
         img.role = 'button';
         img.setAttribute('aria-label', 'Open image in modal');
