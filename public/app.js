@@ -352,7 +352,7 @@ function initMycoCarousel() {
         addKeyboardClickSupport(img);
 
         const dot = document.createElement('span');
-        dot.className = index === 0 ? 'myco-dot active' : 'myco-dot';
+        dot.className = index === 0 ? 'myco-dot is-active' : 'myco-dot';
         dot.dataset.index = index;
         dot.tabIndex = 0;
         dot.role = 'button';
@@ -418,10 +418,10 @@ function updateMycoCarousel(track, currentMycoIndex) {
 
     cachedMycoDots.forEach((d, i) => {
         if (i === currentMycoIndex) {
-            d.classList.add('active');
+            d.classList.add('is-active');
             d.setAttribute('aria-current', 'true');
         } else {
-            d.classList.remove('active');
+            d.classList.remove('is-active');
             d.removeAttribute('aria-current');
         }
     });
