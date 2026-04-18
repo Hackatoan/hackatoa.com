@@ -5,3 +5,11 @@
 **Vulnerability:** sanitizeUrl strictly filtered out bare relative URLs while permitting protocol-relative URLs.
 **Learning:** URL sanitizers using startsWith conditions might overlook bare relative paths and allow external URLs beginning with //.
 **Prevention:** In sanitizeUrl, explicitly drop protocol-relative URLs (starts with '//') and allow bare relative paths by validating they do not contain colons (!includes(':')), avoiding both open redirects and broken image src attributes.
+## 2026-04-18 - URL Encoding in DOM Assignments
+**Vulnerability:** Constructing dynamic URLs from external data (e.g. GitHub events) by directly injecting strings without URL encoding them could allow malformed characters to break out of the URL structure or trigger unexpected behavior, even if traditional HTML context XSS is not directly possible through property assignment.
+**Learning:** When interpolating external data into URL paths, you must URL-encode the variables.  should be used instead of  when the external data itself contains valid path separators (like `/` in `username/repo`) that must be preserved.
+**Prevention:** Always use  or  appropriately on any externally sourced string before injecting it into a dynamic `href` or `src` attribute.
+## 2026-04-18 - URL Encoding in DOM Assignments
+**Vulnerability:** Constructing dynamic URLs from external data (e.g. GitHub events) by directly injecting strings without URL encoding them could allow malformed characters to break out of the URL structure or trigger unexpected behavior, even if traditional HTML context XSS is not directly possible through property assignment.
+**Learning:** When interpolating external data into URL paths, you must URL-encode the variables. `encodeURI()` should be used instead of `encodeURIComponent()` when the external data itself contains valid path separators (like `/` in `username/repo`) that must be preserved.
+**Prevention:** Always use `encodeURI()` or `encodeURIComponent()` appropriately on any externally sourced string before injecting it into a dynamic `href` or `src` attribute.
