@@ -103,6 +103,13 @@ function handleWheel(e) {
 function handleKey(e) {
     if (window.innerWidth <= 768) return;
     if (!slides.length) return;
+
+    // Prevent global keyboard listener from hijacking user inputs in forms/editable areas
+    const activeTagName = document.activeElement ? document.activeElement.tagName : '';
+    const isInputActive = ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTagName) ||
+                          (document.activeElement && document.activeElement.isContentEditable);
+    if (isInputActive) return;
+
     if (isSliding) return;
     if (e.key === 'ArrowRight' || e.key === 'PageDown') {
         e.preventDefault();

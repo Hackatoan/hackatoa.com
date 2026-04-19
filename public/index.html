@@ -377,9 +377,11 @@
                   </div>
                 </div>
                 <form class="contact-form" action="mailto:jacob@hackatoa.com" method="GET">
-                  <label class="contact-label" for="contact-message">Send a quick message</label>
+                  <label class="contact-label" for="contact-message">
+                    Send a quick message <span style="color: var(--primary);" aria-hidden="true">*</span><span class="sr-only"> (Required)</span>
+                  </label>
                   <textarea id="contact-message" name="body" class="contact-input" rows="3"
-                    placeholder="Drop a short message and your contact details…"></textarea>
+                    placeholder="Drop a short message and your contact details…" required></textarea>
                   <div class="contact-actions">
                     <button class="button button-primary" type="submit">Open email app</button>
                     <span class="contact-hint">You can also reach me on TeamSpeak at

@@ -1,3 +1,7 @@
 ## 2024-05-18 - Missing Modal & Custom Keyboard Navigation Bug
 **Learning:** Found an accessibility issue where dynamic `img` and `span` tags are used as buttons without `role="button"`, `tabIndex="0"`, or keyboard event listeners for `Enter` or `Space`, making them inaccessible to keyboard users and screen readers. Additionally, found a JavaScript implementation for a Mycology image modal where the corresponding `<div id="myco-modal">` structure was missing from `index.html`.
 **Action:** When making custom components interactive (like an image that opens a modal or dots in a carousel), always include `tabIndex=0` to make them focusable, set `role="button"`, and implement `keydown` listeners for standard activation keys (`Enter`, `Space`). Always verify HTML templates include necessary elements that JavaScript assumes are present.
+
+## 2024-11-09 - Global Keyboard Listener Hijacking Inputs
+**Learning:** Found an issue where global keyboard event listeners (like arrow keys for carousel navigation) can unintentionally hijack user inputs inside forms or `contenteditable` areas, preventing users from moving their text cursor.
+**Action:** When implementing global keyboard shortcuts (e.g., arrow key navigation), always check `document.activeElement.tagName` (ignoring `INPUT`, `TEXTAREA`, `SELECT`) and `isContentEditable` before executing the listener's logic to ensure native input behavior is preserved.
