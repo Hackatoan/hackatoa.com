@@ -37,8 +37,9 @@ function sanitizeUrl(urlString, fallback = '#') {
     if (!urlString) return fallback;
     const trimmed = urlString.trim();
 
-    // Deny protocol-relative URLs
-    if (trimmed.startsWith('//')) return fallback;
+    // Deny protocol-relative URLs (including backslash bypasses)
+    const normalized = trimmed.replace(/\\/g, '/');
+    if (normalized.startsWith('//')) return fallback;
 
     // Deny malicious protocols
     if (/^(javascript|data|vbscript):/i.test(trimmed)) return fallback;
