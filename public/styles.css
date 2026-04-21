@@ -1402,6 +1402,14 @@ body.bg-viewing .site-header {
     cursor: pointer;
 }
 
+.myco-dot:focus-visible,
+.myco-arrow:focus-visible,
+.myco-slide img:focus-visible,
+.modal-close:focus-visible {
+    outline: 2px solid var(--primary-glow);
+    outline-offset: 2px;
+}
+
 /* Ensure content doesn't overflow on small screens */
 img,
 iframe,
