@@ -670,7 +670,10 @@ main {
     min-height: 70px;
 }
 
-.contact-input:focus-visible {
+.contact-input:focus-visible,
+.myco-dot:focus-visible,
+.myco-arrow:focus-visible,
+.modal-close:focus-visible {
     outline: none;
     border-color: var(--primary-glow);
     box-shadow: 0 0 0 1px rgba(255, 138, 74, 0.5);
