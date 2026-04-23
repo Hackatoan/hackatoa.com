@@ -5,3 +5,7 @@
 **Vulnerability:** sanitizeUrl strictly filtered out bare relative URLs while permitting protocol-relative URLs.
 **Learning:** URL sanitizers using startsWith conditions might overlook bare relative paths and allow external URLs beginning with //.
 **Prevention:** In sanitizeUrl, explicitly drop protocol-relative URLs (starts with '//') and allow bare relative paths by validating they do not contain colons (!includes(':')), avoiding both open redirects and broken image src attributes.
+## 2024-05-18 - Reverse Tabnabbing Vulnerability via target="_blank"
+**Vulnerability:** Anchor tags opening external links using `target="_blank"` were missing `rel="noopener"` attributes (in both static HTML and dynamically generated JS content).
+**Learning:** Without `rel="noopener"`, the newly opened page gains access to the original page's `window` object via `window.opener`. This enables reverse tabnabbing, where a potentially malicious destination site could navigate the original tab to a phishing page.
+**Prevention:** Always append `rel="noopener noreferrer"` to any anchor tag that specifies `target="_blank"` to explicitly deny `window.opener` access and ensure cross-origin privacy.
