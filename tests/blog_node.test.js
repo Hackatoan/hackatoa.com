@@ -10,6 +10,7 @@ const appJsContent = fs.readFileSync(appJsPath, 'utf8');
 
 function createMockEnv() {
   const dom = {
+    createDocumentFragment: () => ({ nodeType: 11, children: [], appendChild: function(child) { this.children.push(child); } }),
     elements: {},
     getElementById(id) {
       if (!this.elements[id]) {
@@ -17,9 +18,7 @@ function createMockEnv() {
             textContent: '',
             style: {},
             children: [],
-            appendChild: function(child) {
-              this.children.push(child);
-            },
+            appendChild: function(child) { if (child && child.nodeType === 11) { this.children.push(...child.children); child.children = []; } else { this.children.push(child); } },
             innerHTML: '',
             querySelectorAll: () => []
         };
@@ -47,7 +46,7 @@ function createMockEnv() {
     createElement: (tag) => ({
         tagName: tag,
         style: {},
-        appendChild: () => {},
+        appendChild: function(child) { if (child && child.nodeType === 11) { if(this.children) { this.children.push(...child.children); } child.children = []; } else { if(this.children) { this.children.push(child); } } },
         classList: { add: () => {} }
     })
   };
