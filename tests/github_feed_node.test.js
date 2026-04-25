@@ -16,7 +16,16 @@ function createMockEnv() {
         this.elements[id] = {
             textContent: '',
             style: {},
-            appendChild: () => {},
+            appendChild: function(child) {
+              if (child && child.nodeType === 11) {
+                  if (!this.children) this.children = [];
+                  this.children.push(...child.children);
+                  child.children = [];
+              } else {
+                  if (!this.children) this.children = [];
+                  this.children.push(child);
+              }
+            },
             innerHTML: '',
             querySelectorAll: () => []
         };
@@ -29,8 +38,15 @@ function createMockEnv() {
                innerHTML: '',
                children: [],
                appendChild(child) {
-                   this.children.push(child);
-               },
+                if (child && child.nodeType === 11) {
+                    if (!this.children) this.children = [];
+                    this.children.push(...child.children);
+                    child.children = [];
+                } else {
+                    if (!this.children) this.children = [];
+                    this.children.push(child);
+                }
+            },
                classList: { add: () => {}, remove: () => {} },
                addEventListener: () => {},
                querySelectorAll: () => [],
@@ -50,6 +66,22 @@ function createMockEnv() {
             remove: () => {}
         }
     },
+    createDocumentFragment() {
+        return {
+            nodeType: 11,
+            children: [],
+            appendChild(child) {
+                if (child && child.nodeType === 11) {
+                    if (!this.children) this.children = [];
+                    this.children.push(...child.children);
+                    child.children = [];
+                } else {
+                    if (!this.children) this.children = [];
+                    this.children.push(child);
+                }
+            }
+        };
+    },
     createElement(tag) {
         return {
             tagName: tag,
@@ -60,7 +92,14 @@ function createMockEnv() {
             rel: '',
             children: [],
             appendChild(child) {
-                this.children.push(child);
+                if (child && child.nodeType === 11) {
+                    if (!this.children) this.children = [];
+                    this.children.push(...child.children);
+                    child.children = [];
+                } else {
+                    if (!this.children) this.children = [];
+                    this.children.push(child);
+                }
             },
             style: {},
             classList: { add: () => {} }

@@ -16,7 +16,16 @@ function createMockEnv(slidesCount = 3) {
         this.elements[id] = {
             textContent: '',
             style: {},
-            appendChild: () => {},
+            appendChild: function(child) {
+              if (child && child.nodeType === 11) {
+                  if (!this.children) this.children = [];
+                  this.children.push(...child.children);
+                  child.children = [];
+              } else {
+                  if (!this.children) this.children = [];
+                  this.children.push(child);
+              }
+            },
             innerHTML: '',
             querySelectorAll: () => []
         };
@@ -49,7 +58,16 @@ function createMockEnv(slidesCount = 3) {
     },
     createElement: () => ({
         style: {},
-        appendChild: () => {},
+        appendChild: function(child) {
+              if (child && child.nodeType === 11) {
+                  if (!this.children) this.children = [];
+                  this.children.push(...child.children);
+                  child.children = [];
+              } else {
+                  if (!this.children) this.children = [];
+                  this.children.push(child);
+              }
+            },
         classList: { add: () => {} }
     })
   };
