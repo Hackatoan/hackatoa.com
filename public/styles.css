@@ -1283,6 +1283,20 @@ body.bg-viewing .site-header {
     color: var(--accent);
 }
 
+
+
+/* Accessibility: Focus visible styles for custom interactive elements */
+.myco-arrow:focus-visible,
+.myco-dot:focus-visible,
+.modal-close:focus-visible,
+.music-toggle:focus-visible,
+.music-skip:focus-visible,
+.music-volume:focus-visible,
+.myco-slide img:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
 /* Responsiveness */
 
 @media (max-width: 768px) {
