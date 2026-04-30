@@ -160,4 +160,92 @@ describe('initGitHubFeed', () => {
     assert.strictEqual(commitDiv.className, 'gh-commit');
     assert.strictEqual(commitDiv.textContent, 'Update security configurations and CMS data');
   });
+
+  test('should handle localStorage.getItem error and fetch fresh data', async () => {
+    const context = createMockEnv();
+
+    // Mock localStorage.getItem to throw
+    context.localStorage.getItem = () => {
+        throw new Error('Access denied');
+    };
+
+    let fetchCalled = false;
+    context.fetch = async () => {
+        fetchCalled = true;
+        return {
+            ok: true,
+            json: async () => []
+        };
+    };
+
+    context.initGitHubFeed();
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    assert.strictEqual(fetchCalled, true);
+    const container = context.document.querySelector('.github-pinner');
+    // Should render "No recent activity found." because json returned []
+    assert.strictEqual(container.children.length, 1);
+    assert.strictEqual(container.children[0].className, 'gh-placeholder');
+  });
+
+  test('should handle JSON.parse error of cached data and fetch fresh data', async () => {
+    const context = createMockEnv();
+
+    // Set invalid JSON in localStorage
+    context.localStorage.store['github-events-cache'] = 'invalid-json';
+
+    let fetchCalled = false;
+    context.fetch = async () => {
+        fetchCalled = true;
+        return {
+            ok: true,
+            json: async () => []
+        };
+    };
+
+    context.initGitHubFeed();
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    assert.strictEqual(fetchCalled, true);
+    const container = context.document.querySelector('.github-pinner');
+    assert.strictEqual(container.children.length, 1);
+    assert.strictEqual(container.children[0].className, 'gh-placeholder');
+  });
+
+  test('should handle localStorage.setItem error and still render fetched data', async () => {
+    const context = createMockEnv();
+
+    // Mock localStorage.setItem to throw
+    context.localStorage.setItem = () => {
+        throw new Error('Quota exceeded');
+    };
+
+    context.fetch = async () => {
+        return {
+            ok: true,
+            json: async () => [
+                {
+                    type: 'PushEvent',
+                    repo: { name: 'test/repo' },
+                    created_at: new Date().toISOString(),
+                    payload: { commits: [{ message: 'test commit' }] }
+                }
+            ]
+        };
+    };
+
+    context.initGitHubFeed();
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    const container = context.document.querySelector('.github-pinner');
+    assert.strictEqual(container.children.length, 1);
+    const eventItem = container.children[0];
+    assert.strictEqual(eventItem.className, 'gh-event');
+    const header = eventItem.children[0];
+    const repoLink = header.children[1];
+    assert.strictEqual(repoLink.textContent, 'test/repo');
+  });
 });
