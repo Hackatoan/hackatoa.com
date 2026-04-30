@@ -15,7 +15,11 @@ function createMockEnv(overrides = {}) {
         this.elements[id] = {
             textContent: '',
             style: {},
-            appendChild: () => {},
+            appendChild: function(node) {
+                if (node && node.nodeType === 11) {
+                    node.childNodes = [];
+                }
+            },
             innerHTML: '',
             querySelectorAll: () => [],
             addEventListener: () => {},
@@ -45,7 +49,12 @@ function createMockEnv(overrides = {}) {
            addEventListener: () => {},
            querySelectorAll: () => [],
            style: {},
-           clientWidth: 1024
+           clientWidth: 1024,
+           appendChild: function(node) {
+               if (node && node.nodeType === 11) {
+                   node.childNodes = [];
+               }
+           }
        };
     },
     querySelectorAll(selector) {
@@ -60,8 +69,19 @@ function createMockEnv(overrides = {}) {
     },
     createElement: () => ({
         style: {},
-        appendChild: () => {},
+        appendChild: function(node) {
+            if (node && node.nodeType === 11) {
+                node.childNodes = [];
+            }
+        },
         classList: { add: () => {} }
+    }),
+    createDocumentFragment: () => ({
+        nodeType: 11,
+        childNodes: [],
+        appendChild: function(node) {
+            this.childNodes.push(node);
+        }
     })
   };
 
