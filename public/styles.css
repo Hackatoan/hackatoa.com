@@ -1392,6 +1392,15 @@ body.bg-viewing .site-header {
     min-height: 200px;
 }
 
+.myco-arrow:focus-visible,
+.myco-dot:focus-visible,
+.modal-close:focus-visible,
+.music-toggle:focus-visible,
+.music-skip:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
 /* Make sure all interactive elements have proper spacing */
 .button,
 .pill-link,
