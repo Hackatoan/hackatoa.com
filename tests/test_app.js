@@ -15,7 +15,15 @@ function createMockEnv(overrides = {}) {
         this.elements[id] = {
             textContent: '',
             style: {},
-            appendChild: () => {},
+            children: [],
+            appendChild(child) {
+                if (child.nodeType === 11) { // DocumentFragment
+                    this.children.push(...child.children);
+                    child.children = [];
+                } else {
+                    this.children.push(child);
+                }
+            },
             innerHTML: '',
             querySelectorAll: () => [],
             addEventListener: () => {},
@@ -29,6 +37,15 @@ function createMockEnv(overrides = {}) {
          if (!this.elements['.slides-track']) {
            this.elements['.slides-track'] = {
              style: {},
+             children: [],
+             appendChild(child) {
+                 if (child.nodeType === 11) {
+                     this.children.push(...child.children);
+                     child.children = [];
+                 } else {
+                     this.children.push(child);
+                 }
+             },
              querySelectorAll: () => [
                { classList: { add: () => {} } },
                { classList: { add: () => {} } },
@@ -45,7 +62,16 @@ function createMockEnv(overrides = {}) {
            addEventListener: () => {},
            querySelectorAll: () => [],
            style: {},
-           clientWidth: 1024
+           clientWidth: 1024,
+           children: [],
+           appendChild(child) {
+               if (child.nodeType === 11) {
+                   this.children.push(...child.children);
+                   child.children = [];
+               } else {
+                   this.children.push(child);
+               }
+           }
        };
     },
     querySelectorAll(selector) {
@@ -58,10 +84,27 @@ function createMockEnv(overrides = {}) {
             remove: () => {}
         }
     },
-    createElement: () => ({
+    createElement: (tag) => ({
+        tagName: tag,
         style: {},
-        appendChild: () => {},
-        classList: { add: () => {} }
+        children: [],
+        appendChild(child) {
+            if (child.nodeType === 11) {
+                this.children.push(...child.children);
+                child.children = [];
+            } else {
+                this.children.push(child);
+            }
+        },
+        classList: { add: () => {} },
+        setAttribute: () => {}
+    }),
+    createDocumentFragment: () => ({
+        nodeType: 11,
+        children: [],
+        appendChild(child) {
+            this.children.push(child);
+        }
     })
   };
 

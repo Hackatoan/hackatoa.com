@@ -240,6 +240,12 @@ function renderBlogFromData() {
         return;
     }
 
+    // ⚡ Bolt Performance Optimization:
+    // Using DocumentFragment to batch DOM insertions for blog entries.
+    // Reduces DOM reflows/repaints from O(N) to O(1) for this rendering loop.
+    // Expected impact: Faster initial render time for the blog section.
+    const fragment = document.createDocumentFragment();
+
     entries.forEach((entry) => {
         const article = document.createElement('article');
         article.className = 'blog-entry';
@@ -295,8 +301,10 @@ function renderBlogFromData() {
             article.appendChild(linksRow);
         }
 
-        container.appendChild(article);
+        fragment.appendChild(article);
     });
+
+    container.appendChild(fragment);
 }
 
 function initMycoCarousel() {
@@ -308,6 +316,13 @@ function initMycoCarousel() {
     // Load data from external file
     const items = Array.isArray(window.MUSHROOMS_DATA) ? window.MUSHROOMS_DATA : [];
     if (!items.length) return;
+
+    // ⚡ Bolt Performance Optimization:
+    // Using DocumentFragment to batch DOM insertions for carousel items and dots.
+    // Reduces DOM reflows/repaints from O(N) to O(1) for this initialization loop.
+    // Expected impact: Faster time to interactive (TTI) for the carousel widget.
+    const trackFragment = document.createDocumentFragment();
+    const dotsFragment = document.createDocumentFragment();
 
     items.forEach((item, index) => {
         const slide = document.createElement('div');
@@ -336,7 +351,7 @@ function initMycoCarousel() {
         overlay.appendChild(meta);
         slide.appendChild(img);
         slide.appendChild(overlay);
-        track.appendChild(slide);
+        trackFragment.appendChild(slide);
 
         img.addEventListener('click', () => {
             const modal = document.getElementById('myco-modal');
@@ -363,8 +378,11 @@ function initMycoCarousel() {
             updateMycoCarousel(track, currentMycoIndex);
         });
         addKeyboardClickSupport(dot);
-        dotsContainer.appendChild(dot);
+        dotsFragment.appendChild(dot);
     });
+
+    track.appendChild(trackFragment);
+    dotsContainer.appendChild(dotsFragment);
 
     let currentMycoIndex = 0;
 
@@ -464,6 +482,12 @@ function renderGitHubEvents(container, events) {
         return;
     }
 
+    // ⚡ Bolt Performance Optimization:
+    // Using DocumentFragment to batch DOM insertions for GitHub events.
+    // Reduces DOM reflows/repaints from O(N) to O(1) when processing the API payload.
+    // Expected impact: Smoother rendering of the GitHub feed with fewer layout thrashing occurrences.
+    const fragment = document.createDocumentFragment();
+
     relevantEvents.forEach(event => {
         const item = document.createElement('div');
         item.className = 'gh-event';
@@ -504,8 +528,10 @@ function renderGitHubEvents(container, events) {
             item.appendChild(commitDiv);
         }
 
-        container.appendChild(item);
+        fragment.appendChild(item);
     });
+
+    container.appendChild(fragment);
 }
 
 function initGitHubFeed() {

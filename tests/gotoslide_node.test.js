@@ -15,7 +15,15 @@ function createMockEnv() {
         this.elements[id] = {
             textContent: '',
             style: {},
-            appendChild: () => {},
+            children: [],
+            appendChild: function(child) {
+              if (child.nodeType === 11) {
+                this.children.push(...child.children);
+                child.children = [];
+              } else {
+                this.children.push(child);
+              }
+            },
             innerHTML: '',
             querySelectorAll: () => []
         };
@@ -53,10 +61,26 @@ function createMockEnv() {
             remove: () => {}
         }
     },
-    createElement: () => ({
+    createElement: (tag) => ({
+        tagName: tag,
         style: {},
-        appendChild: () => {},
+        children: [],
+        appendChild: function(child) {
+            if (child.nodeType === 11) {
+                this.children.push(...child.children);
+                child.children = [];
+            } else {
+                this.children.push(child);
+            }
+        },
         classList: { add: () => {} }
+    }),
+    createDocumentFragment: () => ({
+        nodeType: 11,
+        children: [],
+        appendChild: function(child) {
+            this.children.push(child);
+        }
     })
   };
 
