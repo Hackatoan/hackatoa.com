@@ -10,12 +10,29 @@ const appJsContent = fs.readFileSync(appJsPath, 'utf8');
 function createMockEnv(overrides = {}) {
   const dom = {
     elements: {},
+    createDocumentFragment() {
+        return {
+            nodeType: 11,
+            children: [],
+            appendChild: function(child) {
+                this.children.push(child);
+            }
+        };
+    },
     getElementById(id) {
       if (!this.elements[id]) {
         this.elements[id] = {
             textContent: '',
             style: {},
-            appendChild: () => {},
+            children: [],
+            appendChild: function(child) {
+              if (child.nodeType === 11) {
+                this.children.push(...child.children);
+                child.children = [];
+              } else {
+                this.children.push(child);
+              }
+            },
             innerHTML: '',
             querySelectorAll: () => [],
             addEventListener: () => {},
@@ -60,7 +77,15 @@ function createMockEnv(overrides = {}) {
     },
     createElement: () => ({
         style: {},
-        appendChild: () => {},
+        children: [],
+        appendChild: function(child) {
+          if (child.nodeType === 11) {
+            this.children.push(...child.children);
+            child.children = [];
+          } else {
+            this.children.push(child);
+          }
+        },
         classList: { add: () => {} }
     })
   };
