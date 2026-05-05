@@ -288,7 +288,7 @@ function renderBlogFromData() {
                 a.className = 'pill-link';
                 a.href = safeHref;
                 a.target = '_blank';
-                a.rel = 'noreferrer';
+                a.rel = 'noopener noreferrer';
                 a.textContent = link.label || link.href;
                 linksRow.appendChild(a);
             });
@@ -482,7 +482,7 @@ function renderGitHubEvents(container, events) {
         const repoLink = document.createElement('a');
         repoLink.href = `https://github.com/${repoName}`;
         repoLink.target = '_blank';
-        repoLink.rel = 'noreferrer';
+        repoLink.rel = 'noopener noreferrer';
         repoLink.className = 'gh-repo';
         repoLink.textContent = repoName;
 
