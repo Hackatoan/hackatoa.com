@@ -79,6 +79,15 @@ function handleWheel(e) {
     if (window.innerWidth <= 768) return;
     if (!slides.length) return;
 
+    // Bolt: Performance Optimization - Early exit if already sliding to prevent layout thrashing
+    // Checking `isSliding` before performing DOM traversals (`e.target.closest`)
+    // and layout property reads (`scrollTop`, `clientHeight`, `scrollHeight`) prevents forced
+    // synchronous layouts during high-frequency scroll events while a transition is active.
+    if (isSliding) {
+        e.preventDefault();
+        return;
+    }
+
     // If hovering over a vertically scrollable area and scrolling vertically, let native handle it
     const scrollTarget = e.target.closest('.blog-list, .github-pinner, .contact-input');
     if (scrollTarget && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
@@ -90,10 +99,6 @@ function handleWheel(e) {
         if (e.deltaY < 0 && !isAtTop) return;    // scrolling up, not at top
     }
 
-    if (isSliding) {
-        e.preventDefault();
-        return;
-    }
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (Math.abs(delta) < 10) return;
     e.preventDefault();
