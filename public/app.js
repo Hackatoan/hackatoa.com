@@ -403,6 +403,12 @@ function updateArrowState(btn, isDisabled) {
     btn.disabled = isDisabled;
     btn.style.opacity = isDisabled ? '0.3' : '1';
     btn.style.cursor = isDisabled ? 'not-allowed' : 'pointer';
+
+    if (isDisabled) {
+        btn.title = btn.dataset.dir === 'prev' ? 'No previous items' : 'No more items';
+    } else {
+        btn.removeAttribute('title');
+    }
 }
 
 // Cache the DOM elements since they do not change after initialization
