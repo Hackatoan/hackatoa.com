@@ -5,3 +5,7 @@
 **Vulnerability:** sanitizeUrl strictly filtered out bare relative URLs while permitting protocol-relative URLs.
 **Learning:** URL sanitizers using startsWith conditions might overlook bare relative paths and allow external URLs beginning with //.
 **Prevention:** In sanitizeUrl, explicitly drop protocol-relative URLs (starts with '//') and allow bare relative paths by validating they do not contain colons (!includes(':')), avoiding both open redirects and broken image src attributes.
+## 2025-02-17 - Missing noopener on target="_blank" Links
+**Vulnerability:** Several external links using `target="_blank"` were missing the `noopener` property in the `rel` attribute.
+**Learning:** While `noreferrer` implies `noopener` in most modern browsers, explicitly specifying `noopener` provides comprehensive defense against `window.opener` exploitation (Tab Nabbing/Reverse Tab Nabbing) across all browsers.
+**Prevention:** Always use `rel="noopener noreferrer"` when utilizing `target="_blank"` for external links to ensure the new tab executes in a separate process without reference to the original window.
