@@ -962,8 +962,17 @@ main {
     background: rgba(121, 129, 193, 0.6);
 }
 
-.myco-dot.is-active {
+.myco-dot.active {
     background: var(--primary-glow);
+}
+
+.myco-arrow:focus-visible,
+.myco-dot:focus-visible,
+.modal-close:focus-visible,
+.music-skip:focus-visible,
+.music-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 .myco-carousel-note {

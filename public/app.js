@@ -403,6 +403,7 @@ function updateArrowState(btn, isDisabled) {
     btn.disabled = isDisabled;
     btn.style.opacity = isDisabled ? '0.3' : '1';
     btn.style.cursor = isDisabled ? 'not-allowed' : 'pointer';
+    btn.title = isDisabled ? 'No more slides in this direction' : '';
 }
 
 // Cache the DOM elements since they do not change after initialization
