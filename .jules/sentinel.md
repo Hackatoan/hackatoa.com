@@ -5,3 +5,8 @@
 **Vulnerability:** sanitizeUrl strictly filtered out bare relative URLs while permitting protocol-relative URLs.
 **Learning:** URL sanitizers using startsWith conditions might overlook bare relative paths and allow external URLs beginning with //.
 **Prevention:** In sanitizeUrl, explicitly drop protocol-relative URLs (starts with '//') and allow bare relative paths by validating they do not contain colons (!includes(':')), avoiding both open redirects and broken image src attributes.
+
+## 2026-05-08 - Protocol-Relative URL Bypass via Backslashes
+**Vulnerability:** The `sanitizeUrl` function in `public/app.js` could be bypassed by using backslashes (`\`) instead of forward slashes (`//`) for protocol-relative URLs (e.g., `\malicious.com`).
+**Learning:** Browsers normalize backslashes to forward slashes in URLs, interpreting `\malicious.com` as `//malicious.com`. Because the input lacked colons, it passed the colon-check designed for bare relative paths and effectively allowed open redirection or malicious sourcing.
+**Prevention:** Always explicitly replace or normalize backslashes to forward slashes (e.g., `.replace(/\/g, '/')`) *before* trimming and performing security validations on user-provided URLs.

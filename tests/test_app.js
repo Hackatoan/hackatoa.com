@@ -139,6 +139,8 @@ describe('app.js tests', () => {
       assert.strictEqual(vm.runInContext('sanitizeUrl("javascript:alert(1)")', context), '#');
       assert.strictEqual(vm.runInContext('sanitizeUrl("data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==")', context), '#');
       assert.strictEqual(vm.runInContext('sanitizeUrl("vbscript:msgbox(1)")', context), '#');
+      assert.strictEqual(vm.runInContext('sanitizeUrl("//malicious.com")', context), '#');
+      assert.strictEqual(vm.runInContext('sanitizeUrl("\\\\\\\\malicious.com")', context), '#');
       // Test fallback overriding
       assert.strictEqual(vm.runInContext('sanitizeUrl("javascript:alert(1)", "fallback")', context), 'fallback');
     });

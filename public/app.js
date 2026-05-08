@@ -35,7 +35,9 @@ function addKeyboardClickSupport(element) {
  */
 function sanitizeUrl(urlString, fallback = '#') {
     if (!urlString) return fallback;
-    const trimmed = urlString.trim();
+    // Normalize backslashes to forward slashes before validation to prevent bypasses
+    const normalized = urlString.replace(/\\/g, '/');
+    const trimmed = normalized.trim();
 
     // Deny protocol-relative URLs
     if (trimmed.startsWith('//')) return fallback;
