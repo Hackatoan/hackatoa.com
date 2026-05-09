@@ -35,7 +35,12 @@ function addKeyboardClickSupport(element) {
  */
 function sanitizeUrl(urlString, fallback = '#') {
     if (!urlString) return fallback;
-    const trimmed = urlString.trim();
+
+    // Normalize backslashes to forward slashes and remove control characters
+    const normalized = String(urlString).replace(/\\/g, '/');
+    // eslint-disable-next-line no-control-regex
+    const cleaned = normalized.replace(/[\x00-\x1F\x7F]+/g, '');
+    const trimmed = cleaned.trim();
 
     // Deny protocol-relative URLs
     if (trimmed.startsWith('//')) return fallback;
@@ -43,8 +48,12 @@ function sanitizeUrl(urlString, fallback = '#') {
     // Deny malicious protocols
     if (/^(javascript|data|vbscript):/i.test(trimmed)) return fallback;
 
+    const isRelativePath = trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../');
+    const isHttpProtocol = /^https?:\/\//i.test(trimmed);
+    const isBareRelativePath = !trimmed.includes(':');
+
     // Allow relative paths, http, and https protocols, and paths without a colon (bare relative paths)
-    if (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || /^https?:\/\//i.test(trimmed) || !trimmed.includes(':')) {
+    if (isRelativePath || isHttpProtocol || isBareRelativePath) {
         return trimmed;
     }
     return fallback;

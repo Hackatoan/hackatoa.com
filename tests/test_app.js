@@ -139,6 +139,12 @@ describe('app.js tests', () => {
       assert.strictEqual(vm.runInContext('sanitizeUrl("javascript:alert(1)")', context), '#');
       assert.strictEqual(vm.runInContext('sanitizeUrl("data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==")', context), '#');
       assert.strictEqual(vm.runInContext('sanitizeUrl("vbscript:msgbox(1)")', context), '#');
+      // Test protocol bypass using control characters
+      assert.strictEqual(vm.runInContext('sanitizeUrl("java\\x09script:alert(1)")', context), '#');
+      assert.strictEqual(vm.runInContext('sanitizeUrl("java\\nscript:alert(1)")', context), '#');
+      // Test protocol-relative bypass using backslashes
+      assert.strictEqual(vm.runInContext('sanitizeUrl("\\\\\\\\malicious.com")', context), '#');
+      assert.strictEqual(vm.runInContext('sanitizeUrl(" \\\\\\\\malicious.com")', context), '#');
       // Test fallback overriding
       assert.strictEqual(vm.runInContext('sanitizeUrl("javascript:alert(1)", "fallback")', context), 'fallback');
     });
