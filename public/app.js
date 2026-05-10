@@ -453,8 +453,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function renderGitHubEvents(container, events) {
     container.innerHTML = '';
-    // Filter push and create events, limit to 5
-    const relevantEvents = events.filter(e => e.type === 'PushEvent' || e.type === 'CreateEvent').slice(0, 5);
+
+    // Filter push and create events, limit to 5 using a short-circuiting loop
+    // This optimization avoids iterating over the entire array once 5 events are found.
+    const relevantEvents = [];
+    for (let i = 0; i < events.length; i++) {
+        const e = events[i];
+        if (e.type === 'PushEvent' || e.type === 'CreateEvent') {
+            relevantEvents.push(e);
+            if (relevantEvents.length === 5) break;
+        }
+    }
 
     if (relevantEvents.length === 0) {
         const placeholder = document.createElement('div');
