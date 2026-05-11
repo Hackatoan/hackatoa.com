@@ -1409,3 +1409,26 @@ video {
     max-width: 100%;
     height: auto;
 }
+
+/* Accessibility utilities */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Custom interactive components focus styles */
+.myco-dot:focus-visible,
+.myco-arrow:focus-visible,
+.modal-close:focus-visible,
+.music-skip:focus-visible,
+.music-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
