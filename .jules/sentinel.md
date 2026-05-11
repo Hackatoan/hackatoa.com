@@ -5,3 +5,7 @@
 **Vulnerability:** sanitizeUrl strictly filtered out bare relative URLs while permitting protocol-relative URLs.
 **Learning:** URL sanitizers using startsWith conditions might overlook bare relative paths and allow external URLs beginning with //.
 **Prevention:** In sanitizeUrl, explicitly drop protocol-relative URLs (starts with '//') and allow bare relative paths by validating they do not contain colons (!includes(':')), avoiding both open redirects and broken image src attributes.
+## 2025-02-23 - [HIGH] XSS and Tabnabbing Vulnerabilities in `sanitizeUrl` and Links
+**Vulnerability:** `sanitizeUrl` did not filter out control characters (like `\x09` tab) and did not normalize backslashes (like `\/`), allowing XSS payloads such as `java\x09script:alert(1)` and bypasses to protocol relative URL blocking. Also, `target="_blank"` links only included `rel="noreferrer"`, missing `noopener`, which could allow tabnabbing where the opened page gains access to `window.opener`.
+**Learning:** Checking for malicious prefixes requires strict normalization. Attackers often obfuscate schemes using backslashes and control characters. Furthermore, when using `target="_blank"`, `noopener` is critical.
+**Prevention:** In URL sanitizers, explicitly strip control characters (e.g., `/[\x00-\x1F\x7F]+/g`) and replace backslashes with forward slashes before validating prefixes. For links opening in new tabs, always use `rel="noopener noreferrer"`.

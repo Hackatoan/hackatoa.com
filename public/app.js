@@ -35,7 +35,11 @@ function addKeyboardClickSupport(element) {
  */
 function sanitizeUrl(urlString, fallback = '#') {
     if (!urlString) return fallback;
-    const trimmed = urlString.trim();
+
+    // Normalize backslashes and remove control characters to prevent bypasses
+    // eslint-disable-next-line no-control-regex
+    const sanitized = urlString.replace(/[\x00-\x1F\x7F]+/g, '').replace(/\\/g, '/');
+    const trimmed = sanitized.trim();
 
     // Deny protocol-relative URLs
     if (trimmed.startsWith('//')) return fallback;
@@ -288,7 +292,7 @@ function renderBlogFromData() {
                 a.className = 'pill-link';
                 a.href = safeHref;
                 a.target = '_blank';
-                a.rel = 'noreferrer';
+                a.rel = 'noopener noreferrer';
                 a.textContent = link.label || link.href;
                 linksRow.appendChild(a);
             });
@@ -482,7 +486,7 @@ function renderGitHubEvents(container, events) {
         const repoLink = document.createElement('a');
         repoLink.href = `https://github.com/${repoName}`;
         repoLink.target = '_blank';
-        repoLink.rel = 'noreferrer';
+        repoLink.rel = 'noopener noreferrer';
         repoLink.className = 'gh-repo';
         repoLink.textContent = repoName;
 
