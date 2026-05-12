@@ -240,6 +240,8 @@ function renderBlogFromData() {
         return;
     }
 
+    const fragment = document.createDocumentFragment();
+
     entries.forEach((entry) => {
         const article = document.createElement('article');
         article.className = 'blog-entry';
@@ -295,8 +297,10 @@ function renderBlogFromData() {
             article.appendChild(linksRow);
         }
 
-        container.appendChild(article);
+        fragment.appendChild(article);
     });
+
+    container.appendChild(fragment);
 }
 
 function initMycoCarousel() {
