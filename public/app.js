@@ -240,6 +240,8 @@ function renderBlogFromData() {
         return;
     }
 
+    const fragment = document.createDocumentFragment();
+
     entries.forEach((entry) => {
         const article = document.createElement('article');
         article.className = 'blog-entry';
@@ -288,15 +290,17 @@ function renderBlogFromData() {
                 a.className = 'pill-link';
                 a.href = safeHref;
                 a.target = '_blank';
-                a.rel = 'noreferrer';
+                a.rel = 'noopener noreferrer';
                 a.textContent = link.label || link.href;
                 linksRow.appendChild(a);
             });
             article.appendChild(linksRow);
         }
 
-        container.appendChild(article);
+        fragment.appendChild(article);
     });
+
+    container.appendChild(fragment);
 }
 
 function initMycoCarousel() {
@@ -308,6 +312,9 @@ function initMycoCarousel() {
     // Load data from external file
     const items = Array.isArray(window.MUSHROOMS_DATA) ? window.MUSHROOMS_DATA : [];
     if (!items.length) return;
+
+    const trackFragment = document.createDocumentFragment();
+    const dotsFragment = document.createDocumentFragment();
 
     items.forEach((item, index) => {
         const slide = document.createElement('div');
@@ -336,7 +343,7 @@ function initMycoCarousel() {
         overlay.appendChild(meta);
         slide.appendChild(img);
         slide.appendChild(overlay);
-        track.appendChild(slide);
+        trackFragment.appendChild(slide);
 
         img.addEventListener('click', () => {
             const modal = document.getElementById('myco-modal');
@@ -363,8 +370,11 @@ function initMycoCarousel() {
             updateMycoCarousel(track, currentMycoIndex);
         });
         addKeyboardClickSupport(dot);
-        dotsContainer.appendChild(dot);
+        dotsFragment.appendChild(dot);
     });
+
+    track.appendChild(trackFragment);
+    dotsContainer.appendChild(dotsFragment);
 
     let currentMycoIndex = 0;
 
@@ -464,6 +474,8 @@ function renderGitHubEvents(container, events) {
         return;
     }
 
+    const fragment = document.createDocumentFragment();
+
     relevantEvents.forEach(event => {
         const item = document.createElement('div');
         item.className = 'gh-event';
@@ -504,8 +516,10 @@ function renderGitHubEvents(container, events) {
             item.appendChild(commitDiv);
         }
 
-        container.appendChild(item);
+        fragment.appendChild(item);
     });
+
+    container.appendChild(fragment);
 }
 
 function initGitHubFeed() {
