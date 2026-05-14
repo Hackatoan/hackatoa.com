@@ -58,7 +58,8 @@ function createMockEnv(overrides = {}) {
             remove: () => {}
         }
     },
-    createElement: () => ({
+    createDocumentFragment: () => ({ nodeType: 11, children: [], appendChild(child) { if (child.nodeType === 11) { this.children.push(...child.children); child.children = []; } else { this.children.push(child); } } }),
+    createElement: (tag) => ({
         style: {},
         appendChild: () => {},
         classList: { add: () => {} }
