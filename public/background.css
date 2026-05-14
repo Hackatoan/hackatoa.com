@@ -1,39 +1,40 @@
-/* CSS Background Art Variables - High Fidelity */
+/* CSS Background Art Variables - Warm Volcanic Palette */
 :root {
-  --sky-day: #87CEEB;
-  --sky-sunset-top: #2a3b5c;
-  --sky-sunset-bottom: #e06030;
-  --sky-night: #050813;
-  --ocean-day: #1ca3ec;
-  --ocean-night: #091b35;
-  --water-shallow: #00b4d8;
-  --water-deep: #0077b6;
-  --beach-color: #e9c46a;
+  --sky-day: #a8cce0;
+  --sky-sunset-top: #2a1810;
+  --sky-sunset-bottom: #c04518;
+  --sky-night: #160c0a;
 
-  --volcano-dark: #1a1a1a;
-  --volcano-base: #242424;
-  --volcano-light: #3a3a3a;
-  --volcano-crater: #0a0a0a;
+  --ocean-day: #2888b8;
+  --ocean-night: #0a1822;
+  --water-shallow: #18708e;
+  --water-deep: #0d2c42;
+  --beach-color: #c49848;
 
-  --island-color: #2e3b32;
-  --forest-dark: #004b23;
-  --forest-base: #006400;
-  --forest-light: #38b000;
+  --volcano-dark: #1c0e08;
+  --volcano-base: #2c1a0e;
+  --volcano-light: #4a2818;
+  --volcano-crater: #0e0606;
+
+  --island-color: #241808;
+  --forest-dark: #1e3010;
+  --forest-base: #2a5018;
+  --forest-light: #4a8028;
 
   --lava: #ff3300;
   --lava-glow: #ff7b00;
-  --lava-hot: #ffea00;
+  --lava-hot: #ffe800;
 
-  --smoke-dark: rgba(40, 40, 50, 0.8);
-  --smoke-light: rgba(100, 100, 110, 0.6);
+  --smoke-dark: rgba(55, 35, 28, 0.82);
+  --smoke-light: rgba(118, 84, 72, 0.55);
 
-  --cloud-day: rgba(255, 255, 255, 0.8);
-  --cloud-night: rgba(40, 50, 70, 0.7);
-  --cloud-sunset: rgba(150, 80, 80, 0.6);
+  --cloud-day: rgba(255, 248, 244, 0.88);
+  --cloud-night: rgba(65, 42, 44, 0.72);
+  --cloud-sunset: rgba(185, 90, 68, 0.65);
 
-  --sun-color: #ffde00;
-  --sun-glow: #ffaa00;
-  --moon-color: #f4f6f0;
+  --sun-color: #ffcc44;
+  --sun-glow: #ff8c20;
+  --moon-color: #e8d8c4;
 }
 
 .video-bg {
@@ -42,11 +43,14 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
-  background: linear-gradient(to bottom, var(--sky-night) 0%, var(--sky-night) 100%);
+  /* Warm horizon glow from volcano even at night */
+  background:
+    radial-gradient(ellipse at 50% 105%, rgba(200, 50, 12, 0.18) 0%, transparent 45%),
+    linear-gradient(to bottom, var(--sky-night) 0%, #0c0604 100%);
   transition: background 2s ease;
 }
 
-/* Sky */
+/* ── Sky ───────────────────────────────────────────────── */
 .sky {
   position: absolute;
   top: 0;
@@ -54,6 +58,31 @@
   width: 100%;
   height: 60%;
   z-index: 1;
+}
+
+/* Stars - populated via JS box-shadow */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  border-radius: 50%;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 3s ease;
+}
+
+body.is-night .stars {
+  opacity: 1;
+  animation: twinkle 8s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.7; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.8; }
 }
 
 .celestial-body {
@@ -66,7 +95,7 @@
   background: var(--moon-color);
   box-shadow: 0 0 40px var(--moon-color);
   transition: all 2s ease;
-  z-index: 2;
+  z-index: 3;
 }
 
 .sun-glow {
@@ -74,7 +103,7 @@
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,170,0,0.4) 0%, rgba(255,170,0,0) 70%);
+  background: radial-gradient(circle, rgba(255, 160, 20, 0.45) 0%, rgba(255, 120, 0, 0) 70%);
   top: 25%;
   left: 70%;
   transform: translate(-120px, -120px);
@@ -83,7 +112,7 @@
   transition: opacity 2s ease;
 }
 
-/* Clouds */
+/* ── Clouds ────────────────────────────────────────────── */
 .clouds {
   position: absolute;
   top: 0;
@@ -98,7 +127,7 @@
   background: var(--cloud-night);
   border-radius: 50px;
   transition: background-color 2s ease;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
 }
 
 .cloud::before, .cloud::after {
@@ -112,39 +141,37 @@
 body.is-day .cloud, body.is-day .cloud::before, body.is-day .cloud::after {
   background: var(--cloud-day);
 }
-
 body.is-night .cloud, body.is-night .cloud::before, body.is-night .cloud::after {
   background: var(--cloud-night);
 }
-
 body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::after {
   background: var(--cloud-sunset);
 }
 
 .cloud-1 { width: 150px; height: 50px; top: 15%; left: -150px; opacity: 0.9; }
 .cloud-1::before { width: 70px; height: 70px; top: -30px; left: 20px; }
-.cloud-1::after { width: 90px; height: 90px; top: -40px; right: 20px; }
+.cloud-1::after  { width: 90px; height: 90px; top: -40px; right: 20px; }
 
 .cloud-2 { width: 220px; height: 60px; top: 5%; left: -250px; opacity: 0.7; }
 .cloud-2::before { width: 80px; height: 80px; top: -40px; left: 30px; }
-.cloud-2::after { width: 110px; height: 110px; top: -50px; right: 40px; }
+.cloud-2::after  { width: 110px; height: 110px; top: -50px; right: 40px; }
 
 .cloud-3 { width: 120px; height: 40px; top: 25%; left: -100px; opacity: 0.8; }
 .cloud-3::before { width: 50px; height: 50px; top: -25px; left: 15px; }
-.cloud-3::after { width: 60px; height: 60px; top: -30px; right: 15px; }
+.cloud-3::after  { width: 60px; height: 60px; top: -30px; right: 15px; }
 
 .cloud-4 { width: 180px; height: 55px; top: 10%; left: -200px; opacity: 0.6; }
 .cloud-4::before { width: 75px; height: 75px; top: -35px; left: 25px; }
-.cloud-4::after { width: 85px; height: 85px; top: -45px; right: 30px; }
+.cloud-4::after  { width: 85px; height: 85px; top: -45px; right: 30px; }
 
-/* Ocean */
+/* ── Ocean ─────────────────────────────────────────────── */
 .ocean {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 40%;
-  background: linear-gradient(to bottom, var(--water-deep), #020309);
+  background: linear-gradient(to bottom, var(--water-deep), #080604);
   z-index: 2;
   overflow: hidden;
   transition: background 2s ease;
@@ -154,16 +181,20 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   position: absolute;
   width: 200%;
   height: 100%;
-  background-image: radial-gradient(circle at 50px 0, transparent 50px, rgba(255,255,255,0.08) 51px, rgba(255,255,255,0.08) 52px, transparent 53px);
+  background-image: radial-gradient(circle at 50px 0,
+    transparent 50px,
+    rgba(255, 255, 255, 0.06) 51px,
+    rgba(255, 255, 255, 0.06) 52px,
+    transparent 53px);
   background-size: 100px 20px;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
-.wave-1 { top: 0; left: 0; z-index: 1; }
-.wave-2 { top: 10px; left: -25px; z-index: 2; opacity: 0.3; }
-.wave-3 { top: 20px; left: -50px; z-index: 3; opacity: 0.2; }
+.wave-1 { top: 0;   left: 0;    z-index: 1; }
+.wave-2 { top: 10px; left: -25px; z-index: 2; opacity: 0.25; }
+.wave-3 { top: 20px; left: -50px; z-index: 3; opacity: 0.18; }
 
-/* Volcano Island Base Positioning */
+/* ── Volcano Island ────────────────────────────────────── */
 .volcano-island {
   position: absolute;
   bottom: 10%;
@@ -181,7 +212,29 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   }
 }
 
-/* Shallow Water & Beach */
+/* Warm lava-light aura that bleeds behind the whole island */
+.volcano-island::before {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: 15%;
+  width: 70%;
+  height: 50%;
+  background: radial-gradient(ellipse at 50% 80%,
+    rgba(255, 55, 10, 0.22) 0%,
+    rgba(255, 90, 20, 0.08) 40%,
+    transparent 70%);
+  z-index: 0;
+  animation: islandHeat 5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes islandHeat {
+  0%   { opacity: 0.7; transform: scaleY(0.95); }
+  100% { opacity: 1;   transform: scaleY(1.05); }
+}
+
+/* ── Beach / Shallow Water ─────────────────────────────── */
 .shallow-water {
   position: absolute;
   bottom: -40px;
@@ -191,7 +244,7 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   background: var(--water-shallow);
   border-radius: 50%;
   filter: blur(10px);
-  opacity: 0.7;
+  opacity: 0.6;
   z-index: 1;
 }
 
@@ -224,127 +277,252 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   left: 80px;
   width: 640px;
   height: 100px;
-  background: var(--forest-dark);
+  background: var(--island-color);
   border-radius: 50%;
   z-index: 3;
 }
 
-/* Volcano Geometry */
+/* ── Water Reflection ──────────────────────────────────── */
+/* Lava glow shimmering on the ocean surface */
+.water-reflection {
+  position: absolute;
+  top: -15px;
+  left: 25%;
+  width: 50%;
+  height: 55px;
+  background: radial-gradient(ellipse at center,
+    rgba(255, 70, 15, 0.28) 0%,
+    rgba(255, 90, 20, 0.08) 50%,
+    transparent 75%);
+  z-index: 4;
+  animation: reflectionShimmer 3s ease-in-out infinite alternate;
+  border-radius: 50%;
+}
+
+@keyframes reflectionShimmer {
+  0%   { opacity: 0.55; transform: scaleX(0.88); }
+  100% { opacity: 1;    transform: scaleX(1.12); }
+}
+
+/* ── Volcano ───────────────────────────────────────────── */
 .volcano {
   position: absolute;
   bottom: 40px;
   left: 150px;
   width: 500px;
-  height: 280px;
+  height: 300px;
   z-index: 4;
 }
 
+/* Wide warm lava-light radiating from within the volcano */
+.volcano::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 12%;
+  width: 76%;
+  height: 75%;
+  background: radial-gradient(ellipse at 50% 0%,
+    rgba(255, 60, 8, 0.28) 0%,
+    rgba(255, 80, 10, 0.12) 35%,
+    transparent 70%);
+  z-index: 0;
+  animation: craterGlow 3s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes craterGlow {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* Main cone — gradient gives lava-lit top, darker flanks */
 .volcano-base {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--volcano-base);
-  clip-path: polygon(40% 0%, 60% 0%, 90% 100%, 10% 100%);
+  background: linear-gradient(168deg,
+    #3c1c0a 0%,
+    #2a1408 25%,
+    #1e0e06 55%,
+    #2c1810 85%,
+    #341e12 100%);
+  clip-path: polygon(43% 0%, 57% 0%, 94% 100%, 6% 100%);
   z-index: 1;
 }
 
+/* Right dark shadow flank */
 .volcano-shadow {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--volcano-dark);
-  clip-path: polygon(50% 0%, 60% 0%, 90% 100%, 40% 100%);
+  background: linear-gradient(to bottom right, #180a04, #100804);
+  clip-path: polygon(52% 0%, 57% 0%, 94% 100%, 46% 100%);
   z-index: 2;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
+/* Left lighter flank — catches ambient warm glow */
 .volcano-highlight {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--volcano-light);
-  clip-path: polygon(40% 0%, 50% 0%, 35% 100%, 10% 100%);
+  background: linear-gradient(to bottom left, #4a2010, #2c1610);
+  clip-path: polygon(43% 0%, 50% 0%, 32% 100%, 6% 100%);
   z-index: 2;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
+/* Central ridge — bright seam catching lava glow */
+.volcano-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255, 80, 20, 0.18) 0%, transparent 50%);
+  clip-path: polygon(47% 0%, 53% 0%, 55% 15%, 45% 15%);
+}
+
+/* Crater rim — prominent glowing ellipse */
 .volcano-crater {
   position: absolute;
-  top: -5px;
-  left: 38%;
-  width: 24%;
-  height: 15px;
-  background: var(--volcano-crater);
+  top: -8px;
+  left: 37%;
+  width: 26%;
+  height: 20px;
+  background: radial-gradient(ellipse at center,
+    #ff4400 0%,
+    #cc2200 40%,
+    #0e0606 70%);
   border-radius: 50%;
   z-index: 3;
+  box-shadow:
+    0 0 18px 6px rgba(255, 80, 20, 0.6),
+    0 0 40px 10px rgba(255, 50, 10, 0.3);
+  animation: craterPulse 2.5s ease-in-out infinite alternate;
 }
 
-/* High Fidelity Lava */
+@keyframes craterPulse {
+  0%   { box-shadow: 0 0 16px 5px rgba(255, 80, 20, 0.55), 0 0 35px 8px rgba(255, 50, 10, 0.25); }
+  100% { box-shadow: 0 0 26px 10px rgba(255, 90, 20, 0.75), 0 0 55px 16px rgba(255, 60, 10, 0.4); }
+}
+
+/* ── Lava Flows ────────────────────────────────────────── */
 .lava-flows {
   position: absolute;
-  top: 5px;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 5;
-  filter: drop-shadow(0 0 10px var(--lava-glow));
+  filter: drop-shadow(0 0 12px rgba(255, 120, 20, 0.8));
 }
 
+/* Primary center stream */
 .lava-main {
   position: absolute;
-  top: 0;
-  left: 48%;
-  width: 18px;
-  height: 140px;
-  background: linear-gradient(to bottom, var(--lava-hot), var(--lava));
-  border-radius: 10px;
-  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-  animation: flowLava 3s ease-in-out infinite;
+  top: 8px;
+  left: 47%;
+  width: 22px;
+  height: 160px;
+  background: linear-gradient(to bottom, var(--lava-hot) 0%, var(--lava-glow) 35%, var(--lava) 100%);
+  border-radius: 8px 8px 14px 14px;
+  clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
+  animation: flowDown 2.5s ease-in-out infinite;
 }
 
+@keyframes flowDown {
+  0%, 100% { transform: scaleX(1);    opacity: 0.9; }
+  50%       { transform: scaleX(1.05); opacity: 1;   }
+}
+
+/* Left branch */
 .lava-branch-1 {
   position: absolute;
-  top: 60px;
-  left: 50%;
-  width: 40px;
-  height: 60px;
-  background: var(--lava);
-  border-radius: 8px;
-  transform: rotate(-30deg);
-  clip-path: polygon(0% 0%, 30% 0%, 100% 100%, 60% 100%);
+  top: 55px;
+  left: 44%;
+  width: 50px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--lava-glow), var(--lava));
+  border-radius: 6px;
+  transform: rotate(-28deg);
+  clip-path: polygon(0% 0%, 35% 0%, 100% 100%, 55% 100%);
+  opacity: 0.9;
 }
 
+/* Right branch */
 .lava-branch-2 {
   position: absolute;
-  top: 80px;
-  left: 45%;
-  width: 30px;
-  height: 50px;
-  background: var(--lava);
+  top: 75px;
+  left: 50%;
+  width: 38px;
+  height: 55px;
+  background: linear-gradient(225deg, var(--lava-glow), var(--lava));
   border-radius: 6px;
-  transform: rotate(25deg);
-  clip-path: polygon(70% 0%, 100% 0%, 40% 100%, 0% 100%);
+  transform: rotate(22deg);
+  clip-path: polygon(65% 0%, 100% 0%, 45% 100%, 0% 100%);
+  opacity: 0.85;
 }
 
+/* Crater lava pool */
 .lava-pool {
   position: absolute;
-  top: -3px;
-  left: 42%;
-  width: 16%;
-  height: 8px;
-  background: var(--lava-hot);
+  top: -6px;
+  left: 40%;
+  width: 20%;
+  height: 12px;
+  background: radial-gradient(ellipse at center,
+    var(--lava-hot) 0%,
+    var(--lava-glow) 50%,
+    var(--lava) 100%);
   border-radius: 50%;
-  box-shadow: 0 0 15px var(--lava-glow);
-  animation: pulseLava 2s alternate infinite;
+  box-shadow:
+    0 0 20px 6px rgba(255, 140, 20, 0.8),
+    0 0 40px 12px rgba(255, 80, 10, 0.4);
+  animation: poolPulse 1.8s ease-in-out infinite alternate;
 }
 
-/* Forest */
+@keyframes poolPulse {
+  0%   { transform: scale(1);    box-shadow: 0 0 18px 5px rgba(255, 130, 20, 0.7), 0 0 35px 10px rgba(255, 70, 10, 0.35); }
+  100% { transform: scale(1.08); box-shadow: 0 0 28px 9px rgba(255, 150, 20, 0.9), 0 0 55px 18px rgba(255, 90, 10, 0.5); }
+}
+
+/* Spark container — JS drops .lava-spark divs here */
+.lava-sparks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 6;
+  overflow: visible;
+}
+
+.lava-spark {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--lava-hot);
+  box-shadow: 0 0 4px 2px rgba(255, 160, 20, 0.9);
+  pointer-events: none;
+  animation: sparkFly var(--spark-dur, 1.4s) ease-out forwards;
+}
+
+@keyframes sparkFly {
+  0%   { transform: translate(0, 0)                             scale(1);   opacity: 1;   }
+  60%  { transform: translate(var(--sx), var(--sy))             scale(0.7); opacity: 0.8; }
+  100% { transform: translate(var(--sx), calc(var(--sy) + 30px)) scale(0);  opacity: 0;   }
+}
+
+/* ── Forest ────────────────────────────────────────────── */
 .forest {
   position: absolute;
   bottom: 15px;
@@ -358,26 +536,26 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   position: absolute;
   border-radius: 50% 50% 10% 10%;
   background: radial-gradient(circle at 30% 30%, var(--forest-light), var(--forest-base));
-  box-shadow: -5px 5px 10px rgba(0,0,0,0.5);
+  box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.6);
   transform-origin: bottom center;
   animation: swayBush 6s ease-in-out infinite;
 }
 
-.bush-1 { width: 180px; height: 100px; bottom: 0; left: 0; z-index: 3; }
+.bush-1 { width: 180px; height: 100px; bottom: 0;   left: 0;    z-index: 3; }
 .bush-2 { width: 220px; height: 140px; bottom: -10px; left: 120px; z-index: 4; }
-.bush-3 { width: 150px; height: 90px; bottom: 20px; left: 80px; z-index: 2; background: var(--forest-dark); }
+.bush-3 { width: 150px; height:  90px; bottom: 20px; left: 80px;  z-index: 2; background: var(--forest-dark); }
 .bush-4 { width: 250px; height: 120px; bottom: -5px; right: 80px; z-index: 4; }
-.bush-5 { width: 160px; height: 85px; bottom: 15px; right: 20px; z-index: 3; }
+.bush-5 { width: 160px; height:  85px; bottom: 15px; right: 20px; z-index: 3; }
 .bush-6 { width: 140px; height: 110px; bottom: 30px; right: 200px; z-index: 2; background: var(--forest-dark); }
-.bush-7 { width: 300px; height: 90px; bottom: -15px; left: 250px; z-index: 5; }
+.bush-7 { width: 300px; height:  90px; bottom: -15px; left: 250px; z-index: 5; }
 
-/* Smoke */
+/* ── Smoke ─────────────────────────────────────────────── */
 .smoke {
   position: absolute;
-  top: -150px;
-  left: 45%;
-  width: 100px;
-  height: 200px;
+  top: -160px;
+  left: 43%;
+  width: 110px;
+  height: 220px;
   z-index: 1;
 }
 
@@ -385,59 +563,48 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   position: absolute;
   background: var(--smoke-dark);
   border-radius: 50%;
-  filter: blur(15px);
+  filter: blur(18px);
   opacity: 0;
 }
 
-.smoke-puff-1 { width: 120px; height: 120px; left: -50px; bottom: 0; animation: riseSmoke 6s ease-in infinite; }
-.smoke-puff-2 { width: 150px; height: 150px; left: -20px; bottom: 20px; animation: riseSmoke 7s ease-in infinite; animation-delay: 1.5s; background: var(--smoke-light); }
-.smoke-puff-3 { width: 100px; height: 100px; right: -30px; bottom: 10px; animation: riseSmoke 5.5s ease-in infinite; animation-delay: 3s; }
-.smoke-puff-4 { width: 180px; height: 180px; left: -40px; bottom: 50px; animation: riseSmoke 8s ease-in infinite; animation-delay: 4.5s; background: var(--smoke-dark); }
+.smoke-puff-1 { width: 130px; height: 130px; left: -50px; bottom: 0;   animation: riseSmoke 6s   ease-in infinite; }
+.smoke-puff-2 { width: 160px; height: 160px; left: -20px; bottom: 20px; animation: riseSmoke 7s   ease-in infinite; animation-delay: 1.5s; background: var(--smoke-light); }
+.smoke-puff-3 { width: 110px; height: 110px; right: -30px; bottom: 10px; animation: riseSmoke 5.5s ease-in infinite; animation-delay: 3s; }
+.smoke-puff-4 { width: 190px; height: 190px; left: -40px; bottom: 50px; animation: riseSmoke 8s   ease-in infinite; animation-delay: 4.5s; }
 
-/* Animations */
+/* ── Animations ─────────────────────────────────────────── */
 @keyframes moveClouds {
   from { transform: translateX(0); }
-  to { transform: translateX(calc(100vw + 300px)); }
-}
-
-@keyframes flowLava {
-  0% { background-position: 0 0; }
-  100% { background-position: 0 50px; }
-}
-
-@keyframes pulseLava {
-  0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(1.05); opacity: 1; }
+  to   { transform: translateX(calc(100vw + 300px)); }
 }
 
 @keyframes riseSmoke {
-  0% { transform: translateY(0) scale(0.8); opacity: 0.8; }
-  100% { transform: translateY(-200px) scale(2.5); opacity: 0; }
+  0%   { transform: translateY(0)      scale(0.8); opacity: 0.75; }
+  100% { transform: translateY(-220px) scale(2.8); opacity: 0; }
 }
 
 @keyframes waveOcean {
-  0% { background-position: 0 0; }
+  0%   { background-position: 0 0; }
   100% { background-position: 100px 0; }
 }
 
 @keyframes swayBush {
-  0%, 100% { transform: rotate(0deg) skewX(0deg); }
-  25% { transform: rotate(1deg) skewX(2deg); }
-  75% { transform: rotate(-1deg) skewX(-2deg); }
+  0%, 100% { transform: rotate(0deg)  skewX(0deg);  }
+  25%       { transform: rotate(1deg)  skewX(2deg);  }
+  75%       { transform: rotate(-1deg) skewX(-2deg); }
 }
 
-/* Clouds Animation Assignments */
+/* ── Animation assignments ──────────────────────────────── */
 .cloud-1 { animation: moveClouds 50s linear infinite; }
 .cloud-2 { animation: moveClouds 70s linear infinite; animation-delay: -20s; }
 .cloud-3 { animation: moveClouds 60s linear infinite; animation-delay: -10s; }
 .cloud-4 { animation: moveClouds 80s linear infinite; animation-delay: -35s; }
 
-/* Ocean Animation Assignments */
 .wave-1 { animation: waveOcean 4s linear infinite; }
 .wave-2 { animation: waveOcean 6s linear infinite reverse; }
 .wave-3 { animation: waveOcean 5s linear infinite; }
 
-/* Weather states */
+/* ── Weather effects ────────────────────────────────────── */
 .weather-effects {
   position: absolute;
   top: 0;
@@ -449,32 +616,30 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
 }
 
 body.stormy .video-bg {
-  background: #0c0f1d;
+  background: #120808;
 }
-
 body.stormy .ocean {
-  background: linear-gradient(to bottom, #071526, #010204);
+  background: linear-gradient(to bottom, #080e0c, #020202);
 }
-
-body.stormy .cloud, body.stormy .cloud::before, body.stormy .cloud::after {
-  background: #3a4052;
+body.stormy .cloud,
+body.stormy .cloud::before,
+body.stormy .cloud::after {
+  background: #4a3030;
 }
-
 .stormy .sky {
   animation: lightning 10s infinite;
 }
 
 @keyframes lightning {
   0%, 95%, 98%, 100% { background: transparent; }
-  96%, 99% { background: rgba(255, 255, 255, 0.2); }
+  96%, 99%           { background: rgba(255, 230, 210, 0.18); }
 }
 
-/* Rain effect for stormy state */
 .rain {
   position: absolute;
-  width: 2px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.3);
+  width: 1px;
+  height: 18px;
+  background: rgba(200, 180, 160, 0.3);
   animation: fall 0.5s linear infinite;
 }
 
