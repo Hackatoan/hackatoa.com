@@ -35,7 +35,9 @@ function addKeyboardClickSupport(element) {
  */
 function sanitizeUrl(urlString, fallback = '#') {
     if (!urlString) return fallback;
-    const trimmed = urlString.trim();
+    // eslint-disable-next-line no-control-regex
+    const sanitized = urlString.replace(/[\x00-\x1F\x7F]+/g, '').replace(/\\/g, '/');
+    const trimmed = sanitized.trim();
 
     // Deny protocol-relative URLs
     if (trimmed.startsWith('//')) return fallback;
