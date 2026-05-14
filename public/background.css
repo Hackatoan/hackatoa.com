@@ -170,29 +170,86 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 40%;
-  background: linear-gradient(to bottom, var(--water-deep), #080604);
+  height: 42%;
+  background: linear-gradient(to bottom,
+    #0e2535 0%,
+    #091a28 30%,
+    #060f1a 65%,
+    #030a10 100%);
   z-index: 2;
   overflow: hidden;
   transition: background 2s ease;
 }
 
-.wave {
+/* Thin horizon shimmer */
+.ocean::before {
+  content: '';
   position: absolute;
-  width: 200%;
-  height: 100%;
-  background-image: radial-gradient(circle at 50px 0,
-    transparent 50px,
-    rgba(255, 255, 255, 0.06) 51px,
-    rgba(255, 255, 255, 0.06) 52px,
-    transparent 53px);
-  background-size: 100px 20px;
-  opacity: 0.4;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(140, 195, 230, 0.12);
+  z-index: 5;
 }
 
-.wave-1 { top: 0;   left: 0;    z-index: 1; }
-.wave-2 { top: 10px; left: -25px; z-index: 2; opacity: 0.25; }
-.wave-3 { top: 20px; left: -50px; z-index: 3; opacity: 0.18; }
+/* Rolling waves — curved crests via border-radius */
+.wave {
+  position: absolute;
+  width: 220%;
+  left: -10%;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+/* Horizon wave — distant, small, subtle */
+.wave-1 {
+  top: 4px;
+  height: 26px;
+  background: linear-gradient(to bottom,
+    rgba(28, 78, 118, 0.52) 0%,
+    rgba(14, 48, 78, 0.22) 55%,
+    transparent 100%);
+  border-radius: 46% 54% 0 0 / 100% 100% 0 0;
+  z-index: 4;
+}
+.wave-1::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 7%; width: 86%;
+  height: 3px;
+  background: rgba(175, 220, 255, 0.13);
+  border-radius: 50%;
+}
+
+/* Mid-distance wave */
+.wave-2 {
+  top: 22px;
+  height: 20px;
+  left: -18%;
+  background: linear-gradient(to bottom,
+    rgba(18, 58, 92, 0.44) 0%,
+    transparent 100%);
+  border-radius: 54% 46% 0 0 / 100% 100% 0 0;
+  z-index: 3;
+}
+.wave-2::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 12%; width: 76%;
+  height: 2px;
+  background: rgba(160, 210, 255, 0.09);
+  border-radius: 50%;
+}
+
+/* Foreground swell */
+.wave-3 {
+  top: 42px;
+  height: 15px;
+  left: -4%;
+  background: linear-gradient(to bottom,
+    rgba(12, 42, 68, 0.35) 0%,
+    transparent 100%);
+  border-radius: 45% 55% 0 0 / 100% 100% 0 0;
+  z-index: 2;
+}
 
 /* ── Volcano Island ────────────────────────────────────── */
 .volcano-island {
@@ -237,48 +294,62 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
 /* ── Beach / Shallow Water ─────────────────────────────── */
 .shallow-water {
   position: absolute;
-  bottom: -40px;
-  left: -50px;
-  width: 900px;
-  height: 140px;
+  bottom: -50px;
+  left: -80px;
+  width: 960px;
+  height: 160px;
   background: var(--water-shallow);
-  border-radius: 50%;
-  filter: blur(10px);
-  opacity: 0.6;
+  border-radius: 44% 56% 38% 62% / 50% 50% 50% 50%;
+  filter: blur(14px);
+  opacity: 0.55;
   z-index: 1;
 }
 
+/* Sandy beach using polygon for irregular coastline */
 .beach {
   position: absolute;
   bottom: 0;
-  left: 50px;
-  width: 700px;
-  height: 80px;
-  background: var(--beach-color);
-  border-radius: 50%;
+  left: 20px;
+  width: 760px;
+  height: 72px;
+  background: linear-gradient(to top, #a07830 0%, var(--beach-color) 60%, #d4b060 100%);
+  clip-path: polygon(
+    0% 100%, 1% 55%, 4% 30%, 9% 14%, 18% 4%,
+    32% 0%, 50% 0%, 68% 0%, 82% 4%,
+    91% 14%, 96% 30%, 99% 55%, 100% 100%
+  );
   z-index: 2;
 }
 
+/* Right beach spit extending into the water */
 .beach-right {
   position: absolute;
-  bottom: 10px;
-  right: -20px;
-  width: 250px;
-  height: 90px;
-  background: var(--beach-color);
-  border-radius: 40% 60% 50% 50%;
-  transform: rotate(-10deg);
+  bottom: -4px;
+  right: -30px;
+  width: 200px;
+  height: 60px;
+  background: linear-gradient(to top, #a07830 0%, var(--beach-color) 100%);
+  clip-path: polygon(
+    0% 100%, 5% 40%, 15% 12%, 35% 0%,
+    60% 5%, 80% 22%, 95% 50%, 100% 100%
+  );
   z-index: 2;
 }
 
+/* Island land mass with natural coastal profile */
 .island-terrain {
   position: absolute;
-  bottom: 10px;
-  left: 80px;
-  width: 640px;
-  height: 100px;
-  background: var(--island-color);
-  border-radius: 50%;
+  bottom: 8px;
+  left: 55px;
+  width: 690px;
+  height: 115px;
+  background: radial-gradient(ellipse at 45% 100%, #2e1a08 0%, var(--island-color) 60%, #1a1006 100%);
+  clip-path: polygon(
+    0% 100%, 1% 70%, 3% 48%, 7% 30%, 14% 16%,
+    24% 7%, 36% 2%, 50% 0%, 64% 2%,
+    76% 7%, 86% 16%, 93% 30%, 97% 48%,
+    99% 70%, 100% 100%
+  );
   z-index: 3;
 }
 
@@ -286,10 +357,10 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
 /* Lava glow shimmering on the ocean surface */
 .water-reflection {
   position: absolute;
-  top: -15px;
-  left: 25%;
-  width: 50%;
-  height: 55px;
+  top: 4px;
+  left: 22%;
+  width: 56%;
+  height: 40px;
   background: radial-gradient(ellipse at center,
     rgba(255, 70, 15, 0.28) 0%,
     rgba(255, 90, 20, 0.08) 50%,
@@ -307,10 +378,10 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
 /* ── Volcano ───────────────────────────────────────────── */
 .volcano {
   position: absolute;
-  bottom: 40px;
-  left: 150px;
-  width: 500px;
-  height: 300px;
+  bottom: 35px;
+  left: 120px;
+  width: 560px;
+  height: 340px;
   z-index: 4;
 }
 
@@ -336,50 +407,68 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   100% { opacity: 1; }
 }
 
-/* Main cone — gradient gives lava-lit top, darker flanks */
+/* Main cone — multi-point polygon for concave stratovolcano flanks */
 .volcano-base {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(168deg,
-    #3c1c0a 0%,
-    #2a1408 25%,
-    #1e0e06 55%,
-    #2c1810 85%,
-    #341e12 100%);
-  clip-path: polygon(43% 0%, 57% 0%, 94% 100%, 6% 100%);
+  background: linear-gradient(175deg,
+    #4a2412 0%,
+    #321808 18%,
+    #201008 42%,
+    #1a0c06 60%,
+    #261410 80%,
+    #301a0e 100%);
+  clip-path: polygon(
+    44% 0%,   56% 0%,
+    61% 9%,   68% 24%,
+    76% 44%,  85% 68%,
+    97% 100%, 3%  100%,
+    15% 68%,  24% 44%,
+    32% 24%,  39% 9%
+  );
   z-index: 1;
 }
 
-/* Right dark shadow flank */
+/* Right shadow flank — darker, cooler */
 .volcano-shadow {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom right, #180a04, #100804);
-  clip-path: polygon(52% 0%, 57% 0%, 94% 100%, 46% 100%);
+  background: linear-gradient(145deg, #150804 0%, #0e0604 50%, #180a06 100%);
+  clip-path: polygon(
+    53% 0%,   56% 0%,
+    61% 9%,   68% 24%,
+    76% 44%,  85% 68%,
+    97% 100%, 52% 100%
+  );
   z-index: 2;
-  opacity: 0.85;
+  opacity: 0.88;
 }
 
-/* Left lighter flank — catches ambient warm glow */
+/* Left lit flank — catches warm lava ambient light */
 .volcano-highlight {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom left, #4a2010, #2c1610);
-  clip-path: polygon(43% 0%, 50% 0%, 32% 100%, 6% 100%);
+  background: linear-gradient(215deg, #522210 0%, #381808 40%, #281410 100%);
+  clip-path: polygon(
+    44% 0%,  50% 0%,
+    48% 100%, 3% 100%,
+    15% 68%, 24% 44%,
+    32% 24%, 39% 9%
+  );
   z-index: 2;
-  opacity: 0.7;
+  opacity: 0.72;
 }
 
-/* Central ridge — bright seam catching lava glow */
+/* Central ridge seam — faint lava-lit strip */
 .volcano-highlight::after {
   content: '';
   position: absolute;
@@ -387,32 +476,47 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(255, 80, 20, 0.18) 0%, transparent 50%);
-  clip-path: polygon(47% 0%, 53% 0%, 55% 15%, 45% 15%);
+  background: linear-gradient(to bottom,
+    rgba(255, 90, 20, 0.22) 0%,
+    rgba(255, 50, 10, 0.08) 30%,
+    transparent 55%);
+  clip-path: polygon(46% 0%, 54% 0%, 56% 20%, 44% 20%);
 }
 
-/* Crater rim — prominent glowing ellipse */
+/* Crater rim — wide ellipse with inner glow */
 .volcano-crater {
   position: absolute;
-  top: -8px;
-  left: 37%;
-  width: 26%;
-  height: 20px;
+  top: -10px;
+  left: 35%;
+  width: 30%;
+  height: 24px;
   background: radial-gradient(ellipse at center,
-    #ff4400 0%,
-    #cc2200 40%,
-    #0e0606 70%);
+    #ffe000 0%,
+    #ff5500 30%,
+    #cc2200 55%,
+    #0e0606 78%);
   border-radius: 50%;
   z-index: 3;
   box-shadow:
-    0 0 18px 6px rgba(255, 80, 20, 0.6),
-    0 0 40px 10px rgba(255, 50, 10, 0.3);
+    0 0 20px 7px rgba(255, 100, 20, 0.65),
+    0 0 45px 12px rgba(255, 60, 10, 0.32);
   animation: craterPulse 2.5s ease-in-out infinite alternate;
 }
 
+/* Raised crater rim edge — outer ring */
+.volcano-crater::after {
+  content: '';
+  position: absolute;
+  top: -3px; left: -4px;
+  right: -4px; bottom: -3px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 100, 30, 0.35);
+  box-shadow: inset 0 0 8px rgba(255, 60, 10, 0.4);
+}
+
 @keyframes craterPulse {
-  0%   { box-shadow: 0 0 16px 5px rgba(255, 80, 20, 0.55), 0 0 35px 8px rgba(255, 50, 10, 0.25); }
-  100% { box-shadow: 0 0 26px 10px rgba(255, 90, 20, 0.75), 0 0 55px 16px rgba(255, 60, 10, 0.4); }
+  0%   { box-shadow: 0 0 16px 5px rgba(255, 90, 20, 0.55), 0 0 38px 10px rgba(255, 50, 10, 0.28); }
+  100% { box-shadow: 0 0 28px 11px rgba(255, 110, 20, 0.78), 0 0 60px 18px rgba(255, 70, 10, 0.42); }
 }
 
 /* ── Lava Flows ────────────────────────────────────────── */
@@ -583,9 +687,9 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   100% { transform: translateY(-220px) scale(2.8); opacity: 0; }
 }
 
-@keyframes waveOcean {
-  0%   { background-position: 0 0; }
-  100% { background-position: 100px 0; }
+@keyframes waveRoll {
+  0%, 100% { transform: translateX(0) scaleX(1); }
+  50%      { transform: translateX(6%) scaleX(0.97); }
 }
 
 @keyframes swayBush {
@@ -600,9 +704,9 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
 .cloud-3 { animation: moveClouds 60s linear infinite; animation-delay: -10s; }
 .cloud-4 { animation: moveClouds 80s linear infinite; animation-delay: -35s; }
 
-.wave-1 { animation: waveOcean 4s linear infinite; }
-.wave-2 { animation: waveOcean 6s linear infinite reverse; }
-.wave-3 { animation: waveOcean 5s linear infinite; }
+.wave-1 { animation: waveRoll 10s ease-in-out infinite; }
+.wave-2 { animation: waveRoll 14s ease-in-out infinite reverse; animation-delay: -5s; }
+.wave-3 { animation: waveRoll 8s  ease-in-out infinite; animation-delay: -3s; }
 
 /* ── Weather effects ────────────────────────────────────── */
 .weather-effects {
