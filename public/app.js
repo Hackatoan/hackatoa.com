@@ -199,12 +199,23 @@ function initMusicWidget() {
     }
 
     if (musicToggle) {
+        let _firstPlay = true;
         musicToggle.addEventListener('click', () => {
             if (!ytPlayer || !ytPlayer.getPlayerState) return;
             const state = ytPlayer.getPlayerState();
             if (state === YT.PlayerState.PLAYING) {
                 ytPlayer.pauseVideo();
             } else {
+                if (_firstPlay) {
+                    _firstPlay = false;
+                    try {
+                        const playlist = ytPlayer.getPlaylist();
+                        if (Array.isArray(playlist) && playlist.length > 1) {
+                            ytPlayer.playVideoAt(Math.floor(Math.random() * playlist.length));
+                            return;
+                        }
+                    } catch (e) {}
+                }
                 ytPlayer.playVideo();
             }
         });
