@@ -5,14 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const ocean = document.querySelector('.ocean');
     const weatherEffects = document.querySelector('.weather-effects');
     const starsEl = document.querySelector('.stars');
-    const volcanoEl = document.querySelector('.volcano');
 
     const sunColor = getComputedStyle(document.documentElement).getPropertyValue('--sun-color').trim();
     const moonColor = getComputedStyle(document.documentElement).getPropertyValue('--moon-color').trim();
     const skyDay = getComputedStyle(document.documentElement).getPropertyValue('--sky-day').trim();
     const skyNight = getComputedStyle(document.documentElement).getPropertyValue('--sky-night').trim();
-    const skySunsetTop = getComputedStyle(document.documentElement).getPropertyValue('--sky-sunset-top').trim();
-    const skySunsetBottom = getComputedStyle(document.documentElement).getPropertyValue('--sky-sunset-bottom').trim();
     const oceanDay = getComputedStyle(document.documentElement).getPropertyValue('--ocean-day').trim();
     const oceanNight = getComputedStyle(document.documentElement).getPropertyValue('--ocean-night').trim();
 
@@ -23,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < 220; i++) {
             const x = Math.floor(Math.random() * 100);
             const y = Math.floor(Math.random() * 60);
-            // Warm tint: most white, some amber, a few rosy
             const tints = ['#fff8f4', '#ffe8d0', '#ffd0b0', '#f8e0e0', '#fffaf6'];
             const color = tints[Math.floor(Math.random() * tints.length)];
             const size = Math.random() < 0.12 ? '2px' : '1px';
@@ -32,35 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         starsEl.style.boxShadow = shadows.join(', ');
     }
     initStars();
-
-    // ── Lava sparks ────────────────────────────────────────
-    function createLavaSpark() {
-        if (!volcanoEl) return;
-        const spark = document.createElement('div');
-        spark.classList.add('lava-spark');
-        // Random scatter from crater top: -60 to +60 px X, -20 to -120 px Y
-        spark.style.setProperty('--sx', `${(Math.random() * 120 - 60).toFixed(1)}px`);
-        spark.style.setProperty('--sy', `${-(20 + Math.random() * 100).toFixed(1)}px`);
-        spark.style.setProperty('--spark-dur', `${(0.6 + Math.random() * 0.8).toFixed(2)}s`);
-        // Horizontal start near crater center
-        spark.style.left = `calc(50% + ${(Math.random() * 16 - 8).toFixed(1)}px)`;
-        spark.style.top = '0px';
-
-        const container = volcanoEl.querySelector('.lava-sparks') || volcanoEl;
-        container.appendChild(spark);
-
-        const dur = parseFloat(spark.style.getPropertyValue('--spark-dur')) * 1000 + 100;
-        setTimeout(() => {
-            if (spark.parentNode) spark.parentNode.removeChild(spark);
-        }, dur);
-    }
-
-    // Sparks every 120–350 ms
-    function scheduleSpark() {
-        createLavaSpark();
-        setTimeout(scheduleSpark, 120 + Math.random() * 230);
-    }
-    scheduleSpark();
 
     // ── Time of day ────────────────────────────────────────
     function updateTimeOfDay() {
