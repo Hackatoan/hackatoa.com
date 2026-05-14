@@ -4,3 +4,6 @@
 ## 2026-04-17 - DocumentFragment for DOM Batching
 **Learning:** Appending elements directly to the DOM within loops causes excessive reflows and repaints, which is a performance bottleneck for list rendering.
 **Action:** Use `DocumentFragment` to batch DOM appends outside of the loop to minimize performance overhead.
+## 2026-04-18 - Cache Intl.DateTimeFormat instantiations
+**Learning:** Instantiating `Intl.DateTimeFormat` is an expensive operation. Creating it repeatedly inside loops or intervals causes unnecessary CPU overhead.
+**Action:** Cache and reuse `Intl.DateTimeFormat` instances outside of frequently called functions to improve formatting performance.
