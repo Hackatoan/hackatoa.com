@@ -121,19 +121,37 @@ main {
 
 #links .grid-2 {
     flex: 1;
-    grid-template-rows: max-content 1fr;
+    grid-template-rows: 1fr auto;
+}
+
+#links .grid-2 .card:not(.card-wide) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 #links .card.card-wide {
     display: flex;
-    flex-direction: column;
-    padding-bottom: 0.8rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1rem 1.2rem;
+}
+
+#links .card.card-wide .card-title {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+}
+
+#links .card.card-wide .card-body {
+    display: none;
 }
 
 #links .card.card-wide .embed-frame {
     flex: 1;
-    max-height: none;
-    aspect-ratio: auto;
+    margin-top: 0;
+    max-height: 160px;
+    min-width: 0;
 }
 
 @media (max-width: 768px) {
