@@ -81,33 +81,24 @@ document.addEventListener('DOMContentLoaded', () => {
         let progress;
         if (state === 'day' || state === 'sunrise' || state === 'sunset') {
             celestialBody.style.background = sunColor;
-            celestialBody.style.boxShadow = `0 0 50px ${sunColor}`;
+            celestialBody.style.boxShadow = `0 0 0 2px rgba(220,180,50,0.5), 0 0 18px 4px ${sunColor}`;
 
             if (state === 'sunset' || state === 'sunrise') {
-                videoBg.style.background = [
-                    'radial-gradient(ellipse at 50% 105%, rgba(200, 50, 12, 0.28) 0%, transparent 45%)',
-                    `linear-gradient(to bottom, ${skySunsetTop} 0%, ${skySunsetBottom} 100%)`
-                ].join(', ');
-                ocean.style.background = `linear-gradient(to bottom, #1a4a5e, #050e14)`;
+                videoBg.style.backgroundColor = '#1e0e06';
+                ocean.style.backgroundColor = '#0c1820';
                 sunGlow.style.opacity = '1';
             } else {
-                videoBg.style.background = [
-                    'radial-gradient(ellipse at 50% 105%, rgba(200, 50, 12, 0.12) 0%, transparent 45%)',
-                    `linear-gradient(to bottom, ${skyDay} 0%, #6ab4d8 100%)`
-                ].join(', ');
-                ocean.style.background = `linear-gradient(to bottom, ${oceanDay}, #0d5080)`;
+                videoBg.style.backgroundColor = skyDay;
+                ocean.style.backgroundColor = oceanDay;
                 sunGlow.style.opacity = '0';
             }
 
             progress = (totalMinutes - 300) / (1140 - 300);
         } else {
             celestialBody.style.background = moonColor;
-            celestialBody.style.boxShadow = `0 0 40px ${moonColor}`;
-            videoBg.style.background = [
-                'radial-gradient(ellipse at 50% 105%, rgba(200, 50, 12, 0.22) 0%, transparent 45%)',
-                `linear-gradient(to bottom, ${skyNight} 0%, #0c0604 100%)`
-            ].join(', ');
-            ocean.style.background = `linear-gradient(to bottom, ${oceanNight}, #04080c)`;
+            celestialBody.style.boxShadow = `0 0 0 2px rgba(200,180,130,0.50), 0 0 0 5px rgba(200,180,130,0.12), 0 0 18px 4px rgba(200,180,130,0.25)`;
+            videoBg.style.backgroundColor = skyNight;
+            ocean.style.backgroundColor = oceanNight;
             sunGlow.style.opacity = '0';
 
             if (hours >= 19) {
