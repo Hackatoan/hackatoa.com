@@ -246,7 +246,7 @@ function renderBlogFromData() {
         placeholder.style.padding = '2rem';
         placeholder.style.textAlign = 'center';
         placeholder.style.color = 'var(--text-muted)';
-        placeholder.style.border = '1px dashed rgba(114, 124, 188, 0.4)';
+        placeholder.style.border = '1px dashed rgba(172, 94, 117, 0.4)';
         placeholder.style.borderWidth = '1px';
         placeholder.style.borderRadius = '0.9rem';
         container.appendChild(placeholder);
@@ -507,7 +507,7 @@ function renderGitHubEvents(container, events) {
         const repoLink = document.createElement('a');
         repoLink.href = `https://github.com/${repoName}`;
         repoLink.target = '_blank';
-        repoLink.rel = 'noreferrer';
+        repoLink.rel = 'noopener noreferrer';
         repoLink.className = 'gh-repo';
         repoLink.textContent = repoName;
 
