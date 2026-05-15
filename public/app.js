@@ -81,6 +81,12 @@ function handleWheel(e) {
     if (window.innerWidth <= 768) return;
     if (!slides.length) return;
 
+    // Early exit before DOM traversal/layout reads to prevent layout thrashing
+    if (isSliding) {
+        e.preventDefault();
+        return;
+    }
+
     // If hovering over a vertically scrollable area and scrolling vertically, let native handle it
     const scrollTarget = e.target.closest('.blog-list, .github-pinner, .contact-input');
     if (scrollTarget && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
@@ -92,10 +98,6 @@ function handleWheel(e) {
         if (e.deltaY < 0 && !isAtTop) return;    // scrolling up, not at top
     }
 
-    if (isSliding) {
-        e.preventDefault();
-        return;
-    }
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (Math.abs(delta) < 10) return;
     e.preventDefault();
@@ -106,6 +108,9 @@ function handleKey(e) {
     if (window.innerWidth <= 768) return;
     if (!slides.length) return;
     if (isSliding) return;
+    // Don't hijack keyboard in form fields
+    const activeTag = document.activeElement?.tagName ?? '';
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag) || document.activeElement?.isContentEditable) return;
     if (e.key === 'ArrowRight' || e.key === 'PageDown') {
         e.preventDefault();
         goToSlide(currentSlideIndex + 1);
@@ -428,6 +433,11 @@ function updateArrowState(btn, isDisabled) {
     btn.disabled = isDisabled;
     btn.style.opacity = isDisabled ? '0.3' : '1';
     btn.style.cursor = isDisabled ? 'not-allowed' : 'pointer';
+    if (isDisabled) {
+        btn.title = btn.dataset.dir === 'prev' ? 'No previous images' : 'No next images';
+    } else {
+        btn.removeAttribute('title');
+    }
 }
 
 // Cache the DOM elements since they do not change after initialization

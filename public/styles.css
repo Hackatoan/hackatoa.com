@@ -1398,3 +1398,12 @@ video {
     white-space: nowrap;
     border-width: 0;
 }
+
+.myco-dot:focus-visible,
+.myco-arrow:focus-visible,
+.modal-close:focus-visible,
+.music-toggle:focus-visible,
+.music-skip:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
