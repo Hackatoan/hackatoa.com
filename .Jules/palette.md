@@ -1,3 +1,7 @@
 ## 2024-05-18 - Missing Modal & Custom Keyboard Navigation Bug
 **Learning:** Found an accessibility issue where dynamic `img` and `span` tags are used as buttons without `role="button"`, `tabIndex="0"`, or keyboard event listeners for `Enter` or `Space`, making them inaccessible to keyboard users and screen readers. Additionally, found a JavaScript implementation for a Mycology image modal where the corresponding `<div id="myco-modal">` structure was missing from `index.html`.
 **Action:** When making custom components interactive (like an image that opens a modal or dots in a carousel), always include `tabIndex=0` to make them focusable, set `role="button"`, and implement `keydown` listeners for standard activation keys (`Enter`, `Space`). Always verify HTML templates include necessary elements that JavaScript assumes are present.
+
+## 2025-02-06 - display:none breaks screen reader accessibility
+**Learning:** Found elements with a `.sr-only` class (intended to be read by screen readers but visually hidden) that also had `style="display:none"` applied inline. `display:none` completely removes elements from the accessibility tree, defeating the purpose of the `.sr-only` class and breaking screen reader support for the modal.
+**Action:** When implementing screen reader only elements, ensure that they are visually hidden using CSS properties like `position: absolute; clip: rect(0,0,0,0);` (via a standard `.sr-only` class) and never apply `display:none` or `visibility:hidden` to them.
