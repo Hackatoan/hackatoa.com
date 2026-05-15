@@ -120,112 +120,79 @@ function handleKey(e) {
     }
 }
 
-// YouTube Music widget
-/* global YT */
-let ytPlayer;
+// Music widget — streams from Hackatoan/records via GitHub raw CDN
+const TRACKS = [
+    { title: '40kb Memory',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/40kb%20Memory.mp3' },
+    { title: 'Bad Condition',             src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Bad%20Condition.mp3' },
+    { title: 'Buffer Stream Blue',        src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Buffer%20Stream%20Blue.mp3' },
+    { title: 'Cursor Trail',              src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Cursor%20Trail.mp3' },
+    { title: 'Desktop Meadow',            src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Desktop%20Meadow.mp3' },
+    { title: 'Dial-Up Lullaby',           src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Dial-Up%20Lullaby.mp3' },
+    { title: 'Heart Not Found',           src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Heart%20Not%20Found.mp3' },
+    { title: 'Pink Guestbook',            src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Pink%20Guestbook.mp3' },
+    { title: 'Under Construction Forever',src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Under%20Construction%20Forever.mp3' },
+    { title: 'Winamp Visualiser',         src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Winampvisualiser.mp3' },
+];
 
-window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
-    ytPlayer = new YT.Player('music-player', {
-        height: '0',
-        width: '0',
-        playerVars: {
-            'listType': 'playlist',
-            'list': 'PLZG0CvngYU9ihzPO2JTRe17DQDUI0Z6vC',
-            'autoplay': 0,
-            'controls': 0,
-            'disablekb': 1,
-            'fs': 0,
-            'modestbranding': 1,
-            'playsinline': 1
-        },
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
-    });
+const audio = new Audio();
+let shuffleOrder = [];
+let trackIndex = 0;
+
+function shuffleTracks() {
+    shuffleOrder = [...Array(TRACKS.length).keys()].sort(() => Math.random() - 0.5);
+    trackIndex = 0;
 }
 
-function onPlayerReady() {
-    const volumeSlider = document.getElementById('music-volume');
-    if (volumeSlider) {
-        let savedVol = parseInt(volumeSlider.value, 10);
-        if (!isNaN(savedVol)) {
-            ytPlayer.setVolume(savedVol);
-        }
-    }
-
-    ytPlayer.setShuffle(true);
-
-    // Removed broken autoPlay block that had no localAudioPlayer or autoPlay variables defined in this scope.
-    // Kept the function valid by removing the extra bracket.
-}
-
-function updateTitle() {
+function loadTrack(idx) {
+    const track = TRACKS[shuffleOrder[idx % TRACKS.length]];
+    audio.src = track.src;
     const titleEl = document.querySelector('.music-title');
-    if (titleEl) {
-        const title = ytPlayer?.getVideoData?.()?.title;
-        if (title) {
-            titleEl.textContent = title;
-        }
-    }
-}
-
-function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.PLAYING) {
-        if (musicToggle) {
-            musicToggle.dataset.state = 'playing';
-            musicToggle.textContent = 'Pause';
-        }
-        updateTitle();
-    } else if (event.data === YT.PlayerState.PAUSED) {
-        if (musicToggle) {
-            musicToggle.dataset.state = 'paused';
-            musicToggle.textContent = 'Play';
-        }
-    }
+    if (titleEl) titleEl.textContent = track.title;
 }
 
 function initMusicWidget() {
+    shuffleTracks();
+
     const volumeSlider = document.getElementById('music-volume');
     const skipBtn = document.getElementById('music-skip');
 
+    // Sync initial volume from slider default (25/100)
+    audio.volume = volumeSlider ? parseInt(volumeSlider.value, 10) / 100 : 0.25;
+
+    audio.addEventListener('ended', () => {
+        trackIndex = (trackIndex + 1) % TRACKS.length;
+        loadTrack(trackIndex);
+        audio.play().catch(() => {});
+    });
+
     if (volumeSlider) {
         volumeSlider.addEventListener('input', (e) => {
-            if (ytPlayer && ytPlayer.setVolume) {
-                ytPlayer.setVolume(parseInt(e.target.value, 10));
-            }
+            audio.volume = parseInt(e.target.value, 10) / 100;
         });
     }
 
     if (skipBtn) {
         skipBtn.addEventListener('click', () => {
-            if (ytPlayer && ytPlayer.nextVideo) {
-                ytPlayer.nextVideo();
-            }
+            trackIndex = (trackIndex + 1) % TRACKS.length;
+            loadTrack(trackIndex);
+            if (!audio.paused) audio.play().catch(() => {});
         });
     }
 
+    audio.addEventListener('play', () => {
+        if (musicToggle) { musicToggle.dataset.state = 'playing'; musicToggle.textContent = 'Pause'; }
+    });
+    audio.addEventListener('pause', () => {
+        if (musicToggle) { musicToggle.dataset.state = 'paused'; musicToggle.textContent = 'Play'; }
+    });
+
     if (musicToggle) {
-        let _firstPlay = true;
         musicToggle.addEventListener('click', () => {
-            if (!ytPlayer || !ytPlayer.getPlayerState) return;
-            const state = ytPlayer.getPlayerState();
-            if (state === YT.PlayerState.PLAYING) {
-                ytPlayer.pauseVideo();
+            if (audio.paused) {
+                if (!audio.src) loadTrack(trackIndex);
+                audio.play().catch(() => {});
             } else {
-                if (_firstPlay) {
-                    _firstPlay = false;
-                    try {
-                        const playlist = ytPlayer.getPlaylist();
-                        if (Array.isArray(playlist) && playlist.length > 1) {
-                            ytPlayer.playVideoAt(Math.floor(Math.random() * playlist.length));
-                            return;
-                        }
-                    } catch {
-                        // ignore error
-                    }
-                }
-                ytPlayer.playVideo();
+                audio.pause();
             }
         });
     }
@@ -743,3 +710,4 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
