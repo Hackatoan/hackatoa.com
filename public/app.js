@@ -310,7 +310,9 @@ function initMycoCarousel() {
         const img = document.createElement('img');
         img.src = sanitizeUrl(item.image, '');
         img.alt = item.alt || 'Mycology image';
-        img.loading = 'eager';
+        // ⚡ Bolt Optimization: Lazy load off-screen images to reduce initial bandwidth and speed up page load.
+        // Only the first image is needed immediately when the carousel becomes visible.
+        img.loading = index === 0 ? 'eager' : 'lazy';
         img.tabIndex = 0;
         img.role = 'button';
         img.setAttribute('aria-label', 'Open image in modal');
