@@ -31,6 +31,19 @@ main {
     z-index: 1;
 }
 
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:visited {
+    color: #e879a8;
+}
+
+a:hover {
+    color: var(--primary-glow);
+}
+
 .slide {
     height: 100%;
     min-height: 0;
