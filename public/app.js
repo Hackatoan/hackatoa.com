@@ -216,7 +216,9 @@ function initMusicWidget() {
                             ytPlayer.playVideoAt(Math.floor(Math.random() * playlist.length));
                             return;
                         }
-                    } catch (e) {}
+                    } catch {
+                        // ignore error
+                    }
                 }
                 ytPlayer.playVideo();
             }
@@ -623,23 +625,28 @@ async function initMOTD() {
 }
 
 // Contact time loop
+// Performance optimization: Cache Intl.DateTimeFormat instances
+// as instantiating them is expensive and updateTimes is called in a loop.
+const localFormatter = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+});
+
+const ptFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Los_Angeles',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+});
+
 function updateTimes(localEl, ptEl) {
     if (!localEl || !ptEl) return;
 
     const now = new Date();
 
-    const localStr = new Intl.DateTimeFormat('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-    }).format(now);
-
-    const ptStr = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/Los_Angeles',
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-    }).format(now);
+    const localStr = localFormatter.format(now);
+    const ptStr = ptFormatter.format(now);
 
     localEl.textContent = localStr;
     ptEl.textContent = ptStr;
