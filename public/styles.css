@@ -732,7 +732,7 @@ main {
     border: 1px solid rgba(172, 93, 117, 0.8);
     color: var(--text-main);
     text-decoration: none;
-    background: rgba(26, 12, 8, 0.9);
+    background: rgba(80, 35, 25, 0.45);
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
@@ -1407,3 +1407,4 @@ video {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
+
