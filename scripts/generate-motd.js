@@ -35,6 +35,9 @@ async function generateMOTD() {
 
     const genAI = new GoogleGenerativeAI(apiKey);
 
+    // Performance optimization: Pre-calculate Set for O(1) membership checks
+    const historySet = new Set(history.map(h => h.message.toLowerCase()));
+
     const modelsToTry = [
         "gemini-3.1-flash-lite-preview", // 500 RPD free tier — highest quota, try first
         "gemini-3-flash-preview",         // 20 RPD free tier
@@ -53,9 +56,7 @@ async function generateMOTD() {
                 const cleaned = message.trim().replace(/^["']|["']$/g, '');
 
                 // Hard check: reject if it exactly matches any historical message
-                const isDuplicate = history.some(
-                    h => h.message.toLowerCase() === cleaned.toLowerCase()
-                );
+                const isDuplicate = historySet.has(cleaned.toLowerCase());
                 if (isDuplicate) {
                     console.warn(`${modelName} returned a duplicate message, trying next...`);
                     continue;
