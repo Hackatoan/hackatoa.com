@@ -106,6 +106,7 @@ function createMockEnv() {
         userAgent: 'node'
     },
     Math: Math,
+    Audio: class { constructor() { this.src = ""; this.volume = 1; this.paused = true; } play() { return Promise.resolve(); } pause() {} addEventListener() {} },
     Array: Array,
     Object: Object,
     JSON: JSON
