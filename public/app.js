@@ -455,6 +455,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+const githubDateFormatter = new Intl.DateTimeFormat();
+
 function renderGitHubEvents(container, events) {
     container.innerHTML = '';
     // Filter push and create events, limit to 5
@@ -476,7 +478,7 @@ function renderGitHubEvents(container, events) {
 
         const typeLabel = event.type === 'PushEvent' ? 'Pushed to' : 'Created';
         const repoName = event.repo.name;
-        const date = new Date(event.created_at).toLocaleDateString();
+        const date = githubDateFormatter.format(new Date(event.created_at));
 
         const headerDiv = document.createElement('div');
         headerDiv.className = 'gh-header';
@@ -671,11 +673,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
     setupSlideNavigation('.slides-viewport a[href^="#"]');
 
-    if (window.innerWidth > 768 && slides.length) {
-        slides.forEach((slide, index) => {
-            slide.addEventListener('click', () => {
-                if (!isSliding) goToSlide(index);
-            });
+    if (window.innerWidth > 768 && slides.length && slidesTrack) {
+        slidesTrack.addEventListener('click', (e) => {
+            const slide = e.target.closest('.slide');
+            if (!slide) return;
+            const index = slides.indexOf(slide);
+            if (index > -1 && !isSliding) goToSlide(index);
         });
     }
 

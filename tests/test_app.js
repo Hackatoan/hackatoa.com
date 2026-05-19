@@ -29,6 +29,7 @@ function createMockEnv(overrides = {}) {
          if (!this.elements['.slides-track']) {
            this.elements['.slides-track'] = {
              style: {},
+             addEventListener: () => {},
              querySelectorAll: () => [
                { classList: { add: () => {} } },
                { classList: { add: () => {} } },
