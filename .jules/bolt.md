@@ -7,3 +7,6 @@
 ## 2026-04-18 - Cache Intl.DateTimeFormat instantiations
 **Learning:** Instantiating `Intl.DateTimeFormat` is an expensive operation. Creating it repeatedly inside loops or intervals causes unnecessary CPU overhead.
 **Action:** Cache and reuse `Intl.DateTimeFormat` instances outside of frequently called functions to improve formatting performance.
+## 2026-04-18 - O(1) Set Lookup for Indefinitely Growing Arrays
+**Learning:** The 'history' array in 'public/motd.json' grows indefinitely with every daily update. Using 'history.some()' inside iterative loops causes O(N) performance degradation over time.
+**Action:** Always use a pre-calculated 'Set' for membership checks inside iterative loops on growing arrays to ensure O(1) lookup complexity.
