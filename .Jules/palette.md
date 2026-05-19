@@ -5,3 +5,7 @@
 ## 2025-02-06 - display:none breaks screen reader accessibility
 **Learning:** Found elements with a `.sr-only` class (intended to be read by screen readers but visually hidden) that also had `style="display:none"` applied inline. `display:none` completely removes elements from the accessibility tree, defeating the purpose of the `.sr-only` class and breaking screen reader support for the modal.
 **Action:** When implementing screen reader only elements, ensure that they are visually hidden using CSS properties like `position: absolute; clip: rect(0,0,0,0);` (via a standard `.sr-only` class) and never apply `display:none` or `visibility:hidden` to them.
+
+## 2025-02-20 - Ensure wrapper elements don't hide interactive child controls from screen readers
+**Learning:** Wrapper elements with `aria-hidden="true"` can accidentally swallow interactive child controls (like the background toggle button), making them inaccessible to screen readers. Furthermore, when custom interactive elements (like the music volume slider) have their default focus indicators removed via `outline: none`, explicit `:focus-visible` states must be reinstated using existing CSS variables to maintain keyboard accessibility.
+**Action:** Ensure that parent containers of interactive elements do not use `aria-hidden="true"` unless the entire component is meant to be hidden from screen readers. Always verify keyboard accessibility and add explicit `:focus-visible` styles using theme variables (e.g., `var(--accent)`) when overriding default outlines.
