@@ -10,3 +10,6 @@
 ## 2026-04-18 - O(1) Set Lookup for Indefinitely Growing Arrays
 **Learning:** The 'history' array in 'public/motd.json' grows indefinitely with every daily update. Using 'history.some()' inside iterative loops causes O(N) performance degradation over time.
 **Action:** Always use a pre-calculated 'Set' for membership checks inside iterative loops on growing arrays to ensure O(1) lookup complexity.
+## 2025-02-14 - Optimize repetitive initialization
+**Learning:** `Array.from(document.querySelectorAll('.slide:not([data-hidden="true"])'))` creates memory pressure and initialization delays due to array reallocation on load. The slide navigation system creates O(n) click closures (one for each slide).
+**Action:** Use event delegation on a common parent element rather than attaching event listeners to each child element within a `forEach` loop.
