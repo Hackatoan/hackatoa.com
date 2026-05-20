@@ -443,7 +443,7 @@
         <div class="music-title">Press Play...</div>
 
       </div>
-      <input type="range" id="music-volume" class="music-volume" min="0" max="100" value="25" aria-label="Volume">
+      <input type="range" id="music-volume" class="music-volume" min="0" max="100" value="25" aria-label="Volume" title="Volume">
       <button class="music-skip" id="music-skip" type="button" aria-label="Skip Track"
         title="Skip">&#x23ED;&#xFE0E;</button>
       <button class="music-toggle" id="music-toggle" type="button" data-state="paused">
@@ -453,12 +453,12 @@
   </aside>
 
   <div class="bg-toggle-wrapper">
-    <button class="bg-toggle" id="bg-toggle" type="button" aria-label="Toggle background view"></button>
+    <button class="bg-toggle" id="bg-toggle" type="button" aria-label="Toggle background view" title="Toggle background view"></button>
   </div>
 
   <!-- Mycology Modal -->
   <div id="myco-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="myco-modal-title" aria-describedby="myco-modal-desc">
-    <span id="myco-modal-close" class="modal-close" role="button" aria-label="Close modal" tabindex="0">&times;</span>
+    <span id="myco-modal-close" class="modal-close" role="button" aria-label="Close modal" tabindex="0" title="Close (Esc)">&times;</span>
     <img id="myco-modal-img" class="modal-content" alt="Full screen mycology image" />
     <span id="myco-modal-title" class="sr-only">Mycology image view</span>
     <span id="myco-modal-desc" class="sr-only">Detailed view of mycology culture</span>
