@@ -128,7 +128,8 @@
                 <div class="hero-panel-label">Current Status</div>
                 <div class="hero-panel-row">
                   <div class="hero-panel-ident">
-                    <img src="assets/me.png" alt="Portrait of Jacob P Harris" class="hero-avatar" loading="lazy" />
+                    <!-- ⚡ Bolt Optimization: Prioritize LCP image by replacing lazy loading with fetchpriority="high" -->
+                    <img src="assets/me.png" alt="Portrait of Jacob P Harris" class="hero-avatar" fetchpriority="high" />
                     <div class="hero-panel-name">Jacob P Harris</div>
                   </div>
                   <span class="chip">Portfolio</span>
@@ -284,10 +285,11 @@
                     Live coding, homelab tinkering, security labs, gaming — and occasionally mushroom updates.
                   </p>
                   <div class="embed-frame embed-16x9">
+                    <!-- ⚡ Bolt Optimization: Defer loading heavy 3rd-party iframe below the fold -->
                     <iframe
                       src="https://player.twitch.tv/?channel=hackatoa&parent=hackatoa.com&parent=localhost&parent=127.0.0.1"
                       title="Hackatoa Twitch Stream" frameborder="0" allowfullscreen="true" scrolling="no" height="378"
-                      width="620"></iframe>
+                      width="620" loading="lazy"></iframe>
                   </div>
                 </article>
               </div>
@@ -368,7 +370,8 @@
                 </p>
                 <div style="margin-top: 1rem; margin-bottom: 1.5rem;">
                   <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noopener noreferrer">
-                    <img src="assets/buymeacoffee.png" alt="Buy Me A Coffee" />
+                    <!-- ⚡ Bolt Optimization: Defer loading off-screen image -->
+                    <img src="assets/buymeacoffee.png" alt="Buy Me A Coffee" loading="lazy" />
                   </a>
                 </div>
                 <div class="wallet-address-box" style="font-size: 0.8rem; padding: 0.5rem;">
