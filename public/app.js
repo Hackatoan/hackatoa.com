@@ -651,14 +651,20 @@ window.addEventListener('DOMContentLoaded', () => {
     initMycoCarousel();
     initGitHubFeed();
     initContactTimes();
-    function setupSlideNavigation(selector, onBeforeGoToSlide) {
-        const links = Array.from(document.querySelectorAll(selector));
-        links.forEach((link) => {
-            const targetId = link.getAttribute('href')?.slice(1);
-            if (!targetId) return;
-            const targetIndex = slides.findIndex((s) => s.id === targetId);
-            if (targetIndex === -1) return;
-            link.addEventListener('click', (e) => {
+    // ⚡ Bolt Optimization: Event delegation for slide navigation to prevent O(n) event listeners
+    function setupSlideNavigation(containerSelector, onBeforeGoToSlide) {
+        const containers = document.querySelectorAll(containerSelector);
+        containers.forEach(container => {
+            container.addEventListener('click', (e) => {
+                const link = e.target.closest('a[href^="#"]');
+                if (!link) return;
+
+                const targetId = link.getAttribute('href')?.slice(1);
+                if (!targetId) return;
+
+                const targetIndex = slides.findIndex((s) => s.id === targetId);
+                if (targetIndex === -1) return;
+
                 if (onBeforeGoToSlide) onBeforeGoToSlide();
                 if (window.innerWidth <= 768) return;
                 e.preventDefault();
@@ -667,11 +673,11 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    setupSlideNavigation('.nav-links a[href^="#"]', () => {
+    setupSlideNavigation('.nav-links', () => {
         document.body.classList.remove('bg-viewing');
     });
 
-    setupSlideNavigation('.slides-viewport a[href^="#"]');
+    setupSlideNavigation('.slides-viewport');
 
     if (window.innerWidth > 768 && slides.length && slidesTrack) {
         slidesTrack.addEventListener('click', (e) => {
