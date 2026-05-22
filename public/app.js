@@ -296,6 +296,8 @@ function initMycoCarousel() {
     const arrows = document.querySelectorAll('.myco-arrow');
     if (!track || !dotsContainer) return;
 
+    let lastFocusedMycoImage = null;
+
     // Load data from external file
     const items = Array.isArray(window.MUSHROOMS_DATA) ? window.MUSHROOMS_DATA : [];
     if (!items.length) return;
@@ -338,6 +340,7 @@ function initMycoCarousel() {
             const modal = document.getElementById('myco-modal');
             const modalImg = document.getElementById('myco-modal-img');
             if (modal && modalImg) {
+                lastFocusedMycoImage = img;
                 // img.src is already sanitized when the slide is created
                 modalImg.src = img.src;
                 modal.classList.add('show');
@@ -383,16 +386,19 @@ function initMycoCarousel() {
     if (modal && modalCloseBtn) {
         modalCloseBtn.addEventListener('click', () => {
             modal.classList.remove('show');
+            if (lastFocusedMycoImage) lastFocusedMycoImage.focus();
         });
         addKeyboardClickSupport(modalCloseBtn);
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.remove('show');
+                if (lastFocusedMycoImage) lastFocusedMycoImage.focus();
             }
         });
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.classList.contains('show')) {
                 modal.classList.remove('show');
+                if (lastFocusedMycoImage) lastFocusedMycoImage.focus();
             }
         });
     }
