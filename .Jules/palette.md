@@ -9,3 +9,6 @@
 ## 2025-02-20 - Ensure wrapper elements don't hide interactive child controls from screen readers
 **Learning:** Wrapper elements with `aria-hidden="true"` can accidentally swallow interactive child controls (like the background toggle button), making them inaccessible to screen readers. Furthermore, when custom interactive elements (like the music volume slider) have their default focus indicators removed via `outline: none`, explicit `:focus-visible` states must be reinstated using existing CSS variables to maintain keyboard accessibility.
 **Action:** Ensure that parent containers of interactive elements do not use `aria-hidden="true"` unless the entire component is meant to be hidden from screen readers. Always verify keyboard accessibility and add explicit `:focus-visible` styles using theme variables (e.g., `var(--accent)`) when overriding default outlines.
+## 2024-05-18 - Restoring Focus on Custom Modals
+**Learning:** When users open a custom modal by clicking an element (like an image), closing the modal without restoring focus to the triggering element leaves keyboard users disconnected from their place in the DOM, creating an inaccessible navigation experience.
+**Action:** Always cache the triggering element before opening a custom modal and call `.focus()` on it when the modal closes, ensuring continuity for keyboard and screen reader users.
