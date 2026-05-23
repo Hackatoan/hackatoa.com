@@ -874,6 +874,18 @@ a:hover {
     text-align: center;
     color: #f0ddd8;
     letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.wallet-address-box:hover,
+.wallet-address-box:focus-visible {
+    border-color: var(--primary-glow);
+    background-color: rgba(255, 140, 92, 0.1);
+}
+
+.wallet-address-box:active {
+    transform: scale(0.99);
 }
 
 .wallet-qr-container {
@@ -1417,7 +1429,8 @@ video {
 .modal-close:focus-visible,
 .music-toggle:focus-visible,
 .music-skip:focus-visible,
-.music-volume:focus-visible {
+.music-volume:focus-visible,
+.wallet-address-box:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
