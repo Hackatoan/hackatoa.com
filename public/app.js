@@ -202,6 +202,8 @@ function initBackgroundToggle() {
     if (!bgToggle) return;
     bgToggle.addEventListener('click', () => {
         document.body.classList.toggle('bg-viewing');
+        const isViewing = document.body.classList.contains('bg-viewing');
+        bgToggle.setAttribute('aria-pressed', isViewing.toString());
     });
 }
 
