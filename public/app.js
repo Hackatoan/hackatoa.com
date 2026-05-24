@@ -649,8 +649,31 @@ function initContactTimes() {
     window.setInterval(() => updateTimes(localEl, ptEl), 30_000);
 }
 
+function initWalletCopy() {
+    const btn = document.getElementById('copy-wallet-btn');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+        try {
+            const address = btn.dataset.address || btn.textContent.trim();
+            if (!btn.dataset.address) btn.dataset.address = address;
+            await navigator.clipboard.writeText(address);
+
+            btn.textContent = 'Copied to clipboard! \u2713';
+            btn.style.color = 'var(--primary-glow)';
+
+            setTimeout(() => {
+                btn.textContent = address;
+                btn.style.color = '';
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy', err);
+        }
+    });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     initMOTD();
+    initWalletCopy();
     initMusicWidget();
     initBackgroundToggle();
     renderBlogFromData();
