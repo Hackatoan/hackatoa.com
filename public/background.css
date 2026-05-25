@@ -193,6 +193,7 @@ body.stormy .cloud::after { background: #3a2828; }
 .rain {
   position: absolute;
   width: 1px; height: 18px;
+  top: -20px;
   background: rgba(200, 180, 160, 0.24);
   animation: fall 0.5s linear infinite;
 }
