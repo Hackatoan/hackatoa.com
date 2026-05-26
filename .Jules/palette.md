@@ -12,3 +12,7 @@
 ## 2024-05-18 - Restoring Focus on Custom Modals
 **Learning:** When users open a custom modal by clicking an element (like an image), closing the modal without restoring focus to the triggering element leaves keyboard users disconnected from their place in the DOM, creating an inaccessible navigation experience.
 **Action:** Always cache the triggering element before opening a custom modal and call `.focus()` on it when the modal closes, ensuring continuity for keyboard and screen reader users.
+
+## 2025-05-26 - Preventing Focus Ring Clipping in overflow:hidden Containers
+**Learning:** When interactive elements (like carousel images) have explicit focus rings (`outline`), those rings can be visually clipped or completely hidden if their parent container uses `overflow: hidden`.
+**Action:** Use a negative `outline-offset` (e.g., `outline-offset: -2px`) on the `:focus-visible` state of the element. This draws the focus indicator *inside* the element's bounding box instead of outside, ensuring it remains fully visible and accessible regardless of the parent container's overflow settings.
