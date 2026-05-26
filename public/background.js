@@ -89,30 +89,37 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateTimeOfDay, 60000);
 
     // ── Weather ────────────────────────────────────────────
-    let rainInterval;
+    let raindropsCreated = false;
 
-    function createRaindrop() {
-        const drop = document.createElement('div');
-        drop.classList.add('rain');
-        drop.style.left = `${Math.random() * 100}%`;
-        drop.style.top = `-20px`;
-        drop.style.animationDuration = `${0.5 + Math.random() * 0.5}s`;
-        weatherEffects.appendChild(drop);
-
-        setTimeout(() => {
-            if (weatherEffects.contains(drop)) weatherEffects.removeChild(drop);
-        }, 1000);
+    function initRaindrops() {
+        if (raindropsCreated) return;
+        // ⚡ Bolt Optimization: Pre-create DOM elements for rain to prevent layout thrashing
+        // from repeated createElement/removeChild calls inside a tight setInterval loop.
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < 40; i++) {
+            const drop = document.createElement('div');
+            drop.classList.add('rain');
+            drop.style.left = `${Math.random() * 100}%`;
+            // Distribute animation delays so they don't all fall at once
+            drop.style.animationDelay = `-${Math.random() * 1}s`;
+            drop.style.animationDuration = `${0.5 + Math.random() * 0.5}s`;
+            fragment.appendChild(drop);
+        }
+        weatherEffects.appendChild(fragment);
+        raindropsCreated = true;
     }
 
     function startStorm() {
+        initRaindrops();
         document.body.classList.add('stormy');
-        rainInterval = setInterval(createRaindrop, 50);
+        // Setting display to block/flex or relying on .stormy class via CSS
+        weatherEffects.style.display = 'block';
     }
 
     function stopStorm() {
         document.body.classList.remove('stormy');
-        clearInterval(rainInterval);
-        weatherEffects.innerHTML = '';
+        // Hide raindrops instead of deleting them to save CPU cycles
+        weatherEffects.style.display = 'none';
     }
 
     function randomWeatherToggle() {
