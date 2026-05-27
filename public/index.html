@@ -20,7 +20,7 @@
   <meta property="og:site_name" content="Hackatoa" />
   <meta name="robots" content="index, follow" />
   <meta name="googlebot" content="index, follow" />
-  <meta name="keywords" content="Hackatoa, Jacob Harris, hackatoa.com, homelab, network security, CompTIA, Linux, self-hosted, mycology" />
+  <meta name="keywords" content="Hackatoa, Jacob Harris, hackatoa.com, homelab, network security, CompTIA, Linux, self-hosted" />
   <link rel="canonical" href="https://hackatoa.com/" />
   <link rel="icon" href="assets/me.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="assets/me.ico" type="image/x-icon" />
@@ -45,7 +45,7 @@
         "https://matrix.to/#/@hackatoa:matrix.hackatoa.com"
       ],
       "jobTitle": "Software Developer",
-      "knowsAbout": ["Network Security", "Linux", "Self-hosted Infrastructure", "Mycology", "Game Development"],
+      "knowsAbout": ["Network Security", "Linux", "Self-hosted Infrastructure", "Game Development"],
       "hasOccupation": {
         "@type": "Occupation",
         "name": "Software Developer",
@@ -84,7 +84,7 @@
           <div class="brand-mark"></div>
           <div>
             <div class="brand-text-main">HACKATOA</div>
-            <div class="brand-text-sub">Network Security · Linux · Mycology</div>
+            <div class="brand-text-sub">Network Security · Linux</div>
           </div>
         </div>
         <nav class="nav-links" aria-label="Primary">
@@ -93,7 +93,6 @@
           <a href="#links">Links</a>
           <a href="#blog">Ramblings</a>
           <a href="#support">Support</a>
-          <a href="#mycology">Mycology</a>
           <a href="#contact" class="nav-pill-primary">Contact</a>
         </nav>
       </header>
@@ -148,7 +147,6 @@
                   <span class="chip chip-hot">Self-taught dev</span>
                   <span class="chip">Network security</span>
                   <span class="chip">Linux &amp; selfhosted</span>
-                  <span class="chip">Mycology side quests</span>
                 </div>
                 <div class="hero-panel-divider"></div>
                 <dl class="hero-panel-meta">
@@ -232,17 +230,6 @@
                     <a class="pill-link" href="https://ttc.hackatoa.com" target="_blank" rel="noopener noreferrer">Tic-Tac-Toe</a>
                   </div>
                 </article>
-                <article class="card">
-                  <h3 class="card-title">Mycology Tracking</h3>
-                  <p class="card-body">
-                    Fungi cultivation alongside the tech work — currently running Tidal Wave, Enigma, Yeti, and
-                    Maria Sabina. Focused on sterile technique, substrate experiments, and tracking fruiting conditions.
-                    Previous work with B+ and NSS.
-                  </p>
-                  <div class="link-row">
-                    <a class="pill-link" href="#mycology">View cultures</a>
-                  </div>
-                </article>
                 <article class="card card-wide">
                   <h3 class="card-title">Active Repositories & Contributions</h3>
                   <p class="card-body">
@@ -294,7 +281,7 @@
                 <article class="card card-wide">
                   <h3 class="card-title">Twitch · Live Stream</h3>
                   <p class="card-body">
-                    Live coding, homelab tinkering, security labs, gaming — and occasionally mushroom updates.
+                    Live coding, homelab tinkering, security labs, and gaming.
                   </p>
                   <div class="embed-frame embed-16x9">
                     <!-- ⚡ Bolt Optimization: Defer loading heavy 3rd-party iframe below the fold -->
@@ -401,35 +388,6 @@
             </div>
           </section>
 
-          <section id="mycology" class="section slide" aria-labelledby="mycology-title">
-            <div class="slide-inner">
-              <div class="section-header">
-                <div>
-                  <div class="section-kicker">Mycology</div>
-                  <h2 class="section-title" id="mycology-title">Fungi &amp; Cultures</h2>
-                </div>
-                <div class="section-caption">Cultivation logs, sterile technique, and fruiting data.</div>
-              </div>
-              <div class="card">
-                <p class="card-body">
-                  Fungi cultivation running parallel to the tech work. Currently working Tidal Wave, Enigma, Yeti,
-                  and Maria Sabina — focused on sterile technique, substrate experiments, and tracking environmental
-                  conditions against fruiting results. Previous work with B+ and NSS. The patience requirement is
-                  the same as debugging a network issue at 2am.
-                </p>
-                <div class="myco-carousel" aria-label="Mycology image carousel">
-                  <div class="myco-carousel-window">
-                    <div class="myco-carousel-track" id="myco-carousel-track"></div>
-                  </div>
-                  <div class="myco-carousel-nav">
-                    <button class="myco-arrow" type="button" data-dir="prev">Prev</button>
-                    <div class="myco-dots" id="myco-dots"></div>
-                    <button class="myco-arrow" type="button" data-dir="next">Next</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
 
 
         </div>
@@ -471,16 +429,7 @@
     <button class="bg-toggle" id="bg-toggle" type="button" aria-pressed="false" aria-label="Toggle background view" title="Toggle background view"></button>
   </div>
 
-  <!-- Mycology Modal -->
-  <div id="myco-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="myco-modal-title" aria-describedby="myco-modal-desc">
-    <span id="myco-modal-close" class="modal-close" role="button" aria-label="Close modal" tabindex="0" title="Close (Esc)">&times;</span>
-    <img id="myco-modal-img" class="modal-content" alt="Full screen mycology image" />
-    <span id="myco-modal-title" class="sr-only">Mycology image view</span>
-    <span id="myco-modal-desc" class="sr-only">Detailed view of mycology culture</span>
-  </div>
-
   <script src="blog-data.js" defer></script>
-  <script src="mushrooms-data.js" defer></script>
   <script src="app.js" defer></script>
   <script src="background.js" defer></script>
 </body>
