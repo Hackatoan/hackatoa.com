@@ -526,6 +526,38 @@ function renderGitHubEvents(container, events) {
     container.appendChild(fragment);
 }
 
+/**
+ * Retrieves an item from localStorage safely.
+ * @param {string} key The localStorage key.
+ * @param {boolean} parseJson Whether to parse the retrieved string as JSON.
+ * @returns {any} The parsed JSON object, string, or null if not found or on error.
+ */
+function getStorageItem(key, parseJson = false) {
+    try {
+        const item = localStorage.getItem(key);
+        if (item === null) return null;
+        return parseJson ? JSON.parse(item) : item;
+    } catch {
+        // ignore error
+        return null;
+    }
+}
+
+/**
+ * Sets an item in localStorage safely.
+ * @param {string} key The localStorage key.
+ * @param {any} value The value to store.
+ * @param {boolean} stringifyJson Whether to stringify the value before storing.
+ */
+function setStorageItem(key, value, stringifyJson = false) {
+    try {
+        const itemToStore = stringifyJson ? JSON.stringify(value) : value;
+        localStorage.setItem(key, itemToStore);
+    } catch {
+        // ignore error
+    }
+}
+
 function initGitHubFeed() {
     const container = document.querySelector('.github-pinner');
     if (!container) return;
@@ -534,16 +566,8 @@ function initGitHubFeed() {
     const cacheTimeKey = 'github-events-cache-time';
     const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
 
-    let cachedData = null;
-    let cachedTime = null;
-
-    try {
-        const cachedRaw = localStorage.getItem(cacheKey);
-        if (cachedRaw) cachedData = JSON.parse(cachedRaw);
-        cachedTime = localStorage.getItem(cacheTimeKey);
-    } catch {
-        // Ignore localStorage access or parse errors
-    }
+    const cachedData = getStorageItem(cacheKey, true);
+    const cachedTime = getStorageItem(cacheTimeKey, false);
 
     // Use cached data to save API call and speed up rendering
     if (cachedData && cachedTime && (Date.now() - parseInt(cachedTime, 10)) < CACHE_DURATION_MS) {
@@ -558,12 +582,8 @@ function initGitHubFeed() {
         })
         .then(events => {
             // Cache the result for future visits
-            try {
-                localStorage.setItem(cacheKey, JSON.stringify(events));
-                localStorage.setItem(cacheTimeKey, Date.now().toString());
-            } catch {
-                // Ignore localStorage quota or access errors
-            }
+            setStorageItem(cacheKey, events, true);
+            setStorageItem(cacheTimeKey, Date.now().toString(), false);
 
             renderGitHubEvents(container, events);
         })
