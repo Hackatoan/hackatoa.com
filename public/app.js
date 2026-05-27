@@ -338,20 +338,6 @@ function initMycoCarousel() {
         slide.appendChild(overlay);
         trackFragment.appendChild(slide);
 
-        img.addEventListener('click', () => {
-            const modal = document.getElementById('myco-modal');
-            const modalImg = document.getElementById('myco-modal-img');
-            if (modal && modalImg) {
-                lastFocusedMycoImage = img;
-                // img.src is already sanitized when the slide is created
-                modalImg.src = img.src;
-                modal.classList.add('show');
-                const closeBtn = document.getElementById('myco-modal-close');
-                if (closeBtn) closeBtn.focus();
-            }
-        });
-        addKeyboardClickSupport(img);
-
         const dot = document.createElement('span');
         dot.className = index === 0 ? 'myco-dot active' : 'myco-dot';
         dot.dataset.index = index;
@@ -359,11 +345,6 @@ function initMycoCarousel() {
         dot.role = 'button';
         dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
         if (index === 0) dot.setAttribute('aria-current', 'true');
-        dot.addEventListener('click', () => {
-            currentMycoIndex = index;
-            updateMycoCarousel(track, currentMycoIndex);
-        });
-        addKeyboardClickSupport(dot);
         dotsFragment.appendChild(dot);
     });
 
@@ -371,6 +352,48 @@ function initMycoCarousel() {
     dotsContainer.appendChild(dotsFragment);
 
     let currentMycoIndex = 0;
+
+    // ⚡ Bolt Optimization: Event delegation for carousel items
+    track.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG') {
+            const modal = document.getElementById('myco-modal');
+            const modalImg = document.getElementById('myco-modal-img');
+            if (modal && modalImg) {
+                lastFocusedMycoImage = e.target;
+                modalImg.src = e.target.src;
+                modal.classList.add('show');
+                const closeBtn = document.getElementById('myco-modal-close');
+                if (closeBtn) closeBtn.focus();
+            }
+        }
+    });
+    track.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+                e.target.click();
+            }
+        }
+    });
+
+    // ⚡ Bolt Optimization: Event delegation for dots
+    dotsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('myco-dot')) {
+            const index = parseInt(e.target.dataset.index, 10);
+            if (!isNaN(index)) {
+                currentMycoIndex = index;
+                updateMycoCarousel(track, currentMycoIndex);
+            }
+        }
+    });
+    dotsContainer.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            if (e.target.classList.contains('myco-dot')) {
+                e.preventDefault();
+                e.target.click();
+            }
+        }
+    });
 
     arrows.forEach((btn) => {
         btn.addEventListener('click', () => {

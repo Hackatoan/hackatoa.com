@@ -19,3 +19,6 @@
 ## 2026-04-18 - Avoid DOM thrashing in particle effects
 **Learning:** Adding and removing DOM elements within a tight loop (e.g. `setInterval` for weather effects) triggers repeated layouts and repaints (DOM thrashing), significantly impacting performance.
 **Action:** Pre-generate a fixed number of reusable DOM elements using a `DocumentFragment` and manage their visibility/animation via CSS rather than constant JS creation/deletion.
+## 2026-04-19 - Event Delegation for Lists/Carousels
+**Learning:** Attaching multiple individual event listeners to child elements inside an iterative list rendering loop (like the carousel) creates O(n) closures. This increases memory usage and causes initialization delays, especially as data sets grow.
+**Action:** Use event delegation by attaching a single event listener to the static parent container and leveraging `e.target` checks to handle interactions for dynamic or numerous child elements.
