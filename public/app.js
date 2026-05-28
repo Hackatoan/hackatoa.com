@@ -355,12 +355,15 @@ function initMycoCarousel() {
 
     // ⚡ Bolt Optimization: Event delegation for carousel items
     track.addEventListener('click', (e) => {
-        if (e.target.tagName === 'IMG') {
+        const slide = e.target.closest('.myco-slide');
+        if (!slide) return;
+        const img = slide.querySelector('img');
+        if (img) {
             const modal = document.getElementById('myco-modal');
             const modalImg = document.getElementById('myco-modal-img');
             if (modal && modalImg) {
-                lastFocusedMycoImage = e.target;
-                modalImg.src = e.target.src;
+                lastFocusedMycoImage = img;
+                modalImg.src = img.src;
                 modal.classList.add('show');
                 const closeBtn = document.getElementById('myco-modal-close');
                 if (closeBtn) closeBtn.focus();
@@ -369,9 +372,12 @@ function initMycoCarousel() {
     });
     track.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
-            if (e.target.tagName === 'IMG') {
+            const slide = e.target.closest('.myco-slide');
+            if (!slide) return;
+            const img = slide.querySelector('img');
+            if (img && document.activeElement === img) {
                 e.preventDefault();
-                e.target.click();
+                img.click();
             }
         }
     });
