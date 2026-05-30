@@ -118,7 +118,6 @@ a:hover {
     flex-direction: column;
 }
 
-#mycology .slide-inner,
 #contact .slide-inner,
 #blog .slide-inner,
 #portfolio .slide-inner,
@@ -531,12 +530,6 @@ a:hover {
     height: 100%;
 }
 
-#mycology .card {
-    flex: 1;
-    min-height: 0;
-    padding-bottom: 0.8rem;
-    margin-bottom: 0;
-}
 
 .card-title {
     font-size: 1rem;
@@ -918,149 +911,6 @@ a:hover {
     line-height: 1.4;
 }
 
-/* Mycology image carousel */
-
-.myco-carousel {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    flex: 1;
-    min-height: 0;
-}
-
-.myco-carousel-window {
-    position: relative;
-    border-radius: 1rem;
-    overflow: hidden;
-    background: radial-gradient(circle at 50% 0%, rgba(255, 140, 92, 0.13), rgba(22, 11, 8, 0.98));
-    margin-top: 0.8rem;
-    flex: 1;
-    min-height: 0;
-    height: 400px;
-    display: flex;
-    align-items: center;
-}
-
-.myco-carousel-track {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.45s ease;
-}
-
-.myco-slide {
-    flex: 0 0 100%;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.myco-slide img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    cursor: pointer;
-}
-
-.myco-slide img:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: -2px;
-}
-
-.myco-slide-caption {
-    position: absolute;
-    left: 0.9rem;
-    bottom: 0.8rem;
-    padding: 0.3rem 0.6rem;
-    border-radius: 999px;
-    background: rgba(22, 10, 8, 0.82);
-    border: 1px solid rgba(230, 175, 195, 0.4);
-    font-size: 0.72rem;
-}
-
-.myco-carousel-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.8rem;
-}
-
-.myco-arrow {
-    border-radius: 999px;
-    border: 1px solid rgba(175, 95, 118, 0.7);
-    background: rgba(26, 12, 8, 0.96);
-    color: var(--text-main);
-    padding: 0.25rem 0.7rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-
-.myco-dots {
-    display: flex;
-    gap: 0.35rem;
-}
-
-.myco-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 999px;
-    background: rgba(165, 90, 115, 0.6);
-}
-
-.myco-dot.active {
-    background: var(--primary-glow);
-}
-
-.myco-carousel-note {
-    font-size: 0.76rem;
-    color: var(--text-muted);
-}
-
-/* Myco Modal */
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.9);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal.show {
-    display: flex;
-}
-
-.modal-content {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.modal-close {
-    position: absolute;
-    top: 20px;
-    right: 35px;
-    color: #fff;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.2s ease;
-}
-
-.modal-close:hover {
-    color: var(--primary-glow);
-}
-
 /* Music widget */
 
 .music-widget {
@@ -1401,7 +1251,6 @@ body.bg-viewing .site-header {
 /* Make sure all interactive elements have proper spacing */
 .button,
 .pill-link,
-.myco-arrow,
 .music-toggle {
     flex-shrink: 0;
 
@@ -1429,8 +1278,6 @@ video {
     border-width: 0;
 }
 
-.myco-dot:focus-visible,
-.myco-arrow:focus-visible,
 .modal-close:focus-visible,
 .music-toggle:focus-visible,
 .music-skip:focus-visible,
