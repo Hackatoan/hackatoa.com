@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resume · Jacob Harris · Hackatoa</title>
+  <meta name="description" content="Resume of Jacob Harris (Hackatoa) — developer, homelab builder, and self-hosted infrastructure enthusiast." />
+  <link rel="icon" href="/assets/me.ico" type="image/x-icon" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #050816;
+      --surface:    #0d1224;
+      --surface-2:  #111827;
+      --border:     rgba(255,255,255,0.08);
+      --primary:    #7c6eff;
+      --primary-dim: rgba(124,110,255,0.12);
+      --text:       #e8eaf6;
+      --muted:      #8892b0;
+      --tag-bg:     rgba(124,110,255,0.15);
+      --tag-border: rgba(124,110,255,0.35);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      padding: 2rem 1rem 5rem;
+    }
+
+    .page-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* ── Nav ── */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--text); }
+    .back-link::before { content: '←'; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+
+    /* ── Header ── */
+    .resume-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .resume-name {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    .resume-contact {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+    }
+
+    .resume-contact a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .resume-contact a:hover { text-decoration: underline; }
+
+    /* ── Sections ── */
+    .section {
+      margin-bottom: 2.25rem;
+    }
+
+    .section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Summary */
+    .summary-text {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 680px;
+    }
+
+    /* ── Project cards ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1rem;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      transition: border-color 0.2s;
+    }
+
+    .project-card:hover {
+      border-color: var(--primary);
+    }
+
+    .project-card.featured {
+      border-color: rgba(124,110,255,0.4);
+      background: var(--primary-dim);
+    }
+
+    .project-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .project-name a {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 500;
+      margin-left: 0.5rem;
+    }
+    .project-name a:hover { text-decoration: underline; }
+
+    .project-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── Experience ── */
+    .job {
+      margin-bottom: 1.5rem;
+      padding-left: 1rem;
+      border-left: 2px solid var(--border);
+    }
+
+    .job-title {
+      font-weight: 700;
+      font-size: 0.97rem;
+      color: var(--text);
+    }
+
+    .job-meta {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .job-bullets {
+      list-style: none;
+      padding: 0;
+    }
+
+    .job-bullets li {
+      font-size: 0.87rem;
+      color: var(--muted);
+      padding: 0.15rem 0;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .job-bullets li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-size: 0.75rem;
+      top: 0.05rem;
+    }
+
+    /* ── Education ── */
+    .edu-row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+
+    .edu-degree {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .edu-school {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .edu-dates {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* ── Skills ── */
+    .skills-group {
+      margin-bottom: 1rem;
+    }
+
+    .skills-group-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag {
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      color: var(--text);
+      font-size: 0.78rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    /* ── Misc rows ── */
+    .meta-row {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 0.88rem;
+    }
+
+    .meta-item strong {
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { background: #fff; color: #000; padding: 1.5rem; }
+      .top-nav, .btn { display: none; }
+      .resume-name { color: #000; }
+      .section-title { color: #444; }
+      .project-card, .job { border-color: #ddd; background: #f9f9f9; }
+      .tag { background: #eee; border-color: #ccc; color: #333; }
+      .summary-text, .project-desc, .job-meta, .job-bullets li, .edu-school, .edu-dates,
+      .skills-group-label, .meta-item { color: #444; }
+      a { color: #555; }
+    }
+
+    @media (max-width: 600px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .resume-name { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <nav class="top-nav">
+    <a class="back-link" href="/">hackatoa.com</a>
+    <button class="btn" onclick="window.print()">⬇ Download / Print</button>
+  </nav>
+
+  <!-- Header -->
+  <header class="resume-header">
+    <div class="resume-name">Jacob Harris</div>
+    <div class="resume-contact">
+      <span>Sylmar, CA 91342</span>
+      <span>+1 818 359 1075</span>
+      <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>
+      <a href="https://hackatoa.com" target="_blank" rel="noopener">hackatoa.com</a>
+      <a href="https://linkedin.com/in/jacob-h-554984227" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/Hackatoan" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </header>
+
+  <!-- Summary -->
+  <section class="section">
+    <div class="section-title">Summary</div>
+    <p class="summary-text">
+      Developer and homelab enthusiast based in California. I build and self-host everything — from browser games and real-time multiplayer apps to a full home server stack running Matrix, mail, DNS, and reverse proxies on bare metal. I enjoy the full stack: frontend, backend, infrastructure, and the Linux layer underneath it all.
+    </p>
+  </section>
+
+  <!-- Projects -->
+  <section class="section">
+    <div class="section-title">Projects</div>
+    <div class="projects-grid">
+
+      <div class="project-card featured">
+        <div class="project-name">
+          hackatoa.com
+          <a href="https://hackatoa.com" target="_blank" rel="noopener">↗ live</a>
+        </div>
+        <p class="project-desc">Personal portfolio and developer hub. Built with vanilla HTML/CSS/JS — no frameworks — featuring a time-driven animated background. Deployed via GitHub Actions to Firebase hosting.</p>
+      </div>
+
+      <div class="project-card featured">
+        <div class="project-name">
+          games.hackatoa.com
+          <a href="https://games.hackatoa.com" target="_blank" rel="noopener">↗ live</a>
+        </div>
+        <p class="project-desc">Self-hosted browser game platform. Six original multiplayer and solo games: Infinisweeper (infinite shared board with global leaderboard), 1v1 Minesweeper, Battleship (AI + multiplayer), Cards Against Hackatoa, Tic-Tac-Toe Online, and System32 Roulette. No account, no ads.</p>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Homelab Infrastructure</div>
+        <p class="project-desc">Full self-hosted stack on Proxmox bare metal. Docker host running 20+ services: Matrix/Synapse, Jitsi, Home Assistant with voice pipeline, Stalwart mail server, NPMplus reverse proxy, Pi-hole DNS, WireGuard VPN, Nextcloud. All services behind <code style="font-size:0.8em;color:var(--primary)">*.hackatoa.com</code> with wildcard TLS.</p>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Canvas Messenger</div>
+        <p class="project-desc">Chrome/Firefox extension for cross-campus encrypted messaging via Canvas LMS. Node.js relay backend with WebRTC signaling — worked around platform restrictions to enable real-time communication between students.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section class="section">
+    <div class="section-title">Work Experience</div>
+
+    <div class="job">
+      <div class="job-title">Logistics Associate — Harbor Freight Tools</div>
+      <div class="job-meta">October 2024 – Present</div>
+      <ul class="job-bullets">
+        <li>Managed shipping and receiving, inventory tracking, and warehouse operations</li>
+        <li>Utilized computer systems to process orders and maintain records</li>
+        <li>Assisted with equipment troubleshooting and technical issue resolution</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-title">Courier Driver — Superior Couriers and Logistics</div>
+      <div class="job-meta">October 2023 – March 2024</div>
+      <ul class="job-bullets">
+        <li>Delivered medical, mail, and packages to businesses, hospitals, and offices</li>
+        <li>Maintained accurate delivery records and adapted to changing routes</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section class="section">
+    <div class="section-title">Education</div>
+    <div class="edu-row">
+      <div>
+        <div class="edu-degree">B.S. Cybersecurity</div>
+        <div class="edu-school">University of Advancing Technology</div>
+      </div>
+      <div class="edu-dates">September 2023 – Present</div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section class="section">
+    <div class="section-title">Technical Skills</div>
+
+    <div class="skills-group">
+      <div class="skills-group-label">Languages &amp; Frameworks</div>
+      <div class="tags">
+        <span class="tag">JavaScript</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">Python</span>
+        <span class="tag">HTML/CSS</span>
+        <span class="tag">SQL</span>
+      </div>
+    </div>
+
+    <div class="skills-group">
+      <div class="skills-group-label">Infrastructure</div>
+      <div class="tags">
+        <span class="tag">Linux</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Proxmox</span>
+        <span class="tag">Nginx</span>
+        <span class="tag">WireGuard</span>
+        <span class="tag">DNS</span>
+        <span class="tag">TLS/Certbot</span>
+        <span class="tag">Cloudflare</span>
+      </div>
+    </div>
+
+    <div class="skills-group">
+      <div class="skills-group-label">Tools &amp; Platforms</div>
+      <div class="tags">
+        <span class="tag">Git/GitHub</span>
+        <span class="tag">Firebase</span>
+        <span class="tag">VMware</span>
+        <span class="tag">Active Directory</span>
+        <span class="tag">Microsoft 365</span>
+        <span class="tag">Google Workspace</span>
+        <span class="tag">Power BI</span>
+      </div>
+    </div>
+
+    <div class="skills-group">
+      <div class="skills-group-label">Networking</div>
+      <div class="tags">
+        <span class="tag">TCP/IP</span>
+        <span class="tag">Network troubleshooting</span>
+        <span class="tag">Firewall configuration</span>
+        <span class="tag">VPN</span>
+        <span class="tag">Network protocols</span>
+        <span class="tag">IT support</span>
+      </div>
+    </div>
+
+    <div class="skills-group">
+      <div class="skills-group-label">Systems</div>
+      <div class="tags">
+        <span class="tag">Windows</span>
+        <span class="tag">macOS</span>
+        <span class="tag">Android</span>
+        <span class="tag">iOS</span>
+        <span class="tag">Server virtualization</span>
+        <span class="tag">Remote access software</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Misc -->
+  <section class="section">
+    <div class="section-title">Additional</div>
+    <div class="meta-row">
+      <div class="meta-item">
+        <strong>Soft Skills</strong>
+        Attention to detail · Adaptability · Communication · Team collaboration
+      </div>
+      <div class="meta-item">
+        <strong>Languages</strong>
+        English (Fluent) · Spanish (Beginner)
+      </div>
+      <div class="meta-item">
+        <strong>Certifications</strong>
+        Driver's License · Forklift Certification
+      </div>
+      <div class="meta-item">
+        <strong>Authorization</strong>
+        Authorized to work in the US · Willing to relocate within San Fernando Valley
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

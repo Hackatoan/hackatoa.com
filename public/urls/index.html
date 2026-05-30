@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Links · Hackatoa</title>
+  <meta name="description" content="All of Jacob Harris (Hackatoa)'s links — games, socials, projects, and more." />
+  <link rel="icon" href="/assets/me.ico" type="image/x-icon" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #050816;
+      --surface:   #0d1224;
+      --border:    rgba(255,255,255,0.08);
+      --primary:   #7c6eff;
+      --primary-dim: rgba(124,110,255,0.15);
+      --text:      #e8eaf6;
+      --muted:     #8892b0;
+      --hover-bg:  #131830;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .back-link {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 2.5rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--text); }
+    .back-link::before { content: '←'; }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+      margin-bottom: 1rem;
+      object-fit: cover;
+    }
+
+    .page-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+
+    .page-subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 0.35rem;
+    }
+
+    .links-list {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 1.25rem;
+      margin-bottom: 0.25rem;
+      padding-left: 0.25rem;
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.18s, border-color 0.18s, transform 0.15s;
+    }
+
+    .link-card:hover {
+      background: var(--hover-bg);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .link-card:active {
+      transform: translateY(0);
+    }
+
+    .link-info { flex: 1; min-width: 0; }
+
+    .link-name {
+      font-weight: 600;
+      font-size: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .link-url {
+      font-size: 0.78rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 0.1rem;
+    }
+
+    .link-arrow {
+      color: var(--primary);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .link-card.featured {
+      border-color: var(--primary);
+      background: var(--primary-dim);
+    }
+
+    footer {
+      margin-top: 3rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="/">hackatoa.com</a>
+
+  <header class="page-header">
+    <img src="/assets/me.png" alt="Jacob P Harris" class="avatar" />
+    <div class="page-title">Hackatoa</div>
+    <div class="page-subtitle">Jacob P Harris · Developer &amp; Homelab Enthusiast</div>
+  </header>
+
+  <div class="links-list">
+
+    <div class="section-label">Home</div>
+    <a class="link-card featured" href="https://hackatoa.com" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">Hackatoa</div>
+        <div class="link-url">hackatoa.com</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <div class="section-label">Games</div>
+    <a class="link-card" href="https://games.hackatoa.com" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">Hackatoa Games</div>
+        <div class="link-url">games.hackatoa.com</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a class="link-card" href="https://infinisweeper.hackatoa.com" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">Infinisweeper</div>
+        <div class="link-url">infinisweeper.hackatoa.com</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a class="link-card" href="https://1v1sw.hackatoa.com" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">1v1 Minesweeper</div>
+        <div class="link-url">1v1sw.hackatoa.com</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a class="link-card" href="https://ttc.hackatoa.com" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">Tic-Tac-Toe Online</div>
+        <div class="link-url">ttc.hackatoa.com</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a class="link-card" href="https://battleship.hackatoa.com" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">Battleship</div>
+        <div class="link-url">battleship.hackatoa.com</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a class="link-card" href="https://cah.hackatoa.com" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">Cards Against Hackatoa</div>
+        <div class="link-url">cah.hackatoa.com</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <div class="section-label">Professional</div>
+    <a class="link-card" href="https://github.com/Hackatoan" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">GitHub</div>
+        <div class="link-url">github.com/Hackatoan</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a class="link-card" href="https://linkedin.com/in/jacob-h-554984227" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">LinkedIn</div>
+        <div class="link-url">linkedin.com/in/jacob-h-554984227</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <div class="section-label">Content &amp; Social</div>
+    <a class="link-card" href="https://twitch.tv/hackatoa" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">Twitch</div>
+        <div class="link-url">twitch.tv/hackatoa</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a class="link-card" href="https://youtube.com/@Hackatoa" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">YouTube</div>
+        <div class="link-url">youtube.com/@Hackatoa</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a class="link-card" href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noopener noreferrer">
+      <div class="link-info">
+        <div class="link-name">Buy Me a Coffee</div>
+        <div class="link-url">buymeacoffee.com/hackatoa</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+  </div>
+
+  <footer>
+    <a href="/">hackatoa.com</a> · Jacob P Harris
+  </footer>
+
+</body>
+</html>
