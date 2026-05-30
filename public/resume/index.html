@@ -73,6 +73,7 @@
       transition: opacity 0.2s;
     }
     .btn:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     /* ── Header ── */
     .resume-header {
@@ -309,16 +310,26 @@
       .projects-grid { grid-template-columns: 1fr; }
       .resume-name { font-size: 1.5rem; }
     }
+    /* pdf-content wrapper — styles for clean PDF output */
+    #pdf-content {
+      background: #fff;
+      color: #111;
+    }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 <div class="page-wrap">
 
-  <nav class="top-nav">
-    <a class="back-link" href="/">hackatoa.com</a>
-    <button class="btn" onclick="window.print()">⬇ Download / Print</button>
+  <nav class="top-nav" id="resume-nav">
+    <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+      <a class="back-link" href="/">hackatoa.com</a>
+      <a class="back-link" href="/cover-letter" style="margin-left:0.5rem;">Cover Letter</a>
+    </div>
+    <button class="btn" id="dl-btn" onclick="downloadPDF()">⬇ Download PDF</button>
   </nav>
 
+  <div id="pdf-content">
   <!-- Header -->
   <header class="resume-header">
     <div class="resume-name">Jacob Harris</div>
@@ -500,6 +511,57 @@
     </div>
   </section>
 
-</div>
+  </div><!-- /pdf-content -->
+
+</div><!-- /page-wrap -->
+
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('dl-btn');
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+
+  const element = document.getElementById('pdf-content');
+  const opt = {
+    margin:      [10, 12, 10, 12],
+    filename:    'Jacob_Harris_Resume.pdf',
+    image:       { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+    jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak:   { mode: ['avoid-all', 'css', 'legacy'] }
+  };
+
+  // Temporarily apply light styles for PDF render
+  element.style.background = '#ffffff';
+  element.style.color = '#111111';
+  document.querySelectorAll('.project-card').forEach(el => {
+    el.style.background = '#f5f5f5';
+    el.style.border = '1px solid #ddd';
+  });
+  document.querySelectorAll('.tag').forEach(el => {
+    el.style.background = '#eee';
+    el.style.border = '1px solid #ccc';
+    el.style.color = '#333';
+  });
+  document.querySelectorAll('.section-title').forEach(el => el.style.color = '#5048c8');
+  document.querySelectorAll('.job').forEach(el => el.style.borderColor = '#ccc');
+  document.querySelectorAll('[class*="muted"], .summary-text, .project-desc, .job-meta, .edu-school, .edu-dates, .skills-group-label').forEach(el => el.style.color = '#444');
+  document.querySelectorAll('.resume-name').forEach(el => el.style.color = '#111');
+
+  html2pdf().set(opt).from(element).save().then(() => {
+    // Restore dark theme
+    element.style.background = '';
+    element.style.color = '';
+    document.querySelectorAll('.project-card').forEach(el => { el.style.background = ''; el.style.border = ''; });
+    document.querySelectorAll('.tag').forEach(el => { el.style.background = ''; el.style.border = ''; el.style.color = ''; });
+    document.querySelectorAll('.section-title').forEach(el => el.style.color = '');
+    document.querySelectorAll('.job').forEach(el => el.style.borderColor = '');
+    document.querySelectorAll('[class*="muted"], .summary-text, .project-desc, .job-meta, .edu-school, .edu-dates, .skills-group-label').forEach(el => el.style.color = '');
+    document.querySelectorAll('.resume-name').forEach(el => el.style.color = '');
+    btn.disabled = false;
+    btn.textContent = '⬇ Download PDF';
+  });
+}
+</script>
 </body>
 </html>

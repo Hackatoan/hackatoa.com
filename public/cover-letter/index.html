@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cover Letter · Jacob Harris · Hackatoa</title>
+  <meta name="description" content="Cover letter of Jacob Harris (Hackatoa) — developer and IT enthusiast." />
+  <link rel="icon" href="/assets/me.ico" type="image/x-icon" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #050816;
+      --surface:    #0d1224;
+      --border:     rgba(255,255,255,0.08);
+      --primary:    #7c6eff;
+      --text:       #e8eaf6;
+      --muted:      #8892b0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.7;
+      padding: 2rem 1rem 5rem;
+    }
+
+    .page-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* ── Nav ── */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .nav-left {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--text); }
+    .back-link:first-child::before { content: '←'; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* ── Letter card ── */
+    #pdf-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.5rem 2.75rem;
+    }
+
+    .letter-sender {
+      margin-bottom: 1.75rem;
+    }
+
+    .letter-sender-name {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .letter-contact {
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1.1rem;
+    }
+
+    .letter-contact a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .letter-contact a:hover { text-decoration: underline; }
+
+    .letter-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1.75rem 0;
+    }
+
+    .letter-date {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .letter-salutation {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    .letter-body p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+
+    .letter-body p:last-child { margin-bottom: 0; }
+
+    .letter-closing {
+      margin-top: 2rem;
+    }
+
+    .letter-closing-word {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .letter-sig {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { background: #fff; color: #000; padding: 1.5rem; }
+      #pdf-content { background: #fff; border: none; border-radius: 0; padding: 0; }
+      .top-nav { display: none; }
+      .letter-sender-name, .letter-salutation, .letter-sig { color: #000; }
+      .letter-contact, .letter-date, .letter-body p, .letter-closing-word { color: #444; }
+      .letter-contact a { color: #444; }
+      .letter-divider { background: #ddd; }
+    }
+
+    @media (max-width: 600px) {
+      #pdf-content { padding: 1.5rem 1.25rem; }
+      .letter-sender-name { font-size: 1.2rem; }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+
+  <nav class="top-nav" id="cl-nav">
+    <div class="nav-left">
+      <a class="back-link" href="/">hackatoa.com</a>
+      <a class="back-link" href="/resume" style="margin-left:0;">Resume</a>
+    </div>
+    <button class="btn" id="dl-btn" onclick="downloadPDF()">⬇ Download PDF</button>
+  </nav>
+
+  <div id="pdf-content">
+
+    <div class="letter-sender">
+      <div class="letter-sender-name">Jacob Harris</div>
+      <div class="letter-contact">
+        <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>
+        <span>+1 818 359 1075</span>
+        <a href="https://hackatoa.com" target="_blank" rel="noopener">hackatoa.com</a>
+        <span>Sylmar, CA</span>
+      </div>
+    </div>
+
+    <div class="letter-divider"></div>
+
+    <div class="letter-date" id="letter-date"></div>
+
+    <div class="letter-salutation">Dear Hiring Manager,</div>
+
+    <div class="letter-body">
+      <p>
+        I'm a self-taught developer and IT enthusiast currently pursuing a B.S. in Cybersecurity at the University of Advancing Technology. I'm seeking a role where I can apply my hands-on technical skills in a professional environment — whether that's IT support, infrastructure, or software development.
+      </p>
+      <p>
+        Outside of my coursework, I've built and maintain a full self-hosted homelab running on bare-metal Proxmox: 20+ Docker services including a Matrix homeserver, self-hosted mail, reverse proxies, DNS, and a WireGuard VPN. I've also developed and deployed six original browser games at <a href="https://games.hackatoa.com" target="_blank" rel="noopener">games.hackatoa.com</a>, along with a Chrome/Firefox extension for real-time encrypted messaging. I own every layer — from the code to the network to the hardware.
+      </p>
+      <p>
+        In my current role at Harbor Freight Tools, I've developed strong attention to detail, reliability, and the ability to troubleshoot equipment and systems under pressure. My background in logistics has also given me experience working in fast-paced environments where accuracy matters.
+      </p>
+      <p>
+        I'm a fast learner, comfortable on any OS, and I like solving problems end-to-end. I'd welcome the opportunity to bring that same approach to your team.
+      </p>
+      <p>
+        Thank you for your time and consideration.
+      </p>
+    </div>
+
+    <div class="letter-closing">
+      <div class="letter-closing-word">Sincerely,</div>
+      <div class="letter-sig">Jacob Harris</div>
+    </div>
+
+  </div><!-- /pdf-content -->
+
+</div><!-- /page-wrap -->
+
+<script>
+  // Auto-insert today's date
+  const dateEl = document.getElementById('letter-date');
+  const today = new Date();
+  dateEl.textContent = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  function downloadPDF() {
+    const btn = document.getElementById('dl-btn');
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+
+    const element = document.getElementById('pdf-content');
+
+    // Snapshot current styles, apply light theme for PDF
+    const origBg = element.style.background;
+    const origColor = element.style.color;
+    const origBorder = element.style.border;
+    const origBorderRadius = element.style.borderRadius;
+
+    element.style.background = '#ffffff';
+    element.style.color = '#111111';
+    element.style.border = 'none';
+    element.style.borderRadius = '0';
+
+    document.querySelectorAll('.letter-sender-name, .letter-salutation, .letter-sig').forEach(el => el.style.color = '#000');
+    document.querySelectorAll('.letter-contact, .letter-date, .letter-body p, .letter-closing-word').forEach(el => el.style.color = '#333');
+    document.querySelectorAll('.letter-contact a, .letter-body a').forEach(el => el.style.color = '#4a40c0');
+    document.querySelectorAll('.letter-divider').forEach(el => el.style.background = '#ddd');
+
+    const opt = {
+      margin:      [15, 18, 15, 18],
+      filename:    'Jacob_Harris_Cover_Letter.pdf',
+      image:       { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+      jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      // Restore
+      element.style.background = origBg;
+      element.style.color = origColor;
+      element.style.border = origBorder;
+      element.style.borderRadius = origBorderRadius;
+      document.querySelectorAll('.letter-sender-name, .letter-salutation, .letter-sig').forEach(el => el.style.color = '');
+      document.querySelectorAll('.letter-contact, .letter-date, .letter-body p, .letter-closing-word').forEach(el => el.style.color = '');
+      document.querySelectorAll('.letter-contact a, .letter-body a').forEach(el => el.style.color = '');
+      document.querySelectorAll('.letter-divider').forEach(el => el.style.background = '');
+      btn.disabled = false;
+      btn.textContent = '⬇ Download PDF';
+    });
+  }
+</script>
+</body>
+</html>

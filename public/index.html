@@ -27,6 +27,18 @@
   <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="background.css" />
+  <style>
+    /* ── Avatar carousel ── */
+    .avatar-carousel { position: relative; display: inline-block; }
+    .avatar-carousel .carousel-img {
+      position: absolute;
+      top: 0; left: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      border-radius: 50%;
+    }
+    .avatar-carousel .carousel-img--active { opacity: 1; position: relative; }
+  </style>
 <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -123,6 +135,7 @@
                 <div class="hero-cta-row">
                   <a class="button button-primary" href="#portfolio">View projects</a>
                   <a class="button button-secondary" href="#blog">Read ramblings</a>
+                  <a class="button button-secondary" href="/resume">View Resume →</a>
                 </div>
                 <div class="hero-metadata">
                   <div>
@@ -140,8 +153,10 @@
                 <div class="hero-panel-label">Current Status</div>
                 <div class="hero-panel-row">
                   <div class="hero-panel-ident">
-                    <!-- ⚡ Bolt Optimization: Prioritize LCP image by replacing lazy loading with fetchpriority="high" -->
-                    <img src="assets/me.png" alt="Portrait of Jacob P Harris" class="hero-avatar" fetchpriority="high" />
+                    <div class="avatar-carousel" aria-label="Photo of Jacob P Harris">
+                      <img src="assets/me.png"      alt="Portrait of Jacob P Harris" class="hero-avatar carousel-img carousel-img--active" fetchpriority="high" />
+                      <img src="assets/jacob2.webp" alt="Photo of Jacob P Harris"    class="hero-avatar carousel-img" loading="lazy" />
+                    </div>
                     <div class="hero-panel-name">Jacob P Harris</div>
                   </div>
                   <span class="chip">Portfolio</span>
@@ -427,6 +442,21 @@
   <script src="blog-data.js" defer></script>
   <script src="app.js" defer></script>
   <script src="background.js" defer></script>
+  <script>
+    // Avatar carousel — fade between photos every 4 seconds
+    (function () {
+      var imgs, idx = 0;
+      function cycle() {
+        imgs[idx].classList.remove('carousel-img--active');
+        idx = (idx + 1) % imgs.length;
+        imgs[idx].classList.add('carousel-img--active');
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        imgs = document.querySelectorAll('.avatar-carousel .carousel-img');
+        if (imgs.length > 1) setInterval(cycle, 4000);
+      });
+    })();
+  </script>
 </body>
 
 </html>
