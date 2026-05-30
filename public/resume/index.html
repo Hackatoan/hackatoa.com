@@ -9,21 +9,8 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:         #050816;
-      --surface:    #0d1224;
-      --surface-2:  #111827;
-      --border:     rgba(255,255,255,0.08);
-      --primary:    #7c6eff;
-      --primary-dim: rgba(124,110,255,0.12);
-      --text:       #e8eaf6;
-      --muted:      #8892b0;
-      --tag-bg:     rgba(124,110,255,0.15);
-      --tag-border: rgba(124,110,255,0.35);
-    }
-
     body {
-      background: var(--bg);
+      background: #050816;
       color: #e8eaf6;
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       line-height: 1.6;
@@ -49,7 +36,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      color: var(--muted);
+      color: #8892b0;
       text-decoration: none;
       font-size: 0.85rem;
       transition: color 0.2s;
@@ -61,7 +48,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: var(--primary);
+      background: #7c6eff;
       color: #fff;
       border: none;
       border-radius: 6px;
@@ -79,7 +66,7 @@
     .resume-header {
       margin-bottom: 2rem;
       padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
     .resume-name {
@@ -92,14 +79,14 @@
     .resume-contact {
       margin-top: 0.5rem;
       font-size: 0.85rem;
-      color: var(--muted);
+      color: #8892b0;
       display: flex;
       flex-wrap: wrap;
       gap: 0.35rem 1.25rem;
     }
 
     .resume-contact a {
-      color: var(--primary);
+      color: #7c6eff;
       text-decoration: none;
     }
     .resume-contact a:hover { text-decoration: underline; }
@@ -114,7 +101,7 @@
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--primary);
+      color: #7c6eff;
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
@@ -124,12 +111,12 @@
       content: '';
       flex: 1;
       height: 1px;
-      background: var(--border);
+      background: rgba(255,255,255,0.08);
     }
 
     /* Summary */
     .summary-text {
-      color: var(--muted);
+      color: #8892b0;
       font-size: 0.95rem;
       max-width: 680px;
     }
@@ -142,31 +129,32 @@
     }
 
     .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: #0d1224;
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 10px;
       padding: 1.1rem 1.25rem;
       transition: border-color 0.2s;
+      overflow: hidden;
     }
 
     .project-card:hover {
-      border-color: var(--primary);
+      border-color: #7c6eff;
     }
 
     .project-card.featured {
       border-color: rgba(124,110,255,0.4);
-      background: var(--primary-dim);
+      background: rgba(124,110,255,0.12);
     }
 
     .project-name {
       font-weight: 700;
       font-size: 0.95rem;
-      color: #e8eaf6 !important;
+      color: #e8eaf6;
       margin-bottom: 0.4rem;
     }
 
     .project-name a {
-      color: var(--primary);
+      color: #7c6eff;
       text-decoration: none;
       font-size: 0.78rem;
       font-weight: 500;
@@ -176,15 +164,20 @@
 
     .project-desc {
       font-size: 0.85rem;
-      color: var(--muted);
+      color: #8892b0;
       line-height: 1.55;
+    }
+
+    .project-desc code {
+      font-size: 0.8em;
+      color: #7c6eff;
     }
 
     /* ── Experience ── */
     .job {
       margin-bottom: 1.5rem;
       padding-left: 1rem;
-      border-left: 2px solid var(--border);
+      border-left: 2px solid rgba(255,255,255,0.08);
     }
 
     .job-title {
@@ -195,7 +188,7 @@
 
     .job-meta {
       font-size: 0.82rem;
-      color: var(--muted);
+      color: #8892b0;
       margin-bottom: 0.5rem;
     }
 
@@ -206,7 +199,7 @@
 
     .job-bullets li {
       font-size: 0.87rem;
-      color: var(--muted);
+      color: #8892b0;
       padding: 0.15rem 0;
       padding-left: 1rem;
       position: relative;
@@ -216,7 +209,7 @@
       content: '▸';
       position: absolute;
       left: 0;
-      color: var(--primary);
+      color: #7c6eff;
       font-size: 0.75rem;
       top: 0.05rem;
     }
@@ -232,16 +225,17 @@
     .edu-degree {
       font-weight: 600;
       font-size: 0.95rem;
+      color: #e8eaf6;
     }
 
     .edu-school {
       font-size: 0.85rem;
-      color: var(--muted);
+      color: #8892b0;
     }
 
     .edu-dates {
       font-size: 0.82rem;
-      color: var(--muted);
+      color: #8892b0;
     }
 
     /* ── Skills ── */
@@ -252,7 +246,7 @@
     .skills-group-label {
       font-size: 0.75rem;
       font-weight: 600;
-      color: var(--muted);
+      color: #8892b0;
       margin-bottom: 0.4rem;
       letter-spacing: 0.05em;
     }
@@ -264,8 +258,8 @@
     }
 
     .tag {
-      background: var(--tag-bg);
-      border: 1px solid var(--tag-border);
+      background: rgba(124,110,255,0.15);
+      border: 1px solid rgba(124,110,255,0.35);
       color: #e8eaf6;
       font-size: 0.78rem;
       padding: 0.25rem 0.6rem;
@@ -282,10 +276,11 @@
 
     .meta-item {
       font-size: 0.88rem;
+      color: #e8eaf6;
     }
 
     .meta-item strong {
-      color: var(--muted);
+      color: #8892b0;
       font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.05em;
@@ -309,11 +304,6 @@
     @media (max-width: 600px) {
       .projects-grid { grid-template-columns: 1fr; }
       .resume-name { font-size: 1.5rem; }
-    }
-    /* pdf-content wrapper — styles for clean PDF output */
-    #pdf-content {
-      background: #fff;
-      color: #111;
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -374,7 +364,7 @@
 
       <div class="project-card">
         <div class="project-name">Homelab Infrastructure</div>
-        <p class="project-desc">Full self-hosted stack on Proxmox bare metal. Docker host running 20+ services: Matrix/Synapse, Jitsi, Home Assistant with voice pipeline, Stalwart mail server, NPMplus reverse proxy, Pi-hole DNS, WireGuard VPN, Nextcloud. All services behind <code style="font-size:0.8em;color:var(--primary)">*.hackatoa.com</code> with wildcard TLS.</p>
+        <p class="project-desc">Full self-hosted stack on Proxmox bare metal. Docker host running 20+ services: Matrix/Synapse, Jitsi, Home Assistant with voice pipeline, Stalwart mail server, NPMplus reverse proxy, Pi-hole DNS, WireGuard VPN, Nextcloud. All services behind <code>*.hackatoa.com</code> with wildcard TLS.</p>
       </div>
 
       <div class="project-card">
@@ -517,12 +507,79 @@
 
 <script>
 function downloadPDF() {
-  const btn = document.getElementById('dl-btn');
+  var btn = document.getElementById('dl-btn');
   btn.disabled = true;
   btn.textContent = 'Generating…';
 
-  const element = document.getElementById('pdf-content');
-  const opt = {
+  // Clone the content so we can restyle for PDF without affecting the page
+  var source = document.getElementById('pdf-content');
+  var clone = source.cloneNode(true);
+
+  // Apply light/print styles to the clone
+  clone.style.cssText = 'background:#ffffff;color:#111111;font-family:Segoe UI,system-ui,-apple-system,sans-serif;padding:0;margin:0;';
+
+  clone.querySelectorAll('.project-card').forEach(function(el) {
+    el.style.cssText = 'background:#f5f5f5;border:1px solid #ddd;border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:0;overflow:hidden;';
+  });
+  clone.querySelectorAll('.project-name').forEach(function(el) {
+    el.style.color = '#111';
+  });
+  clone.querySelectorAll('.project-name a').forEach(function(el) {
+    el.style.color = '#5048c8';
+  });
+  clone.querySelectorAll('.project-desc').forEach(function(el) {
+    el.style.color = '#444';
+  });
+  clone.querySelectorAll('code').forEach(function(el) {
+    el.style.color = '#5048c8';
+  });
+  clone.querySelectorAll('.tag').forEach(function(el) {
+    el.style.cssText = 'background:#eee;border:1px solid #ccc;color:#333;font-size:0.78rem;padding:0.25rem 0.6rem;border-radius:4px;white-space:nowrap;';
+  });
+  clone.querySelectorAll('.section-title').forEach(function(el) {
+    el.style.color = '#5048c8';
+  });
+  clone.querySelectorAll('.job').forEach(function(el) {
+    el.style.borderColor = '#ccc';
+  });
+  clone.querySelectorAll('.job-title').forEach(function(el) {
+    el.style.color = '#111';
+  });
+  clone.querySelectorAll('.summary-text, .project-desc, .job-meta, .edu-school, .edu-dates, .skills-group-label').forEach(function(el) {
+    el.style.color = '#444';
+  });
+  clone.querySelectorAll('.job-bullets li').forEach(function(el) {
+    el.style.color = '#444';
+  });
+  clone.querySelectorAll('.resume-name').forEach(function(el) {
+    el.style.color = '#111';
+  });
+  clone.querySelectorAll('.resume-contact').forEach(function(el) {
+    el.style.color = '#444';
+  });
+  clone.querySelectorAll('.resume-contact a').forEach(function(el) {
+    el.style.color = '#5048c8';
+  });
+  clone.querySelectorAll('.meta-item').forEach(function(el) {
+    el.style.color = '#333';
+  });
+  clone.querySelectorAll('.meta-item strong').forEach(function(el) {
+    el.style.color = '#555';
+  });
+  clone.querySelectorAll('.edu-degree').forEach(function(el) {
+    el.style.color = '#111';
+  });
+  clone.querySelectorAll('.section-title::after').forEach(function(el) {
+    el.style.background = '#ddd';
+  });
+
+  // Append clone off-screen temporarily
+  clone.style.position = 'absolute';
+  clone.style.left = '-9999px';
+  clone.style.width = '794px'; // A4 width approx at 96dpi
+  document.body.appendChild(clone);
+
+  var opt = {
     margin:      [10, 12, 10, 12],
     filename:    'Jacob_Harris_Resume.pdf',
     image:       { type: 'jpeg', quality: 0.98 },
@@ -531,35 +588,16 @@ function downloadPDF() {
     pagebreak:   { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
-  // Temporarily apply light styles for PDF render
-  element.style.background = '#ffffff';
-  element.style.color = '#111111';
-  document.querySelectorAll('.project-card').forEach(el => {
-    el.style.background = '#f5f5f5';
-    el.style.border = '1px solid #ddd';
-  });
-  document.querySelectorAll('.tag').forEach(el => {
-    el.style.background = '#eee';
-    el.style.border = '1px solid #ccc';
-    el.style.color = '#333';
-  });
-  document.querySelectorAll('.section-title').forEach(el => el.style.color = '#5048c8');
-  document.querySelectorAll('.job').forEach(el => el.style.borderColor = '#ccc');
-  document.querySelectorAll('[class*="muted"], .summary-text, .project-desc, .job-meta, .edu-school, .edu-dates, .skills-group-label').forEach(el => el.style.color = '#444');
-  document.querySelectorAll('.resume-name').forEach(el => el.style.color = '#111');
-
-  html2pdf().set(opt).from(element).save().then(() => {
-    // Restore dark theme
-    element.style.background = '';
-    element.style.color = '';
-    document.querySelectorAll('.project-card').forEach(el => { el.style.background = ''; el.style.border = ''; });
-    document.querySelectorAll('.tag').forEach(el => { el.style.background = ''; el.style.border = ''; el.style.color = ''; });
-    document.querySelectorAll('.section-title').forEach(el => el.style.color = '');
-    document.querySelectorAll('.job').forEach(el => el.style.borderColor = '');
-    document.querySelectorAll('[class*="muted"], .summary-text, .project-desc, .job-meta, .edu-school, .edu-dates, .skills-group-label').forEach(el => el.style.color = '');
-    document.querySelectorAll('.resume-name').forEach(el => el.style.color = '');
+  html2pdf().set(opt).from(clone).save().then(function() {
+    document.body.removeChild(clone);
     btn.disabled = false;
-    btn.textContent = '⬇ Download PDF';
+    btn.innerHTML = '⬇ Download PDF';
+  }).catch(function(err) {
+    document.body.removeChild(clone);
+    btn.disabled = false;
+    btn.innerHTML = '⬇ Download PDF';
+    console.error('PDF generation failed:', err);
+    alert('PDF generation failed. Please try again.');
   });
 }
 </script>
