@@ -290,6 +290,8 @@
 
     /* ── Print / Save as PDF ── */
     @media print {
+      @page { margin: 0; }
+      body { padding: 12mm 14mm; }
       * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       body {
         background: #ffffff !important;
