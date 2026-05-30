@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mycology · Hackatoa</title>
+  <meta name="description" content="Jacob Harris (Hackatoa) fungi cultivation log — a gallery of mushroom grows and experiments." />
+  <link rel="icon" href="/assets/me.ico" type="image/x-icon" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #1a0f0c;
+      --surface:      #28140e;
+      --border:       rgba(255, 140, 80, 0.12);
+      --primary:      #ff4b3a;
+      --primary-glow: #ff8a4a;
+      --accent:       #f472b6;
+      --text-main:    #f5ede8;
+      --text-muted:   #c4a090;
+      --hover-bg:     #331a12;
+    }
+
+    body {
+      background: radial-gradient(circle at 10% -10%, #3d1a10 0, transparent 50%),
+                  radial-gradient(circle at 90% -10%, #2d1020 0, transparent 50%),
+                  linear-gradient(to bottom, #2a1c17, var(--bg));
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .back-link {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 2.5rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--text-main); }
+    .back-link::before { content: '←'; }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text-main);
+    }
+
+    .page-kicker {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary-glow);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 0.4rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .gallery {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .gallery-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.18s, box-shadow 0.2s;
+    }
+
+    .gallery-card:hover {
+      border-color: rgba(255, 138, 74, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+    }
+
+    .gallery-card img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      background: #1e0e09;
+    }
+
+    .gallery-card-body {
+      padding: 0.9rem 1.1rem 1rem;
+    }
+
+    .gallery-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.2rem;
+    }
+
+    .gallery-card-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state {
+      width: 100%;
+      max-width: 900px;
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .empty-state-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    footer {
+      margin-top: 3rem;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--primary-glow);
+      text-decoration: none;
+    }
+
+    footer a:hover { color: var(--text-main); }
+
+    @media (max-width: 600px) {
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="/">hackatoa.com</a>
+
+  <header class="page-header">
+    <div class="page-kicker">Hobbies</div>
+    <h1 class="page-title">Mycology</h1>
+    <p class="page-subtitle">Fungi cultivation log — grows, experiments, and the occasional mistake.</p>
+  </header>
+
+  <div id="gallery-root"></div>
+
+  <footer>
+    <a href="/">hackatoa.com</a> · Jacob P Harris
+  </footer>
+
+  <script src="/mushrooms-data.js"></script>
+  <script>
+    (function () {
+      var root = document.getElementById('gallery-root');
+      var data = window.MUSHROOMS_DATA || [];
+
+      if (!data.length) {
+        root.innerHTML =
+          '<div class="empty-state">' +
+          '  <span class="empty-state-icon">🍄</span>' +
+          '  <div class="empty-state-title">Gallery coming soon</div>' +
+          '  <p>No photos yet — check back when the mycelium catches up.</p>' +
+          '</div>';
+        return;
+      }
+
+      var html = '<div class="gallery">';
+      data.forEach(function (item) {
+        html += '<article class="gallery-card">';
+        html += '  <img src="/' + item.image + '" alt="' + (item.alt || item.title || '') + '" loading="lazy" />';
+        html += '  <div class="gallery-card-body">';
+        html += '    <div class="gallery-card-title">' + (item.title || 'Untitled') + '</div>';
+        if (item.meta) {
+          html += '    <div class="gallery-card-meta">' + item.meta + '</div>';
+        }
+        html += '  </div>';
+        html += '</article>';
+      });
+      html += '</div>';
+      root.innerHTML = html;
+    })();
+  </script>
+
+</body>
+</html>
