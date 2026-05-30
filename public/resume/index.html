@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Resume · Jacob Harris · Hackatoa</title>
+  <title>Jacob_Harris_Resume</title>
   <meta name="description" content="Resume of Jacob Harris (Hackatoa) — developer, homelab builder, and self-hosted infrastructure enthusiast." />
   <link rel="icon" href="/assets/me.ico" type="image/x-icon" />
   <style>
@@ -288,17 +288,44 @@
       margin-bottom: 0.15rem;
     }
 
-    /* ── Print ── */
+    /* ── Print / Save as PDF ── */
     @media print {
-      body { background: #fff; color: #000; padding: 1.5rem; }
-      .top-nav, .btn { display: none; }
-      .resume-name { color: #000; }
-      .section-title { color: #444; }
-      .project-card, .job { border-color: #ddd; background: #f9f9f9; }
-      .tag { background: #eee; border-color: #ccc; color: #333; }
-      .summary-text, .project-desc, .job-meta, .job-bullets li, .edu-school, .edu-dates,
-      .skills-group-label, .meta-item { color: #444; }
-      a { color: #555; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body {
+        background: #ffffff !important;
+        color: #111111 !important;
+        padding: 1.5rem !important;
+        font-size: 13px;
+      }
+      .top-nav { display: none !important; }
+      .page-wrap { max-width: 100%; }
+      .resume-name { color: #111 !important; }
+      .resume-contact { color: #444 !important; }
+      .resume-contact a { color: #4a3fcf !important; }
+      .section-title { color: #4a3fcf !important; }
+      .section-title::after { background: #ccc !important; }
+      .summary-text, .project-desc, .job-meta, .edu-school, .edu-dates,
+      .skills-group-label { color: #444 !important; }
+      .job-bullets li { color: #444 !important; }
+      .job-bullets li::before { color: #4a3fcf !important; }
+      .job { border-left-color: #ccc !important; }
+      .project-card {
+        background: #f8f8f8 !important;
+        border-color: #ddd !important;
+        break-inside: avoid;
+      }
+      .project-name { color: #111 !important; }
+      .project-name a { color: #4a3fcf !important; }
+      .project-desc code { color: #4a3fcf !important; }
+      .tag {
+        background: #eeeeee !important;
+        border-color: #cccccc !important;
+        color: #333 !important;
+      }
+      .edu-degree { color: #111 !important; }
+      .meta-item { color: #333 !important; }
+      .meta-item strong { color: #555 !important; }
+      .projects-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 600px) {
@@ -306,7 +333,6 @@
       .resume-name { font-size: 1.5rem; }
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 <div class="page-wrap">
@@ -316,7 +342,7 @@
       <a class="back-link" href="/">hackatoa.com</a>
       <a class="back-link" href="/cover-letter" style="margin-left:0.5rem;">Cover Letter</a>
     </div>
-    <button class="btn" id="dl-btn" onclick="downloadPDF()">⬇ Download PDF</button>
+    <button class="btn" id="dl-btn" onclick="window.print()">⬇ Download PDF</button>
   </nav>
 
   <div id="pdf-content">
@@ -505,101 +531,6 @@
 
 </div><!-- /page-wrap -->
 
-<script>
-function downloadPDF() {
-  var btn = document.getElementById('dl-btn');
-  btn.disabled = true;
-  btn.textContent = 'Generating…';
-
-  // Clone the content so we can restyle for PDF without affecting the page
-  var source = document.getElementById('pdf-content');
-  var clone = source.cloneNode(true);
-
-  // Apply light/print styles to the clone
-  clone.style.cssText = 'background:#ffffff;color:#111111;font-family:Segoe UI,system-ui,-apple-system,sans-serif;padding:0;margin:0;';
-
-  clone.querySelectorAll('.project-card').forEach(function(el) {
-    el.style.cssText = 'background:#f5f5f5;border:1px solid #ddd;border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:0;overflow:hidden;';
-  });
-  clone.querySelectorAll('.project-name').forEach(function(el) {
-    el.style.color = '#111';
-  });
-  clone.querySelectorAll('.project-name a').forEach(function(el) {
-    el.style.color = '#5048c8';
-  });
-  clone.querySelectorAll('.project-desc').forEach(function(el) {
-    el.style.color = '#444';
-  });
-  clone.querySelectorAll('code').forEach(function(el) {
-    el.style.color = '#5048c8';
-  });
-  clone.querySelectorAll('.tag').forEach(function(el) {
-    el.style.cssText = 'background:#eee;border:1px solid #ccc;color:#333;font-size:0.78rem;padding:0.25rem 0.6rem;border-radius:4px;white-space:nowrap;';
-  });
-  clone.querySelectorAll('.section-title').forEach(function(el) {
-    el.style.color = '#5048c8';
-  });
-  clone.querySelectorAll('.job').forEach(function(el) {
-    el.style.borderColor = '#ccc';
-  });
-  clone.querySelectorAll('.job-title').forEach(function(el) {
-    el.style.color = '#111';
-  });
-  clone.querySelectorAll('.summary-text, .project-desc, .job-meta, .edu-school, .edu-dates, .skills-group-label').forEach(function(el) {
-    el.style.color = '#444';
-  });
-  clone.querySelectorAll('.job-bullets li').forEach(function(el) {
-    el.style.color = '#444';
-  });
-  clone.querySelectorAll('.resume-name').forEach(function(el) {
-    el.style.color = '#111';
-  });
-  clone.querySelectorAll('.resume-contact').forEach(function(el) {
-    el.style.color = '#444';
-  });
-  clone.querySelectorAll('.resume-contact a').forEach(function(el) {
-    el.style.color = '#5048c8';
-  });
-  clone.querySelectorAll('.meta-item').forEach(function(el) {
-    el.style.color = '#333';
-  });
-  clone.querySelectorAll('.meta-item strong').forEach(function(el) {
-    el.style.color = '#555';
-  });
-  clone.querySelectorAll('.edu-degree').forEach(function(el) {
-    el.style.color = '#111';
-  });
-  clone.querySelectorAll('.section-title::after').forEach(function(el) {
-    el.style.background = '#ddd';
-  });
-
-  // Append clone off-screen temporarily
-  clone.style.position = 'absolute';
-  clone.style.left = '-9999px';
-  clone.style.width = '794px'; // A4 width approx at 96dpi
-  document.body.appendChild(clone);
-
-  var opt = {
-    margin:      [10, 12, 10, 12],
-    filename:    'Jacob_Harris_Resume.pdf',
-    image:       { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-    jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak:   { mode: ['avoid-all', 'css', 'legacy'] }
-  };
-
-  html2pdf().set(opt).from(clone).save().then(function() {
-    document.body.removeChild(clone);
-    btn.disabled = false;
-    btn.innerHTML = '⬇ Download PDF';
-  }).catch(function(err) {
-    document.body.removeChild(clone);
-    btn.disabled = false;
-    btn.innerHTML = '⬇ Download PDF';
-    console.error('PDF generation failed:', err);
-    alert('PDF generation failed. Please try again.');
-  });
-}
-</script>
 </body>
 </html>
+
