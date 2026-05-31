@@ -42,7 +42,7 @@
           },
           {
             "key": "Content-Security-Policy",
-            "value": "default-src 'self'; script-src 'self' 'sha256-6q5jUfC/eyB7ToqrCWMYkpVI8bq5/MclDasAi+tsWpE=' 'sha256-cY4SyCZnGky8HH7U4cmrfMkdR7gpqSkN2FWka6B6Dlw=' https://alexgama11.github.io https://www.youtube.com https://s.ytimg.com https://pagead2.googlesyndication.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://alexgama11.github.io; img-src 'self' https://api.qrserver.com https://www.buymeacoffee.com data:; media-src 'self' https://github.com https://raw.githubusercontent.com; frame-src https://player.twitch.tv https://www.youtube.com; connect-src 'self' https://api.github.com; upgrade-insecure-requests;"
+            "value": "default-src 'self'; script-src 'self' 'sha256-6q5jUfC/eyB7ToqrCWMYkpVI8bq5/MclDasAi+tsWpE=' 'sha256-cY4SyCZnGky8HH7U4cmrfMkdR7gpqSkN2FWka6B6Dlw=' https://alexgama11.github.io https://www.youtube.com https://s.ytimg.com https://pagead2.googlesyndication.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://alexgama11.github.io; img-src 'self' https://api.qrserver.com https://www.buymeacoffee.com data:; media-src 'self' https://github.com https://raw.githubusercontent.com; frame-src https://player.twitch.tv https://www.youtube.com; connect-src 'self' https://api.github.com https://cloudflareinsights.com https://static.cloudflareinsights.com; upgrade-insecure-requests;"
           }
         ]
       }
