@@ -617,7 +617,7 @@
       <button id="scene-time-reset" class="scene-time-reset" type="button" title="Return to live time">↺ Live</button>
     </div>
     <input type="range" id="scene-time-slider" class="scene-time-slider"
-           min="0" max="1439" step="5" value="630" aria-label="Scene time of day">
+           min="0" max="1439" step="5" value="0" aria-label="Scene time of day">
     <div class="scene-clock-ticks">
       <span>12 AM</span><span>6 AM</span><span>Noon</span><span>6 PM</span><span>Midnight</span>
     </div>
@@ -626,21 +626,7 @@
   <script src="blog-data.js" defer></script>
   <script src="app.js" defer></script>
   <script src="background.js" defer></script>
-  <script>
-    // Avatar carousel — fade between photos every 4 seconds
-    (function () {
-      var imgs, idx = 0;
-      function cycle() {
-        imgs[idx].classList.remove('carousel-img--active');
-        idx = (idx + 1) % imgs.length;
-        imgs[idx].classList.add('carousel-img--active');
-      }
-      document.addEventListener('DOMContentLoaded', function () {
-        imgs = document.querySelectorAll('.avatar-carousel .carousel-img');
-        if (imgs.length > 1) setInterval(cycle, 4000);
-      });
-    })();
-  </script>
+  <script src="carousel.js" defer></script>
 </body>
 
 </html>
