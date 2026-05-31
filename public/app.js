@@ -172,18 +172,52 @@ function loadTrack(idx) {
     if (titleEl) titleEl.textContent = track.title;
 }
 
+function saveMusicState() {
+    try {
+        sessionStorage.setItem('hackatoa_player', JSON.stringify({
+            src: audio.src,
+            trackIdx: trackIndex,
+            time: audio.currentTime,
+            paused: audio.paused,
+            volume: audio.volume,
+            shuffleOrder: shuffleOrder,
+            trackIndex: trackIndex,
+        }));
+    } catch(e) {}
+}
+
+function restoreMusicState() {
+    try {
+        const s = JSON.parse(sessionStorage.getItem('hackatoa_player'));
+        if (!s || !s.src) return false;
+        if (s.shuffleOrder) shuffleOrder = s.shuffleOrder;
+        if (s.trackIndex != null) trackIndex = s.trackIndex;
+        audio.src = s.src;
+        audio.volume = s.volume != null ? s.volume : 0.25;
+        audio.currentTime = s.time || 0;
+        if (!s.paused) audio.play().catch(() => {});
+        const titleEl = document.querySelector('.music-title');
+        const track = TRACKS.find(t => t.src === s.src);
+        if (titleEl && track) titleEl.textContent = track.title;
+        return true;
+    } catch(e) { return false; }
+}
+
 function initMusicWidget() {
-    shuffleTracks();
+    const restored = restoreMusicState();
+    if (!restored) shuffleTracks();
 
     const volumeSlider = document.getElementById('music-volume');
     const skipBtn = document.getElementById('music-skip');
 
-    // Sync initial volume from slider default (25/100)
-    audio.volume = volumeSlider ? parseInt(volumeSlider.value, 10) / 100 : 0.25;
+    // Sync volume slider to current audio volume
+    if (volumeSlider) volumeSlider.value = Math.round(audio.volume * 100);
+    else audio.volume = 0.25;
 
     audio.addEventListener('ended', () => {
         loadTrack(trackIndex + 1);
         audio.play().catch(() => {});
+        saveMusicState();
     });
 
     if (volumeSlider) {
@@ -202,9 +236,11 @@ function initMusicWidget() {
 
     audio.addEventListener('play', () => {
         if (musicToggle) { musicToggle.dataset.state = 'playing'; musicToggle.textContent = 'Pause'; }
+        saveMusicState();
     });
     audio.addEventListener('pause', () => {
         if (musicToggle) { musicToggle.dataset.state = 'paused'; musicToggle.textContent = 'Play'; }
+        saveMusicState();
     });
 
     if (musicToggle) {
@@ -217,6 +253,8 @@ function initMusicWidget() {
             }
         });
     }
+    window.addEventListener('beforeunload', saveMusicState);
+    window.addEventListener('pagehide', saveMusicState);
 }
 
 function initBackgroundToggle() {
