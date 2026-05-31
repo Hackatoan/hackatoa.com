@@ -248,9 +248,14 @@ body.stormy .cloud::after  { background: #3a2828; }
   user-select: none;
 }
 
+/* Visible but ghosted when not hovered; pointer-events stay on so hover fires */
 body.bg-viewing .scene-clock {
-  opacity: 1;
+  opacity: 0.08;
   pointer-events: auto;
+  transform: translateX(-50%) translateY(4px);
+}
+body.bg-viewing .scene-clock:hover {
+  opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
 
