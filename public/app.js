@@ -173,9 +173,10 @@ function initMusicWidget() {
 
     if (skipBtn) {
         skipBtn.addEventListener('click', () => {
+            const wasPlaying = !audio.paused;
             trackIndex = (trackIndex + 1) % TRACKS.length;
             loadTrack(trackIndex);
-            if (!audio.paused) audio.play().catch(() => {});
+            if (wasPlaying) audio.play().catch(() => {});
         });
     }
 
