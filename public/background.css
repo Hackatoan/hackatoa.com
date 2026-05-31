@@ -4,8 +4,6 @@
   --sky-sunset-top:   #2a1810;
   --sky-sunset-bottom:#c04518;
   --sky-night:        #140e0a;
-  --ocean-day:        #0e2035;
-  --ocean-night:      #0a1622;
   --cloud-day:        rgba(240, 235, 220, 0.85);
   --cloud-night:      rgba(65, 50, 42, 0.65);
   --cloud-sunset:     rgba(185, 90, 62, 0.60);
@@ -52,11 +50,6 @@
 body.is-night .stars {
   opacity: 1;
   animation: twinkle 8s ease-in-out infinite alternate;
-}
-@keyframes twinkle {
-  0%   { opacity: 0.70; }
-  50%  { opacity: 1.00; }
-  100% { opacity: 0.82; }
 }
 
 /* Celestial body */
@@ -131,43 +124,57 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
 .cloud-4::before { width: 72px;  height: 72px;  top: -32px; left: 24px; }
 .cloud-4::after  { width: 82px;  height: 82px;  top: -42px; right: 28px; }
 
-/* ── Ocean ───────────────────────────────────────────────── */
-.ocean {
+/* ── Cityscape ───────────────────────────────────────────── */
+.cityscape {
   position: absolute;
   bottom: 0; left: 0;
-  width: 100%; height: 40%;
-  background-color: #0c1a26;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0, transparent 9px,
-    rgba(100, 155, 210, 0.10) 9px, rgba(100, 155, 210, 0.10) 10px
-  );
+  width: 100%; height: 25%;
   z-index: 2;
-  overflow: hidden;
-  transition: background-color 2s ease;
+  overflow: visible;
 }
 
-/* Horizon line */
-.ocean::before {
-  content: '';
+.cityscape-svg {
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: rgba(160, 210, 240, 0.22);
-  z-index: 5;
+  bottom: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: visible;
 }
 
-/* Wave crests */
-.wave {
-  position: absolute;
-  width: 200%;
-  left: -15%;
-  background: transparent;
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+/* Windows: dark during day, amber glow at night.
+   Transitions are slow so the cross-fade is gradual as time passes the horizon. */
+.win {
+  fill: #060a0d;
+  filter: none;
+  transition: fill 3s ease, filter 3s ease, opacity 3s ease;
 }
-.wave-1 { height: 32px; top:  4px; border-top: 1.5px solid rgba(130, 185, 230, 0.26); z-index: 4; }
-.wave-2 { height: 24px; top: 24px; border-top: 1.0px solid rgba(110, 165, 218, 0.18); z-index: 3; left: -25%; }
-.wave-3 { height: 16px; top: 42px; border-top: 1.0px solid rgba( 90, 145, 200, 0.13); z-index: 2; left:  -5%; }
+
+/* Night: warm amber indoor glow */
+body.is-night .win {
+  fill: #c97a14;
+  filter: drop-shadow(0 0 4px rgba(200, 118, 20, 0.85));
+}
+
+/* ~25% of windows stay unlit even at night — variety via nth-child */
+body.is-night .win:nth-child(4n+3) {
+  fill: #04070a;
+  filter: none;
+}
+
+/* A dimmer warm variant for some */
+body.is-night .win:nth-child(7n+5) {
+  fill: #9a5c0e;
+  filter: drop-shadow(0 0 2px rgba(150, 88, 14, 0.55));
+}
+
+/* Sunrise/sunset: windows fade toward off as day breaks, or glow dimly */
+body.is-sunset .win {
+  fill: #7a4a0a;
+  filter: drop-shadow(0 0 2px rgba(120, 72, 10, 0.4));
+}
+body.is-sunset .win:nth-child(4n+3) {
+  fill: #04070a;
+  filter: none;
+}
 
 /* ── Weather ─────────────────────────────────────────────── */
 .weather-effects {
@@ -178,12 +185,12 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   z-index: 5;
 }
 
-body.stormy .video-bg { background-color: #0c0806 !important; }
-body.stormy .ocean    { background-color: #060c10 !important; }
+body.stormy .video-bg      { background-color: #0c0806 !important; }
+body.stormy .cityscape-svg { opacity: 0.75; }
 body.stormy .cloud,
 body.stormy .cloud::before,
-body.stormy .cloud::after { background: #3a2828; }
-.stormy .sky { animation: lightning 10s infinite; }
+body.stormy .cloud::after  { background: #3a2828; }
+.stormy .sky               { animation: lightning 10s infinite; }
 
 @keyframes lightning {
   0%, 95%, 98%, 100% { background: transparent; }
@@ -203,21 +210,14 @@ body.stormy .cloud::after { background: #3a2828; }
   from { transform: translateX(0); }
   to   { transform: translateX(calc(100vw + 300px)); }
 }
-@keyframes waveRoll {
-  0%, 100% { transform: translateX(0%); }
-  50%      { transform: translateX(6%); }
-}
 @keyframes twinkle {
   0%   { opacity: 0.70; }
-  100% { opacity: 1.00; }
+  50%  { opacity: 1.00; }
+  100% { opacity: 0.82; }
 }
 @keyframes fall { to { transform: translateY(100vh); } }
 
-.cloud-1 { animation: moveClouds 50s linear infinite; }
-.cloud-2 { animation: moveClouds 70s linear infinite; animation-delay: -20s; }
-.cloud-3 { animation: moveClouds 60s linear infinite; animation-delay: -10s; }
-.cloud-4 { animation: moveClouds 80s linear infinite; animation-delay: -35s; }
-
-.wave-1 { animation: waveRoll 10s ease-in-out infinite; }
-.wave-2 { animation: waveRoll 14s ease-in-out infinite reverse; animation-delay: -5s; }
-.wave-3 { animation: waveRoll  8s ease-in-out infinite; animation-delay: -3s; }
+.cloud-1 { animation: moveClouds  50s linear infinite; }
+.cloud-2 { animation: moveClouds  70s linear infinite; animation-delay: -20s; }
+.cloud-3 { animation: moveClouds  60s linear infinite; animation-delay: -10s; }
+.cloud-4 { animation: moveClouds  80s linear infinite; animation-delay: -35s; }
