@@ -7,6 +7,6 @@
   }
   document.addEventListener('DOMContentLoaded', function () {
     imgs = document.querySelectorAll('.avatar-carousel .carousel-img');
-    if (imgs.length > 1) setInterval(cycle, 4000);
+    if (imgs.length > 1) setInterval(cycle, 10000);
   });
 })();
