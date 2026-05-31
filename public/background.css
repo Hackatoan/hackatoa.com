@@ -365,3 +365,16 @@ body.bg-viewing .scene-clock:hover {
   color: rgba(160, 170, 190, 0.4);
   letter-spacing: 0.02em;
 }
+
+
+/* Songs page link in music widget */
+.music-list-link {
+  color: var(--text-muted, #8b949e);
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0.2rem 0.3rem;
+  border-radius: 4px;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.music-list-link:hover { color: var(--accent, #58a6ff); }
