@@ -356,6 +356,81 @@ function renderBlogFromData() {
 
 
 
+function parseSongsFromSheetResponse(text) {
+    const prefix = 'setResponse(';
+    const start = text.indexOf(prefix);
+    const end = text.lastIndexOf(');');
+
+    if (start === -1 || end === -1 || end <= start + prefix.length) {
+        throw new Error('Invalid songs response format');
+    }
+
+    const payload = JSON.parse(text.slice(start + prefix.length, end));
+    const rows = payload?.table?.rows ?? [];
+
+    return rows
+        .map((row) => ({
+            title: row?.c?.[0]?.v || '',
+            lyrics: row?.c?.[1]?.v || '',
+        }))
+        .filter((song) => song.title || song.lyrics);
+}
+
+function renderSongs(container, songs) {
+    container.innerHTML = '';
+
+    if (!songs.length) {
+        const empty = document.createElement('div');
+        empty.className = 'text-yellow-200';
+        empty.textContent = 'No songs available right now.';
+        container.appendChild(empty);
+        return;
+    }
+
+    songs
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .forEach((song) => {
+            const songElement = document.createElement('div');
+            songElement.className = 'bg-black/50 border border-yellow-300 rounded-lg p-6';
+
+            const title = document.createElement('h2');
+            title.className = 'text-2xl text-yellow-300 mb-4';
+            title.textContent = song.title || 'Untitled';
+            songElement.appendChild(title);
+
+            const lyricsWrapper = document.createElement('div');
+            lyricsWrapper.className = 'space-y-2 text-yellow-100 leading-relaxed';
+            const lines = (song.lyrics || 'No lyrics available').split('\n');
+
+            lines.forEach((line) => {
+                const p = document.createElement('p');
+                p.textContent = line || ' ';
+                lyricsWrapper.appendChild(p);
+            });
+
+            songElement.appendChild(lyricsWrapper);
+            container.appendChild(songElement);
+        });
+}
+
+async function initSongs() {
+    const container = document.getElementById('songs-container');
+    if (!container) return;
+
+    try {
+        const response = await fetch(
+            'https://docs.google.com/spreadsheets/d/15U8Us6fNfLw9-YbWYnQPUQ6SpYxMbnOj5N6l6WgVvN8/gviz/tq?tqx=out:json&sheet=Songs',
+        );
+        if (!response.ok) throw new Error(`Songs fetch failed: ${response.status}`);
+        const text = await response.text();
+        const songs = parseSongsFromSheetResponse(text);
+        renderSongs(container, songs);
+    } catch (err) {
+        console.error('Error loading songs:', err);
+        container.innerHTML = '<div class="text-red-400">Unable to load songs right now.</div>';
+    }
+}
+
 const githubDateFormatter = new Intl.DateTimeFormat();
 
 function renderGitHubEvents(container, events) {
@@ -588,6 +663,7 @@ function initWalletCopy() {
 
 window.addEventListener('DOMContentLoaded', () => {
     initMOTD();
+    initSongs();
     initWalletCopy();
     initMusicWidget();
     initBackgroundToggle();
@@ -664,4 +740,3 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
