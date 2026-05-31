@@ -610,6 +610,19 @@
     <button class="bg-toggle" id="bg-toggle" type="button" aria-pressed="false" aria-label="Toggle background view" title="Toggle background view"></button>
   </div>
 
+  <div id="scene-clock" class="scene-clock" role="region" aria-label="Scene time controls">
+    <div class="scene-clock-header">
+      <span id="scene-time-display" class="scene-time-display">12:00 PM</span>
+      <span id="scene-phase-display" class="scene-phase-display">Daytime</span>
+      <button id="scene-time-reset" class="scene-time-reset" type="button" title="Return to live time">↺ Live</button>
+    </div>
+    <input type="range" id="scene-time-slider" class="scene-time-slider"
+           min="0" max="1439" step="5" value="630" aria-label="Scene time of day">
+    <div class="scene-clock-ticks">
+      <span>12 AM</span><span>6 AM</span><span>Noon</span><span>6 PM</span><span>Midnight</span>
+    </div>
+  </div>
+
   <script src="blog-data.js" defer></script>
   <script src="app.js" defer></script>
   <script src="background.js" defer></script>
