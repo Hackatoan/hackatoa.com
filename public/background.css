@@ -27,7 +27,7 @@
 .sky {
   position: absolute;
   top: 0; left: 0;
-  width: 100%; height: 62%;
+  width: 100%; height: 100%;
   z-index: 1;
   background-image: repeating-linear-gradient(
     -58deg,
@@ -185,7 +185,10 @@ body.is-sunset .win:nth-child(4n+3) {
   z-index: 5;
 }
 
-body.stormy .video-bg      { background-color: #0c0806 !important; }
+/* Storm sky: keep each time-of-day readable instead of pitch black */
+body.stormy            .video-bg { background-color: #0c0806 !important; }  /* night storm: near-black */
+body.is-day.stormy     .video-bg { background-color: #2e3d4a !important; }  /* day storm: dark overcast blue-grey */
+body.is-sunset.stormy  .video-bg { background-color: #1c1008 !important; }  /* sunset storm: deep murky orange-black */
 body.stormy .cityscape-svg { opacity: 0.75; }
 body.stormy .cloud,
 body.stormy .cloud::before,
