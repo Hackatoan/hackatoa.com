@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Songs — Hackatoa</title>
+  <meta name="description" content="Music playing on hackatoa.com — browse and preview all tracks." />
+  <link rel="icon" href="/assets/me.ico" type="image/x-icon" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    rgba(100, 180, 255, 0.12);
+      --primary:   #58a6ff;
+      --text-main: #e6edf3;
+      --text-muted:#8b949e;
+      --hover-bg:  #1f2937;
+      --playing-bg:#1a2a3a;
+    }
+
+    body {
+      background: radial-gradient(circle at 15% 0%, #1a2a3d 0, transparent 55%),
+                  radial-gradient(circle at 85% 0%, #1a1a2e 0, transparent 55%),
+                  linear-gradient(to bottom, #111827, var(--bg));
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 6rem;
+    }
+
+    .back-link {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 2.5rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--text-main); }
+    .back-link::before { content: '←'; }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .page-header h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 0.4rem;
+    }
+
+    .track-list {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .track-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .track-row:hover { background: var(--hover-bg); border-color: rgba(100,180,255,0.25); }
+    .track-row.is-playing { background: var(--playing-bg); border-color: var(--primary); }
+
+    .track-num {
+      width: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .track-row.is-playing .track-num { display: none; }
+    .track-eq {
+      display: none;
+      width: 1.5rem;
+      height: 1.2rem;
+      align-items: flex-end;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .track-row.is-playing .track-eq { display: flex; }
+    .track-eq span {
+      flex: 1;
+      background: var(--primary);
+      border-radius: 1px;
+      animation: eq-bar 0.8s ease-in-out infinite alternate;
+    }
+    .track-eq span:nth-child(2) { animation-delay: 0.15s; }
+    .track-eq span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes eq-bar {
+      from { height: 30%; }
+      to   { height: 100%; }
+    }
+    .track-row.is-paused .track-eq span { animation-play-state: paused; }
+
+    .track-title {
+      flex: 1;
+      font-size: 0.95rem;
+    }
+    .track-row.is-playing .track-title { color: var(--primary); font-weight: 600; }
+
+    .track-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      padding: 0.3rem 0.7rem;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .track-btn:hover { color: var(--text-main); border-color: var(--primary); }
+    .track-row.is-playing .track-btn { color: var(--primary); border-color: var(--primary); }
+
+    /* Mini player bar at bottom */
+    .mini-player {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(13, 17, 23, 0.92);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 100;
+    }
+    .mini-player-title {
+      flex: 1;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mini-player-title strong { color: var(--text-main); }
+    .mini-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      padding: 0.35rem 0.8rem;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .mini-btn:hover { color: var(--text-main); border-color: var(--primary); }
+    .mini-btn.active { color: var(--primary); border-color: var(--primary); }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      cursor: pointer;
+      position: absolute;
+      top: 0; left: 0;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.5s linear;
+    }
+  </style>
+</head>
+<body>
+
+<a class="back-link" href="/">Back to main</a>
+
+<div class="page-header">
+  <h1>🎵 Songs</h1>
+  <p>All tracks in the player — click any to preview</p>
+</div>
+
+<div class="track-list" id="track-list"></div>
+
+<div class="mini-player" id="mini-player">
+  <div class="progress-bar-wrap" id="progress-wrap">
+    <div class="progress-bar-fill" id="progress-fill"></div>
+  </div>
+  <div class="mini-player-title" id="mini-title"><strong>No track playing</strong></div>
+  <button class="mini-btn" id="btn-prev">⏮</button>
+  <button class="mini-btn" id="btn-play">▶ Play</button>
+  <button class="mini-btn" id="btn-skip">⏭</button>
+</div>
+
+<script>
+const TRACKS = [
+    { title: '40kb Memory',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/40kb%20Memory.mp3' },
+    { title: 'Bad Condition',             src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Bad%20Condition.mp3' },
+    { title: 'Buffer Stream Blue',        src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Buffer%20Stream%20Blue.mp3' },
+    { title: 'Cursor Trail',              src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Cursor%20Trail.mp3' },
+    { title: 'Desktop Meadow',            src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Desktop%20Meadow.mp3' },
+    { title: 'Dial-Up Lullaby',           src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Dial-Up%20Lullaby.mp3' },
+    { title: 'Heart Not Found',           src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Heart%20Not%20Found.mp3' },
+    { title: 'Pink Guestbook',            src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Pink%20Guestbook.mp3' },
+    { title: 'Under Construction Forever',src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Under%20Construction%20Forever.mp3' },
+    { title: 'Winamp Visualiser',         src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Winampvisualiser.mp3' },
+    { title: 'Half Asleep',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Half%20Asleep.mp3' },
+    { title: 'Slow Scroll',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Slow%20Scroll.mp3' },
+    { title: 'Rain on the Blue Chair',    src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Rain%20on%20the%20Blue%20Chair.mp3' },
+    { title: 'Pocket Reset',              src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Pocket%20Reset.mp3' },
+    { title: 'Rain On Glass',             src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Rain%20On%20Glass.mp3' },
+];
+
+// --- Shared state via sessionStorage ---
+function saveState() {
+    const s = {
+        src: audio.src,
+        trackIdx: currentIdx,
+        time: audio.currentTime,
+        paused: audio.paused,
+        volume: audio.volume,
+        shuffleOrder: shuffleOrder,
+        trackIndex: trackIndex,
+    };
+    sessionStorage.setItem('hackatoa_player', JSON.stringify(s));
+}
+
+function loadState() {
+    try { return JSON.parse(sessionStorage.getItem('hackatoa_player')); }
+    catch { return null; }
+}
+
+// --- Player logic ---
+const audio = new Audio();
+let shuffleOrder = [...Array(TRACKS.length).keys()];
+let trackIndex = 0;
+let currentIdx = 0; // actual TRACKS index of current track
+
+function findTrackIndex(src) {
+    return TRACKS.findIndex(t => t.src === src);
+}
+
+function setTrack(idx, play) {
+    currentIdx = idx;
+    audio.src = TRACKS[idx].src;
+    audio.load();
+    if (play) audio.play().catch(() => {});
+    updateUI();
+    saveState();
+}
+
+function updateUI() {
+    const titleEl = document.getElementById('mini-title');
+    const playBtn = document.getElementById('btn-play');
+    if (titleEl) titleEl.innerHTML = '<strong>' + (TRACKS[currentIdx] ? TRACKS[currentIdx].title : 'No track') + '</strong>';
+    if (playBtn) playBtn.textContent = audio.paused ? '▶ Play' : '⏸ Pause';
+
+    document.querySelectorAll('.track-row').forEach((row, i) => {
+        row.classList.remove('is-playing', 'is-paused');
+        const btn = row.querySelector('.track-btn');
+        if (i === currentIdx) {
+            row.classList.add(audio.paused ? 'is-paused' : 'is-playing');
+            if (btn) btn.textContent = audio.paused ? '▶ Resume' : '⏸ Pause';
+        } else {
+            if (btn) btn.textContent = '▶ Play';
+        }
+    });
+}
+
+// Restore state from main page if available
+const saved = loadState();
+if (saved && saved.src) {
+    const idx = findTrackIndex(saved.src);
+    currentIdx = idx >= 0 ? idx : 0;
+    shuffleOrder = saved.shuffleOrder || shuffleOrder;
+    trackIndex = saved.trackIndex || 0;
+    audio.src = saved.src;
+    audio.volume = saved.volume != null ? saved.volume : 0.25;
+    audio.currentTime = saved.time || 0;
+    // If it was playing on main page, keep playing
+    if (!saved.paused) audio.play().catch(() => {});
+} else {
+    audio.volume = 0.25;
+}
+
+// Build track list
+const list = document.getElementById('track-list');
+TRACKS.forEach((track, i) => {
+    const row = document.createElement('div');
+    row.className = 'track-row';
+    row.dataset.idx = i;
+    row.innerHTML = `
+        <div class="track-num">${i + 1}</div>
+        <div class="track-eq"><span></span><span></span><span></span></div>
+        <div class="track-title">${track.title}</div>
+        <button class="track-btn">▶ Play</button>
+    `;
+    const btn = row.querySelector('.track-btn');
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (i === currentIdx) {
+            if (audio.paused) { audio.play().catch(() => {}); }
+            else { audio.pause(); }
+        } else {
+            setTrack(i, true);
+        }
+        updateUI();
+        saveState();
+    });
+    row.addEventListener('click', () => {
+        if (i !== currentIdx) { setTrack(i, true); }
+        else if (audio.paused) { audio.play().catch(() => {}); }
+        else { audio.pause(); }
+        updateUI();
+        saveState();
+    });
+    list.appendChild(row);
+});
+
+// Mini player controls
+document.getElementById('btn-play').addEventListener('click', () => {
+    if (audio.paused) audio.play().catch(() => {});
+    else audio.pause();
+    updateUI(); saveState();
+});
+document.getElementById('btn-skip').addEventListener('click', () => {
+    const next = (currentIdx + 1) % TRACKS.length;
+    setTrack(next, !audio.paused);
+});
+document.getElementById('btn-prev').addEventListener('click', () => {
+    if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+    const prev = (currentIdx - 1 + TRACKS.length) % TRACKS.length;
+    setTrack(prev, !audio.paused);
+});
+
+// Progress bar
+const fill = document.getElementById('progress-fill');
+audio.addEventListener('timeupdate', () => {
+    if (audio.duration) fill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+});
+document.getElementById('progress-wrap').addEventListener('click', (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pct * audio.duration;
+});
+
+audio.addEventListener('ended', () => {
+    const next = (currentIdx + 1) % TRACKS.length;
+    setTrack(next, true);
+});
+audio.addEventListener('play', () => { updateUI(); saveState(); });
+audio.addEventListener('pause', () => { updateUI(); saveState(); });
+
+// Save state before navigating away
+window.addEventListener('beforeunload', saveState);
+window.addEventListener('pagehide', saveState);
+
+updateUI();
+</script>
+</body>
+</html>
