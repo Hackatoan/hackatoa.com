@@ -138,13 +138,30 @@ const audio = new Audio();
 let shuffleOrder = [];
 let trackIndex = 0;
 
-function shuffleTracks() {
-    shuffleOrder = [...Array(TRACKS.length).keys()].sort(() => Math.random() - 0.5);
+function shuffleTracks(lastTrackIndex) {
+    // Fisher-Yates shuffle
+    const arr = [...Array(TRACKS.length).keys()];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    // Ensure the first song of the new cycle isn't the same as the last
+    if (lastTrackIndex !== undefined && arr[0] === lastTrackIndex && arr.length > 1) {
+        [arr[0], arr[1]] = [arr[1], arr[0]];
+    }
+    shuffleOrder = arr;
     trackIndex = 0;
 }
 
 function loadTrack(idx) {
-    const track = TRACKS[shuffleOrder[idx % TRACKS.length]];
+    // When we've exhausted the shuffle order, reshuffle for the next cycle
+    if (idx >= TRACKS.length) {
+        const lastPlayed = shuffleOrder[TRACKS.length - 1];
+        shuffleTracks(lastPlayed);
+        idx = 0;
+    }
+    trackIndex = idx;
+    const track = TRACKS[shuffleOrder[idx]];
     audio.src = track.src;
     const titleEl = document.querySelector('.music-title');
     if (titleEl) titleEl.textContent = track.title;
@@ -160,8 +177,7 @@ function initMusicWidget() {
     audio.volume = volumeSlider ? parseInt(volumeSlider.value, 10) / 100 : 0.25;
 
     audio.addEventListener('ended', () => {
-        trackIndex = (trackIndex + 1) % TRACKS.length;
-        loadTrack(trackIndex);
+        loadTrack(trackIndex + 1);
         audio.play().catch(() => {});
     });
 
@@ -174,8 +190,7 @@ function initMusicWidget() {
     if (skipBtn) {
         skipBtn.addEventListener('click', () => {
             const wasPlaying = !audio.paused;
-            trackIndex = (trackIndex + 1) % TRACKS.length;
-            loadTrack(trackIndex);
+            loadTrack(trackIndex + 1);
             if (wasPlaying) audio.play().catch(() => {});
         });
     }
