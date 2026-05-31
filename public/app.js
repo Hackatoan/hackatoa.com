@@ -132,6 +132,11 @@ const TRACKS = [
     { title: 'Pink Guestbook',            src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Pink%20Guestbook.mp3' },
     { title: 'Under Construction Forever',src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Under%20Construction%20Forever.mp3' },
     { title: 'Winamp Visualiser',         src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Winampvisualiser.mp3' },
+    { title: 'Half Asleep',                  src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Half%20Asleep.mp3' },
+    { title: 'Slow Scroll',                  src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Slow%20Scroll.mp3' },
+    { title: 'Rain on the Blue Chair',       src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Rain%20on%20the%20Blue%20Chair.mp3' },
+    { title: 'Pocket Reset',                 src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Pocket%20Reset.mp3' },
+    { title: 'Rain On Glass',                src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Rain%20On%20Glass.mp3' },
 ];
 
 const audio = new Audio();
