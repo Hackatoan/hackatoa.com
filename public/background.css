@@ -143,21 +143,28 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
 /* Windows: dark during day, amber glow at night.
    Transitions are slow so the cross-fade is gradual as time passes the horizon. */
 .win {
-  fill: #060a0d;
+  fill: rgba(120, 160, 200, 0.18);
+  stroke: rgba(160, 200, 240, 0.25);
+  stroke-width: 0.5;
   filter: none;
-  transition: fill 3s ease, filter 3s ease, opacity 3s ease;
+  transition: fill 3s ease, filter 3s ease, stroke 3s ease;
 }
 
-/* Night: warm amber indoor glow */
 body.is-night .win {
-  fill: #c97a14;
-  filter: drop-shadow(0 0 4px rgba(200, 118, 20, 0.85));
+  fill: #d4841a;
+  stroke: rgba(220, 160, 60, 0.4);
+  filter: drop-shadow(0 0 3px rgba(210, 130, 20, 0.9));
 }
 
-/* ~25% of windows stay unlit even at night — variety via nth-child */
-body.is-night .win:nth-child(4n+3) {
+body.is-night .win:nth-child(5n+4) {
   fill: #04070a;
+  stroke: none;
   filter: none;
+}
+
+body.is-sunset .win {
+  fill: rgba(200, 100, 40, 0.22);
+  stroke: rgba(220, 130, 60, 0.3);
 }
 
 /* A dimmer warm variant for some */
