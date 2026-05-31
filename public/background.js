@@ -120,7 +120,15 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('is-day', 'is-night', 'is-sunset');
         document.body.classList.add(bodyClass);
 
+        // ── FIX: Update clock display FIRST, before any celestial DOM work.
+        // This way a missing sky element can never block the clock from updating.
+        updateSceneClockDisplay(totalMinutes, state);
+
         // ── Celestial body ────────────────────────────────
+        // Guard: if sky elements are missing, skip DOM manipulation but clock
+        // display has already been updated above.
+        if (!celestialBody || !videoBg) return;
+
         let progress;
         if (state === 'day' || state === 'sunrise' || state === 'sunset') {
             celestialBody.style.background = sunColor;
@@ -162,7 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
         sunGlow.style.top  = `${yPos}%`;
 
         updateCityscapeLighting(state, xPos);
-        updateSceneClockDisplay(totalMinutes, state);
     }
 
     // ── Scene clock widget wiring ──────────────────────────
@@ -175,6 +182,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const now = new Date();
         slider.value = now.getHours() * 60 + now.getMinutes();
 
+        // FIX: Immediately render the correct time so the display is populated
+        // from the first frame, not just after the first 10-second interval.
+        const initMinutes = now.getHours() * 60 + now.getMinutes();
+        let initState = 'night';
+        if      (initMinutes >= 300  && initMinutes < 420)  initState = 'sunrise';
+        else if (initMinutes >= 420  && initMinutes < 1020) initState = 'day';
+        else if (initMinutes >= 1020 && initMinutes < 1140) initState = 'sunset';
+        updateSceneClockDisplay(initMinutes, initState);
+
+        // FIX: assign parseInt to bgTimeOverride so updateTimeOfDay() uses it
         slider.addEventListener('input', () => {
             bgTimeOverride = parseInt(slider.value, 10);
             updateTimeOfDay();
@@ -184,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // (so you can set it to e.g. "night" and leave it there to watch the stars)
 
         if (resetBtn) {
+            // FIX: reset to null, sync slider to real time, then update display
             resetBtn.addEventListener('click', () => {
                 bgTimeOverride = null;
                 const now = new Date();
