@@ -81,10 +81,161 @@
       <div class="weather-effects"></div>
     </div>
 
-    <div class="ocean">
-      <div class="wave wave-1"></div>
-      <div class="wave wave-2"></div>
-      <div class="wave wave-3"></div>
+    <div class="cityscape">
+      <svg class="cityscape-svg" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Building fill gradient — updated by background.js for directional sun lighting -->
+          <linearGradient id="bldg-fill" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="0">
+            <stop id="bldg-s1" offset="0%"   stop-color="#0c1018"/>
+            <stop id="bldg-s2" offset="100%" stop-color="#0d1120"/>
+          </linearGradient>
+        </defs>
+
+        <!-- ── Skyline buildings ───────────────────────────────── -->
+        <g fill="url(#bldg-fill)">
+          <rect x="0"   y="180" width="80"  height="120"/><!-- short block, left edge -->
+          <rect x="85"  y="125" width="55"  height="175"/><!-- medium tower -->
+          <rect x="145" y="80"  width="70"  height="220"/><!-- tall building -->
+          <rect x="220" y="210" width="45"  height="90"/> <!-- short filler -->
+          <rect x="270" y="40"  width="50"  height="260"/><!-- skyscraper -->
+          <rect x="325" y="155" width="65"  height="145"/><!-- medium -->
+          <rect x="395" y="105" width="38"  height="195"/><!-- thin tower -->
+          <rect x="438" y="195" width="85"  height="105"/><!-- wide short block -->
+          <rect x="528" y="20"  width="52"  height="280"/><!-- tallest skyscraper -->
+          <rect x="585" y="145" width="60"  height="155"/><!-- medium -->
+          <rect x="650" y="110" width="80"  height="190"/><!-- medium-tall -->
+          <rect x="735" y="170" width="42"  height="130"/><!-- thin medium -->
+          <rect x="782" y="205" width="88"  height="95"/> <!-- short wide -->
+          <rect x="875" y="125" width="55"  height="175"/><!-- medium tower -->
+          <rect x="935" y="170" width="65"  height="130"/><!-- right edge -->
+        </g>
+
+        <!-- ── Window lights ──────────────────────────────────── -->
+        <!-- .win fill/filter are driven by CSS body state classes (is-day / is-night / is-sunset) -->
+        <!-- ~25% intentionally stay dark at night (nth-child selectors) for realistic scatter  -->
+        <g class="windows">
+          <!-- Building 2: x=85 medium tower -->
+          <rect class="win" x="92"  y="138" width="7" height="8"/>
+          <rect class="win" x="105" y="138" width="7" height="8"/>
+          <rect class="win" x="118" y="138" width="7" height="8"/>
+          <rect class="win" x="92"  y="160" width="7" height="8"/>
+          <rect class="win" x="118" y="160" width="7" height="8"/>
+          <rect class="win" x="105" y="182" width="7" height="8"/>
+          <rect class="win" x="92"  y="205" width="7" height="8"/>
+          <rect class="win" x="118" y="225" width="7" height="8"/>
+          <rect class="win" x="105" y="248" width="7" height="8"/>
+          <rect class="win" x="92"  y="268" width="7" height="8"/>
+
+          <!-- Building 3: x=145 tall building -->
+          <rect class="win" x="152" y="92"  width="7" height="8"/>
+          <rect class="win" x="165" y="92"  width="7" height="8"/>
+          <rect class="win" x="178" y="92"  width="7" height="8"/>
+          <rect class="win" x="191" y="92"  width="7" height="8"/>
+          <rect class="win" x="152" y="115" width="7" height="8"/>
+          <rect class="win" x="178" y="115" width="7" height="8"/>
+          <rect class="win" x="165" y="138" width="7" height="8"/>
+          <rect class="win" x="191" y="138" width="7" height="8"/>
+          <rect class="win" x="152" y="162" width="7" height="8"/>
+          <rect class="win" x="165" y="162" width="7" height="8"/>
+          <rect class="win" x="178" y="162" width="7" height="8"/>
+          <rect class="win" x="191" y="185" width="7" height="8"/>
+          <rect class="win" x="152" y="185" width="7" height="8"/>
+          <rect class="win" x="165" y="208" width="7" height="8"/>
+          <rect class="win" x="178" y="228" width="7" height="8"/>
+          <rect class="win" x="152" y="250" width="7" height="8"/>
+          <rect class="win" x="191" y="268" width="7" height="8"/>
+
+          <!-- Building 5: x=270 skyscraper -->
+          <rect class="win" x="277" y="52"  width="7" height="8"/>
+          <rect class="win" x="291" y="52"  width="7" height="8"/>
+          <rect class="win" x="305" y="52"  width="7" height="8"/>
+          <rect class="win" x="277" y="74"  width="7" height="8"/>
+          <rect class="win" x="305" y="74"  width="7" height="8"/>
+          <rect class="win" x="291" y="96"  width="7" height="8"/>
+          <rect class="win" x="277" y="118" width="7" height="8"/>
+          <rect class="win" x="305" y="118" width="7" height="8"/>
+          <rect class="win" x="291" y="140" width="7" height="8"/>
+          <rect class="win" x="277" y="162" width="7" height="8"/>
+          <rect class="win" x="305" y="162" width="7" height="8"/>
+          <rect class="win" x="291" y="184" width="7" height="8"/>
+          <rect class="win" x="277" y="206" width="7" height="8"/>
+          <rect class="win" x="305" y="228" width="7" height="8"/>
+          <rect class="win" x="291" y="250" width="7" height="8"/>
+          <rect class="win" x="277" y="272" width="7" height="8"/>
+
+          <!-- Building 7: x=395 thin tower -->
+          <rect class="win" x="401" y="118" width="6" height="8"/>
+          <rect class="win" x="414" y="118" width="6" height="8"/>
+          <rect class="win" x="401" y="141" width="6" height="8"/>
+          <rect class="win" x="414" y="163" width="6" height="8"/>
+          <rect class="win" x="401" y="186" width="6" height="8"/>
+          <rect class="win" x="414" y="208" width="6" height="8"/>
+          <rect class="win" x="401" y="232" width="6" height="8"/>
+          <rect class="win" x="414" y="254" width="6" height="8"/>
+          <rect class="win" x="401" y="273" width="6" height="8"/>
+
+          <!-- Building 9: x=528 tallest skyscraper -->
+          <rect class="win" x="534" y="33"  width="7" height="8"/>
+          <rect class="win" x="548" y="33"  width="7" height="8"/>
+          <rect class="win" x="562" y="33"  width="7" height="8"/>
+          <rect class="win" x="534" y="56"  width="7" height="8"/>
+          <rect class="win" x="562" y="56"  width="7" height="8"/>
+          <rect class="win" x="548" y="79"  width="7" height="8"/>
+          <rect class="win" x="534" y="102" width="7" height="8"/>
+          <rect class="win" x="562" y="102" width="7" height="8"/>
+          <rect class="win" x="548" y="125" width="7" height="8"/>
+          <rect class="win" x="534" y="148" width="7" height="8"/>
+          <rect class="win" x="562" y="148" width="7" height="8"/>
+          <rect class="win" x="548" y="171" width="7" height="8"/>
+          <rect class="win" x="534" y="194" width="7" height="8"/>
+          <rect class="win" x="562" y="217" width="7" height="8"/>
+          <rect class="win" x="548" y="240" width="7" height="8"/>
+          <rect class="win" x="534" y="263" width="7" height="8"/>
+          <rect class="win" x="562" y="280" width="7" height="8"/>
+
+          <!-- Building 10: x=585 medium -->
+          <rect class="win" x="591" y="158" width="7" height="8"/>
+          <rect class="win" x="605" y="158" width="7" height="8"/>
+          <rect class="win" x="619" y="158" width="7" height="8"/>
+          <rect class="win" x="633" y="180" width="7" height="8"/>
+          <rect class="win" x="591" y="180" width="7" height="8"/>
+          <rect class="win" x="605" y="203" width="7" height="8"/>
+          <rect class="win" x="619" y="225" width="7" height="8"/>
+          <rect class="win" x="591" y="248" width="7" height="8"/>
+          <rect class="win" x="633" y="268" width="7" height="8"/>
+          <rect class="win" x="605" y="278" width="7" height="8"/>
+
+          <!-- Building 11: x=650 medium-tall wide -->
+          <rect class="win" x="656" y="123" width="7" height="8"/>
+          <rect class="win" x="670" y="123" width="7" height="8"/>
+          <rect class="win" x="684" y="123" width="7" height="8"/>
+          <rect class="win" x="698" y="123" width="7" height="8"/>
+          <rect class="win" x="712" y="145" width="7" height="8"/>
+          <rect class="win" x="656" y="145" width="7" height="8"/>
+          <rect class="win" x="670" y="167" width="7" height="8"/>
+          <rect class="win" x="684" y="167" width="7" height="8"/>
+          <rect class="win" x="698" y="190" width="7" height="8"/>
+          <rect class="win" x="712" y="190" width="7" height="8"/>
+          <rect class="win" x="656" y="213" width="7" height="8"/>
+          <rect class="win" x="670" y="235" width="7" height="8"/>
+          <rect class="win" x="684" y="257" width="7" height="8"/>
+          <rect class="win" x="698" y="275" width="7" height="8"/>
+          <rect class="win" x="712" y="278" width="7" height="8"/>
+
+          <!-- Building 14: x=875 medium tower -->
+          <rect class="win" x="881" y="138" width="7" height="8"/>
+          <rect class="win" x="894" y="138" width="7" height="8"/>
+          <rect class="win" x="907" y="160" width="7" height="8"/>
+          <rect class="win" x="920" y="160" width="7" height="8"/>
+          <rect class="win" x="881" y="183" width="7" height="8"/>
+          <rect class="win" x="907" y="183" width="7" height="8"/>
+          <rect class="win" x="894" y="206" width="7" height="8"/>
+          <rect class="win" x="920" y="206" width="7" height="8"/>
+          <rect class="win" x="881" y="230" width="7" height="8"/>
+          <rect class="win" x="907" y="252" width="7" height="8"/>
+          <rect class="win" x="894" y="272" width="7" height="8"/>
+        </g>
+      </svg>
     </div>
   </div>
 
