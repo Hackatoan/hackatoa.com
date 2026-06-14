@@ -1,7 +1,7 @@
 name: Daily MOTD Generation
 on:
   schedule:
-    - cron: '0 9 * * *'
+    - cron: '0 22 * * *'
   workflow_dispatch:
 permissions:
   contents: write
