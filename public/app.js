@@ -594,13 +594,32 @@ async function initMOTD() {
 
     const greeting = getTimeGreeting();
 
+    // Viewer's local date as YYYY-MM-DD
+    const now = new Date();
+    const localDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
     try {
         const response = await fetch('/motd.json');
         if (!response.ok) {
             throw new Error('MOTD file not found or unreadable');
         }
         const data = await response.json();
-        const message = (data && data.message) ? data.message : "Stay curious. Keep building.";
+
+        // Check if today's server message matches the viewer's local date
+        const serverDate = data.lastUpdated ? data.lastUpdated.slice(0, 10) : null;
+        let message = null;
+
+        if (serverDate === localDate && data.message) {
+            message = data.message;
+        } else if (Array.isArray(data.history)) {
+            // Find the most recent history entry matching the viewer's local date
+            const match = [...data.history].reverse().find(e => e.date === localDate);
+            if (match) message = match.message;
+        }
+
+        // Fall back to the current server message
+        if (!message) message = data.message || "Stay curious. Keep building.";
+
         motdBody.textContent = greeting + " " + message;
     } catch (error) {
         console.error('Error fetching MOTD:', error);
