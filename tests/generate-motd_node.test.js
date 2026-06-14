@@ -111,9 +111,11 @@ describe('generateMOTD Script', () => {
         await generateMOTD();
 
         assert.strictEqual(writtenData.message, 'Stay curious. Keep building.');
-        assert.ok(consoleErrorArgs.some(args => args[0].includes('Error with gemini-1.5-flash')));
-        assert.ok(consoleErrorArgs.some(args => args[0].includes('Error with gemini-1.5-pro')));
-        assert.ok(consoleErrorArgs.some(args => args[0].includes('Error with gemini-pro')));
+        assert.ok(consoleErrorArgs.some(args => args[0].includes('Error with gemini-3.1-flash-lite-preview')));
+        assert.ok(consoleErrorArgs.some(args => args[0].includes('Error with gemini-3-flash-preview')));
+        assert.ok(consoleErrorArgs.some(args => args[0].includes('Error with gemini-2.5-flash')));
+        assert.ok(consoleErrorArgs.some(args => args[0].includes('Error with gemini-2.5-flash-lite')));
+        assert.ok(consoleErrorArgs.some(args => args[0].includes('All models failed')));
     });
 
 });

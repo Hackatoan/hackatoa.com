@@ -9,11 +9,6 @@ async function generateMOTD() {
 
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
-    if (!apiKey) {
-        console.error("ERROR: GEMINI_API_KEY not found.");
-        process.exit(1);
-    }
-
     // Read existing data to get current message and full history
     let previousMessage = null;
     let history = [];
@@ -23,6 +18,12 @@ async function generateMOTD() {
         if (Array.isArray(existing?.history)) history = existing.history;
     } catch {
         // File doesn't exist yet, that's fine
+    }
+
+    if (!apiKey) {
+        console.error("ERROR: GEMINI_API_KEY not found.");
+        await writeOutput(outputPath, 'Stay curious. Keep building.', previousMessage, history);
+        return;
     }
 
     // Use UTC+14 (Pacific/Kiritimati) — the furthest-ahead timezone on Earth —
@@ -83,7 +84,7 @@ async function generateMOTD() {
     }
 
     console.error("ERROR: All models failed. No MOTD generated.");
-    process.exit(1);
+    await writeOutput(outputPath, 'Stay curious. Keep building.', previousMessage, history);
 }
 
 async function writeOutput(targetPath, newMessage, previousMessage, existingHistory) {
