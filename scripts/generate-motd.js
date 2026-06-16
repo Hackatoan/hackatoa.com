@@ -11,22 +11,27 @@ async function generateMOTD() {
 
     // Read existing data to get current message and full history
     let previousMessage = null;
+    let previousDate = null;
     let history = [];
     try {
         const existing = JSON.parse(await fs.promises.readFile(outputPath, 'utf8'));
         if (existing?.message) previousMessage = existing.message;
+        if (existing?.date) previousDate = existing.date;
         if (Array.isArray(existing?.history)) history = existing.history;
     } catch {
         // File doesn't exist yet, that's fine
     }
 
+    // Kiritimati (UTC+14) is the furthest-ahead timezone — generating here means
+    // the MOTD is ready as soon as that calendar day starts anywhere on Earth.
+    const todayDate = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Kiritimati' });
+    const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'Pacific/Kiritimati' });
+
     if (!apiKey) {
         console.error("ERROR: GEMINI_API_KEY not found.");
-        await writeOutput(outputPath, 'Stay curious. Keep building.', previousMessage, history);
+        await writeOutput(outputPath, 'Stay curious. Keep building.', previousMessage, previousDate, history, todayDate);
         return;
     }
-
-    const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles' });
 
     const avoidList = history.length > 0
         ? `\n\nYou have already used the following messages — do NOT repeat or closely paraphrase any of them:\n${history.map((h, i) => `${i + 1}. "${h.message}"`).join('\n')}`
@@ -63,7 +68,7 @@ async function generateMOTD() {
                     continue;
                 }
 
-                await writeOutput(outputPath, cleaned, previousMessage, history);
+                await writeOutput(outputPath, cleaned, previousMessage, previousDate, history, todayDate);
                 console.log(`Success with ${modelName}: ${cleaned}`);
                 return;
             }
@@ -82,25 +87,22 @@ async function generateMOTD() {
     }
 
     console.error("ERROR: All models failed. No MOTD generated.");
-    await writeOutput(outputPath, 'Stay curious. Keep building.', previousMessage, history);
+    await writeOutput(outputPath, 'Stay curious. Keep building.', previousMessage, previousDate, history, todayDate);
 }
 
-async function writeOutput(targetPath, newMessage, previousMessage, existingHistory) {
-    // Push the outgoing current message into history before replacing it
+async function writeOutput(targetPath, newMessage, previousMessage, previousDate, existingHistory, newDate) {
+    // Archive the outgoing message with the date it was generated FOR (not "now")
     const updatedHistory = [...existingHistory];
-    if (previousMessage) {
-        // Avoid duplicates in history itself
+    if (previousMessage && previousDate) {
         const alreadyInHistory = updatedHistory.some(h => h.message === previousMessage);
         if (!alreadyInHistory) {
-            updatedHistory.push({
-                message: previousMessage,
-                date: new Date().toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' })
-            });
+            updatedHistory.push({ message: previousMessage, date: previousDate });
         }
     }
 
     const finalOutput = {
         message: newMessage,
+        date: newDate,
         lastUpdated: new Date().toISOString(),
         status: "success",
         history: updatedHistory
@@ -117,4 +119,5 @@ if (require.main === module) {
 }
 
 module.exports = { generateMOTD, writeOutput };
+
 
