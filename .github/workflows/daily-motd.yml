@@ -1,7 +1,7 @@
 name: Daily MOTD Generation
 on:
   schedule:
-    - cron: '0 22 * * *'
+    - cron: '0 8 * * *'
   workflow_dispatch:
 permissions:
   contents: write
@@ -42,3 +42,4 @@ jobs:
           git commit -m "chore: automated MOTD update"
           git pull --rebase origin Main
           git push origin Main
+
