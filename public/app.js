@@ -580,19 +580,9 @@ function initGitHubFeed() {
 }
 
 // MOTD System
-function getTimeGreeting() {
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) return "Good morning.";
-    if (hour >= 12 && hour < 17) return "Good afternoon.";
-    if (hour >= 17 && hour < 21) return "Good evening.";
-    return "Good night.";
-}
-
 async function initMOTD() {
     const motdBody = document.getElementById('motd-body');
     if (!motdBody) return;
-
-    const greeting = getTimeGreeting();
 
     // Viewer's local date as YYYY-MM-DD
     const now = new Date();
@@ -606,7 +596,7 @@ async function initMOTD() {
         const data = await response.json();
 
         // Check if today's server message matches the viewer's local date
-        const serverDate = data.lastUpdated ? data.lastUpdated.slice(0, 10) : null;
+        const serverDate = data.lastUpdated ? new Date(data.lastUpdated).toLocaleDateString('en-CA', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }) : null;
         let message = null;
 
         if (serverDate === localDate && data.message) {
@@ -620,10 +610,10 @@ async function initMOTD() {
         // Fall back to the current server message
         if (!message) message = data.message || "Stay curious. Keep building.";
 
-        motdBody.textContent = greeting + " " + message;
+        motdBody.textContent = message;
     } catch (error) {
         console.error('Error fetching MOTD:', error);
-        motdBody.textContent = greeting + " Stay curious. Keep building.";
+        motdBody.textContent = "Stay curious. Keep building.";
     }
 }
 
@@ -766,3 +756,4 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
