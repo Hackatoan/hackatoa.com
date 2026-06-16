@@ -26,9 +26,7 @@ async function generateMOTD() {
         return;
     }
 
-    // Use UTC+14 (Pacific/Kiritimati) — the furthest-ahead timezone on Earth —
-    // so the MOTD is always generated for the current day for every viewer globally.
-    const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'Pacific/Kiritimati' });
+    const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles' });
 
     const avoidList = history.length > 0
         ? `\n\nYou have already used the following messages — do NOT repeat or closely paraphrase any of them:\n${history.map((h, i) => `${i + 1}. "${h.message}"`).join('\n')}`
@@ -96,7 +94,7 @@ async function writeOutput(targetPath, newMessage, previousMessage, existingHist
         if (!alreadyInHistory) {
             updatedHistory.push({
                 message: previousMessage,
-                date: new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Kiritimati' })
+                date: new Date().toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' })
             });
         }
     }
@@ -119,3 +117,4 @@ if (require.main === module) {
 }
 
 module.exports = { generateMOTD, writeOutput };
+
