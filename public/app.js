@@ -595,11 +595,10 @@ async function initMOTD() {
         }
         const data = await response.json();
 
-        // Check if today's server message matches the viewer's local date
-        const serverDate = data.lastUpdated ? new Date(data.lastUpdated).toLocaleDateString('en-CA', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }) : null;
+        // data.date is the Kiritimati calendar date the message was generated for (YYYY-MM-DD)
         let message = null;
 
-        if (serverDate === localDate && data.message) {
+        if (data.date === localDate && data.message) {
             message = data.message;
         } else if (Array.isArray(data.history)) {
             // Find the most recent history entry matching the viewer's local date
@@ -756,4 +755,5 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
