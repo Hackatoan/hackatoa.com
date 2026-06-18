@@ -541,16 +541,17 @@
       <span class="brand-text">HACKATOA</span>
     </a>
     <div class="nav-links">
-      <a href="#intro">Intro</a>
+      <a href="#hero">About</a>
       <a href="#projects">Projects</a>
+      <a href="#homelab">Homelab</a>
       <a href="#community">Community</a>
       <a href="#blog">Blog</a>
       <a href="#contact" class="nav-pill">Contact</a>
     </div>
   </nav>
 
-  <!-- ══════════ INTRO — character RIGHT ══════════ -->
-  <section id="intro" data-side="right">
+  <!-- ══════════ HERO — wave · character RIGHT ══════════ -->
+  <section id="hero" data-side="right">
 
     <div class="content-col">
       <div class="card">
@@ -607,23 +608,23 @@
     </div>
 
     <div class="char-col">
-      <img src="assets/jacob-standing-full.png" alt="" aria-hidden="true" />
+      <img src="assets/jacob-pose-wave.png" alt="" aria-hidden="true" />
     </div>
 
   </section>
 
-  <!-- ══════════ PROJECTS — character LEFT ══════════ -->
+  <!-- ══════════ PROJECTS — desk · character LEFT ══════════ -->
   <section id="projects" data-side="left">
 
     <div class="char-col">
-      <img src="assets/jacob-pose-run.png" alt="" aria-hidden="true" />
+      <img src="assets/jacob-pose-desk.png" alt="" aria-hidden="true" />
     </div>
 
     <div class="content-col">
       <div class="section-header">
         <div class="kicker">Portfolio</div>
         <h2>Things I've <span class="hl">built</span></h2>
-        <p>Infrastructure, games, bots, and browser tools — all self-hosted.</p>
+        <p>Games, bots, and browser tools — all open-source, all self-hosted.</p>
       </div>
       <div class="grid-2">
 
@@ -655,20 +656,58 @@
         </div>
 
         <div class="project-card">
-          <h3>Canvas Messenger</h3>
-          <p>Chrome &amp; Firefox extension — Discord-style messaging in Canvas LMS. DMs, group chats, class channels. E2E encrypted via Node.js relay.</p>
-          <div class="pill-row">
-            <a class="pill-link" href="https://github.com/Hackatoan/canvas-messenger" target="_blank">GitHub</a>
-            <a class="pill-link" href="https://relay.hackatoa.com" target="_blank">Relay</a>
-          </div>
-        </div>
-
-        <div class="project-card">
           <h3>Clip Forge · Browser Video Editor</h3>
           <p>Fully client-side video editor — no uploads. FFmpeg.wasm for encoding, Fabric.js for canvas overlays, WaveSurfer.js for waveforms.</p>
           <div class="pill-row">
             <a class="pill-link" href="https://clip-forge.hackatoa.com" target="_blank">Open Editor</a>
             <a class="pill-link" href="https://github.com/Hackatoan/clip-forge" target="_blank">GitHub</a>
+          </div>
+        </div>
+
+        <div class="project-card grid-full">
+          <h3>Canvas Messenger</h3>
+          <p>Chrome &amp; Firefox extension — Discord-style messaging in Canvas LMS. DMs, group chats, class channels. E2E encrypted via Node.js relay. Built to work around platform restrictions so students could actually talk in real time.</p>
+          <div class="pill-row">
+            <a class="pill-link" href="https://github.com/Hackatoan/canvas-messenger" target="_blank">GitHub</a>
+            <a class="pill-link" href="https://relay.hackatoa.com" target="_blank">Relay Server</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════ HOMELAB — crouch · character RIGHT ══════════ -->
+  <section id="homelab" data-side="right">
+
+    <div class="content-col">
+      <div class="section-header">
+        <div class="kicker">Infrastructure</div>
+        <h2>The <span class="hl">homelab</span></h2>
+        <p>Proxmox bare metal. 20+ self-hosted services. All on my own hardware.</p>
+      </div>
+      <div class="grid-2">
+
+        <div class="project-card">
+          <h3>Core Stack</h3>
+          <p>Proxmox hypervisor running Debian VMs. Primary Docker host at 192.168.1.210 with NPMplus reverse proxy, Cloudflare DNS, and wildcard TLS via Certbot. Everything behind <code style="color:var(--accent)">*.hackatoa.com</code>.</p>
+          <div class="pill-row">
+            <span class="chip">Proxmox</span>
+            <span class="chip">Docker</span>
+            <span class="chip">Nginx</span>
+            <span class="chip">Cloudflare</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <h3>Self-Hosted Services</h3>
+          <p>Matrix/Synapse · Stalwart mail · Nextcloud · Jitsi · Home Assistant with voice pipeline · Pi-hole DNS · WireGuard VPN · Gitea · Uptime Kuma · and more.</p>
+          <div class="pill-row">
+            <span class="chip">Matrix</span>
+            <span class="chip">Home Assistant</span>
+            <span class="chip">WireGuard</span>
+            <span class="chip">Pi-hole</span>
           </div>
         </div>
 
@@ -705,10 +744,18 @@
       </div>
     </div>
 
+    <div class="char-col">
+      <img src="assets/jacob-pose-crouch.png" alt="" aria-hidden="true" />
+    </div>
+
   </section>
 
-  <!-- ══════════ COMMUNITY — character RIGHT ══════════ -->
-  <section id="community" data-side="right">
+  <!-- ══════════ COMMUNITY — power · character LEFT ══════════ -->
+  <section id="community" data-side="left">
+
+    <div class="char-col">
+      <img src="assets/jacob-pose-power.png" alt="" aria-hidden="true" />
+    </div>
 
     <div class="content-col">
       <div class="section-header">
@@ -750,18 +797,10 @@
       </div>
     </div>
 
-    <div class="char-col">
-      <img src="assets/jacob-pose-power.png" alt="" aria-hidden="true" />
-    </div>
-
   </section>
 
-  <!-- ══════════ BLOG — character LEFT ══════════ -->
-  <section id="blog" data-side="left">
-
-    <div class="char-col">
-      <img src="assets/jacob-pose-paint.png" alt="" aria-hidden="true" />
-    </div>
+  <!-- ══════════ BLOG — paint · character RIGHT ══════════ -->
+  <section id="blog" data-side="right">
 
     <div class="content-col">
       <div class="section-header">
@@ -788,10 +827,18 @@
       </div>
     </div>
 
+    <div class="char-col">
+      <img src="assets/jacob-pose-paint.png" alt="" aria-hidden="true" />
+    </div>
+
   </section>
 
-  <!-- ══════════ CONTACT + SUPPORT — character RIGHT ══════════ -->
-  <section id="contact" data-side="right">
+  <!-- ══════════ CONTACT — point · character LEFT ══════════ -->
+  <section id="contact" data-side="left">
+
+    <div class="char-col">
+      <img src="assets/jacob-pose-point.png" alt="" aria-hidden="true" />
+    </div>
 
     <div class="content-col">
       <div class="section-header">
@@ -837,10 +884,6 @@
         </div>
 
       </div>
-    </div>
-
-    <div class="char-col">
-      <img src="assets/jacob-pose-launch.png" alt="" aria-hidden="true" />
     </div>
 
   </section>
