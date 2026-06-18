@@ -52,13 +52,20 @@
     /* ── Fixed character figure ── */
     #character {
       position: fixed;
-      right: 4%;
       top: 50%;
+      right: 4%;
+      left: auto;
       transform: translateY(-50%);
       width: clamp(160px, 18vw, 290px);
       z-index: 20;
       pointer-events: none;
       filter: drop-shadow(0 0 18px rgba(224, 32, 176, 0.18));
+      transition: right 0.5s ease, left 0.5s ease;
+    }
+
+    #character.side-left {
+      left: 4%;
+      right: auto;
     }
 
     #char-img {
@@ -132,13 +139,26 @@
       position: relative;
       z-index: 1;
       min-height: 100vh;
-      padding: 5rem 0 5rem 5%;
+      padding: 5rem 5% 5rem 5%;
       display: flex;
       align-items: center;
     }
 
+    /* character on right → content on left */
+    section[data-side="right"] {
+      justify-content: flex-start;
+      padding-right: calc(4% + clamp(160px, 18vw, 290px) + 3%);
+    }
+
+    /* character on left → content on right */
+    section[data-side="left"] {
+      justify-content: flex-end;
+      padding-left: calc(4% + clamp(160px, 18vw, 290px) + 3%);
+    }
+
     .section-inner {
-      width: min(58%, 680px);
+      width: 100%;
+      max-width: 640px;
     }
 
     /* ── Cards ── */
@@ -509,10 +529,31 @@
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
-      section { padding-left: 1.2rem; padding-right: 1.2rem; }
-      .section-inner { width: 100%; }
+      /* hide fixed character, show inline pose per-section instead */
       #character { display: none; }
+
+      section {
+        min-height: auto;
+        padding: 3rem 1.2rem 2rem !important;
+        justify-content: flex-start !important;
+      }
+
+      .section-inner { max-width: 100%; }
+
+      /* inline character pose above each section's card */
+      .section-pose {
+        display: block;
+        width: 120px;
+        height: auto;
+        margin: 0 auto 1.2rem;
+        filter: drop-shadow(0 0 12px rgba(224,32,176,0.2));
+      }
+
       .project-grid { grid-template-columns: 1fr; }
+
+      .snap-meta { grid-template-columns: 1fr 1fr; }
+
+      .nav-links a:not(.nav-pill) { display: none; }
     }
   </style>
 </head>
@@ -546,8 +587,9 @@
   </nav>
 
   <!-- ── INTRO ── -->
-  <section id="intro" data-pose="assets/jacob-standing-full.png">
+  <section id="intro" data-pose="assets/jacob-standing-full.png" data-side="right">
     <div class="section-inner">
+      <img class="section-pose" src="assets/jacob-standing-full.png" alt="" aria-hidden="true" />
       <div class="card">
         <div class="kicker">Active Development</div>
         <h1>
@@ -603,8 +645,9 @@
   </section>
 
   <!-- ── PROJECTS ── -->
-  <section id="projects" data-pose="assets/jacob-pose-run.png">
+  <section id="projects" data-pose="assets/jacob-pose-run.png" data-side="left">
     <div class="section-inner">
+      <img class="section-pose" src="assets/jacob-pose-run.png" alt="" aria-hidden="true" />
       <div class="section-header">
         <div class="kicker">Portfolio</div>
         <h2>Things I've <span class="hl">built</span></h2>
@@ -683,8 +726,9 @@
   </section>
 
   <!-- ── COMMUNITY ── -->
-  <section id="community" data-pose="assets/jacob-pose-power.png">
+  <section id="community" data-pose="assets/jacob-pose-power.png" data-side="right">
     <div class="section-inner">
+      <img class="section-pose" src="assets/jacob-pose-power.png" alt="" aria-hidden="true" />
       <div class="section-header">
         <div class="kicker">Community</div>
         <h2>Where to <span class="hl">find me</span></h2>
@@ -726,8 +770,9 @@
   </section>
 
   <!-- ── BLOG ── -->
-  <section id="blog" data-pose="assets/jacob-pose-paint.png">
+  <section id="blog" data-pose="assets/jacob-pose-paint.png" data-side="left">
     <div class="section-inner">
+      <img class="section-pose" src="assets/jacob-pose-paint.png" alt="" aria-hidden="true" />
       <div class="section-header">
         <div class="kicker">Blog</div>
         <h2>Logs &amp; <span class="hl">Ramblings</span></h2>
@@ -754,8 +799,9 @@
   </section>
 
   <!-- ── CONTACT + SUPPORT ── -->
-  <section id="contact" data-pose="assets/jacob-pose-launch.png">
+  <section id="contact" data-pose="assets/jacob-pose-launch.png" data-side="right">
     <div class="section-inner">
+      <img class="section-pose" src="assets/jacob-pose-launch.png" alt="" aria-hidden="true" />
       <div class="section-header">
         <div class="kicker">Contact</div>
         <h2>Get in <span class="hl">touch</span></h2>
@@ -817,10 +863,22 @@
     const charImg  = document.getElementById('char-img');
     const poseLabel = document.getElementById('pose-label');
 
+    const charEl = document.getElementById('character');
+
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          const src = e.target.dataset.pose;
+          const src  = e.target.dataset.pose;
+          const side = e.target.dataset.side || 'right';
+
+          // switch side
+          if (side === 'left') {
+            charEl.classList.add('side-left');
+          } else {
+            charEl.classList.remove('side-left');
+          }
+
+          // swap pose
           if (charImg.src.endsWith(src.split('/').pop())) return;
           charImg.classList.add('out');
           setTimeout(() => {
