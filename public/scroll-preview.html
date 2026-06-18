@@ -545,6 +545,8 @@
     .music-title {
       font-size: 0.75rem; color: var(--muted);
       display: inline-block; white-space: nowrap;
+    }
+    .music-title.is-scrolling {
       animation: scroll-left 12s linear infinite;
       padding-left: 100%;
     }
@@ -1007,7 +1009,13 @@
       const t = TRACKS[shuffleOrder[idx]];
       audio.src = t.src;
       const el = document.querySelector('.music-title');
-      if (el) el.textContent = t.title;
+      if (el) {
+        el.classList.remove('is-scrolling');
+        el.textContent = t.title;
+        requestAnimationFrame(() => {
+          if (el.scrollWidth > el.parentElement.clientWidth) el.classList.add('is-scrolling');
+        });
+      }
     }
     (function initMusic() {
       shuffleTracks();
