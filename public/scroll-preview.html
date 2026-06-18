@@ -31,16 +31,25 @@
     }
 
     /* ── Volcano bg ── */
-    body::before {
-      content: '';
+    #bg-wrap {
       position: absolute;
       top: 0; left: 0;
       width: 100%;
       height: 100%;
-      background: url('assets/volcano-portrait.jpg') center top / 100% auto repeat-y;
-      opacity: 0.16;
       z-index: 0;
       pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-tile {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 180vh;
+      background: url('assets/volcano-portrait.jpg') center / 100% 100% no-repeat;
+      opacity: 0.18;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+      mask-image:         linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
     }
 
     body::after {
@@ -529,6 +538,8 @@
 </head>
 <body>
 
+  <div id="bg-wrap" aria-hidden="true"></div>
+
   <div class="preview-banner">
     LAYOUT PREVIEW — scroll-preview.html
     <a href="/">← back to main site</a>
@@ -874,6 +885,20 @@
       this.style.borderColor = 'var(--accent)';
       setTimeout(() => this.style.borderColor = '', 1200);
     });
+
+    /* stamp alternating-flip volcano bg tiles to cover full page height */
+    (function stampBg() {
+      const wrap = document.getElementById('bg-wrap');
+      const tileH = window.innerHeight * 1.8;
+      const count = Math.ceil(document.documentElement.scrollHeight / tileH) + 2;
+      for (let i = 0; i < count; i++) {
+        const t = document.createElement('div');
+        t.className = 'bg-tile';
+        t.style.top = (i * tileH) + 'px';
+        if (i % 2 === 1) t.style.transform = 'scaleY(-1)';
+        wrap.appendChild(t);
+      }
+    })();
   </script>
 </body>
 </html>
