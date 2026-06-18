@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scroll Layout Preview — Hackatoa</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080010;
+      --primary:      #e85020;
+      --primary-glow: #ff7030;
+      --accent:       #e020b0;
+      --text:         #f5ede8;
+      --muted:        #b090a8;
+      --card-bg:      rgba(14, 6, 24, 0.96);
+      --card-border:  rgba(160, 40, 140, 0.65);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── Volcano bg ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url('assets/volcano-portrait.jpg') center bottom / cover no-repeat;
+      opacity: 0.16;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Sky gradient overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 10% -10%, #1a0030 0, transparent 50%),
+                  radial-gradient(circle at 90% -10%, #200030 0, transparent 50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Fixed character figure ── */
+    #character {
+      position: fixed;
+      right: 4%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: clamp(160px, 18vw, 290px);
+      z-index: 20;
+      pointer-events: none;
+      filter: drop-shadow(0 0 18px rgba(224, 32, 176, 0.18));
+    }
+
+    #char-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: opacity 0.25s ease;
+    }
+
+    #char-img.out { opacity: 0; }
+
+    /* ── Sticky nav ── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.65rem 1.5rem;
+      background: rgba(10, 4, 20, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(140, 30, 120, 0.25);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-mark {
+      width: 28px; height: 28px;
+      border-radius: 30% 70% 65% 35%;
+      background: radial-gradient(circle at 20% 10%, var(--primary-glow), var(--primary));
+      box-shadow: 0 0 14px rgba(232, 80, 32, 0.7);
+      flex-shrink: 0;
+    }
+
+    .brand-text { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    .nav-links {
+      display: flex;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); background: rgba(255,255,255,0.04); }
+
+    .nav-pill {
+      background: linear-gradient(135deg, var(--primary), var(--primary-glow));
+      color: #0e0018 !important;
+      font-weight: 500;
+      box-shadow: 0 0 12px rgba(232, 80, 32, 0.6);
+    }
+
+    /* ── Sections ── */
+    section {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 5rem 0 5rem 5%;
+      display: flex;
+      align-items: center;
+    }
+
+    .section-inner {
+      width: min(58%, 680px);
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.4rem;
+      padding: 2rem 1.8rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.75);
+    }
+
+    .kicker {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    h1, h2 { line-height: 1.08; }
+
+    h1 {
+      font-size: clamp(2rem, 2.5vw + 1rem, 2.8rem);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 1.8vw + 0.9rem, 2.2rem);
+      margin-bottom: 0.9rem;
+    }
+
+    .hl { color: var(--accent); }
+    .hl-orange { color: var(--primary-glow); }
+
+    p, .body-text {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.92rem;
+    }
+
+    .accent-line {
+      width: 44px; height: 3px;
+      border-radius: 2px;
+      margin-top: 1.2rem;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+    }
+
+    /* ── Buttons ── */
+    .btn-row { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.6rem; }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.88rem;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: radial-gradient(circle at 0% 0%, #ffb070, var(--primary));
+      color: #0e0018;
+      box-shadow: 0 0 16px rgba(232,80,32,0.7);
+    }
+
+    .btn-secondary {
+      background: rgba(14,4,28,0.9);
+      color: var(--text);
+      border: 1px solid rgba(140,30,120,0.6);
+    }
+
+    /* ── Chips ── */
+    .chip-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.9rem; }
+
+    .chip {
+      border-radius: 999px;
+      padding: 0.22rem 0.6rem;
+      font-size: 0.68rem;
+      background: rgba(14,4,24,0.9);
+      border: 1px solid rgba(160,40,140,0.9);
+      color: var(--muted);
+    }
+
+    .chip-hot {
+      background: rgba(232,80,32,0.12);
+      border-color: rgba(255,112,48,0.9);
+      color: var(--primary-glow);
+    }
+
+    /* ── Hero snapshot card ── */
+    .snapshot-card {
+      margin-top: 1.4rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.2rem;
+      padding: 1.4rem 1.6rem;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.7);
+    }
+
+    .snap-row {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .snap-avatar {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(160,40,140,0.6);
+      box-shadow: 0 0 12px rgba(232,80,32,0.8);
+      flex-shrink: 0;
+    }
+
+    .snap-name { font-size: 1rem; font-weight: 500; }
+    .snap-sub  { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+
+    .snap-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(160,40,140,0.7), transparent);
+      margin: 1rem 0;
+    }
+
+    .snap-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      font-size: 0.72rem;
+    }
+
+    .snap-meta dt { color: var(--muted); }
+    .snap-meta dd { color: var(--accent); font-weight: 500; margin-top: 0.1rem; }
+
+    /* ── MOTD ── */
+    .motd {
+      margin-top: 1rem;
+      padding: 0.9rem 1rem;
+      border-radius: 0.8rem;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.82rem;
+    }
+
+    .motd-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .motd-body { color: var(--text); line-height: 1.45; }
+
+    /* ── Socials ── */
+    .pill-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+
+    .pill-link {
+      font-size: 0.75rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(140,30,120,0.8);
+      color: var(--text);
+      text-decoration: none;
+      background: rgba(50,10,60,0.45);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .pill-link:hover { border-color: var(--primary-glow); color: var(--accent); }
+
+    /* ── Project cards grid ── */
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.2rem;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card h3 { font-size: 0.9rem; margin-bottom: 0.4rem; font-weight: 600; }
+    .project-card p  { font-size: 0.8rem; color: var(--muted); line-height: 1.4; flex: 1; }
+
+    .project-card .pill-row { margin-top: 0.8rem; }
+
+    /* ── Blog entries ── */
+    .blog-list { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
+
+    .blog-entry {
+      padding: 0.9rem 1rem;
+      border-radius: 0.9rem;
+      background: rgba(10,4,18,0.9);
+      border: 1px dashed rgba(140,30,120,0.55);
+      font-size: 0.85rem;
+    }
+
+    .blog-entry-title { font-size: 0.88rem; color: var(--text); margin-bottom: 0.15rem; font-weight: 500; }
+    .blog-entry-meta  { font-size: 0.68rem; color: var(--muted); margin-bottom: 0.35rem; }
+
+    /* ── GitHub filler ── */
+    .gh-list { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 1rem; }
+
+    .gh-event {
+      padding: 0.8rem 1rem;
+      border-radius: 0.8rem;
+      background: rgba(10,4,18,0.9);
+      border: 1px dashed rgba(140,30,120,0.4);
+      font-size: 0.82rem;
+    }
+
+    .gh-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .gh-type {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(14,4,24,0.9);
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      color: var(--text);
+    }
+
+    .gh-repo { color: var(--accent); font-weight: 500; text-decoration: none; }
+    .gh-time { margin-left: auto; font-size: 0.7rem; }
+    .gh-commit { color: var(--text); line-height: 1.4; }
+
+    /* ── Contact form ── */
+    .contact-times {
+      margin-top: 0.9rem;
+      padding: 0.55rem 0.7rem;
+      border-radius: 0.8rem;
+      background: radial-gradient(circle at 0% 0%, rgba(255,112,48,0.14), rgba(10,4,18,0.96));
+      border: 1px solid rgba(140,30,120,0.6);
+      font-size: 0.76rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .time-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .time-label { color: var(--muted); }
+    .time-val   { color: var(--accent); font-variant-numeric: tabular-nums; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+    .form-label   { font-size: 0.76rem; color: var(--muted); }
+
+    .form-input {
+      width: 100%;
+      border-radius: 0.7rem;
+      border: 1px solid rgba(160,40,140,0.7);
+      background: rgba(10,4,18,0.96);
+      color: var(--text);
+      padding: 0.55rem 0.7rem;
+      font-size: 0.82rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-input:focus { outline: none; border-color: var(--primary-glow); }
+
+    /* ── Support ── */
+    .wallet-box {
+      margin-top: 1rem;
+      padding: 0.9rem 1rem;
+      background: rgba(0,0,0,0.4);
+      border: 1px dashed rgba(140,30,120,0.5);
+      border-radius: 0.8rem;
+      font-family: monospace;
+      font-size: 0.78rem;
+      word-break: break-all;
+      text-align: center;
+      color: #e8d8f0;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .wallet-box:hover { border-color: var(--primary-glow); background: rgba(232,112,48,0.08); }
+
+    /* ── Section divider ── */
+    .section-header {
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── On-screen indicator (debug) ── */
+    #pose-label {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.62rem;
+      color: rgba(200,160,240,0.3);
+      z-index: 40;
+      letter-spacing: 0.06em;
+      pointer-events: none;
+    }
+
+    /* ── PREVIEW BANNER ── */
+    .preview-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(232,80,32,0.9);
+      color: #fff;
+      font-size: 0.72rem;
+      text-align: center;
+      padding: 0.35rem;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+
+    .preview-banner a {
+      color: #fff;
+      text-decoration: underline;
+      margin-left: 1rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 2rem 5%;
+      border-top: 1px solid rgba(140,30,120,0.25);
+      font-size: 0.76rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      section { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .section-inner { width: 100%; }
+      #character { display: none; }
+      .project-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="preview-banner">
+    LAYOUT PREVIEW — scroll-preview.html
+    <a href="/">← back to main site</a>
+  </div>
+
+  <!-- Fixed character -->
+  <div id="character">
+    <img id="char-img" src="assets/jacob-standing-full.png" alt="Jacob" />
+  </div>
+
+  <div id="pose-label"></div>
+
+  <!-- Nav -->
+  <nav class="site-nav" style="margin-top: 1.5rem;">
+    <a class="brand" href="#">
+      <div class="brand-mark"></div>
+      <span class="brand-text">HACKATOA</span>
+    </a>
+    <div class="nav-links">
+      <a href="#intro">Intro</a>
+      <a href="#projects">Projects</a>
+      <a href="#community">Community</a>
+      <a href="#blog">Blog</a>
+      <a href="#contact" class="nav-pill">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ── INTRO ── -->
+  <section id="intro" data-pose="assets/jacob-standing-full.png">
+    <div class="section-inner">
+      <div class="card">
+        <div class="kicker">Active Development</div>
+        <h1>
+          Building real infrastructure to learn
+          <span class="hl">network security</span>
+          from the ground up.
+        </h1>
+        <p>
+          I'm Jacob — aka <strong>Hackatoa</strong> (hacker + Krakatoa, it's a volcano pun).
+          Studying network security at UAT and pursuing CompTIA while running a Proxmox homelab
+          with 20+ self-hosted services.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#projects">View projects</a>
+          <a class="btn btn-secondary" href="#blog">Read blog</a>
+          <a class="btn btn-secondary" href="/resume">Resume →</a>
+        </div>
+        <div class="accent-line"></div>
+      </div>
+
+      <div class="snapshot-card">
+        <div class="snap-row">
+          <img class="snap-avatar" src="assets/jacob-face-portrait.png" alt="Jacob P Harris" />
+          <div>
+            <div class="snap-name">Jacob P Harris</div>
+            <div class="snap-sub">@Hackatoan</div>
+          </div>
+          <span class="chip" style="margin-left:auto">Portfolio</span>
+        </div>
+        <div class="chip-row">
+          <span class="chip chip-hot">Self-taught dev</span>
+          <span class="chip">Network security</span>
+          <span class="chip">Linux &amp; selfhosted</span>
+        </div>
+        <div class="snap-divider"></div>
+        <dl class="snap-meta">
+          <div><dt>Stack</dt><dd>JS · Node · Python · Bash</dd></div>
+          <div><dt>Education</dt><dd>UAT · Network Security</dd></div>
+          <div><dt>Pursuing</dt><dd>CompTIA A+ → Net+</dd></div>
+        </dl>
+        <div class="motd">
+          <div class="motd-label">Message of the Day</div>
+          <div class="motd-body" id="motd-body">Loading...</div>
+        </div>
+        <div class="pill-row">
+          <a class="pill-link" href="https://github.com/Hackatoan" target="_blank">GitHub</a>
+          <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank">YouTube</a>
+          <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank">Twitch</a>
+          <a class="pill-link" href="https://www.linkedin.com/in/jacob-h-554984227" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ── -->
+  <section id="projects" data-pose="assets/jacob-pose-run.png">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="kicker">Portfolio</div>
+        <h2>Things I've <span class="hl">built</span></h2>
+        <p>Infrastructure, games, bots, and browser tools — all self-hosted.</p>
+      </div>
+      <div class="project-grid">
+
+        <div class="project-card">
+          <h3>Hackatoa Games Platform</h3>
+          <p>Six original browser games — Infinisweeper, 1v1 Minesweeper, Battleship, Cards Against Hackatoa, Sys32 Roulette, and Tic-Tac-Toe. Free, no account, no ads.</p>
+          <div class="pill-row">
+            <a class="pill-link" href="https://games.hackatoa.com" target="_blank">All Games</a>
+            <a class="pill-link" href="https://infinisweeper.hackatoa.com" target="_blank">Infinisweeper</a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <h3>WikiRoll · Discord Bot</h3>
+          <p>Roll, claim, and trade characters from Wikipedia and 150+ Fandom wikis. Wishlist, boost sources, vote for bonus rolls. Built with discord.js &amp; MediaWiki API.</p>
+          <div class="pill-row">
+            <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank">Website</a>
+            <a class="pill-link" href="https://github.com/Hackatoan/wikiroll" target="_blank">GitHub</a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <h3>Lamar Bot · GTA V AI</h3>
+          <p>Lamar Davis in your Discord server. Powered by llama-3.3-70b with persistent per-user memory so he actually remembers you. Attack commands, games, zero chill.</p>
+          <div class="pill-row">
+            <a class="pill-link" href="https://lamar.hackatoa.com" target="_blank">Website</a>
+            <a class="pill-link" href="https://github.com/Hackatoan/Lamar" target="_blank">GitHub</a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <h3>Canvas Messenger</h3>
+          <p>Chrome &amp; Firefox extension adding Discord-style messaging to Canvas LMS — DMs, group chats, class-wide channels, end-to-end encrypted via Node.js relay.</p>
+          <div class="pill-row">
+            <a class="pill-link" href="https://github.com/Hackatoan/canvas-messenger" target="_blank">GitHub</a>
+            <a class="pill-link" href="https://relay.hackatoa.com" target="_blank">Relay</a>
+          </div>
+        </div>
+
+        <div class="project-card" style="grid-column: 1 / -1;">
+          <h3>Recent GitHub Activity</h3>
+          <div class="gh-list">
+            <div class="gh-event">
+              <div class="gh-header">
+                <span class="gh-type">Push</span>
+                <a class="gh-repo">Hackatoan/wikiroll</a>
+                <span class="gh-time">2h ago</span>
+              </div>
+              <div class="gh-commit">fix: correct embed footer timestamp format for roll results</div>
+            </div>
+            <div class="gh-event">
+              <div class="gh-header">
+                <span class="gh-type">Push</span>
+                <a class="gh-repo">Hackatoan/hackatoa.com</a>
+                <span class="gh-time">6h ago</span>
+              </div>
+              <div class="gh-commit">retheme: dark purple/magenta circuit aesthetic with lava orange accents</div>
+            </div>
+            <div class="gh-event">
+              <div class="gh-header">
+                <span class="gh-type">Push</span>
+                <a class="gh-repo">Hackatoan/homeassistant</a>
+                <span class="gh-time">1d ago</span>
+              </div>
+              <div class="gh-commit">add: custom sarah wake word training pipeline + wyoming openwakeword config</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COMMUNITY ── -->
+  <section id="community" data-pose="assets/jacob-pose-power.png">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="kicker">Community</div>
+        <h2>Where to <span class="hl">find me</span></h2>
+        <p>Code, streams, servers, and conversation.</p>
+      </div>
+      <div class="project-grid">
+
+        <div class="project-card">
+          <h3>Orbital Outpost · Discord</h3>
+          <p>My community — homelab talk, dev projects, gaming, and general vibes. WikiRoll and Lamar Bot live here too. Drop in anytime.</p>
+          <div class="pill-row">
+            <a class="pill-link" href="https://discord.gg/7eh3q2u8V" target="_blank">Join Server</a>
+            <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank">WikiRoll</a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <h3>Code &amp; Content</h3>
+          <p>GitHub has all active projects and source. YouTube for build write-ups and lab videos when I bother to record. Instagram for everything else.</p>
+          <div class="pill-row">
+            <a class="pill-link" href="https://github.com/Hackatoan" target="_blank">GitHub</a>
+            <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank">YouTube</a>
+            <a class="pill-link" href="https://instagram.com/hackatoa" target="_blank">Instagram</a>
+          </div>
+        </div>
+
+        <div class="project-card" style="grid-column: 1 / -1;">
+          <h3>Live &amp; Voice</h3>
+          <p>Twitch for live sessions — coding, security labs, gaming, whatever's on. TeamSpeak is open if you want to drop by voice. Matrix for decentralized chat.</p>
+          <div class="pill-row">
+            <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank">Twitch</a>
+            <a class="pill-link" href="ts3server://ts.hackatoa.com">TeamSpeak · ts.hackatoa.com</a>
+            <a class="pill-link" href="https://matrix.hackatoa.com" target="_blank">Matrix</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BLOG ── -->
+  <section id="blog" data-pose="assets/jacob-pose-paint.png">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="kicker">Blog</div>
+        <h2>Logs &amp; <span class="hl">Ramblings</span></h2>
+        <p>Homelab notes, project updates, and the occasional tangent.</p>
+      </div>
+      <div class="blog-list" id="blog-list">
+        <div class="blog-entry">
+          <div class="blog-entry-title">Sleepy</div>
+          <div class="blog-entry-meta">Log · 2026-04-16</div>
+          <div>man I'm sleepy but no I won't go to bed</div>
+        </div>
+        <div class="blog-entry">
+          <div class="blog-entry-title">Changes</div>
+          <div class="blog-entry-meta">Log · 2026-04-07</div>
+          <div>Well I'm officially a vibe coder now. Completely overhauled my website and server. While I was at it I also fixed Infinisweeper — go give it a try if you like Minesweeper.</div>
+        </div>
+        <div class="blog-entry">
+          <div class="blog-entry-title">Hello World</div>
+          <div class="blog-entry-meta">Log · 2026-04-04</div>
+          <div>Hey this is new for me but I have this blog feed now. Hopefully I use this often but only time will tell. Either Way Have a great day.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT + SUPPORT ── -->
+  <section id="contact" data-pose="assets/jacob-pose-launch.png">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="kicker">Contact</div>
+        <h2>Get in <span class="hl">touch</span></h2>
+        <p>Email, Signal, or show up on TeamSpeak.</p>
+      </div>
+      <div class="project-grid">
+
+        <div class="project-card">
+          <p>Best reached by email at <a href="mailto:jacob@hackatoa.com" style="color:var(--accent)">jacob@hackatoa.com</a>. Happy to talk infrastructure, security, development, or whatever you've got in mind.</p>
+          <div class="contact-times">
+            <div class="time-row">
+              <span class="time-label">Your local time</span>
+              <span class="time-val" id="local-time">--:--</span>
+            </div>
+            <div class="time-row">
+              <span class="time-label">Hackatoa time (PT)</span>
+              <span class="time-val" id="pt-time">--:--</span>
+            </div>
+          </div>
+          <form class="contact-form" action="mailto:jacob@hackatoa.com" method="GET">
+            <label class="form-label">Send a quick message</label>
+            <textarea class="form-input" name="body" placeholder="Drop a short message and your contact details…"></textarea>
+            <div class="btn-row" style="margin-top:0.4rem">
+              <button type="submit" class="btn btn-primary">Open email app</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="project-card">
+          <h3>Support My Work</h3>
+          <p>Everything here is free — no ads, no accounts. If you enjoy the games, bots, or tools and want to help cover hosting costs, a coffee or some XMR goes a long way.</p>
+          <div style="margin: 1rem 0;">
+            <a href="https://buymeacoffee.com/hackatoa" target="_blank">
+              <img src="assets/buymeacoffee.png" alt="Buy Me A Coffee" style="max-width:160px;height:auto" />
+            </a>
+          </div>
+          <div class="wallet-box" title="Click to copy XMR address">
+            48KxgziBnPXZzjeUqLmwctEEiaNbCaXc5Dr2ZDvG2pDP6WLJaPMFg3YEY8hmLRD94dYoQs1n3XtkSELVtDscjgqWH44qjnG
+          </div>
+          <p style="font-size:0.75rem;margin-top:0.6rem;text-align:center">Monero (XMR) · click to copy</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Built by Jacob P Harris · Hackatoa (hacker + Krakatoa).</div>
+    <div style="display:flex;gap:1rem">
+      <a href="/urls">All Links</a>
+      <a href="/resume">Resume</a>
+      <a href="https://buymeacoffee.com/hackatoa" target="_blank">Buy Me a Coffee</a>
+    </div>
+  </footer>
+
+  <script>
+    /* ── Pose swap on scroll ── */
+    const sections = document.querySelectorAll('section[data-pose]');
+    const charImg  = document.getElementById('char-img');
+    const poseLabel = document.getElementById('pose-label');
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const src = e.target.dataset.pose;
+          if (charImg.src.endsWith(src.split('/').pop())) return;
+          charImg.classList.add('out');
+          setTimeout(() => {
+            charImg.src = src;
+            charImg.classList.remove('out');
+            poseLabel.textContent = src.split('/').pop().replace('.png','').replace('jacob-','');
+          }, 220);
+        }
+      });
+    }, { threshold: 0.35 });
+
+    sections.forEach(s => obs.observe(s));
+
+    /* ── MOTD ── */
+    fetch('/motd.json')
+      .then(r => r.json())
+      .then(d => { document.getElementById('motd-body').textContent = d.message; })
+      .catch(() => { document.getElementById('motd-body').textContent = 'Stay curious. Keep building.'; });
+
+    /* ── Time ── */
+    function updateTimes() {
+      const now = new Date();
+      document.getElementById('local-time').textContent =
+        now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('pt-time').textContent =
+        now.toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: '2-digit', minute: '2-digit' });
+    }
+    updateTimes();
+    setInterval(updateTimes, 15000);
+
+    /* ── Wallet copy ── */
+    document.querySelector('.wallet-box').addEventListener('click', function() {
+      navigator.clipboard.writeText(this.textContent.trim());
+      this.style.borderColor = 'var(--accent)';
+      setTimeout(() => this.style.borderColor = '', 1200);
+    });
+  </script>
+</body>
+</html>
