@@ -1,15 +1,15 @@
 /* CSS Background Art */
 :root {
   --sky-day:          #8aaec5;
-  --sky-sunset-top:   #2a1810;
-  --sky-sunset-bottom:#c04518;
-  --sky-night:        #140e0a;
+  --sky-sunset-top:   #1a0c18;
+  --sky-sunset-bottom:#a03515;
+  --sky-night:        #080010;
   --cloud-day:        rgba(240, 235, 220, 0.85);
-  --cloud-night:      rgba(65, 50, 42, 0.65);
-  --cloud-sunset:     rgba(185, 90, 62, 0.60);
+  --cloud-night:      rgba(30, 10, 40, 0.65);
+  --cloud-sunset:     rgba(140, 50, 110, 0.60);
   --sun-color:        #f0c030;
   --sun-glow:         #e08018;
-  --moon-color:       #d8c8a8;
+  --moon-color:       #c8a8d8;
 }
 
 /* ── Base ────────────────────────────────────────────────── */
@@ -23,6 +23,16 @@
   transition: background-color 2s ease;
 }
 
+/* Volcano background image — subtle, behind all animated layers */
+.video-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('assets/volcano-portrait.jpg') center bottom / cover no-repeat;
+  opacity: 0.22;
+  z-index: 0;
+}
+
 /* ── Sky ─────────────────────────────────────────────────── */
 .sky {
   position: absolute;
@@ -32,7 +42,7 @@
   background-image: repeating-linear-gradient(
     -58deg,
     transparent 0, transparent 14px,
-    rgba(200, 180, 140, 0.018) 14px, rgba(200, 180, 140, 0.018) 15px
+    rgba(160, 100, 200, 0.015) 14px, rgba(160, 100, 200, 0.015) 15px
   );
 }
 
@@ -60,9 +70,9 @@ body.is-night .stars {
   top: 25%; left: 70%;
   background: var(--moon-color);
   box-shadow:
-    0 0 0 2px rgba(200, 180, 130, 0.50),
-    0 0 0 5px rgba(200, 180, 130, 0.12),
-    0 0 18px 4px rgba(200, 180, 130, 0.25);
+    0 0 0 2px rgba(180, 150, 210, 0.50),
+    0 0 0 5px rgba(180, 150, 210, 0.12),
+    0 0 18px 4px rgba(180, 150, 210, 0.25);
   transition: all 2s ease;
   z-index: 3;
 }
@@ -140,46 +150,39 @@ body.is-sunset .cloud, body.is-sunset .cloud::before, body.is-sunset .cloud::aft
   overflow: visible;
 }
 
-/* Windows: dark during day, amber glow at night.
-   Transitions are slow so the cross-fade is gradual as time passes the horizon. */
+/* Circuit-city windows: magenta glow at night */
 .win {
-  fill: rgba(120, 160, 200, 0.18);
-  stroke: rgba(160, 200, 240, 0.25);
+  fill: rgba(160, 80, 180, 0.10);
+  stroke: rgba(180, 80, 200, 0.18);
   stroke-width: 0.5;
   filter: none;
   transition: fill 3s ease, filter 3s ease, stroke 3s ease;
 }
 
 body.is-night .win {
-  fill: #d4841a;
-  stroke: rgba(220, 160, 60, 0.4);
-  filter: drop-shadow(0 0 3px rgba(210, 130, 20, 0.9));
+  fill: #cc22aa;
+  stroke: rgba(200, 40, 180, 0.5);
+  filter: drop-shadow(0 0 3px rgba(180, 20, 150, 0.9));
 }
 
 body.is-night .win:nth-child(5n+4) {
-  fill: #04070a;
+  fill: #06000c;
   stroke: none;
   filter: none;
 }
 
-body.is-sunset .win {
-  fill: rgba(200, 100, 40, 0.22);
-  stroke: rgba(220, 130, 60, 0.3);
-}
-
-/* A dimmer warm variant for some */
 body.is-night .win:nth-child(7n+5) {
-  fill: #9a5c0e;
-  filter: drop-shadow(0 0 2px rgba(150, 88, 14, 0.55));
+  fill: #7a0a68;
+  filter: drop-shadow(0 0 2px rgba(120, 10, 100, 0.55));
 }
 
-/* Sunrise/sunset: windows fade toward off as day breaks, or glow dimly */
 body.is-sunset .win {
-  fill: #7a4a0a;
-  filter: drop-shadow(0 0 2px rgba(120, 72, 10, 0.4));
+  fill: #8a1a6a;
+  stroke: rgba(160, 40, 130, 0.3);
+  filter: drop-shadow(0 0 2px rgba(140, 20, 110, 0.4));
 }
 body.is-sunset .win:nth-child(4n+3) {
-  fill: #04070a;
+  fill: #04000a;
   filter: none;
 }
 
@@ -192,26 +195,25 @@ body.is-sunset .win:nth-child(4n+3) {
   z-index: 5;
 }
 
-/* Storm sky: keep each time-of-day readable instead of pitch black */
-body.stormy            .video-bg { background-color: #0c0806 !important; }  /* night storm: near-black */
-body.is-day.stormy     .video-bg { background-color: #2e3d4a !important; }  /* day storm: dark overcast blue-grey */
-body.is-sunset.stormy  .video-bg { background-color: #1c1008 !important; }  /* sunset storm: deep murky orange-black */
+body.stormy            .video-bg { background-color: #06000e !important; }
+body.is-day.stormy     .video-bg { background-color: #1a1428 !important; }
+body.is-sunset.stormy  .video-bg { background-color: #100818 !important; }
 body.stormy .cityscape-svg { opacity: 0.75; }
 body.stormy .cloud,
 body.stormy .cloud::before,
-body.stormy .cloud::after  { background: #3a2828; }
+body.stormy .cloud::after  { background: #1a0828; }
 .stormy .sky               { animation: lightning 10s infinite; }
 
 @keyframes lightning {
   0%, 95%, 98%, 100% { background: transparent; }
-  96%, 99%           { background: rgba(255, 230, 210, 0.10); }
+  96%, 99%           { background: rgba(220, 180, 255, 0.08); }
 }
 
 .rain {
   position: absolute;
   width: 1px; height: 18px;
   top: -20px;
-  background: rgba(200, 180, 160, 0.24);
+  background: rgba(180, 150, 220, 0.20);
   animation: fall 0.5s linear infinite;
 }
 
@@ -232,7 +234,7 @@ body.stormy .cloud::after  { background: #3a2828; }
 .cloud-3 { animation: moveClouds  60s linear infinite; animation-delay: -10s; }
 .cloud-4 { animation: moveClouds  80s linear infinite; animation-delay: -35s; }
 
-/* ── Scene Clock (visible only in bg-viewing mode) ───────── */
+/* ── Scene Clock ─────────────────────────────────────────── */
 .scene-clock {
   position: fixed;
   bottom: 2.2rem;
@@ -242,20 +244,18 @@ body.stormy .cloud::after  { background: #3a2828; }
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s ease, transform 0.35s ease;
-
-  background: rgba(8, 12, 18, 0.82);
+  background: rgba(6, 0, 14, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(160, 180, 210, 0.12);
+  border: 1px solid rgba(160, 40, 140, 0.2);
   border-radius: 14px;
   padding: 0.75rem 1.1rem 0.6rem;
   min-width: 260px;
   max-width: 320px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
   user-select: none;
 }
 
-/* Visible but ghosted when not hovered; pointer-events stay on so hover fires */
 body.bg-viewing .scene-clock {
   opacity: 0.08;
   pointer-events: auto;
@@ -276,25 +276,24 @@ body.bg-viewing .scene-clock:hover {
 .scene-time-display {
   font-size: 1rem;
   font-weight: 600;
-  color: #e8d8b8;
+  color: #e8c8f8;
   letter-spacing: 0.03em;
   font-variant-numeric: tabular-nums;
 }
 
 .scene-phase-display {
   font-size: 0.72rem;
-  color: rgba(200, 180, 140, 0.6);
+  color: rgba(200, 150, 220, 0.6);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   flex: 1;
 }
 
-/* Live/reset button */
 .scene-time-reset {
   background: none;
-  border: 1px solid rgba(160, 180, 210, 0.2);
+  border: 1px solid rgba(160, 40, 140, 0.25);
   border-radius: 6px;
-  color: rgba(180, 200, 230, 0.55);
+  color: rgba(180, 120, 200, 0.55);
   font-size: 0.68rem;
   padding: 0.15rem 0.45rem;
   cursor: pointer;
@@ -303,13 +302,11 @@ body.bg-viewing .scene-clock:hover {
   white-space: nowrap;
 }
 .scene-time-reset:hover {
-  color: rgba(200, 220, 255, 0.9);
-  border-color: rgba(160, 180, 210, 0.5);
+  color: rgba(220, 160, 255, 0.9);
+  border-color: rgba(160, 40, 140, 0.5);
 }
-/* Hide reset when not overriding (controlled via JS class) */
 .scene-time-reset.hidden { opacity: 0; pointer-events: none; }
 
-/* Slider track */
 .scene-time-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -318,15 +315,14 @@ body.bg-viewing .scene-clock:hover {
   border-radius: 2px;
   outline: none;
   cursor: pointer;
-  /* gradient: midnight → dawn (blue) → day (gold) → dusk (orange) → midnight */
   background: linear-gradient(to right,
-    #0d1520 0%,
-    #1a2d4a 20%,
-    #c8901a 35%,
-    #8ab0c8 45%,
-    #8ab0c8 70%,
-    #c04518 80%,
-    #0d1520 100%
+    #06000e 0%,
+    #180830 20%,
+    #e05020 35%,
+    #4a1070 45%,
+    #4a1070 70%,
+    #a02060 80%,
+    #06000e 100%
   );
 }
 .scene-time-slider::-webkit-slider-thumb {
@@ -335,41 +331,39 @@ body.bg-viewing .scene-clock:hover {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #e8d0a0;
-  border: 2px solid rgba(255, 240, 200, 0.6);
-  box-shadow: 0 0 6px rgba(220, 160, 40, 0.5);
+  background: #e8a0d8;
+  border: 2px solid rgba(240, 180, 255, 0.6);
+  box-shadow: 0 0 6px rgba(200, 40, 180, 0.6);
   cursor: grab;
   transition: box-shadow 0.15s, transform 0.15s;
 }
 .scene-time-slider::-webkit-slider-thumb:active {
   cursor: grabbing;
   transform: scale(1.2);
-  box-shadow: 0 0 10px rgba(220, 160, 40, 0.8);
+  box-shadow: 0 0 10px rgba(200, 40, 180, 0.9);
 }
 .scene-time-slider::-moz-range-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #e8d0a0;
-  border: 2px solid rgba(255, 240, 200, 0.6);
-  box-shadow: 0 0 6px rgba(220, 160, 40, 0.5);
+  background: #e8a0d8;
+  border: 2px solid rgba(240, 180, 255, 0.6);
+  box-shadow: 0 0 6px rgba(200, 40, 180, 0.6);
   cursor: grab;
 }
 
-/* Tick labels */
 .scene-clock-ticks {
   display: flex;
   justify-content: space-between;
   margin-top: 0.3rem;
   font-size: 0.6rem;
-  color: rgba(160, 170, 190, 0.4);
+  color: rgba(160, 120, 180, 0.4);
   letter-spacing: 0.02em;
 }
 
-
-/* Songs page link in music widget */
+/* Songs page link */
 .music-list-link {
-  color: var(--text-muted, #8b949e);
+  color: var(--text-muted, #b090a8);
   text-decoration: none;
   font-size: 1rem;
   padding: 0.2rem 0.3rem;
@@ -377,4 +371,4 @@ body.bg-viewing .scene-clock:hover {
   transition: color 0.2s;
   line-height: 1;
 }
-.music-list-link:hover { color: var(--accent, #58a6ff); }
+.music-list-link:hover { color: var(--accent, #e020b0); }
