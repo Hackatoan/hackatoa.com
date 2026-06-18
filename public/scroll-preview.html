@@ -20,18 +20,25 @@
       --char-w:       clamp(180px, 24vw, 360px);
     }
 
-    html {
-      scroll-behavior: smooth;
-      /* Background lives on html so it covers the full document canvas — no bottom gap */
-      background: var(--bg) url('assets/volcano-portrait.jpg') center top / 100% 100% no-repeat;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      /* Semi-transparent overlay dims the volcano image to ~18% */
-      background: rgba(8, 0, 16, 0.82);
+      background: var(--bg);
       color: var(--text);
       overflow-x: hidden;
+      position: relative;
+      /* padding-top prevents margin-collapse with first child, keeps body top at y=0 */
+      padding-top: 1.5rem;
+    }
+
+    #bg-wrap {
+      position: absolute;
+      inset: 0;
+      background: url('assets/volcano-portrait.jpg') center top / 100% 100% no-repeat;
+      opacity: 0.18;
+      z-index: 0;
+      pointer-events: none;
     }
 
     body::after {
@@ -581,12 +588,14 @@
 </head>
 <body>
 
+  <div id="bg-wrap" aria-hidden="true"></div>
+
   <div class="preview-banner">
     LAYOUT PREVIEW — scroll-preview.html
     <a href="/">← back to main site</a>
   </div>
 
-  <nav class="site-nav" style="margin-top:1.5rem">
+  <nav class="site-nav">
     <a class="brand" href="#">
       <div class="brand-mark"></div>
       <span class="brand-text">HACKATOA</span>
