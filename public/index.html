@@ -26,20 +26,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="background.css" />
-  <style>
-    /* ── Avatar carousel ── */
-    .avatar-carousel { position: relative; display: inline-block; }
-    .avatar-carousel .carousel-img {
-      position: absolute;
-      top: 0; left: 0;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-      border-radius: 50%;
-    }
-    .avatar-carousel .carousel-img--active { opacity: 1; position: relative; }
-  </style>
-<script type="application/ld+json">
+  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Person",
@@ -66,715 +53,572 @@
       }
     }
   </script>
+  <style>
+    /* ── Scroll layout overrides (replaces horizontal-slide layout) ── */
+
+    :root {
+      --bg:         #080010;
+      --card-bg:    rgba(14, 6, 24, 0.96);
+      --card-border:rgba(160, 40, 140, 0.65);
+      --char-w:     clamp(180px, 24vw, 360px);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+      padding-top: 1.5rem;
+      /* prevent margin-collapse with first flow child */
+      min-height: 100vh;
+    }
+
+    main { height: auto; min-height: 0; overflow: visible; }
+
+    /* ── Volcano background ── */
+    #bg-wrap {
+      position: absolute;
+      inset: 0;
+      background: url('assets/volcano-portrait-borderless.jpg') center top / 100% 100% no-repeat;
+      opacity: 0.18;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Sticky nav ── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.65rem 1.5rem;
+      background: rgba(10, 4, 20, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(140, 30, 120, 0.25);
+    }
+
+    /* ── Section grid ── */
+    section {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      min-height: 100vh;
+      align-items: start;
+      gap: 0;
+      padding: 0 2%;
+      height: auto;
+    }
+
+    section[data-side="right"] {
+      grid-template-columns: 3fr 2fr;
+      grid-template-areas: "content char";
+    }
+
+    section[data-side="left"] {
+      grid-template-columns: 2fr 3fr;
+      grid-template-areas: "char content";
+    }
+
+    .char-col {
+      grid-area: char;
+      position: relative;
+    }
+
+    .char-col img {
+      position: sticky;
+      top: 10vh;
+      width: 100%;
+      height: 80vh;
+      object-fit: contain;
+      object-position: center bottom;
+      display: block;
+      filter: drop-shadow(0 0 20px rgba(224, 32, 176, 0.2));
+    }
+
+    .content-col {
+      grid-area: content;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 6vh 4%;
+    }
+
+    /* ── Avatar carousel ── */
+    .avatar-carousel { position: relative; display: inline-block; }
+    .avatar-carousel .carousel-img {
+      position: absolute; top: 0; left: 0;
+      opacity: 0; transition: opacity 1s ease-in-out;
+      border-radius: 50%;
+    }
+    .avatar-carousel .carousel-img--active { opacity: 1; position: relative; }
+
+    /* ── Mobile: single column ── */
+    @media (max-width: 768px) {
+      section,
+      section[data-side="right"],
+      section[data-side="left"] {
+        grid-template-columns: 1fr;
+        grid-template-areas: "content";
+        min-height: auto;
+        padding: 0;
+      }
+      .char-col { display: none; }
+      .content-col { min-height: auto; padding: 3rem 1.2rem; }
+    }
+  </style>
 </head>
 
 <body>
-  <div class="video-bg" aria-hidden="true">
-    <div class="sky">
-      <div class="sun-glow"></div>
-      <div class="celestial-body"></div>
-      <div class="clouds">
-        <div class="cloud cloud-1"></div>
-        <div class="cloud cloud-2"></div>
-        <div class="cloud cloud-3"></div>
-        <div class="cloud cloud-4"></div>
+
+  <div id="bg-wrap" aria-hidden="true"></div>
+
+  <!-- ── Nav ── -->
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div>
+        <div class="brand-text-main">HACKATOA</div>
+        <div class="brand-text-sub">Network Security · Linux</div>
       </div>
-      <div class="stars"></div>
-      <div class="weather-effects"></div>
     </div>
-
-    <div class="cityscape">
-      <svg class="cityscape-svg" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="bldg-fill" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="0">
-            <stop id="bldg-s1" offset="0%"   stop-color="#080012"/>
-            <stop id="bldg-s2" offset="100%" stop-color="#0a0018"/>
-          </linearGradient>
-        </defs>
-
-        <!-- ── Skyline buildings ───────────────────────────────── -->
-        <g fill="url(#bldg-fill)">
-          <rect x="0"   y="180" width="80"  height="120"/>
-          <rect x="85"  y="125" width="55"  height="175"/>
-          <rect x="145" y="80"  width="70"  height="220"/>
-          <rect x="220" y="210" width="45"  height="90"/>
-          <rect x="270" y="40"  width="50"  height="260"/>
-          <rect x="325" y="155" width="65"  height="145"/>
-          <rect x="395" y="105" width="38"  height="195"/>
-          <rect x="438" y="195" width="85"  height="105"/>
-          <rect x="528" y="20"  width="52"  height="280"/>
-          <rect x="585" y="145" width="60"  height="155"/>
-          <rect x="650" y="110" width="80"  height="190"/>
-          <rect x="735" y="170" width="42"  height="130"/>
-          <rect x="782" y="205" width="88"  height="95"/>
-          <rect x="875" y="125" width="55"  height="175"/>
-          <rect x="935" y="170" width="65"  height="130"/>
-        </g>
-
-        <!-- ── Window lights ──────────────────────────────────── -->
-        <g class="windows">
-          <!-- bldg 1: x=0 -->
-          <rect class="win" x="21" y="190" width="6" height="9"/>
-          <rect class="win" x="34" y="190" width="6" height="9"/>
-          <rect class="win" x="8" y="210" width="6" height="9"/>
-          <rect class="win" x="21" y="210" width="6" height="9"/>
-          <rect class="win" x="47" y="210" width="6" height="9"/>
-          <rect class="win" x="60" y="210" width="6" height="9"/>
-          <rect class="win" x="8" y="230" width="6" height="9"/>
-          <rect class="win" x="34" y="230" width="6" height="9"/>
-          <rect class="win" x="60" y="230" width="6" height="9"/>
-          <rect class="win" x="8" y="250" width="6" height="9"/>
-          <rect class="win" x="21" y="250" width="6" height="9"/>
-          <rect class="win" x="34" y="250" width="6" height="9"/>
-          <rect class="win" x="60" y="250" width="6" height="9"/>
-          <rect class="win" x="21" y="270" width="6" height="9"/>
-          <rect class="win" x="34" y="270" width="6" height="9"/>
-
-          <!-- bldg 2: x=85 -->
-          <rect class="win" x="106" y="135" width="6" height="9"/>
-          <rect class="win" x="119" y="135" width="6" height="9"/>
-          <rect class="win" x="93" y="155" width="6" height="9"/>
-          <rect class="win" x="106" y="155" width="6" height="9"/>
-          <rect class="win" x="93" y="175" width="6" height="9"/>
-          <rect class="win" x="119" y="175" width="6" height="9"/>
-          <rect class="win" x="93" y="195" width="6" height="9"/>
-          <rect class="win" x="106" y="195" width="6" height="9"/>
-          <rect class="win" x="119" y="195" width="6" height="9"/>
-          <rect class="win" x="106" y="215" width="6" height="9"/>
-          <rect class="win" x="119" y="215" width="6" height="9"/>
-          <rect class="win" x="93" y="235" width="6" height="9"/>
-          <rect class="win" x="106" y="235" width="6" height="9"/>
-          <rect class="win" x="93" y="255" width="6" height="9"/>
-          <rect class="win" x="119" y="255" width="6" height="9"/>
-          <rect class="win" x="93" y="275" width="6" height="9"/>
-          <rect class="win" x="106" y="275" width="6" height="9"/>
-          <rect class="win" x="119" y="275" width="6" height="9"/>
-
-          <!-- bldg 3: x=145 -->
-          <rect class="win" x="166" y="90" width="6" height="9"/>
-          <rect class="win" x="179" y="90" width="6" height="9"/>
-          <rect class="win" x="153" y="110" width="6" height="9"/>
-          <rect class="win" x="166" y="110" width="6" height="9"/>
-          <rect class="win" x="192" y="110" width="6" height="9"/>
-          <rect class="win" x="153" y="130" width="6" height="9"/>
-          <rect class="win" x="179" y="130" width="6" height="9"/>
-          <rect class="win" x="153" y="150" width="6" height="9"/>
-          <rect class="win" x="166" y="150" width="6" height="9"/>
-          <rect class="win" x="179" y="150" width="6" height="9"/>
-          <rect class="win" x="166" y="170" width="6" height="9"/>
-          <rect class="win" x="179" y="170" width="6" height="9"/>
-          <rect class="win" x="153" y="190" width="6" height="9"/>
-          <rect class="win" x="166" y="190" width="6" height="9"/>
-          <rect class="win" x="192" y="190" width="6" height="9"/>
-          <rect class="win" x="153" y="210" width="6" height="9"/>
-          <rect class="win" x="179" y="210" width="6" height="9"/>
-          <rect class="win" x="153" y="230" width="6" height="9"/>
-          <rect class="win" x="166" y="230" width="6" height="9"/>
-          <rect class="win" x="179" y="230" width="6" height="9"/>
-          <rect class="win" x="166" y="250" width="6" height="9"/>
-          <rect class="win" x="179" y="250" width="6" height="9"/>
-          <rect class="win" x="153" y="270" width="6" height="9"/>
-          <rect class="win" x="166" y="270" width="6" height="9"/>
-          <rect class="win" x="192" y="270" width="6" height="9"/>
-
-          <!-- bldg 4: x=220 -->
-          <rect class="win" x="241" y="220" width="6" height="9"/>
-          <rect class="win" x="228" y="240" width="6" height="9"/>
-          <rect class="win" x="241" y="240" width="6" height="9"/>
-          <rect class="win" x="228" y="260" width="6" height="9"/>
-          <rect class="win" x="228" y="280" width="6" height="9"/>
-          <rect class="win" x="241" y="280" width="6" height="9"/>
-
-          <!-- bldg 5: x=270 -->
-          <rect class="win" x="291" y="50" width="6" height="9"/>
-          <rect class="win" x="304" y="50" width="6" height="9"/>
-          <rect class="win" x="278" y="70" width="6" height="9"/>
-          <rect class="win" x="291" y="70" width="6" height="9"/>
-          <rect class="win" x="278" y="90" width="6" height="9"/>
-          <rect class="win" x="304" y="90" width="6" height="9"/>
-          <rect class="win" x="278" y="110" width="6" height="9"/>
-          <rect class="win" x="291" y="110" width="6" height="9"/>
-          <rect class="win" x="304" y="110" width="6" height="9"/>
-          <rect class="win" x="291" y="130" width="6" height="9"/>
-          <rect class="win" x="304" y="130" width="6" height="9"/>
-          <rect class="win" x="278" y="150" width="6" height="9"/>
-          <rect class="win" x="291" y="150" width="6" height="9"/>
-          <rect class="win" x="278" y="170" width="6" height="9"/>
-          <rect class="win" x="304" y="170" width="6" height="9"/>
-          <rect class="win" x="278" y="190" width="6" height="9"/>
-          <rect class="win" x="291" y="190" width="6" height="9"/>
-          <rect class="win" x="304" y="190" width="6" height="9"/>
-          <rect class="win" x="291" y="210" width="6" height="9"/>
-          <rect class="win" x="304" y="210" width="6" height="9"/>
-          <rect class="win" x="278" y="230" width="6" height="9"/>
-          <rect class="win" x="291" y="230" width="6" height="9"/>
-          <rect class="win" x="278" y="250" width="6" height="9"/>
-          <rect class="win" x="304" y="250" width="6" height="9"/>
-          <rect class="win" x="278" y="270" width="6" height="9"/>
-          <rect class="win" x="291" y="270" width="6" height="9"/>
-          <rect class="win" x="304" y="270" width="6" height="9"/>
-
-          <!-- bldg 6: x=325 -->
-          <rect class="win" x="346" y="165" width="6" height="9"/>
-          <rect class="win" x="359" y="165" width="6" height="9"/>
-          <rect class="win" x="333" y="185" width="6" height="9"/>
-          <rect class="win" x="346" y="185" width="6" height="9"/>
-          <rect class="win" x="372" y="185" width="6" height="9"/>
-          <rect class="win" x="333" y="205" width="6" height="9"/>
-          <rect class="win" x="359" y="205" width="6" height="9"/>
-          <rect class="win" x="333" y="225" width="6" height="9"/>
-          <rect class="win" x="346" y="225" width="6" height="9"/>
-          <rect class="win" x="359" y="225" width="6" height="9"/>
-          <rect class="win" x="346" y="245" width="6" height="9"/>
-          <rect class="win" x="359" y="245" width="6" height="9"/>
-          <rect class="win" x="333" y="265" width="6" height="9"/>
-          <rect class="win" x="346" y="265" width="6" height="9"/>
-          <rect class="win" x="372" y="265" width="6" height="9"/>
-
-          <!-- bldg 7: x=395 -->
-          <rect class="win" x="416" y="115" width="6" height="9"/>
-          <rect class="win" x="403" y="135" width="6" height="9"/>
-          <rect class="win" x="416" y="135" width="6" height="9"/>
-          <rect class="win" x="403" y="155" width="6" height="9"/>
-          <rect class="win" x="403" y="175" width="6" height="9"/>
-          <rect class="win" x="416" y="175" width="6" height="9"/>
-          <rect class="win" x="416" y="195" width="6" height="9"/>
-          <rect class="win" x="403" y="215" width="6" height="9"/>
-          <rect class="win" x="416" y="215" width="6" height="9"/>
-          <rect class="win" x="403" y="235" width="6" height="9"/>
-          <rect class="win" x="403" y="255" width="6" height="9"/>
-          <rect class="win" x="416" y="255" width="6" height="9"/>
-          <rect class="win" x="416" y="275" width="6" height="9"/>
-
-          <!-- bldg 8: x=438 -->
-          <rect class="win" x="459" y="205" width="6" height="9"/>
-          <rect class="win" x="472" y="205" width="6" height="9"/>
-          <rect class="win" x="446" y="225" width="6" height="9"/>
-          <rect class="win" x="459" y="225" width="6" height="9"/>
-          <rect class="win" x="485" y="225" width="6" height="9"/>
-          <rect class="win" x="498" y="225" width="6" height="9"/>
-          <rect class="win" x="446" y="245" width="6" height="9"/>
-          <rect class="win" x="472" y="245" width="6" height="9"/>
-          <rect class="win" x="498" y="245" width="6" height="9"/>
-          <rect class="win" x="446" y="265" width="6" height="9"/>
-          <rect class="win" x="459" y="265" width="6" height="9"/>
-          <rect class="win" x="472" y="265" width="6" height="9"/>
-          <rect class="win" x="498" y="265" width="6" height="9"/>
-
-          <!-- bldg 9: x=528 -->
-          <rect class="win" x="549" y="30" width="6" height="9"/>
-          <rect class="win" x="562" y="30" width="6" height="9"/>
-          <rect class="win" x="536" y="50" width="6" height="9"/>
-          <rect class="win" x="549" y="50" width="6" height="9"/>
-          <rect class="win" x="536" y="70" width="6" height="9"/>
-          <rect class="win" x="562" y="70" width="6" height="9"/>
-          <rect class="win" x="536" y="90" width="6" height="9"/>
-          <rect class="win" x="549" y="90" width="6" height="9"/>
-          <rect class="win" x="562" y="90" width="6" height="9"/>
-          <rect class="win" x="549" y="110" width="6" height="9"/>
-          <rect class="win" x="562" y="110" width="6" height="9"/>
-          <rect class="win" x="536" y="130" width="6" height="9"/>
-          <rect class="win" x="549" y="130" width="6" height="9"/>
-          <rect class="win" x="536" y="150" width="6" height="9"/>
-          <rect class="win" x="562" y="150" width="6" height="9"/>
-          <rect class="win" x="536" y="170" width="6" height="9"/>
-          <rect class="win" x="549" y="170" width="6" height="9"/>
-          <rect class="win" x="562" y="170" width="6" height="9"/>
-          <rect class="win" x="549" y="190" width="6" height="9"/>
-          <rect class="win" x="562" y="190" width="6" height="9"/>
-          <rect class="win" x="536" y="210" width="6" height="9"/>
-          <rect class="win" x="549" y="210" width="6" height="9"/>
-          <rect class="win" x="536" y="230" width="6" height="9"/>
-          <rect class="win" x="562" y="230" width="6" height="9"/>
-          <rect class="win" x="536" y="250" width="6" height="9"/>
-          <rect class="win" x="549" y="250" width="6" height="9"/>
-          <rect class="win" x="562" y="250" width="6" height="9"/>
-          <rect class="win" x="549" y="270" width="6" height="9"/>
-          <rect class="win" x="562" y="270" width="6" height="9"/>
-
-          <!-- bldg 10: x=585 -->
-          <rect class="win" x="606" y="155" width="6" height="9"/>
-          <rect class="win" x="619" y="155" width="6" height="9"/>
-          <rect class="win" x="593" y="175" width="6" height="9"/>
-          <rect class="win" x="606" y="175" width="6" height="9"/>
-          <rect class="win" x="593" y="195" width="6" height="9"/>
-          <rect class="win" x="619" y="195" width="6" height="9"/>
-          <rect class="win" x="593" y="215" width="6" height="9"/>
-          <rect class="win" x="606" y="215" width="6" height="9"/>
-          <rect class="win" x="619" y="215" width="6" height="9"/>
-          <rect class="win" x="606" y="235" width="6" height="9"/>
-          <rect class="win" x="619" y="235" width="6" height="9"/>
-          <rect class="win" x="593" y="255" width="6" height="9"/>
-          <rect class="win" x="606" y="255" width="6" height="9"/>
-          <rect class="win" x="593" y="275" width="6" height="9"/>
-          <rect class="win" x="619" y="275" width="6" height="9"/>
-
-          <!-- bldg 11: x=650 -->
-          <rect class="win" x="671" y="120" width="6" height="9"/>
-          <rect class="win" x="684" y="120" width="6" height="9"/>
-          <rect class="win" x="658" y="140" width="6" height="9"/>
-          <rect class="win" x="671" y="140" width="6" height="9"/>
-          <rect class="win" x="697" y="140" width="6" height="9"/>
-          <rect class="win" x="710" y="140" width="6" height="9"/>
-          <rect class="win" x="658" y="160" width="6" height="9"/>
-          <rect class="win" x="684" y="160" width="6" height="9"/>
-          <rect class="win" x="710" y="160" width="6" height="9"/>
-          <rect class="win" x="658" y="180" width="6" height="9"/>
-          <rect class="win" x="671" y="180" width="6" height="9"/>
-          <rect class="win" x="684" y="180" width="6" height="9"/>
-          <rect class="win" x="710" y="180" width="6" height="9"/>
-          <rect class="win" x="671" y="200" width="6" height="9"/>
-          <rect class="win" x="684" y="200" width="6" height="9"/>
-          <rect class="win" x="658" y="220" width="6" height="9"/>
-          <rect class="win" x="671" y="220" width="6" height="9"/>
-          <rect class="win" x="697" y="220" width="6" height="9"/>
-          <rect class="win" x="710" y="220" width="6" height="9"/>
-          <rect class="win" x="658" y="240" width="6" height="9"/>
-          <rect class="win" x="684" y="240" width="6" height="9"/>
-          <rect class="win" x="710" y="240" width="6" height="9"/>
-          <rect class="win" x="658" y="260" width="6" height="9"/>
-          <rect class="win" x="671" y="260" width="6" height="9"/>
-          <rect class="win" x="684" y="260" width="6" height="9"/>
-          <rect class="win" x="710" y="260" width="6" height="9"/>
-          <rect class="win" x="671" y="280" width="6" height="9"/>
-          <rect class="win" x="684" y="280" width="6" height="9"/>
-
-          <!-- bldg 12: x=735 -->
-          <rect class="win" x="756" y="180" width="6" height="9"/>
-          <rect class="win" x="743" y="200" width="6" height="9"/>
-          <rect class="win" x="756" y="200" width="6" height="9"/>
-          <rect class="win" x="743" y="220" width="6" height="9"/>
-          <rect class="win" x="743" y="240" width="6" height="9"/>
-          <rect class="win" x="756" y="240" width="6" height="9"/>
-          <rect class="win" x="756" y="260" width="6" height="9"/>
-          <rect class="win" x="743" y="280" width="6" height="9"/>
-          <rect class="win" x="756" y="280" width="6" height="9"/>
-
-          <!-- bldg 13: x=782 -->
-          <rect class="win" x="803" y="215" width="6" height="9"/>
-          <rect class="win" x="816" y="215" width="6" height="9"/>
-          <rect class="win" x="855" y="215" width="6" height="9"/>
-          <rect class="win" x="790" y="235" width="6" height="9"/>
-          <rect class="win" x="803" y="235" width="6" height="9"/>
-          <rect class="win" x="829" y="235" width="6" height="9"/>
-          <rect class="win" x="842" y="235" width="6" height="9"/>
-          <rect class="win" x="855" y="235" width="6" height="9"/>
-          <rect class="win" x="790" y="255" width="6" height="9"/>
-          <rect class="win" x="816" y="255" width="6" height="9"/>
-          <rect class="win" x="842" y="255" width="6" height="9"/>
-          <rect class="win" x="790" y="275" width="6" height="9"/>
-          <rect class="win" x="803" y="275" width="6" height="9"/>
-          <rect class="win" x="816" y="275" width="6" height="9"/>
-          <rect class="win" x="842" y="275" width="6" height="9"/>
-          <rect class="win" x="855" y="275" width="6" height="9"/>
-
-          <!-- bldg 14: x=875 -->
-          <rect class="win" x="896" y="135" width="6" height="9"/>
-          <rect class="win" x="909" y="135" width="6" height="9"/>
-          <rect class="win" x="883" y="155" width="6" height="9"/>
-          <rect class="win" x="896" y="155" width="6" height="9"/>
-          <rect class="win" x="883" y="175" width="6" height="9"/>
-          <rect class="win" x="909" y="175" width="6" height="9"/>
-          <rect class="win" x="883" y="195" width="6" height="9"/>
-          <rect class="win" x="896" y="195" width="6" height="9"/>
-          <rect class="win" x="909" y="195" width="6" height="9"/>
-          <rect class="win" x="896" y="215" width="6" height="9"/>
-          <rect class="win" x="909" y="215" width="6" height="9"/>
-          <rect class="win" x="883" y="235" width="6" height="9"/>
-          <rect class="win" x="896" y="235" width="6" height="9"/>
-          <rect class="win" x="883" y="255" width="6" height="9"/>
-          <rect class="win" x="909" y="255" width="6" height="9"/>
-          <rect class="win" x="883" y="275" width="6" height="9"/>
-          <rect class="win" x="896" y="275" width="6" height="9"/>
-          <rect class="win" x="909" y="275" width="6" height="9"/>
-
-          <!-- bldg 15: x=935 -->
-          <rect class="win" x="956" y="180" width="6" height="9"/>
-          <rect class="win" x="969" y="180" width="6" height="9"/>
-          <rect class="win" x="943" y="200" width="6" height="9"/>
-          <rect class="win" x="956" y="200" width="6" height="9"/>
-          <rect class="win" x="982" y="200" width="6" height="9"/>
-          <rect class="win" x="943" y="220" width="6" height="9"/>
-          <rect class="win" x="969" y="220" width="6" height="9"/>
-          <rect class="win" x="943" y="240" width="6" height="9"/>
-          <rect class="win" x="956" y="240" width="6" height="9"/>
-          <rect class="win" x="969" y="240" width="6" height="9"/>
-          <rect class="win" x="956" y="260" width="6" height="9"/>
-          <rect class="win" x="969" y="260" width="6" height="9"/>
-          <rect class="win" x="943" y="280" width="6" height="9"/>
-          <rect class="win" x="956" y="280" width="6" height="9"/>
-          <rect class="win" x="982" y="280" width="6" height="9"/>
-        </g>
-      </svg>
+    <div class="nav-links">
+      <a href="#intro">Intro</a>
+      <a href="#portfolio">Projects</a>
+      <a href="#homelab">Homelab</a>
+      <a href="#community">Community</a>
+      <a href="#blog">Blog</a>
+      <a href="#contact" class="nav-pill-primary">Contact</a>
     </div>
-  </div>
+  </nav>
 
-  <main>
-    <div class="site-shell">
-      <header class="site-header">
-        <div class="brand">
-          <div class="brand-mark"></div>
+  <!-- ══════════ HERO — wave · character RIGHT ══════════ -->
+  <section id="intro" data-side="right" aria-labelledby="hero-title">
+
+    <div class="content-col">
+
+      <div class="hero-copy">
+        <div class="hero-copy-tag">
+          <span class="hero-copy-tag-dot"></span>
+          <span>Active Development</span>
+        </div>
+        <h1 id="hero-title" class="hero-title">
+          Building real infrastructure to learn
+          <span class="highlight">network security</span>
+          from the ground up.
+        </h1>
+        <p class="hero-subtitle">
+          I'm Jacob — aka <strong>Hackatoa</strong> (hacker + Krakatoa, it's a volcano pun).
+          Studying network security at UAT and pursuing CompTIA while running a Proxmox homelab
+          with 20+ self-hosted services. The homelab breaks in interesting ways that teach me
+          things textbooks don't.
+        </p>
+        <div class="hero-cta-row">
+          <a class="button button-primary" href="#portfolio">View projects</a>
+          <a class="button button-secondary" href="#blog">Read blog</a>
+          <a class="button button-secondary" href="/resume">Resume →</a>
+        </div>
+        <div class="hero-metadata">
           <div>
-            <div class="brand-text-main">HACKATOA</div>
-            <div class="brand-text-sub">Network Security · Linux</div>
+            <strong>Primary Focus</strong>
+            <div>Network security, Linux infrastructure, and browser game development.</div>
           </div>
-        </div>
-        <nav class="nav-links" aria-label="Primary">
-          <a href="#intro">Intro</a>
-          <a href="#portfolio">Projects</a>
-          <a href="#community">Community</a>
-          <a href="#blog">Blog</a>
-          <a href="/resume">Resume</a>
-          <a href="#contact" class="nav-pill-primary">Contact</a>
-        </nav>
-      </header>
-
-      <div class="slides-viewport">
-        <div class="slides-track">
-
-          <!-- ── Intro ── -->
-          <section id="intro" class="hero slide" aria-labelledby="hero-title">
-            <div class="slide-inner">
-              <div class="hero-copy">
-                <div class="hero-copy-tag">
-                  <span class="hero-copy-tag-dot"></span>
-                  <span>Active Development</span>
-                </div>
-                <h1 id="hero-title" class="hero-title">
-                  Building real infrastructure to learn
-                  <span class="highlight">network security</span>
-                  from the ground up.
-                </h1>
-                <p class="hero-subtitle">
-                  I'm Jacob — aka <strong>Hackatoa</strong> (hacker + Krakatoa, it's a volcano pun).
-                  Studying network security at UAT and pursuing CompTIA while running a Proxmox homelab
-                  with 20+ self-hosted services. The homelab breaks in interesting ways that teach me
-                  things textbooks don't.
-                </p>
-                <div class="hero-cta-row">
-                  <a class="button button-primary" href="#portfolio">View projects</a>
-                  <a class="button button-secondary" href="#blog">Read blog</a>
-                  <a class="button button-secondary" href="/resume">Resume →</a>
-                </div>
-                <div class="hero-metadata">
-                  <div>
-                    <strong>Primary Focus</strong>
-                    <div>Network security, Linux infrastructure, and browser game development.</div>
-                  </div>
-                  <div>
-                    <strong>Currently Building</strong>
-                    <div>WikiRoll Discord bot, self-hosted games platform, homelab security stack.</div>
-                  </div>
-                </div>
-              </div>
-
-              <aside class="hero-panel" aria-label="Developer snapshot">
-                <div class="hero-panel-label">Current Status</div>
-                <div class="hero-panel-row">
-                  <div class="hero-panel-ident">
-                    <div class="avatar-carousel" aria-label="Photo of Jacob P Harris">
-                      <img src="assets/me.png"      alt="Portrait of Jacob P Harris" class="hero-avatar carousel-img carousel-img--active" fetchpriority="high" />
-                      <img src="assets/jacob2.webp" alt="Photo of Jacob P Harris"    class="hero-avatar carousel-img" loading="lazy" />
-                    </div>
-                    <div class="hero-panel-name">Jacob P Harris</div>
-                  </div>
-                  <span class="chip">Portfolio</span>
-                </div>
-                <div class="hero-panel-tags">
-                  <span class="chip chip-hot">Self-taught dev</span>
-                  <span class="chip">Network security</span>
-                  <span class="chip">Linux &amp; selfhosted</span>
-                </div>
-                <div class="hero-panel-divider"></div>
-                <dl class="hero-panel-meta">
-                  <div>
-                    <dt class="label">Stack</dt>
-                    <dd class="value">JS · Node · Python · Bash</dd>
-                  </div>
-                  <div>
-                    <dt class="label">Education</dt>
-                    <dd class="value">UAT · Network Security</dd>
-                  </div>
-                  <div>
-                    <dt class="label">Pursuing</dt>
-                    <dd class="value">CompTIA A+ → Network+</dd>
-                  </div>
-                </dl>
-
-                <div id="motd-card" class="motd-card">
-                  <div class="motd-header">Message of the Day</div>
-                  <div class="motd-body" id="motd-body">Loading message...</div>
-                </div>
-
-                <div class="hero-panel-socials">
-                  <a href="https://github.com/Hackatoan" class="pill-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-                  <a href="https://www.youtube.com/@Hackatoa" class="pill-link" target="_blank" rel="noopener noreferrer">YouTube</a>
-                  <a href="https://www.twitch.tv/hackatoa" class="pill-link" target="_blank" rel="noopener noreferrer">Twitch</a>
-                  <a href="https://www.linkedin.com/in/jacob-h-554984227" class="pill-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                </div>
-
-              </aside>
-            </div>
-          </section>
-
-          <!-- ── Projects ── -->
-          <section id="portfolio" class="section slide" aria-labelledby="portfolio-title">
-            <div class="slide-inner">
-              <div class="section-header">
-                <div>
-                  <div class="section-kicker">Portfolio</div>
-                  <h2 class="section-title" id="portfolio-title">Things I've built</h2>
-                </div>
-                <div class="section-caption">Infrastructure, games, bots, and browser tools — all self-hosted.</div>
-              </div>
-              <div class="grid-2">
-
-                <article class="card">
-                  <h3 class="card-title">Hackatoa Games Platform</h3>
-                  <p class="card-body">
-                    A self-hosted browser games platform — free, no account, no ads. Six original games:
-                    <strong>Infinisweeper</strong> (infinite shared Minesweeper with global leaderboard),
-                    <strong>1v1 Minesweeper</strong> (competitive head-to-head),
-                    <strong>Battleship</strong> (AI + multiplayer),
-                    <strong>Cards Against Hackatoa</strong> (browser CAH with voting rounds and community packs),
-                    <strong>Sys32 Roulette</strong>, and <strong>Tic-Tac-Toe Online</strong>.
-                    All running on the homelab.
-                  </p>
-                  <div class="link-row">
-                    <a class="pill-link" href="https://games.hackatoa.com" target="_blank" rel="noopener noreferrer">All Games</a>
-                    <a class="pill-link" href="https://infinisweeper.hackatoa.com/" target="_blank" rel="noopener noreferrer">Infinisweeper</a>
-                    <a class="pill-link" href="https://1v1sw.hackatoa.com" target="_blank" rel="noopener noreferrer">1v1 Minesweeper</a>
-                    <a class="pill-link" href="https://cah.hackatoa.com" target="_blank" rel="noopener noreferrer">Cards Against Hackatoa</a>
-                  </div>
-                </article>
-
-                <article class="card">
-                  <h3 class="card-title">WikiRoll · Discord Collection Bot</h3>
-                  <p class="card-body">
-                    A Discord bot where server members roll, claim, and trade characters sourced from
-                    Wikipedia and 150+ Fandom wikis — Naruto, Marvel, Pokémon, Elden Ring, and more.
-                    Wishlist characters, boost sources for 3× pull weight, vote for bonus rolls.
-                    Built with discord.js, SQLite, and the MediaWiki API.
-                  </p>
-                  <div class="link-row">
-                    <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank" rel="noopener noreferrer">Website</a>
-                    <a class="pill-link" href="https://discord.com/api/oauth2/authorize?client_id=1343100226537259018&permissions=19456&scope=bot%20applications.commands" target="_blank" rel="noopener noreferrer">Add to Discord</a>
-                    <a class="pill-link" href="https://top.gg/bot/1343100226537259018/vote" target="_blank" rel="noopener noreferrer">Vote on top.gg</a>
-                    <a class="pill-link" href="https://github.com/Hackatoan/wikiroll" target="_blank" rel="noopener noreferrer">GitHub</a>
-                  </div>
-                </article>
-
-                <article class="card">
-                  <h3 class="card-title">Lamar Bot · GTA V AI Discord Bot</h3>
-                  <p class="card-body">
-                    Lamar Davis from GTA V, living in your Discord server. Powered by Groq's llama-3.3-70b —
-                    responds in character with persistent per-user memory so he actually remembers what you
-                    said. Attack commands, games, stories, and zero chill.
-                  </p>
-                  <div class="link-row">
-                    <a class="pill-link" href="https://lamar.hackatoa.com" target="_blank" rel="noopener noreferrer">Website</a>
-                    <a class="pill-link" href="https://discord.com/oauth2/authorize?client_id=1136636484900888597&permissions=19456&scope=bot" target="_blank" rel="noopener noreferrer">Add to Discord</a>
-                    <a class="pill-link" href="https://github.com/Hackatoan/Lamar" target="_blank" rel="noopener noreferrer">GitHub</a>
-                  </div>
-                </article>
-
-                <article class="card">
-                  <h3 class="card-title">Canvas Messenger</h3>
-                  <p class="card-body">
-                    Chrome and Firefox extension that adds Discord-style messaging to Canvas LMS — DMs,
-                    group chats, and class-wide channels, all end-to-end encrypted. Built around a Node.js
-                    relay backend with WebRTC signaling to work within Canvas's platform restrictions.
-                  </p>
-                  <div class="link-row">
-                    <a class="pill-link" href="https://github.com/Hackatoan/canvas-messenger" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    <a class="pill-link" href="https://relay.hackatoa.com" target="_blank" rel="noopener noreferrer">Relay</a>
-                  </div>
-                </article>
-
-                <article class="card">
-                  <h3 class="card-title">Clip Forge · Browser Video Editor</h3>
-                  <p class="card-body">
-                    A fully browser-based video editor — no uploads, no server, no account.
-                    All rendering happens locally using FFmpeg compiled to WebAssembly.
-                    Multi-track timeline with video, audio, text, and shape layers, transitions,
-                    voiceover recording, and per-track volume control.
-                  </p>
-                  <div class="link-row">
-                    <a class="pill-link" href="https://clip-forge.hackatoa.com" target="_blank" rel="noopener noreferrer">Open Editor</a>
-                    <a class="pill-link" href="https://github.com/Hackatoan/clip-forge" target="_blank" rel="noopener noreferrer">GitHub</a>
-                  </div>
-                </article>
-
-                <article class="card card-wide">
-                  <h3 class="card-title">Recent GitHub Activity</h3>
-                  <p class="card-body">Live feed of commits and contributions pulled directly from GitHub.</p>
-                  <div class="github-pinner">
-                    <div class="gh-placeholder">Loading recent activity...</div>
-                  </div>
-                </article>
-
-              </div>
-            </div>
-          </section>
-
-          <!-- ── Community ── -->
-          <section id="community" class="section slide" aria-labelledby="community-title">
-            <div class="slide-inner">
-              <div class="section-header">
-                <div>
-                  <div class="section-kicker">Community</div>
-                  <h2 class="section-title" id="community-title">Where to find me</h2>
-                </div>
-                <div class="section-caption">Code, streams, servers, and conversation.</div>
-              </div>
-              <div class="grid-2">
-
-                <article class="card">
-                  <h3 class="card-title">Orbital Outpost · Discord</h3>
-                  <p class="card-body">
-                    My Discord community — homelab talk, dev projects, gaming, and general vibes.
-                    Drop in if you want to chat, ask questions, or just hang out.
-                    WikiRoll and Lamar Bot live here too.
-                  </p>
-                  <div class="link-row">
-                    <a class="pill-link" href="https://discord.gg/7eh3q2u8V" target="_blank" rel="noopener noreferrer">Join Server</a>
-                    <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank" rel="noopener noreferrer">WikiRoll Bot</a>
-                    <a class="pill-link" href="https://lamar.hackatoa.com" target="_blank" rel="noopener noreferrer">Lamar Bot</a>
-                  </div>
-                </article>
-
-                <article class="card">
-                  <h3 class="card-title">Code &amp; Content</h3>
-                  <p class="card-body">
-                    GitHub has all the active projects and source code. YouTube for build write-ups and
-                    lab videos when I bother to record. Instagram for everything else.
-                  </p>
-                  <div class="link-row">
-                    <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank" rel="noopener noreferrer">YouTube</a>
-                    <a class="pill-link" href="https://instagram.com/hackatoa" target="_blank" rel="noopener noreferrer">Instagram</a>
-                    <a class="pill-link" href="https://www.linkedin.com/in/jacob-h-554984227" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                  </div>
-                </article>
-
-                <article class="card">
-                  <h3 class="card-title">Live &amp; Voice</h3>
-                  <p class="card-body">
-                    Twitch for live sessions — coding, security labs, gaming, whatever's on that day.
-                    TeamSpeak is open if you want to drop by. Matrix for decentralized chat.
-                  </p>
-                  <div class="link-row">
-                    <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank" rel="noopener noreferrer">Twitch</a>
-                    <a class="pill-link" href="ts3server://ts.hackatoa.com">TeamSpeak · ts.hackatoa.com</a>
-                    <a class="pill-link" href="https://matrix.hackatoa.com" target="_blank" rel="noopener noreferrer">Matrix</a>
-                  </div>
-                </article>
-
-              </div>
-            </div>
-          </section>
-
-          <!-- ── Blog ── -->
-          <section id="blog" class="section slide" aria-labelledby="blog-title">
-            <div class="slide-inner">
-              <div class="section-header">
-                <div>
-                  <div class="section-kicker">Blog</div>
-                  <h2 class="section-title" id="blog-title">Logs &amp; Ramblings</h2>
-                </div>
-                <div class="section-caption">Homelab notes, project updates, and the occasional tangent.</div>
-              </div>
-              <div class="blog-list" id="blog-list"></div>
-            </div>
-          </section>
-
-          <!-- ── Contact + Support ── -->
-          <section id="contact" class="section slide" aria-labelledby="contact-title">
-            <div class="slide-inner">
-              <div class="section-header">
-                <div>
-                  <div class="section-kicker">Contact</div>
-                  <h2 class="section-title" id="contact-title">Get in touch</h2>
-                </div>
-                <div class="section-caption">Email, Signal, or show up on TeamSpeak.</div>
-              </div>
-              <div class="grid-2">
-
-                <div class="card">
-                  <p class="card-body">
-                    Best reached by email at
-                    <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>.
-                    Happy to talk infrastructure, security, development, or whatever you've got in mind.
-                  </p>
-                  <div class="contact-times" aria-label="Local and Hackatoa time">
-                    <div class="contact-time-row">
-                      <span class="contact-time-label">Your local time</span>
-                      <span class="contact-time-value" id="contact-local-time">--:--</span>
-                    </div>
-                    <div class="contact-time-row">
-                      <span class="contact-time-label">Hackatoa time (PT)</span>
-                      <span class="contact-time-value" id="contact-pt-time">--:--</span>
-                    </div>
-                  </div>
-                  <form class="contact-form" action="mailto:jacob@hackatoa.com" method="GET">
-                    <label class="contact-label" for="contact-message">Send a quick message <span style="color: var(--primary);" aria-hidden="true">*</span><span class="sr-only"> (Required)</span></label>
-                    <textarea id="contact-message" name="body" class="contact-input" rows="3"
-                      placeholder="Drop a short message and your contact details…" required></textarea>
-                    <div class="contact-actions">
-                      <button class="button button-primary" type="submit">Open email app</button>
-                      <span class="contact-hint">Also on
-                        <a href="https://matrix.to/#/@hackatoa:matrix.hackatoa.com" target="_blank" rel="noopener noreferrer">Matrix</a>
-                        (<code style="font-size:0.82em">@hackatoa:matrix.hackatoa.com</code>),
-                        <a href="https://signal.me/#eu/ZqxSe8D4lgvz9D6rUI0cq7cjTyPXb086bWiagELkPQIsEpzDs2JLeIC1aGF-ByHj" target="_blank" rel="noopener noreferrer">Signal</a>,
-                        or TeamSpeak at <a href="ts3server://ts.hackatoa.com">ts.hackatoa.com</a>.
-                      </span>
-                    </div>
-                  </form>
-                </div>
-
-                <div class="card">
-                  <h3 class="card-title">Support My Work</h3>
-                  <p class="card-body">
-                    Everything here is free — no ads, no accounts. If you enjoy the games, bots, or tools
-                    and want to help cover hosting costs, a coffee or some XMR goes a long way.
-                  </p>
-                  <div style="margin-top: 1rem; margin-bottom: 1.5rem;">
-                    <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noopener noreferrer">
-                      <img src="assets/buymeacoffee.png" alt="Buy Me A Coffee" loading="lazy" />
-                    </a>
-                  </div>
-                  <button type="button" id="copy-wallet-btn" class="wallet-address-box" style="display: block; width: 100%; font-size: 0.8rem; padding: 0.5rem;" aria-label="Copy Monero wallet address" title="Copy XMR address">
-                    48KxgziBnPXZzjeUqLmwctEEiaNbCaXc5Dr2ZDvG2pDP6WLJaPMFg3YEY8hmLRD94dYoQs1n3XtkSELVtDscjgqWH44qjnG
-                  </button>
-                  <div class="wallet-qr-container">
-                    <img
-                      src="https://api.qrserver.com/v1/create-qr-code/?size=450x450&data=48KxgziBnPXZzjeUqLmwctEEiaNbCaXc5Dr2ZDvG2pDP6WLJaPMFg3YEY8hmLRD94dYoQs1n3XtkSELVtDscjgqWH44qjnG&bgcolor=FFFFFF&color=050816&margin=0"
-                      alt="QR code for Monero wallet address" loading="lazy" />
-                    <div class="wallet-qr-text">Scan with any XMR wallet app.</div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </section>
-
+          <div>
+            <strong>Currently Building</strong>
+            <div>WikiRoll Discord bot, self-hosted games platform, homelab security stack.</div>
+          </div>
         </div>
       </div>
 
-      <footer class="site-footer">
-        <div class="site-footer-row">
-          <div>Built by Jacob P Harris · Hackatoa (hacker + Krakatoa).</div>
-          <div class="footer-links">
-            <a href="/urls">All Links</a>
-            <a href="/resume">Resume</a>
-            <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a>
-            <a href="#intro">Back to top</a>
+      <aside class="hero-panel" aria-label="Developer snapshot">
+        <div class="hero-panel-label">Current Status</div>
+        <div class="hero-panel-row">
+          <div class="hero-panel-ident">
+            <div class="avatar-carousel" aria-label="Photo of Jacob P Harris">
+              <img src="assets/me.png"      alt="Portrait of Jacob P Harris" class="hero-avatar carousel-img carousel-img--active" fetchpriority="high" />
+              <img src="assets/jacob2.webp" alt="Photo of Jacob P Harris"    class="hero-avatar carousel-img" loading="lazy" />
+            </div>
+            <div class="hero-panel-name">Jacob P Harris</div>
+          </div>
+          <span class="chip">Portfolio</span>
+        </div>
+        <div class="hero-panel-tags">
+          <span class="chip chip-hot">Self-taught dev</span>
+          <span class="chip">Network security</span>
+          <span class="chip">Linux &amp; selfhosted</span>
+        </div>
+        <div class="hero-panel-divider"></div>
+        <dl class="hero-panel-meta">
+          <div>
+            <dt class="label">Stack</dt>
+            <dd class="value">JS · Node · Python · Bash</dd>
+          </div>
+          <div>
+            <dt class="label">Education</dt>
+            <dd class="value">UAT · Network Security</dd>
+          </div>
+          <div>
+            <dt class="label">Pursuing</dt>
+            <dd class="value">CompTIA A+ → Network+</dd>
+          </div>
+        </dl>
+
+        <div id="motd-card" class="motd-card">
+          <div class="motd-header">Message of the Day</div>
+          <div class="motd-body" id="motd-body">Loading message...</div>
+        </div>
+
+        <div class="hero-panel-socials">
+          <a href="https://github.com/Hackatoan" class="pill-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.youtube.com/@Hackatoa" class="pill-link" target="_blank" rel="noopener noreferrer">YouTube</a>
+          <a href="https://www.twitch.tv/hackatoa" class="pill-link" target="_blank" rel="noopener noreferrer">Twitch</a>
+          <a href="https://www.linkedin.com/in/jacob-h-554984227" class="pill-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="char-col" aria-hidden="true">
+      <img src="assets/jacob-pose-wave.png" alt="" />
+    </div>
+
+  </section>
+
+  <!-- ══════════ PROJECTS — desk · character LEFT ══════════ -->
+  <section id="portfolio" data-side="left" aria-labelledby="portfolio-title">
+
+    <div class="char-col" aria-hidden="true">
+      <img src="assets/jacob-pose-desk.png" alt="" />
+    </div>
+
+    <div class="content-col">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">Portfolio</div>
+          <h2 class="section-title" id="portfolio-title">Things I've built</h2>
+        </div>
+        <div class="section-caption">Infrastructure, games, bots, and browser tools — all self-hosted.</div>
+      </div>
+      <div class="grid-2">
+
+        <article class="card">
+          <h3 class="card-title">Hackatoa Games Platform</h3>
+          <p class="card-body">
+            A self-hosted browser games platform — free, no account, no ads. Six original games:
+            <strong>Infinisweeper</strong> (infinite shared Minesweeper with global leaderboard),
+            <strong>1v1 Minesweeper</strong> (competitive head-to-head),
+            <strong>Battleship</strong> (AI + multiplayer),
+            <strong>Cards Against Hackatoa</strong> (browser CAH with voting rounds and community packs),
+            <strong>Sys32 Roulette</strong>, and <strong>Tic-Tac-Toe Online</strong>.
+            All running on the homelab.
+          </p>
+          <div class="link-row">
+            <a class="pill-link" href="https://games.hackatoa.com" target="_blank" rel="noopener noreferrer">All Games</a>
+            <a class="pill-link" href="https://infinisweeper.hackatoa.com/" target="_blank" rel="noopener noreferrer">Infinisweeper</a>
+            <a class="pill-link" href="https://1v1sw.hackatoa.com" target="_blank" rel="noopener noreferrer">1v1 Minesweeper</a>
+            <a class="pill-link" href="https://cah.hackatoa.com" target="_blank" rel="noopener noreferrer">Cards Against Hackatoa</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title">WikiRoll · Discord Collection Bot</h3>
+          <p class="card-body">
+            A Discord bot where server members roll, claim, and trade characters sourced from
+            Wikipedia and 150+ Fandom wikis — Naruto, Marvel, Pokémon, Elden Ring, and more.
+            Wishlist characters, boost sources for 3× pull weight, vote for bonus rolls.
+            Built with discord.js, SQLite, and the MediaWiki API.
+          </p>
+          <div class="link-row">
+            <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank" rel="noopener noreferrer">Website</a>
+            <a class="pill-link" href="https://discord.com/api/oauth2/authorize?client_id=1343100226537259018&permissions=19456&scope=bot%20applications.commands" target="_blank" rel="noopener noreferrer">Add to Discord</a>
+            <a class="pill-link" href="https://top.gg/bot/1343100226537259018/vote" target="_blank" rel="noopener noreferrer">Vote on top.gg</a>
+            <a class="pill-link" href="https://github.com/Hackatoan/wikiroll" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title">Lamar Bot · GTA V AI Discord Bot</h3>
+          <p class="card-body">
+            Lamar Davis from GTA V, living in your Discord server. Powered by Groq's llama-3.3-70b —
+            responds in character with persistent per-user memory so he actually remembers what you
+            said. Attack commands, games, stories, and zero chill.
+          </p>
+          <div class="link-row">
+            <a class="pill-link" href="https://lamar.hackatoa.com" target="_blank" rel="noopener noreferrer">Website</a>
+            <a class="pill-link" href="https://discord.com/oauth2/authorize?client_id=1136636484900888597&permissions=19456&scope=bot" target="_blank" rel="noopener noreferrer">Add to Discord</a>
+            <a class="pill-link" href="https://github.com/Hackatoan/Lamar" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title">Canvas Messenger</h3>
+          <p class="card-body">
+            Chrome and Firefox extension that adds Discord-style messaging to Canvas LMS — DMs,
+            group chats, and class-wide channels, all end-to-end encrypted. Built around a Node.js
+            relay backend with WebRTC signaling to work within Canvas's platform restrictions.
+          </p>
+          <div class="link-row">
+            <a class="pill-link" href="https://github.com/Hackatoan/canvas-messenger" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="pill-link" href="https://relay.hackatoa.com" target="_blank" rel="noopener noreferrer">Relay</a>
+          </div>
+        </article>
+
+        <article class="card card-wide">
+          <h3 class="card-title">Clip Forge · Browser Video Editor</h3>
+          <p class="card-body">
+            A fully browser-based video editor — no uploads, no server, no account.
+            All rendering happens locally using FFmpeg compiled to WebAssembly.
+            Multi-track timeline with video, audio, text, and shape layers, transitions,
+            voiceover recording, and per-track volume control.
+          </p>
+          <div class="link-row">
+            <a class="pill-link" href="https://clip-forge.hackatoa.com" target="_blank" rel="noopener noreferrer">Open Editor</a>
+            <a class="pill-link" href="https://github.com/Hackatoan/clip-forge" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════ HOMELAB — crouch · character RIGHT ══════════ -->
+  <section id="homelab" data-side="right" aria-labelledby="homelab-title">
+
+    <div class="content-col">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">Infrastructure</div>
+          <h2 class="section-title" id="homelab-title">The homelab</h2>
+        </div>
+        <div class="section-caption">Proxmox bare metal. 20+ self-hosted services. All on my own hardware.</div>
+      </div>
+      <div class="grid-2">
+
+        <article class="card">
+          <h3 class="card-title">Core Stack</h3>
+          <p class="card-body">
+            Proxmox hypervisor running Debian VMs. Primary Docker host with NPMplus reverse proxy,
+            Cloudflare DNS, and wildcard TLS via Certbot. Everything proxied behind
+            <code style="color:var(--accent)">*.hackatoa.com</code>.
+          </p>
+          <div class="link-row">
+            <span class="chip">Proxmox</span>
+            <span class="chip">Docker</span>
+            <span class="chip">Nginx</span>
+            <span class="chip">Cloudflare</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title">Self-Hosted Services</h3>
+          <p class="card-body">
+            Matrix/Synapse · Stalwart mail · Nextcloud · Jitsi · Home Assistant with voice pipeline ·
+            Pi-hole DNS · WireGuard VPN · Gitea · Uptime Kuma · TeamSpeak · and more.
+          </p>
+          <div class="link-row">
+            <span class="chip">Matrix</span>
+            <span class="chip">Home Assistant</span>
+            <span class="chip">WireGuard</span>
+            <span class="chip">Pi-hole</span>
+          </div>
+        </article>
+
+        <article class="card card-wide">
+          <h3 class="card-title">Recent GitHub Activity</h3>
+          <p class="card-body">Live feed of commits and contributions pulled directly from GitHub.</p>
+          <div class="github-pinner">
+            <div class="gh-placeholder">Loading recent activity...</div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <div class="char-col" aria-hidden="true">
+      <img src="assets/jacob-pose-crouch.png" alt="" />
+    </div>
+
+  </section>
+
+  <!-- ══════════ COMMUNITY — power · character LEFT ══════════ -->
+  <section id="community" data-side="left" aria-labelledby="community-title">
+
+    <div class="char-col" aria-hidden="true">
+      <img src="assets/jacob-pose-power.png" alt="" />
+    </div>
+
+    <div class="content-col">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">Community</div>
+          <h2 class="section-title" id="community-title">Where to find me</h2>
+        </div>
+        <div class="section-caption">Code, streams, servers, and conversation.</div>
+      </div>
+      <div class="grid-2">
+
+        <article class="card">
+          <h3 class="card-title">Orbital Outpost · Discord</h3>
+          <p class="card-body">
+            My Discord community — homelab talk, dev projects, gaming, and general vibes.
+            Drop in if you want to chat, ask questions, or just hang out.
+            WikiRoll and Lamar Bot live here too.
+          </p>
+          <div class="link-row">
+            <a class="pill-link" href="https://discord.gg/7eh3q2u8V" target="_blank" rel="noopener noreferrer">Join Server</a>
+            <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank" rel="noopener noreferrer">WikiRoll Bot</a>
+            <a class="pill-link" href="https://lamar.hackatoa.com" target="_blank" rel="noopener noreferrer">Lamar Bot</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title">Code &amp; Content</h3>
+          <p class="card-body">
+            GitHub has all the active projects and source code. YouTube for build write-ups and
+            lab videos when I bother to record. Instagram for everything else.
+          </p>
+          <div class="link-row">
+            <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank" rel="noopener noreferrer">YouTube</a>
+            <a class="pill-link" href="https://instagram.com/hackatoa" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a class="pill-link" href="https://www.linkedin.com/in/jacob-h-554984227" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title">Live &amp; Voice</h3>
+          <p class="card-body">
+            Twitch for live sessions — coding, security labs, gaming, whatever's on that day.
+            TeamSpeak is open if you want to drop by. Matrix for decentralized chat.
+          </p>
+          <div class="link-row">
+            <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank" rel="noopener noreferrer">Twitch</a>
+            <a class="pill-link" href="ts3server://ts.hackatoa.com">TeamSpeak · ts.hackatoa.com</a>
+            <a class="pill-link" href="https://matrix.hackatoa.com" target="_blank" rel="noopener noreferrer">Matrix</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════ BLOG — paint · character RIGHT ══════════ -->
+  <section id="blog" data-side="right" aria-labelledby="blog-title">
+
+    <div class="content-col">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">Blog</div>
+          <h2 class="section-title" id="blog-title">Logs &amp; Ramblings</h2>
+        </div>
+        <div class="section-caption">Homelab notes, project updates, and the occasional tangent.</div>
+      </div>
+      <div class="blog-list" id="blog-list"></div>
+    </div>
+
+    <div class="char-col" aria-hidden="true">
+      <img src="assets/jacob-pose-paint.png" alt="" />
+    </div>
+
+  </section>
+
+  <!-- ══════════ CONTACT — point · character LEFT ══════════ -->
+  <section id="contact" data-side="left" aria-labelledby="contact-title">
+
+    <div class="char-col" aria-hidden="true">
+      <img src="assets/jacob-pose-point.png" alt="" />
+    </div>
+
+    <div class="content-col">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">Contact</div>
+          <h2 class="section-title" id="contact-title">Get in touch</h2>
+        </div>
+        <div class="section-caption">Email, Signal, or show up on TeamSpeak.</div>
+      </div>
+      <div class="grid-2">
+
+        <div class="card">
+          <p class="card-body">
+            Best reached by email at
+            <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>.
+            Happy to talk infrastructure, security, development, or whatever you've got in mind.
+          </p>
+          <div class="contact-times" aria-label="Local and Hackatoa time">
+            <div class="contact-time-row">
+              <span class="contact-time-label">Your local time</span>
+              <span class="contact-time-value" id="contact-local-time">--:--</span>
+            </div>
+            <div class="contact-time-row">
+              <span class="contact-time-label">Hackatoa time (PT)</span>
+              <span class="contact-time-value" id="contact-pt-time">--:--</span>
+            </div>
+          </div>
+          <form class="contact-form" action="mailto:jacob@hackatoa.com" method="GET">
+            <label class="contact-label" for="contact-message">Send a quick message <span style="color: var(--primary);" aria-hidden="true">*</span><span class="sr-only"> (Required)</span></label>
+            <textarea id="contact-message" name="body" class="contact-input" rows="3"
+              placeholder="Drop a short message and your contact details…" required></textarea>
+            <div class="contact-actions">
+              <button class="button button-primary" type="submit">Open email app</button>
+              <span class="contact-hint">Also on
+                <a href="https://matrix.to/#/@hackatoa:matrix.hackatoa.com" target="_blank" rel="noopener noreferrer">Matrix</a>
+                (<code style="font-size:0.82em">@hackatoa:matrix.hackatoa.com</code>),
+                <a href="https://signal.me/#eu/ZqxSe8D4lgvz9D6rUI0cq7cjTyPXb086bWiagELkPQIsEpzDs2JLeIC1aGF-ByHj" target="_blank" rel="noopener noreferrer">Signal</a>,
+                or TeamSpeak at <a href="ts3server://ts.hackatoa.com">ts.hackatoa.com</a>.
+              </span>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Support My Work</h3>
+          <p class="card-body">
+            Everything here is free — no ads, no accounts. If you enjoy the games, bots, or tools
+            and want to help cover hosting costs, a coffee or some XMR goes a long way.
+          </p>
+          <div style="margin-top: 1rem; margin-bottom: 1.5rem;">
+            <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noopener noreferrer">
+              <img src="assets/buymeacoffee.png" alt="Buy Me A Coffee" loading="lazy" />
+            </a>
+          </div>
+          <button type="button" id="copy-wallet-btn" class="wallet-address-box" style="display: block; width: 100%; font-size: 0.8rem; padding: 0.5rem;" aria-label="Copy Monero wallet address" title="Copy XMR address">
+            48KxgziBnPXZzjeUqLmwctEEiaNbCaXc5Dr2ZDvG2pDP6WLJaPMFg3YEY8hmLRD94dYoQs1n3XtkSELVtDscjgqWH44qjnG
+          </button>
+          <div class="wallet-qr-container">
+            <img
+              src="https://api.qrserver.com/v1/create-qr-code/?size=450x450&data=48KxgziBnPXZzjeUqLmwctEEiaNbCaXc5Dr2ZDvG2pDP6WLJaPMFg3YEY8hmLRD94dYoQs1n3XtkSELVtDscjgqWH44qjnG&bgcolor=FFFFFF&color=050816&margin=0"
+              alt="QR code for Monero wallet address" loading="lazy" />
+            <div class="wallet-qr-text">Scan with any XMR wallet app.</div>
           </div>
         </div>
-      </footer>
-    </div>
-  </main>
 
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="site-footer" style="position:relative;z-index:1;">
+    <div class="site-footer-row">
+      <div>Built by Jacob P Harris · Hackatoa (hacker + Krakatoa).</div>
+      <div class="footer-links">
+        <a href="/urls">All Links</a>
+        <a href="/resume">Resume</a>
+        <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a>
+        <a href="#intro">Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Music widget (wired to app.js) ── -->
   <aside class="music-widget" aria-label="Ambient music widget">
     <div class="music-card">
       <div class="music-wave" aria-hidden="true">
@@ -786,33 +630,15 @@
       <div class="music-meta">
         <div class="music-title">Press Play...</div>
       </div>
-      <input type="range" id="music-volume" class="music-volume" min="0" max="100" value="25" aria-label="Volume" title="Volume">
+      <input type="range" id="music-volume" class="music-volume" min="0" max="100" value="5" aria-label="Volume" title="Volume">
       <button class="music-skip" id="music-skip" type="button" aria-label="Skip Track" title="Skip">&#x23ED;&#xFE0E;</button>
       <button class="music-toggle" id="music-toggle" type="button" data-state="paused">Play</button>
       <a class="music-list-link" href="/songs" title="Browse all songs">&#x266B;</a>
     </div>
   </aside>
 
-  <div class="bg-toggle-wrapper">
-    <button class="bg-toggle" id="bg-toggle" type="button" aria-pressed="false" aria-label="Toggle background view" title="Toggle background view"></button>
-  </div>
-
-  <div id="scene-clock" class="scene-clock" role="region" aria-label="Scene time controls">
-    <div class="scene-clock-header">
-      <span id="scene-time-display" class="scene-time-display">--:-- --</span>
-      <span id="scene-phase-display" class="scene-phase-display">Daytime</span>
-      <button id="scene-time-reset" class="scene-time-reset" type="button" title="Return to live time">↺ Live</button>
-    </div>
-    <input type="range" id="scene-time-slider" class="scene-time-slider"
-           min="0" max="1439" step="5" value="0" aria-label="Scene time of day">
-    <div class="scene-clock-ticks">
-      <span>12 AM</span><span>6 AM</span><span>Noon</span><span>6 PM</span><span>Midnight</span>
-    </div>
-  </div>
-
   <script src="blog-data.js" defer></script>
   <script src="app.js" defer></script>
-  <script src="background.js" defer></script>
   <script src="carousel.js" defer></script>
 
 </body>
