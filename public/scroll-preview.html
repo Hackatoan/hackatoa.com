@@ -524,6 +524,69 @@
       .snap-meta { grid-template-columns: 1fr 1fr; }
       .nav-links a:not(.nav-pill) { display: none; }
     }
+
+    /* ── Music widget ── */
+    .music-widget {
+      position: fixed;
+      right: 1.3rem;
+      bottom: 1.3rem;
+      z-index: 50;
+    }
+    .music-card {
+      padding: 0.75rem 1.25rem;
+      border-radius: 999px;
+      background: radial-gradient(circle at 0% 0%, rgba(255,112,48,0.2), rgba(10,4,20,0.96));
+      border: 1px solid rgba(160,40,140,0.7);
+      box-shadow: 0 16px 44px rgba(0,0,0,0.9);
+      width: 320px;
+      max-width: calc(100vw - 2rem);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .music-wave { display: flex; gap: 2px; flex-shrink: 0; }
+    .music-bar {
+      width: 3px; border-radius: 999px;
+      background: linear-gradient(to top, var(--primary), var(--accent));
+      height: 10px; opacity: 0.3; transform-origin: bottom;
+    }
+    .music-meta { flex: 1 1 100px; overflow: hidden; white-space: nowrap; }
+    .music-title {
+      font-size: 0.8rem; display: inline-block; white-space: nowrap;
+      animation: scroll-left 12s linear infinite; padding-left: 100%;
+    }
+    @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+    .music-volume {
+      flex-shrink: 0; width: 60px; height: 4px;
+      -webkit-appearance: none; appearance: none;
+      background: rgba(255,255,255,0.2); border-radius: 2px; outline: none; cursor: pointer;
+    }
+    .music-volume::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 10px; height: 10px; background: var(--primary); border-radius: 50%; cursor: pointer;
+    }
+    .music-skip {
+      flex-shrink: 0; background: none; border: none;
+      color: var(--muted); font-size: 1.1rem; cursor: pointer;
+      padding: 0 0.2rem; transition: color 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .music-skip:hover { color: var(--text); }
+    .music-toggle {
+      flex-shrink: 0; border-radius: 999px; border: none;
+      padding: 0.35rem 0.7rem; font-size: 0.72rem;
+      background: rgba(14,4,24,0.95); color: var(--text);
+      border: 1px solid rgba(160,40,140,0.8); cursor: pointer;
+    }
+    .music-toggle[data-state="playing"] {
+      background: linear-gradient(135deg, var(--primary), var(--primary-glow));
+      color: #0e0018; border-color: transparent;
+    }
+    .music-list-link {
+      color: var(--muted); text-decoration: none; font-size: 1rem;
+      flex-shrink: 0; transition: color 0.2s;
+    }
+    .music-list-link:hover { color: var(--accent); }
   </style>
 </head>
 <body>
@@ -888,6 +951,24 @@
 
   </section>
 
+  <aside class="music-widget" aria-label="Ambient music widget">
+    <div class="music-card">
+      <div class="music-wave" aria-hidden="true">
+        <div class="music-bar" data-bar="1"></div>
+        <div class="music-bar" data-bar="2"></div>
+        <div class="music-bar" data-bar="3"></div>
+        <div class="music-bar" data-bar="4"></div>
+      </div>
+      <div class="music-meta">
+        <div class="music-title">Press Play...</div>
+      </div>
+      <input type="range" id="music-volume" class="music-volume" min="0" max="100" value="25" aria-label="Volume" title="Volume">
+      <button class="music-skip" id="music-skip" type="button" aria-label="Skip Track" title="Skip">&#x23ED;&#xFE0E;</button>
+      <button class="music-toggle" id="music-toggle" type="button" data-state="paused">Play</button>
+      <a class="music-list-link" href="/songs" title="Browse all songs">&#x266B;</a>
+    </div>
+  </aside>
+
   <footer>
     <div>Built by Jacob P Harris · Hackatoa (hacker + Krakatoa).</div>
     <div style="display:flex;gap:1rem">
@@ -919,6 +1000,56 @@
       setTimeout(() => this.style.borderColor = '', 1200);
     });
 
+    /* ── Music player ── */
+    const TRACKS = [
+      { title: '40kb Memory',                src: 'https://raw.githubusercontent.com/Hackatoan/records/main/40kb%20Memory.mp3' },
+      { title: 'Bad Condition',              src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Bad%20Condition.mp3' },
+      { title: 'Buffer Stream Blue',         src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Buffer%20Stream%20Blue.mp3' },
+      { title: 'Cursor Trail',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Cursor%20Trail.mp3' },
+      { title: 'Desktop Meadow',             src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Desktop%20Meadow.mp3' },
+      { title: 'Dial-Up Lullaby',            src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Dial-Up%20Lullaby.mp3' },
+      { title: 'Heart Not Found',            src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Heart%20Not%20Found.mp3' },
+      { title: 'Pink Guestbook',             src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Pink%20Guestbook.mp3' },
+      { title: 'Under Construction Forever', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Under%20Construction%20Forever.mp3' },
+      { title: 'Winamp Visualiser',          src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Winampvisualiser.mp3' },
+      { title: 'Half Asleep',                src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Half%20Asleep.mp3' },
+      { title: 'Slow Scroll',                src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Slow%20Scroll.mp3' },
+      { title: 'Rain on the Blue Chair',     src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Rain%20on%20the%20Blue%20Chair.mp3' },
+      { title: 'Pocket Reset',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Pocket%20Reset.mp3' },
+      { title: 'Rain On Glass',              src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Rain%20On%20Glass.mp3' },
+    ];
+    const audio = new Audio();
+    let shuffleOrder = [], trackIndex = 0;
+    function shuffleTracks(last) {
+      const arr = [...Array(TRACKS.length).keys()];
+      for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+      if (last !== undefined && arr[0] === last && arr.length > 1) [arr[0],arr[1]]=[arr[1],arr[0]];
+      shuffleOrder = arr; trackIndex = 0;
+    }
+    function loadTrack(idx) {
+      if (idx >= TRACKS.length) { shuffleTracks(shuffleOrder[TRACKS.length-1]); idx = 0; }
+      trackIndex = idx;
+      const t = TRACKS[shuffleOrder[idx]];
+      audio.src = t.src;
+      const el = document.querySelector('.music-title');
+      if (el) el.textContent = t.title;
+    }
+    (function initMusic() {
+      shuffleTracks();
+      const vol = document.getElementById('music-volume');
+      const skip = document.getElementById('music-skip');
+      const tog = document.getElementById('music-toggle');
+      audio.volume = 0.25;
+      audio.addEventListener('ended', () => { loadTrack(trackIndex+1); audio.play().catch(()=>{}); });
+      if (vol) vol.addEventListener('input', e => { audio.volume = e.target.value/100; });
+      if (skip) skip.addEventListener('click', () => { const p=!audio.paused; loadTrack(trackIndex+1); if(p) audio.play().catch(()=>{}); });
+      if (tog) tog.addEventListener('click', () => {
+        if (audio.paused) { if (!audio.src) loadTrack(0); audio.play().catch(()=>{}); }
+        else audio.pause();
+      });
+      audio.addEventListener('play',  () => { if(tog){tog.dataset.state='playing'; tog.textContent='Pause';} });
+      audio.addEventListener('pause', () => { if(tog){tog.dataset.state='paused';  tog.textContent='Play';} });
+    })();
   </script>
 </body>
 </html>
