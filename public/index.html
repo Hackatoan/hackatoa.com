@@ -172,6 +172,56 @@
       .char-col { display: none; }
       .content-col { min-height: auto; padding: 3rem 1.2rem; }
     }
+
+    /* ── Now-playing pill ── */
+    .now-playing {
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.7rem 0.3rem 0.5rem;
+      background: rgba(14, 4, 24, 0.85);
+      border: 1px solid rgba(160, 40, 140, 0.45);
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+      max-width: 340px;
+      overflow: hidden;
+    }
+    .now-playing .np-toggle {
+      background: none; border: none; cursor: pointer;
+      color: var(--accent, #a0288c); font-size: 0.9rem;
+      padding: 0; line-height: 1; flex-shrink: 0; transition: opacity 0.2s;
+    }
+    .now-playing .np-toggle:hover { opacity: 0.75; }
+    .now-playing .np-meta { width: 160px; overflow: hidden; white-space: nowrap; position: relative; }
+    .now-playing .music-title { font-size: 0.75rem; color: var(--muted, #9080a0); display: inline-block; white-space: nowrap; }
+    .now-playing .music-title.is-scrolling { animation: scroll-left 12s linear infinite; padding-left: 100%; }
+    @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+    .now-playing .np-skip {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted, #9080a0); font-size: 0.85rem;
+      padding: 0; flex-shrink: 0; transition: color 0.2s;
+    }
+    .now-playing .np-skip:hover { color: var(--text, #e0d0f0); }
+    .now-playing .np-vol {
+      -webkit-appearance: none; appearance: none;
+      width: 56px; height: 3px; background: rgba(160, 40, 140, 0.35);
+      border-radius: 2px; outline: none; cursor: pointer; flex-shrink: 0;
+    }
+    .now-playing .np-vol::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent, #a0288c); cursor: pointer;
+    }
+    .now-playing .np-vol::-moz-range-thumb {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent, #a0288c); cursor: pointer; border: none;
+    }
+    .now-playing .np-link {
+      color: var(--muted, #9080a0); text-decoration: none;
+      font-size: 0.8rem; flex-shrink: 0; transition: color 0.2s;
+    }
+    .now-playing .np-link:hover { color: var(--accent, #a0288c); }
   </style>
 </head>
 
@@ -202,6 +252,14 @@
   <section id="intro" data-side="right" aria-labelledby="hero-title">
 
     <div class="content-col">
+
+      <div class="now-playing">
+        <button class="np-toggle" id="music-toggle" type="button" data-state="paused" title="Play/Pause">▶</button>
+        <div class="np-meta"><div class="music-title">Press Play…</div></div>
+        <button class="np-skip" id="music-skip" type="button" title="Skip">⏭</button>
+        <input class="np-vol" id="music-volume" type="range" min="0" max="100" value="5" aria-label="Volume" title="Volume" />
+        <a class="np-link" href="/songs" title="All songs">♫</a>
+      </div>
 
       <div class="hero-copy">
         <h1 id="hero-title" class="hero-title">
@@ -613,25 +671,6 @@
       </div>
     </div>
   </footer>
-
-  <!-- ── Music widget (wired to app.js) ── -->
-  <aside class="music-widget" aria-label="Ambient music widget">
-    <div class="music-card">
-      <div class="music-wave" aria-hidden="true">
-        <div class="music-bar" data-bar="1"></div>
-        <div class="music-bar" data-bar="2"></div>
-        <div class="music-bar" data-bar="3"></div>
-        <div class="music-bar" data-bar="4"></div>
-      </div>
-      <div class="music-meta">
-        <div class="music-title">Press Play...</div>
-      </div>
-      <input type="range" id="music-volume" class="music-volume" min="0" max="100" value="5" aria-label="Volume" title="Volume">
-      <button class="music-skip" id="music-skip" type="button" aria-label="Skip Track" title="Skip">&#x23ED;&#xFE0E;</button>
-      <button class="music-toggle" id="music-toggle" type="button" data-state="paused">Play</button>
-      <a class="music-list-link" href="/songs" title="Browse all songs">&#x266B;</a>
-    </div>
-  </aside>
 
   <script src="blog-data.js" defer></script>
   <script src="app.js" defer></script>
