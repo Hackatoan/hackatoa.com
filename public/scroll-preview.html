@@ -53,18 +53,19 @@
     #character {
       position: fixed;
       top: 50%;
-      right: 4%;
+      right: 2%;
       left: auto;
       transform: translateY(-50%);
-      width: clamp(160px, 18vw, 290px);
+      width: clamp(200px, 26vw, 400px);
       z-index: 20;
       pointer-events: none;
       filter: drop-shadow(0 0 18px rgba(224, 32, 176, 0.18));
-      transition: right 0.5s ease, left 0.5s ease;
+      transition: right 0.55s cubic-bezier(0.4,0,0.2,1),
+                  left  0.55s cubic-bezier(0.4,0,0.2,1);
     }
 
     #character.side-left {
-      left: 4%;
+      left: 2%;
       right: auto;
     }
 
@@ -139,26 +140,29 @@
       position: relative;
       z-index: 1;
       min-height: 100vh;
-      padding: 5rem 5% 5rem 5%;
+      padding: 8vh 5%;
       display: flex;
       align-items: center;
+      /* reserve space for the character column */
+      --char-col: clamp(200px, 26vw, 400px);
     }
 
     /* character on right → content on left */
     section[data-side="right"] {
       justify-content: flex-start;
-      padding-right: calc(4% + clamp(160px, 18vw, 290px) + 3%);
+      padding-right: calc(var(--char-col) + 4%);
     }
 
     /* character on left → content on right */
     section[data-side="left"] {
       justify-content: flex-end;
-      padding-left: calc(4% + clamp(160px, 18vw, 290px) + 3%);
+      padding-left: calc(var(--char-col) + 4%);
     }
 
     .section-inner {
       width: 100%;
-      max-width: 640px;
+      /* fill the non-character column */
+      max-width: min(100%, 780px);
     }
 
     /* ── Cards ── */
@@ -527,32 +531,40 @@
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--accent); }
 
+    /* hide inline pose on desktop */
+    .section-pose { display: none; }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
-      /* hide fixed character, show inline pose per-section instead */
       #character { display: none; }
 
       section {
-        min-height: auto;
-        padding: 3rem 1.2rem 2rem !important;
+        min-height: auto !important;
+        padding: 2.5rem 1.2rem 2.5rem !important;
         justify-content: flex-start !important;
+      }
+
+      section[data-side="right"],
+      section[data-side="left"] {
+        padding-left: 1.2rem !important;
+        padding-right: 1.2rem !important;
       }
 
       .section-inner { max-width: 100%; }
 
-      /* inline character pose above each section's card */
+      /* inline character pose beside the section header */
       .section-pose {
         display: block;
-        width: 120px;
+        width: 100px;
         height: auto;
-        margin: 0 auto 1.2rem;
-        filter: drop-shadow(0 0 12px rgba(224,32,176,0.2));
+        float: right;
+        margin: 0 0 0.8rem 1rem;
+        filter: drop-shadow(0 0 10px rgba(224,32,176,0.25));
+        shape-outside: margin-box;
       }
 
       .project-grid { grid-template-columns: 1fr; }
-
       .snap-meta { grid-template-columns: 1fr 1fr; }
-
       .nav-links a:not(.nav-pill) { display: none; }
     }
   </style>
