@@ -101,24 +101,31 @@ if (saved && saved.src) {
     audio.volume = 0.25;
 }
 
-// Build track list grouped by album
+// Build track list grouped by album (newest first, collapsible)
 const list = document.getElementById('track-list');
-const albums = [...new Set(TRACKS.map(t => t.album))];
-albums.forEach(album => {
+const albums = [...new Set(TRACKS.map(t => t.album))].reverse();
+albums.forEach((album, albumIdx) => {
+    const albumTracks = TRACKS.map((t, i) => ({ ...t, i })).filter(t => t.album === album);
+    const isOpen = albumIdx === 0; // first album (newest) open by default
+
     const header = document.createElement('div');
     header.className = 'album-header';
-    header.textContent = album;
-    list.appendChild(header);
+    header.setAttribute('role', 'button');
+    header.setAttribute('tabindex', '0');
+    header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    header.innerHTML = `<span class="album-name">${album}</span><span class="album-chevron">${isOpen ? '▾' : '▸'}</span>`;
 
-    TRACKS.forEach((track, i) => {
-        if (track.album !== album) return;
-        const albumTracks = TRACKS.filter(t => t.album === album);
-        const trackNum = albumTracks.indexOf(track) + 1;
+    const section = document.createElement('div');
+    section.className = 'album-section';
+    if (!isOpen) section.classList.add('album-collapsed');
+
+    albumTracks.forEach((track, trackNum) => {
+        const i = track.i;
         const row = document.createElement('div');
         row.className = 'track-row';
         row.dataset.idx = i;
         row.innerHTML = `
-            <div class="track-num">${trackNum}</div>
+            <div class="track-num">${trackNum + 1}</div>
             <div class="track-eq"><span></span><span></span><span></span></div>
             <div class="track-title">${track.title}</div>
             <button class="track-btn">▶ Play</button>
@@ -146,8 +153,20 @@ albums.forEach(album => {
             updateUI();
             saveState();
         });
-        list.appendChild(row);
+        section.appendChild(row);
     });
+
+    const toggle = () => {
+        const expanded = header.getAttribute('aria-expanded') === 'true';
+        header.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+        header.querySelector('.album-chevron').textContent = expanded ? '▸' : '▾';
+        section.classList.toggle('album-collapsed', expanded);
+    };
+    header.addEventListener('click', toggle);
+    header.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+
+    list.appendChild(header);
+    list.appendChild(section);
 });
 
 // Mini player controls
