@@ -1,19 +1,29 @@
 const TRACKS = [
-    { title: '40kb Memory', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/40kb%20Memory.mp3' },
-    { title: 'Bad Condition', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Bad%20Condition.mp3' },
-    { title: 'Buffer Stream Blue', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Buffer%20Stream%20Blue.mp3' },
-    { title: 'Cursor Trail', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Cursor%20Trail.mp3' },
-    { title: 'Desktop Meadow', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Desktop%20Meadow.mp3' },
-    { title: 'Dial-Up Lullaby', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Dial-Up%20Lullaby.mp3' },
-    { title: 'Heart Not Found', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Heart%20Not%20Found.mp3' },
-    { title: 'Pink Guestbook', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Pink%20Guestbook.mp3' },
-    { title: 'Under Construction Forever', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Under%20Construction%20Forever.mp3' },
-    { title: 'Winamp Visualiser', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Winampvisualiser.mp3' },
-    { title: 'Half Asleep', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Half%20Asleep.mp3' },
-    { title: 'Slow Scroll', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Slow%20Scroll.mp3' },
-    { title: 'Rain on the Blue Chair', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Rain%20on%20the%20Blue%20Chair.mp3' },
-    { title: 'Pocket Reset', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Pocket%20Reset.mp3' },
-    { title: 'Rain On Glass', src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Rain%20On%20Glass.mp3' },
+    { title: '40kb Memory',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/40kb%20Memory.mp3',               album: 'Trial 1' },
+    { title: 'Bad Condition',             src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Bad%20Condition.mp3',             album: 'Trial 1' },
+    { title: 'Buffer Stream Blue',        src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Buffer%20Stream%20Blue.mp3',        album: 'Trial 1' },
+    { title: 'Cursor Trail',              src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Cursor%20Trail.mp3',              album: 'Trial 1' },
+    { title: 'Desktop Meadow',            src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Desktop%20Meadow.mp3',            album: 'Trial 1' },
+    { title: 'Dial-Up Lullaby',           src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Dial-Up%20Lullaby.mp3',           album: 'Trial 1' },
+    { title: 'Heart Not Found',           src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Heart%20Not%20Found.mp3',           album: 'Trial 1' },
+    { title: 'Pink Guestbook',            src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Pink%20Guestbook.mp3',            album: 'Trial 1' },
+    { title: 'Under Construction Forever',src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Under%20Construction%20Forever.mp3',album: 'Trial 1' },
+    { title: 'Winamp Visualiser',         src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Winampvisualiser.mp3',            album: 'Trial 1' },
+    { title: 'Half Asleep',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Half%20Asleep.mp3',               album: 'Trial 1' },
+    { title: 'Slow Scroll',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Slow%20Scroll.mp3',               album: 'Trial 1' },
+    { title: 'Rain on the Blue Chair',    src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Rain%20on%20the%20Blue%20Chair.mp3',album: 'Trial 1' },
+    { title: 'Pocket Reset',              src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Pocket%20Reset.mp3',              album: 'Trial 1' },
+    { title: 'Rain On Glass',             src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Trial%201/Rain%20On%20Glass.mp3',            album: 'Trial 1' },
+    { title: 'Comic Sans Heart',          src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Wayback%20Machine/Comic%20Sans%20Heart.mp3', album: 'Wayback Machine' },
+    { title: 'Default Background',        src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Wayback%20Machine/Default%20Background.mp3', album: 'Wayback Machine' },
+    { title: 'Equalizer Bars',            src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Wayback%20Machine/Equalizer%20Bars.mp3',    album: 'Wayback Machine' },
+    { title: 'Geocities Ghost',           src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Wayback%20Machine/Geocities%20Ghost.mp3',   album: 'Wayback Machine' },
+    { title: 'Last Modified',             src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Wayback%20Machine/Last%20Modified.mp3',     album: 'Wayback Machine' },
+    { title: 'Loading Forever',           src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Wayback%20Machine/Loading%20Forever.mp3',   album: 'Wayback Machine' },
+    { title: 'Modem Hymn',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Wayback%20Machine/Modem%20Hymn.mp3',        album: 'Wayback Machine' },
+    { title: 'Profile Deactivated',       src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Wayback%20Machine/Profile%20Deactivated.mp3',album: 'Wayback Machine' },
+    { title: 'Static Room',               src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Wayback%20Machine/Static%20Room.mp3',       album: 'Wayback Machine' },
+    { title: 'Yellow Tape Sign',          src: 'https://raw.githubusercontent.com/Hackatoan/records/main/Wayback%20Machine/Yellow%20Tape%20Sign.mp3',album: 'Wayback Machine' },
 ];
 
 // --- Shared state via sessionStorage ---
@@ -91,45 +101,53 @@ if (saved && saved.src) {
     audio.volume = 0.25;
 }
 
-// Build track list
+// Build track list grouped by album
 const list = document.getElementById('track-list');
-TRACKS.forEach((track, i) => {
-    const row = document.createElement('div');
-    row.className = 'track-row';
-    row.dataset.idx = i;
-    row.innerHTML = `
-        <div class="track-num">${i + 1}</div>
-        <div class="track-eq"><span></span><span></span><span></span></div>
-        <div class="track-title">${track.title}</div>
-        <button class="track-btn">▶ Play</button>
-    `;
-    const btn = row.querySelector('.track-btn');
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (i === currentIdx) {
-            if (audio.paused) {
+const albums = [...new Set(TRACKS.map(t => t.album))];
+albums.forEach(album => {
+    const header = document.createElement('div');
+    header.className = 'album-header';
+    header.textContent = album;
+    list.appendChild(header);
+
+    TRACKS.forEach((track, i) => {
+        if (track.album !== album) return;
+        const albumTracks = TRACKS.filter(t => t.album === album);
+        const trackNum = albumTracks.indexOf(track) + 1;
+        const row = document.createElement('div');
+        row.className = 'track-row';
+        row.dataset.idx = i;
+        row.innerHTML = `
+            <div class="track-num">${trackNum}</div>
+            <div class="track-eq"><span></span><span></span><span></span></div>
+            <div class="track-title">${track.title}</div>
+            <button class="track-btn">▶ Play</button>
+        `;
+        const btn = row.querySelector('.track-btn');
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (i === currentIdx) {
+                if (audio.paused) audio.play().catch(() => {});
+                else audio.pause();
+            } else {
+                setTrack(i, true);
+            }
+            updateUI();
+            saveState();
+        });
+        row.addEventListener('click', () => {
+            if (i !== currentIdx) {
+                setTrack(i, true);
+            } else if (audio.paused) {
                 audio.play().catch(() => {});
             } else {
                 audio.pause();
             }
-        } else {
-            setTrack(i, true);
-        }
-        updateUI();
-        saveState();
+            updateUI();
+            saveState();
+        });
+        list.appendChild(row);
     });
-    row.addEventListener('click', () => {
-        if (i !== currentIdx) {
-            setTrack(i, true);
-        } else if (audio.paused) {
-            audio.play().catch(() => {});
-        } else {
-            audio.pause();
-        }
-        updateUI();
-        saveState();
-    });
-    list.appendChild(row);
 });
 
 // Mini player controls

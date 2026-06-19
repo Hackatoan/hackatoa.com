@@ -137,6 +137,40 @@
     .track-btn:hover { color: var(--text-main); border-color: var(--primary); }
     .track-row.is-playing .track-btn { color: var(--primary); border-color: var(--primary); }
 
+    .album-header {
+      width: 100%;
+      max-width: 640px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary);
+      padding: 1.5rem 0.25rem 0.4rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.25rem;
+    }
+    .album-header:first-child { padding-top: 0; }
+
+    .distrokid-banner {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 640px;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(160, 40, 140, 0.4);
+      background: rgba(14, 6, 24, 0.7);
+      margin-bottom: 0.5rem;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .distrokid-banner:hover { border-color: var(--primary); background: var(--hover-bg); }
+    .distrokid-banner .dk-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .distrokid-banner .dk-title { font-size: 0.95rem; font-weight: 600; }
+    .distrokid-banner .dk-arrow { margin-left: auto; color: var(--text-muted); font-size: 0.85rem; flex-shrink: 0; }
+
     /* Mini player bar at bottom */
     .mini-player {
       position: fixed;
@@ -198,6 +232,14 @@
   <h1>🎵 Songs</h1>
   <p>All tracks in the player — click any to preview</p>
 </div>
+
+<a class="distrokid-banner" href="https://distrokid.com/hyperfollow/hackatoa/wayback-machine" target="_blank" rel="noopener noreferrer">
+  <div>
+    <div class="dk-label">Available on streaming</div>
+    <div class="dk-title">Wayback Machine — Hackatoa</div>
+  </div>
+  <span class="dk-arrow">Listen →</span>
+</a>
 
 <div class="track-list" id="track-list"></div>
 
