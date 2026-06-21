@@ -8,44 +8,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const el = document.getElementById('pdf-content');
 
-    // Snapshot inline styles
-    const prev = {
-      bg:    el.style.background,
-      color: el.style.color,
-    };
-
-    // Apply clean light theme for PDF
-    el.style.background = '#ffffff';
-    el.style.color = '#111111';
-
-    document.querySelectorAll('.section-title').forEach(e => e.style.color = '#4a3fcf');
-    document.querySelectorAll('.section-title').forEach(e => e.style.setProperty('--after-bg', '#ccc'));
-    document.querySelectorAll('.resume-name').forEach(e => e.style.color = '#111');
-    document.querySelectorAll('.resume-contact').forEach(e => e.style.color = '#444');
-    document.querySelectorAll('.resume-contact a').forEach(e => e.style.color = '#4a3fcf');
-    document.querySelectorAll('.summary-text').forEach(e => e.style.color = '#333');
-    document.querySelectorAll('.project-card').forEach(e => {
-      e.style.background = '#f8f8f8';
-      e.style.borderColor = '#ddd';
-    });
-    document.querySelectorAll('.project-name').forEach(e => e.style.color = '#111');
-    document.querySelectorAll('.project-name a').forEach(e => e.style.color = '#4a3fcf');
-    document.querySelectorAll('.project-desc').forEach(e => e.style.color = '#333');
-    document.querySelectorAll('.project-desc code').forEach(e => e.style.color = '#4a3fcf');
-    document.querySelectorAll('.job').forEach(e => e.style.borderLeftColor = '#ccc');
-    document.querySelectorAll('.job-title').forEach(e => e.style.color = '#111');
-    document.querySelectorAll('.job-meta').forEach(e => e.style.color = '#555');
-    document.querySelectorAll('.job-bullets li').forEach(e => e.style.color = '#333');
-    document.querySelectorAll('.edu-degree').forEach(e => e.style.color = '#111');
-    document.querySelectorAll('.edu-school, .edu-dates').forEach(e => e.style.color = '#555');
-    document.querySelectorAll('.skills-group-label').forEach(e => e.style.color = '#555');
-    document.querySelectorAll('.tag').forEach(e => {
-      e.style.background = '#eeeeee';
-      e.style.borderColor = '#cccccc';
-      e.style.color = '#333';
-    });
-    document.querySelectorAll('.meta-item').forEach(e => e.style.color = '#333');
-    document.querySelectorAll('.meta-item strong').forEach(e => e.style.color = '#555');
+    // Inject a temporary stylesheet that forces a clean light theme
+    const style = document.createElement('style');
+    style.id = '__pdf-override';
+    style.textContent = `
+      #pdf-content, #pdf-content * {
+        background: #fff !important;
+        background-color: #fff !important;
+        color: #111 !important;
+        border-color: #ddd !important;
+        box-shadow: none !important;
+      }
+      #pdf-content .section-title { color: #2a2aaa !important; }
+      #pdf-content .section-title::after { background: #ccc !important; }
+      #pdf-content .resume-contact,
+      #pdf-content .summary-text,
+      #pdf-content .project-desc,
+      #pdf-content .job-meta,
+      #pdf-content .job-bullets li,
+      #pdf-content .edu-school,
+      #pdf-content .edu-dates,
+      #pdf-content .skills-group-label,
+      #pdf-content .meta-item strong { color: #444 !important; }
+      #pdf-content a,
+      #pdf-content .resume-contact a,
+      #pdf-content .project-name a,
+      #pdf-content .project-desc code { color: #2a2aaa !important; }
+      #pdf-content .tag {
+        background: #eee !important;
+        border-color: #ccc !important;
+        color: #333 !important;
+      }
+    `;
+    document.head.appendChild(style);
 
     const opt = {
       margin:      [12, 14, 12, 14],
@@ -56,15 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     html2pdf().set(opt).from(el).save().then(() => {
-      // Restore
-      el.style.background = prev.bg;
-      el.style.color = prev.color;
-      document.querySelectorAll(
-        '.section-title, .resume-name, .resume-contact, .resume-contact a, .summary-text,' +
-        '.project-card, .project-name, .project-name a, .project-desc, .project-desc code,' +
-        '.job, .job-title, .job-meta, .job-bullets li, .edu-degree, .edu-school, .edu-dates,' +
-        '.skills-group-label, .tag, .meta-item, .meta-item strong'
-      ).forEach(e => e.removeAttribute('style'));
+      document.getElementById('__pdf-override')?.remove();
       btn.disabled = false;
       btn.textContent = '⬇ Download PDF';
     });
