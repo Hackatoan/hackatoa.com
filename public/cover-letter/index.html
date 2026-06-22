@@ -24,12 +24,12 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:         #050816;
-      --surface:    #0d1224;
-      --border:     rgba(255,255,255,0.08);
-      --primary:    #7c6eff;
-      --text:       #e8eaf6;
-      --muted:      #8892b0;
+      --bg:         #080010;
+      --surface:    #0e0618;
+      --border:     rgba(140,30,120,0.22);
+      --primary:    #e020b0;
+      --text:       #f5ede8;
+      --muted:      #b090a8;
     }
 
     body {
@@ -194,7 +194,7 @@
       <a class="back-link" href="/">hackatoa.com</a>
       <a class="back-link" href="/resume" style="margin-left:0;">Resume</a>
     </div>
-    <button class="btn" id="dl-btn" onclick="downloadPDF()">⬇ Download PDF</button>
+    <button class="btn" id="dl-btn">⬇ Download PDF</button>
   </nav>
 
   <div id="pdf-content">
@@ -242,58 +242,7 @@
 
 </div><!-- /page-wrap -->
 
-<script>
-  // Auto-insert today's date
-  const dateEl = document.getElementById('letter-date');
-  const today = new Date();
-  dateEl.textContent = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-  function downloadPDF() {
-    const btn = document.getElementById('dl-btn');
-    btn.disabled = true;
-    btn.textContent = 'Generating…';
-
-    const element = document.getElementById('pdf-content');
-
-    // Snapshot current styles, apply light theme for PDF
-    const origBg = element.style.background;
-    const origColor = element.style.color;
-    const origBorder = element.style.border;
-    const origBorderRadius = element.style.borderRadius;
-
-    element.style.background = '#ffffff';
-    element.style.color = '#111111';
-    element.style.border = 'none';
-    element.style.borderRadius = '0';
-
-    document.querySelectorAll('.letter-sender-name, .letter-salutation, .letter-sig').forEach(el => el.style.color = '#000');
-    document.querySelectorAll('.letter-contact, .letter-date, .letter-body p, .letter-closing-word').forEach(el => el.style.color = '#333');
-    document.querySelectorAll('.letter-contact a, .letter-body a').forEach(el => el.style.color = '#4a40c0');
-    document.querySelectorAll('.letter-divider').forEach(el => el.style.background = '#ddd');
-
-    const opt = {
-      margin:      [15, 18, 15, 18],
-      filename:    'Jacob_Harris_Cover_Letter.pdf',
-      image:       { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-      jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    };
-
-    html2pdf().set(opt).from(element).save().then(() => {
-      // Restore
-      element.style.background = origBg;
-      element.style.color = origColor;
-      element.style.border = origBorder;
-      element.style.borderRadius = origBorderRadius;
-      document.querySelectorAll('.letter-sender-name, .letter-salutation, .letter-sig').forEach(el => el.style.color = '');
-      document.querySelectorAll('.letter-contact, .letter-date, .letter-body p, .letter-closing-word').forEach(el => el.style.color = '');
-      document.querySelectorAll('.letter-contact a, .letter-body a').forEach(el => el.style.color = '');
-      document.querySelectorAll('.letter-divider').forEach(el => el.style.background = '');
-      btn.disabled = false;
-      btn.textContent = '⬇ Download PDF';
-    });
-  }
-</script>
+<script src="/cover-letter/cover-letter.js"></script>
 
 </body>
 </html>
