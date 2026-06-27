@@ -21,9 +21,22 @@ jobs:
           }
           EOF
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_HACKATOA_COM }}
-          channelId: live
-          projectId: hackatoa-com
+      - name: Set up Firebase credentials
+        env:
+          SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_HACKATOA_COM }}
+        run: |
+          echo "$SA_KEY" > /tmp/sa-key.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/sa-key.json" >> $GITHUB_ENV
+
+      - name: Deploy to Firebase Hosting
+        run: |
+          set +e
+          output=$(npx firebase-tools deploy --only hosting --non-interactive 2>&1)
+          exit_code=$?
+          set -e
+          echo "$output"
+          if [ $exit_code -ne 0 ] && echo "$output" | grep -q "is the current active version"; then
+            echo "Version already live — no-op deploy, treating as success"
+            exit 0
+          fi
+          exit $exit_code
