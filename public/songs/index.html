@@ -10,248 +10,69 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:        #080010;
-      --surface:   #0e0618;
-      --border:    rgba(140, 30, 120, 0.25);
-      --primary:   #e020b0;
-      --text-main: #f5ede8;
-      --text-muted:#b090a8;
-      --hover-bg:  #150828;
-      --playing-bg:#1a0428;
+      --bg: #040602; --surface: #080a05; --border: rgba(130,119,23,0.28);
+      --gold: #ffd600; --gold-dim: #827717; --text: #d8d0a8;
+      --muted: #6a6030; --hover-bg: #0d0f08; --playing-bg: #100f02;
     }
-
-    body {
-      background: radial-gradient(circle at 15% 0%, #1a0030 0, transparent 55%),
-                  radial-gradient(circle at 85% 0%, #200030 0, transparent 55%),
-                  linear-gradient(to bottom, #0d0020, var(--bg));
-      color: var(--text-main);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem 6rem;
-    }
-
-    .back-link {
-      align-self: flex-start;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      margin-bottom: 2.5rem;
-      transition: color 0.2s;
-    }
-    .back-link:hover { color: var(--text-main); }
+    body { background: var(--bg); color: var(--text); font-family: monospace,monospace; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem 6rem; }
+    .back-link { align-self: flex-start; display: inline-flex; align-items: center; gap: .4rem; color: var(--muted); text-decoration: none; font-size: .82rem; letter-spacing: 1px; margin-bottom: 2.5rem; transition: color .2s; }
+    .back-link:hover { color: var(--gold); }
     .back-link::before { content: '←'; }
-
-    .page-header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-    .page-header h1 {
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    .page-header p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-top: 0.4rem;
-    }
-
-    .track-list {
-      width: 100%;
-      max-width: 640px;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .track-row {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-    }
-    .track-row:hover { background: var(--hover-bg); border-color: rgba(100,180,255,0.25); }
-    .track-row.is-playing { background: var(--playing-bg); border-color: var(--primary); }
-
-    .track-num {
-      width: 1.5rem;
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      flex-shrink: 0;
-    }
+    .page-header { text-align: center; margin-bottom: 2rem; }
+    .page-header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; }
+    .page-header p { color: var(--muted); font-size: .78rem; margin-top: .4rem; letter-spacing: 1px; }
+    .track-list { width: 100%; max-width: 620px; display: flex; flex-direction: column; gap: .4rem; }
+    .track-row { display: flex; align-items: center; gap: 1rem; padding: .7rem 1rem; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; transition: background .15s, border-color .15s; }
+    .track-row:hover { background: var(--hover-bg); border-color: var(--gold-dim); }
+    .track-row.is-playing { background: var(--playing-bg); border-color: var(--gold); }
+    .track-num { width: 1.4rem; text-align: center; font-size: .75rem; color: var(--muted); flex-shrink: 0; }
     .track-row.is-playing .track-num { display: none; }
-    .track-eq {
-      display: none;
-      width: 1.5rem;
-      height: 1.2rem;
-      align-items: flex-end;
-      gap: 2px;
-      flex-shrink: 0;
-    }
+    .track-eq { display: none; width: 1.4rem; height: 1.1rem; align-items: flex-end; gap: 2px; flex-shrink: 0; }
     .track-row.is-playing .track-eq { display: flex; }
-    .track-eq span {
-      flex: 1;
-      background: var(--primary);
-      border-radius: 1px;
-      animation: eq-bar 0.8s ease-in-out infinite alternate;
-    }
-    .track-eq span:nth-child(2) { animation-delay: 0.15s; }
-    .track-eq span:nth-child(3) { animation-delay: 0.3s; }
-    @keyframes eq-bar {
-      from { height: 30%; }
-      to   { height: 100%; }
-    }
+    .track-eq span { flex: 1; background: var(--gold); border-radius: 1px; animation: eq-bar .8s ease-in-out infinite alternate; }
+    .track-eq span:nth-child(2) { animation-delay: .15s; }
+    .track-eq span:nth-child(3) { animation-delay: .3s; }
+    @keyframes eq-bar { from { height: 25%; } to { height: 100%; } }
     .track-row.is-paused .track-eq span { animation-play-state: paused; }
-
-    .track-title {
-      flex: 1;
-      font-size: 0.95rem;
-    }
-    .track-row.is-playing .track-title { color: var(--primary); font-weight: 600; }
-
-    .track-btn {
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text-muted);
-      padding: 0.3rem 0.7rem;
-      font-size: 0.78rem;
-      cursor: pointer;
-      transition: color 0.15s, border-color 0.15s;
-      white-space: nowrap;
-    }
-    .track-btn:hover { color: var(--text-main); border-color: var(--primary); }
-    .track-row.is-playing .track-btn { color: var(--primary); border-color: var(--primary); }
-
-    .album-header {
-      width: 100%;
-      max-width: 640px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--primary);
-      padding: 1.5rem 0.25rem 0.4rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 0.25rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      user-select: none;
-    }
-    .album-header:first-child { padding-top: 0; }
-    .album-header:hover { color: #f040d0; }
-    .album-chevron { font-style: normal; font-size: 0.85rem; }
-    .album-section { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .track-title { flex: 1; font-size: .88rem; letter-spacing: .5px; }
+    .track-row.is-playing .track-title { color: var(--gold); font-weight: 700; }
+    .track-btn { background: none; border: 1px solid var(--border); border-radius: 3px; color: var(--muted); padding: .25rem .6rem; font-size: .72rem; font-family: monospace; cursor: pointer; transition: color .15s, border-color .15s; white-space: nowrap; letter-spacing: 1px; }
+    .track-btn:hover { color: var(--text); border-color: var(--gold-dim); }
+    .track-row.is-playing .track-btn { color: var(--gold); border-color: var(--gold); }
+    .album-header { width: 100%; max-width: 620px; font-size: .65rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold-dim); padding: 1.5rem .25rem .4rem; border-bottom: 1px solid var(--border); margin-bottom: .25rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+    .album-header:hover { color: var(--gold); }
+    .album-section { display: flex; flex-direction: column; gap: .4rem; margin-bottom: .4rem; }
     .album-section.album-collapsed { display: none; }
-
-    .distrokid-banner {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      width: 100%;
-      max-width: 640px;
-      padding: 0.7rem 1rem;
-      border-radius: 10px;
-      border: 1px solid rgba(160, 40, 140, 0.4);
-      background: rgba(14, 6, 24, 0.7);
-      margin-bottom: 0.5rem;
-      text-decoration: none;
-      color: var(--text-main);
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .distrokid-banner:hover { border-color: var(--primary); background: var(--hover-bg); }
-    .distrokid-banner .dk-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
-    .distrokid-banner .dk-title { font-size: 0.95rem; font-weight: 600; }
-    .distrokid-banner .dk-arrow { margin-left: auto; color: var(--text-muted); font-size: 0.85rem; flex-shrink: 0; }
-
-    /* Mini player bar at bottom */
-    .mini-player {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: rgba(8, 0, 16, 0.92);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid var(--border);
-      padding: 0.75rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      z-index: 100;
-    }
-    .mini-player-title {
-      flex: 1;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .mini-player-title strong { color: var(--text-main); }
-    .mini-btn {
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text-muted);
-      padding: 0.35rem 0.8rem;
-      font-size: 0.82rem;
-      cursor: pointer;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    .mini-btn:hover { color: var(--text-main); border-color: var(--primary); }
-    .mini-btn.active { color: var(--primary); border-color: var(--primary); }
-
-    .progress-bar-wrap {
-      width: 100%;
-      height: 3px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 2px;
-      cursor: pointer;
-      position: absolute;
-      top: 0; left: 0;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: var(--primary);
-      border-radius: 2px;
-      width: 0%;
-      transition: width 0.5s linear;
-    }
+    .distrokid-banner { display: flex; align-items: center; gap: .75rem; width: 100%; max-width: 620px; padding: .7rem 1rem; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); margin-bottom: .75rem; text-decoration: none; color: var(--text); transition: border-color .15s, background .15s; }
+    .distrokid-banner:hover { border-color: var(--gold); background: var(--hover-bg); }
+    .distrokid-banner .dk-label { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
+    .distrokid-banner .dk-title { font-size: .9rem; font-weight: 700; letter-spacing: 1px; }
+    .distrokid-banner .dk-arrow { margin-left: auto; color: var(--gold-dim); font-size: .85rem; flex-shrink: 0; }
+    .mini-player { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(4,6,2,.95); border-top: 1px solid var(--border); padding: .7rem 1.5rem; display: flex; align-items: center; gap: 1rem; z-index: 100; }
+    .mini-player-title { flex: 1; font-size: .8rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .5px; }
+    .mini-player-title strong { color: var(--text); }
+    .mini-btn { background: none; border: 1px solid var(--border); border-radius: 3px; color: var(--muted); padding: .3rem .75rem; font-size: .78rem; font-family: monospace; cursor: pointer; letter-spacing: 1px; transition: color .15s, border-color .15s; }
+    .mini-btn:hover { color: var(--text); border-color: var(--gold-dim); }
+    .mini-btn.active { color: var(--gold); border-color: var(--gold); }
+    .progress-bar-wrap { width: 100%; height: 2px; background: rgba(255,255,255,.06); cursor: pointer; position: absolute; top: 0; left: 0; }
+    .progress-bar-fill { height: 100%; background: var(--gold); width: 0%; transition: width .5s linear; }
   </style>
 </head>
 <body>
-
-<a class="back-link" href="/">Back to main</a>
-
+<a class="back-link" href="/">hackatoa.com</a>
 <div class="page-header">
-  <h1>🎵 Songs</h1>
-  <p>All tracks in the player — click any to preview</p>
+  <h1>Songs</h1>
+  <p>all tracks in the player — click any to listen</p>
 </div>
-
 <a class="distrokid-banner" href="https://distrokid.com/hyperfollow/hackatoa/wayback-machine" target="_blank" rel="noopener noreferrer">
   <div>
     <div class="dk-label">Available on streaming</div>
     <div class="dk-title">Wayback Machine — Hackatoa</div>
   </div>
-  <span class="dk-arrow">Listen →</span>
+  <span class="dk-arrow">→</span>
 </a>
-
 <div class="track-list" id="track-list"></div>
-
 <div class="mini-player" id="mini-player">
   <div class="progress-bar-wrap" id="progress-wrap">
     <div class="progress-bar-fill" id="progress-fill"></div>
@@ -261,7 +82,6 @@
   <button class="mini-btn" id="btn-play">▶ Play</button>
   <button class="mini-btn" id="btn-skip">⏭</button>
 </div>
-
 <script src="/songs/app.js"></script>
 </body>
 </html>
