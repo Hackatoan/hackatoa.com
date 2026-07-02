@@ -42,7 +42,7 @@
           },
           {
             "key": "Content-Security-Policy",
-            "value": "default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-F7J5JbTl9umXIWY/onZdvaO1drPVJXiUEGbdQhmsgnM=' 'sha256-cjyXRSae3Pc7KLUCHYBa23/0C2PUygK3ufDOkLH20nI=' 'sha256-5pve4l/0RqH9TniyiTa/h5vTK0qPM6QJggRoPMTkE+0=' https://alexgama11.github.io https://www.youtube.com https://s.ytimg.com https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline' https://alexgama11.github.io; img-src 'self' https://api.qrserver.com https://www.buymeacoffee.com data:; media-src 'self' https://github.com https://raw.githubusercontent.com; frame-src https://player.twitch.tv https://www.youtube.com; connect-src 'self' https://api.github.com; upgrade-insecure-requests;"
+            "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://alexgama11.github.io https://www.youtube.com https://s.ytimg.com https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline' https://alexgama11.github.io; img-src 'self' https://api.qrserver.com https://www.buymeacoffee.com data:; media-src 'self' https://github.com https://raw.githubusercontent.com; frame-src https://player.twitch.tv https://www.youtube.com; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; upgrade-insecure-requests;"
           }
         ]
       }
