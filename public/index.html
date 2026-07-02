@@ -1,681 +1,550 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Preston Harris — Developer & Homelab Engineer | Hackatoa</title>
-  <meta name="description" content="Preston Harris (Hackatoa) — developer and homelab engineer studying network security at UAT. Building self-hosted infrastructure, browser games, and open-source tools." />
+  <title>Hackatoa — Preston Harris</title>
+  <meta name="description" content="Preston Harris (Hackatoa) — developer, homelab engineer, AI enthusiast. Building self-hosted infrastructure, browser games, Discord bots, and open-source tools." />
   <meta name="author" content="Preston Harris" />
-  <meta name="keywords" content="Preston Harris, Hackatoa, developer, homelab, self-hosted, Docker, Proxmox, Matrix, browser games, network security, UAT, Linux" />
-  <meta property="og:title" content="Preston Harris — Developer & Homelab Engineer | Hackatoa" />
-  <meta property="og:description" content="Preston Harris (Hackatoa) — developer and homelab engineer studying network security at UAT. Building self-hosted infra, browser games, and Discord bots." />
+  <meta property="og:title" content="Hackatoa — Preston Harris" />
+  <meta property="og:description" content="Developer · Homelab · AI Enthusiast. Building self-hosted infrastructure, browser games, Discord bots, and open-source tools." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://hackatoa.com/" />
-  <meta property="og:image" content="https://hackatoa.com/assets/jacob-face-portrait.png" />
+  <meta property="og:image" content="https://hackatoa.com/assets/me.png" />
   <meta property="og:site_name" content="Hackatoa" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Preston Harris — Developer & Homelab Engineer | Hackatoa" />
-  <meta name="twitter:description" content="Preston Harris (Hackatoa) — developer and homelab engineer studying network security at UAT." />
-  <meta name="twitter:image" content="https://hackatoa.com/assets/jacob-face-portrait.png" />
+  <meta name="twitter:title" content="Hackatoa — Preston Harris" />
+  <meta name="twitter:description" content="Developer · Homelab · AI Enthusiast" />
+  <meta name="twitter:image" content="https://hackatoa.com/assets/me.png" />
   <meta name="twitter:site" content="@jhackatoa" />
   <link rel="canonical" href="https://hackatoa.com/" />
   <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
-  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
-  <link rel="stylesheet" href="styles.css" />
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Preston Harris",
-      "alternateName": "Hackatoa",
-      "brand": { "@type": "Brand", "name": "Hackatoa" },
-      "description": "Hackatoa — Preston Harris, developer and homelab engineer studying network security at UAT. Building self-hosted infrastructure, browser games, and Discord bots.",
-      "url": "https://hackatoa.com",
-      "image": "https://hackatoa.com/assets/jacob-face-portrait.png",
-      "sameAs": [
-        "https://github.com/Hackatoan",
-        "https://twitter.com/jhackatoa",
-        "https://www.youtube.com/@Hackatoa",
-        "https://www.twitch.tv/hackatoa",
-        "https://matrix.to/#/@hackatoa:matrix.hackatoa.com",
-        "https://www.linkedin.com/in/jacob-h-554984227"
-      ],
-      "jobTitle": "Software Developer",
-      "knowsAbout": ["Network Security", "Linux", "Self-hosted Infrastructure", "Game Development"],
-      "hasOccupation": {
-        "@type": "Occupation",
-        "name": "Software Developer",
-        "occupationLocation": { "@type": "Country", "name": "United States" }
-      }
-    }
-  </script>
   <style>
-    /* ── Scroll layout overrides (replaces horizontal-slide layout) ── */
-
-    :root {
-      --bg:         #080010;
-      --card-bg:    rgba(14, 6, 24, 0.96);
-      --card-border:rgba(160, 40, 140, 0.65);
-      --char-w:     clamp(180px, 24vw, 360px);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      overflow-x: hidden;
-      overflow-y: auto;
-      position: relative;
-      padding-top: 1.5rem;
-      /* prevent margin-collapse with first flow child */
-      min-height: 100vh;
-    }
-
-    main { height: auto; min-height: 0; overflow: visible; }
-
-    /* ── Volcano background ── */
-    #bg-wrap {
-      position: absolute;
-      inset: 0;
-      background: url('assets/volcano-portrait-borderless.jpg') center top / 100% 100% no-repeat;
-      opacity: 0.18;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* ── Sticky nav ── */
-    .site-nav {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.65rem 1.5rem;
-      background: rgba(10, 4, 20, 0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(140, 30, 120, 0.25);
-    }
-
-    /* ── Section grid ── */
-    section {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      min-height: 100vh;
-      align-items: start;
-      gap: 0;
-      padding: 0 2%;
-      height: auto;
-    }
-
-    section[data-side="right"] {
-      grid-template-columns: 3fr 2fr;
-      grid-template-areas: "content char";
-    }
-
-    section[data-side="left"] {
-      grid-template-columns: 2fr 3fr;
-      grid-template-areas: "char content";
-    }
-
-    .char-col {
-      grid-area: char;
-      position: relative;
-    }
-
-    .char-col img {
-      position: sticky;
-      top: 10vh;
-      width: 100%;
-      height: 80vh;
-      object-fit: contain;
-      object-position: center bottom;
-      display: block;
-      filter: drop-shadow(0 0 20px rgba(224, 32, 176, 0.2));
-    }
-
-    .content-col {
-      grid-area: content;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 6vh 4%;
-    }
-
-    /* ── Avatar carousel ── */
-    .avatar-carousel { position: relative; display: inline-block; }
-    .avatar-carousel .carousel-img {
-      position: absolute; top: 0; left: 0;
-      opacity: 0; transition: opacity 1s ease-in-out;
-      border-radius: 50%;
-    }
-    .avatar-carousel .carousel-img--active { opacity: 1; position: relative; }
-
-    /* ── Mobile: single column ── */
-    @media (max-width: 768px) {
-      section,
-      section[data-side="right"],
-      section[data-side="left"] {
-        grid-template-columns: 1fr;
-        grid-template-areas: "content";
-        min-height: auto;
-        padding: 0;
-      }
-      .char-col { display: none; }
-      .content-col { min-height: auto; padding: 3rem 1.2rem; }
-    }
-
-    /* ── Now-playing pill ── */
-    .now-playing {
-      display: inline-flex;
-      align-self: flex-start;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.3rem 0.7rem 0.3rem 0.5rem;
-      background: rgba(14, 4, 24, 0.85);
-      border: 1px solid rgba(160, 40, 140, 0.45);
-      border-radius: 999px;
-      margin-bottom: 0.75rem;
-      max-width: 340px;
-      overflow: hidden;
-    }
-    .now-playing .np-toggle {
-      background: none; border: none; cursor: pointer;
-      color: var(--accent, #a0288c); font-size: 0.9rem;
-      padding: 0; line-height: 1; flex-shrink: 0; transition: opacity 0.2s;
-    }
-    .now-playing .np-toggle:hover { opacity: 0.75; }
-    .now-playing .np-meta { width: 160px; overflow: hidden; white-space: nowrap; position: relative; }
-    .now-playing .music-title { font-size: 0.75rem; color: var(--muted, #9080a0); display: inline-block; white-space: nowrap; }
-    .now-playing .music-title.is-scrolling { animation: scroll-left 12s linear infinite; padding-left: 100%; }
-    @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-    .now-playing .np-skip {
-      background: none; border: none; cursor: pointer;
-      color: var(--muted, #9080a0); font-size: 0.85rem;
-      padding: 0; flex-shrink: 0; transition: color 0.2s;
-    }
-    .now-playing .np-skip:hover { color: var(--text, #e0d0f0); }
-    .now-playing .np-vol {
-      -webkit-appearance: none; appearance: none;
-      width: 56px; height: 3px; background: rgba(160, 40, 140, 0.35);
-      border-radius: 2px; outline: none; cursor: pointer; flex-shrink: 0;
-    }
-    .now-playing .np-vol::-webkit-slider-thumb {
-      -webkit-appearance: none; appearance: none;
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--accent, #a0288c); cursor: pointer;
-    }
-    .now-playing .np-vol::-moz-range-thumb {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--accent, #a0288c); cursor: pointer; border: none;
-    }
-    .now-playing .np-link {
-      color: var(--muted, #9080a0); text-decoration: none;
-      font-size: 0.8rem; flex-shrink: 0; transition: color 0.2s;
-    }
-    .now-playing .np-link:hover { color: var(--accent, #a0288c); }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{width:100%;height:100%;overflow:hidden;background:#040602}
+    #wrap{position:relative;width:100%;height:100%;background:#040602;overflow:hidden;font-family:monospace}
+    canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+    .nb{color:#5a4400;cursor:pointer;font-size:11px;letter-spacing:2.5px;font-family:monospace;transition:color .2s,text-shadow .2s;user-select:none}
+    .nb:hover,.nb.active{color:#ffd600;text-shadow:0 0 10px rgba(255,214,0,0.35)}
+    .nb.sub{font-size:10px;letter-spacing:2px;color:#3d2e00}
+    .nb.sub:hover,.nb.sub.active{color:#ffd600;text-shadow:0 0 8px rgba(255,214,0,0.3)}
   </style>
 </head>
-
 <body>
+<div id="wrap">
 
-  <div id="bg-wrap" aria-hidden="true"></div>
-
-  <!-- ── Nav ── -->
-  <nav class="site-nav" aria-label="Primary navigation">
-    <div class="brand">
-      <div class="brand-mark"></div>
-      <div>
-        <div class="brand-text-main">HACKATOA</div>
-        <div class="brand-text-sub">Network Security · Linux</div>
-      </div>
+  <!-- Music widget -->
+  <div id="music-wrap" style="position:absolute;top:14px;left:14px;z-index:20;display:flex;align-items:center">
+    <div id="music-icon" style="width:30px;height:30px;border-radius:50%;background:#1a1400;border:1px solid #827717;display:flex;align-items:center;justify-content:center;color:#ffd600;font-size:15px;cursor:pointer;flex-shrink:0">♫</div>
+    <div id="music-panel" style="position:absolute;top:0;left:36px;opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s;pointer-events:none;background:#0d0a00;border:1px solid #827717;border-radius:6px;padding:6px 10px;white-space:nowrap;display:flex;align-items:center;gap:8px">
+      <button id="pp" style="background:none;border:none;color:#ffd600;cursor:pointer;font-size:18px;padding:0;line-height:1">▶</button>
+      <div style="overflow:hidden;width:140px"><div id="title-scroll" style="color:#ffd600;font-size:11px;white-space:nowrap;display:inline-block"></div></div>
+      <button id="nxt" style="background:none;border:none;color:#ffd600;cursor:pointer;font-size:13px;padding:0">⏭</button>
+      <input id="vol" type="range" min="0" max="1" step="0.05" value="0.7" style="width:54px;accent-color:#ffd600">
+      <a href="/songs" style="color:#827717;font-size:10px;text-decoration:none">♪</a>
     </div>
-    <div class="nav-links">
-      <a href="#intro">Intro</a>
-      <a href="#portfolio">Projects</a>
-      <a href="#homelab">Homelab</a>
-      <a href="#community">Community</a>
-      <a href="#blog">Blog</a>
-      <a href="#contact" class="nav-pill-primary">Contact</a>
+  </div>
+
+  <!-- Copy toast -->
+  <div id="copy-toast" style="position:absolute;top:14px;right:14px;z-index:20;background:#1a1400;border:1px solid #827717;border-radius:4px;padding:5px 10px;color:#ffd600;font-size:10px;letter-spacing:1px;opacity:0;transition:opacity .3s;pointer-events:none">copied</div>
+
+  <!-- Nav -->
+  <nav style="position:absolute;bottom:18px;left:0;right:0;z-index:10;display:flex;flex-direction:column;align-items:center;gap:12px">
+    <div id="sub-nav" style="display:none;gap:22px">
+      <span class="nb sub" data-sec="bots">BOTS</span>
+      <span class="nb sub" data-sec="games">GAMES</span>
+      <span class="nb sub" data-sec="tools">TOOLS</span>
+    </div>
+    <div style="display:flex;gap:26px;align-items:center">
+      <span class="nb" data-sec="about">ABOUT</span>
+      <span class="nb" id="proj-btn">PROJECTS</span>
+      <span class="nb" data-sec="connect">CONNECT</span>
+      <span class="nb" data-sec="support">SUPPORT</span>
+      <span class="nb" data-sec="volcano" style="font-size:15px;letter-spacing:0">↺</span>
     </div>
   </nav>
 
-  <!-- ══════════ HERO — wave · character RIGHT ══════════ -->
-  <section id="intro" data-side="right" aria-labelledby="hero-title">
+  <canvas id="c"></canvas>
+</div>
 
-    <div class="content-col">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ── Music ── */
+const TRACKS=[
+['40kb Memory','Trial_1/40kb_Memory.mp3'],['Bad Condition','Trial_1/Bad_Condition.mp3'],
+['Buffer Stream Blue','Trial_1/Buffer_Stream_Blue.mp3'],['Cursor Trail','Trial_1/Cursor_Trail.mp3'],
+['Desktop Meadow','Trial_1/Desktop_Meadow.mp3'],['Dial-Up Lullaby','Trial_1/Dial-Up_Lullaby.mp3'],
+['Heart Not Found','Trial_1/Heart_Not_Found.mp3'],['Pink Guestbook','Trial_1/Pink_Guestbook.mp3'],
+['Under Construction Forever','Trial_1/Under_Construction_Forever.mp3'],
+['Winamp Visualiser','Trial_1/Winamp_Visualiser.mp3'],['Half Asleep','Trial_1/Half_Asleep.mp3'],
+['Slow Scroll','Trial_1/Slow_Scroll.mp3'],['Rain on the Blue Chair','Trial_1/Rain_on_the_Blue_Chair.mp3'],
+['Pocket Reset','Trial_1/Pocket_Reset.mp3'],['Rain On Glass','Trial_1/Rain_On_Glass.mp3'],
+['Comic Sans Heart','Wayback_Machine/Comic_Sans_Heart.mp3'],
+['Default Background','Wayback_Machine/Default_Background.mp3'],
+['Equalizer Bars','Wayback_Machine/Equalizer_Bars.mp3'],
+['Geocities Ghost','Wayback_Machine/Geocities_Ghost.mp3'],
+['Last Modified','Wayback_Machine/Last_Modified.mp3'],['Loading Forever','Wayback_Machine/Loading_Forever.mp3'],
+['Modem Hymn','Wayback_Machine/Modem_Hymn.mp3'],['Profile Deactivated','Wayback_Machine/Profile_Deactivated.mp3'],
+['Static Room','Wayback_Machine/Static_Room.mp3'],['Yellow Tape Sign','Wayback_Machine/Yellow_Tape_Sign.mp3'],
+];
+const BASE_URL='https://raw.githubusercontent.com/Hackatoan/records/main/';
+const audio=new Audio();audio.volume=0.7;
+let order=[...Array(TRACKS.length).keys()].sort(()=>Math.random()-.5),oi=0;
+function setTrack(i){const t=TRACKS[order[i%order.length]];audio.src=BASE_URL+t[1];const el=document.getElementById('title-scroll');if(el)el.textContent=t[0];}
+function updateUI(p){const b=document.getElementById('pp');if(b)b.textContent=p?'⏸':'▶';}
+audio.addEventListener('ended',()=>{oi++;setTrack(oi);audio.play().then(()=>updateUI(true));});
+function tryAutoplay(){setTrack(0);audio.play().then(()=>updateUI(true)).catch(()=>{updateUI(false);const r=()=>{audio.play().then(()=>updateUI(true));document.removeEventListener('click',r);document.removeEventListener('keydown',r);};document.addEventListener('click',r);document.addEventListener('keydown',r);});}
+const mw=document.getElementById('music-wrap'),mp=document.getElementById('music-panel');
+mw.addEventListener('mouseenter',()=>{mp.style.opacity='1';mp.style.transform='translateX(0)';mp.style.pointerEvents='auto';});
+mw.addEventListener('mouseleave',()=>{mp.style.opacity='0';mp.style.transform='translateX(-6px)';mp.style.pointerEvents='none';});
+document.getElementById('pp').addEventListener('click',()=>{if(audio.paused)audio.play().then(()=>updateUI(true));else{audio.pause();updateUI(false);}});
+document.getElementById('nxt').addEventListener('click',()=>{oi++;setTrack(oi);audio.play().then(()=>updateUI(true));});
+document.getElementById('vol').addEventListener('input',e=>{audio.volume=+e.target.value;});
 
-      <div class="now-playing">
-        <button class="np-toggle" id="music-toggle" type="button" data-state="paused" title="Play/Pause">▶</button>
-        <div class="np-meta"><div class="music-title">Press Play…</div></div>
-        <button class="np-skip" id="music-skip" type="button" title="Skip">⏭</button>
-        <input class="np-vol" id="music-volume" type="range" min="0" max="100" value="5" aria-label="Volume" title="Volume" />
-        <a class="np-link" href="/songs" title="All songs">♫</a>
-      </div>
+/* ── Constants ── */
+const N=66000,LERP_DUR=2.8,CAM_SPRING_DUR=1.1,CURVE_R=15;
+const TEXT_POS=new THREE.Vector3(0,2.5,13),TEXT_TGT=new THREE.Vector3(0,2.5,0);
+const BASE_SIZE=0.22,HOVER_SIZE=0.52,SPREAD=0.28;
+const GROUND_Y=-1.22,FOREST_N=120000,MIN_TREE_DIST=1.6;
+const DIM_BACK=80,DIM_FRONT=60;
+const POOL_N=320,CRATER_Y=4.45,CRATER_R=1.1,POOL_RISE=0.72;
+const SEC_URLS={volcano:'/',about:'/about',bots:'/projects/bots',games:'/projects/games',tools:'/projects/tools',connect:'/connect',support:'/support'};
+const HOME_POS=new THREE.Vector3(0,5,16),HOME_TGT=new THREE.Vector3(0,1,0);
+const BTC_ADDR='3L2oWuxjqZ8cbqgVFNTJzkkPKe2zKeZMif';
+const ETH_ADDR='0x2A7d2849607bC0B95C34CE01062D21bC8A10Bd17';
+const CRO_ADDR='0x2A7d2849607bC0B95C34CE01062D21bC8A10Bd17';
+const lineCopy={support:{3:BTC_ADDR,6:ETH_ADDR,9:CRO_ADDR}};
 
-      <div class="hero-copy">
-        <h1 id="hero-title" class="hero-title">
-          Building real infrastructure to learn
-          <span class="highlight">network security</span>
-          from the ground up.
-        </h1>
-        <p class="hero-subtitle">
-          I'm Preston — aka <strong>Hackatoa</strong> (hacker + Krakatoa, it's a volcano pun).
-          Studying network security at UAT and pursuing CompTIA while running a Proxmox homelab
-          with 20+ self-hosted services. The homelab breaks in interesting ways that teach me
-          things textbooks don't.
-        </p>
-        <div class="hero-cta-row">
-          <a class="button button-primary" href="#portfolio">View projects</a>
-          <a class="button button-secondary" href="#blog">Read blog</a>
-          <!-- hidden: <a class="button button-secondary" href="/resume">Resume →</a> -->
-        </div>
-        <div class="hero-metadata">
-          <div>
-            <strong>Primary Focus</strong>
-            <div>Network security, Linux infrastructure, and browser game development.</div>
-          </div>
-          <div>
-            <strong>Currently Building</strong>
-            <div>WikiRoll Discord bot, self-hosted games platform, homelab security stack.</div>
-          </div>
-        </div>
-      </div>
+/* ── Section content ── */
+const sectionContent={
+  about:['Jacob Preston Harris','aka Hackatoa','','Networking · Homelab · AI','Game Dev · Tool Builder','','homelab · 20+ services','JS · Python · Node · Bash','Proxmox · Docker · Linux','','github.com/Hackatoan'],
+  bots:['[ WikiRoll ]','collect characters from','Wikipedia + 150 wikis','roll · claim · trade','','[ Lamar ]','GTA V AI on Discord','Gemini · Google Search','responds in character'],
+  games:['[ Hackatoa Games ]','','Infinisweeper','infinite minesweeper','','Battleship','multiplayer · vs AI','','Sys32 Roulette','competitive minigames'],
+  tools:['[ Clip Forge ]','browser video editor','trim · cut · overlay','no uploads · runs local'],
+  connect:['jacob@hackatoa.com','github.com/Hackatoan','twitter · @jhackatoa','youtube · @Hackatoa','twitch · hackatoa','instagram · hackatoa','discord · Orbital Outpost'],
+  support:['Buy Me a Coffee','','Bitcoin','3L2oWu...KeZMif','','Ethereum','0x2A7d...0Bd17','','Cronos','0x2A7d...0Bd17'],
+};
+const lineLinks={
+  about:[null,null,null,null,null,null,null,null,null,null,'https://github.com/Hackatoan'],
+  bots:['https://wikiroll.hackatoa.com',null,null,null,null,'https://lamar.hackatoa.com',null,null,null],
+  games:['https://games.hackatoa.com',null,'https://infinisweeper.hackatoa.com',null,null,'https://battleship.hackatoa.com',null,null,'https://cah.hackatoa.com',null],
+  tools:['https://clip-forge.hackatoa.com',null,null,null],
+  connect:['mailto:jacob@hackatoa.com','https://github.com/Hackatoan','https://twitter.com/jhackatoa','https://youtube.com/@Hackatoa','https://twitch.tv/hackatoa','https://instagram.com/hackatoa','https://discord.gg/7eh3q2u8V'],
+  support:['https://buymeacoffee.com/hackatoa',null,null,null,null,null,null,null,null,null],
+};
 
-      <aside class="hero-panel" aria-label="Developer snapshot">
-        <div class="hero-panel-label">Current Status</div>
-        <div class="hero-panel-row">
-          <div class="hero-panel-ident">
-            <div class="avatar-carousel" aria-label="Photo of Preston Harris">
-              <img src="assets/me.png"      alt="Portrait of Preston Harris" class="hero-avatar carousel-img carousel-img--active" fetchpriority="high" />
-              <img src="assets/jacob2.webp" alt="Photo of Preston Harris"    class="hero-avatar carousel-img" loading="lazy" />
-            </div>
-            <div class="hero-panel-name">Preston Harris</div>
-          </div>
-          <span class="chip">Portfolio</span>
-        </div>
-        <div class="hero-panel-tags">
-          <span class="chip chip-hot">Self-taught dev</span>
-          <span class="chip">Network security</span>
-          <span class="chip">Linux &amp; selfhosted</span>
-        </div>
-        <div class="hero-panel-divider"></div>
-        <dl class="hero-panel-meta">
-          <div>
-            <dt class="label">Stack</dt>
-            <dd class="value">JS · Node · Python · Bash</dd>
-          </div>
-          <div>
-            <dt class="label">Education</dt>
-            <dd class="value">UAT · Network Security</dd>
-          </div>
-          <div>
-            <dt class="label">Pursuing</dt>
-            <dd class="value">CompTIA A+ → Network+</dd>
-          </div>
-        </dl>
+/* ── Three.js setup ── */
+const wrap=document.getElementById('wrap'),canvas=document.getElementById('c');
+let W=wrap.clientWidth,H=wrap.clientHeight;
+const renderer=new THREE.WebGLRenderer({canvas,antialias:false,alpha:false});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(W,H);
+renderer.setClearColor(0x040602,1);
+const scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0x040602,0.022);
+const camera=new THREE.PerspectiveCamera(55,W/H,0.1,200);
+camera.position.copy(HOME_POS);camera.lookAt(HOME_TGT);
 
-        <div id="motd-card" class="motd-card">
-          <div class="motd-header">Message of the Day</div>
-          <div class="motd-body" id="motd-body">Loading message...</div>
-        </div>
+/* ── Shaders ── */
+const UV=`vec2(gl_PointCoord.x,1.0-gl_PointCoord.y)`;
+const VERT_V=`attribute float aSize;attribute vec2 aSpread;void main(){vec3 p=position+vec3(aSpread.x,0.0,aSpread.y);vec4 mv=modelViewMatrix*vec4(p,1.0);gl_PointSize=aSize*(300.0/-mv.z);gl_Position=projectionMatrix*mv;}`;
+const FRAG_V=`uniform sampler2D uTex;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;gl_FragColor=c;}`;
+const VERT_F=`attribute float aBright;uniform float uTextMode;uniform float uTime;varying float vAlpha;void main(){float h=max(0.0,position.y-(-1.22));float phase=position.x*0.37+position.z*0.21;float wx=sin(uTime*0.7+phase)*h*0.055+sin(uTime*1.3+phase*1.7)*h*0.022;float wz=cos(uTime*0.5+phase*0.9)*h*0.018;vec3 p=position+vec3(wx,0.0,wz);vec4 mv=modelViewMatrix*vec4(p,1.0);gl_PointSize=0.14*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vAlpha=mix(1.0,aBright,uTextMode);}`;
+const FRAG_F=`uniform sampler2D uTex;uniform vec3 uColor;varying float vAlpha;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;gl_FragColor=vec4(uColor*vAlpha,c.a*0.55*vAlpha);}`;
+const VERT_POOL=`attribute float aAlpha;varying float vA;void main(){vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=0.28*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vA=aAlpha;}`;
+const FRAG_POOL=`uniform sampler2D uTex;uniform vec3 uColor;varying float vA;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;gl_FragColor=vec4(uColor*vA,c.a*vA);}`;
 
-        <div class="hero-panel-socials">
-          <a href="https://github.com/Hackatoan" class="pill-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a href="https://www.youtube.com/@Hackatoa" class="pill-link" target="_blank" rel="noopener noreferrer">YouTube</a>
-          <a href="https://www.twitch.tv/hackatoa" class="pill-link" target="_blank" rel="noopener noreferrer">Twitch</a>
-          <a href="https://www.linkedin.com/in/jacob-h-554984227" class="pill-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        </div>
-      </aside>
+const TREE_COLORS=[[0.28,0.65,0.20],[0.82,0.62,0.04],[0.18,0.55,0.26],[0.70,0.48,0.03]];
 
-    </div>
+function mkSprite(ch,col){const cv=document.createElement('canvas');cv.width=64;cv.height=64;const cx=cv.getContext('2d');cx.fillStyle=col;cx.font='bold 48px monospace';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(ch,32,32);return new THREE.CanvasTexture(cv);}
+const TEX0=mkSprite('0','#ffd600'),TEX1=mkSprite('1','#ffffff');
+const TEXG0=mkSprite('0','#ffffff'),TEXG1=mkSprite('1','#ffffff');
 
-    <div class="char-col" aria-hidden="true">
-      <img src="assets/jacob-pose-wave.png" alt="" />
-    </div>
+function makeMat(tex){return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex}},vertexShader:VERT_V,fragmentShader:FRAG_V,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
+function makeForestMat(r,g,b,texIdx){
+  const tex=texIdx===1?TEXG1:TEXG0;
+  return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex},uColor:{value:new THREE.Vector3(r,g,b)},uTextMode:{value:0},uTime:{value:0}},vertexShader:VERT_F,fragmentShader:FRAG_F,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+}
+function makePoolMat(col,tex){return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex},uColor:{value:col}},vertexShader:VERT_POOL,fragmentShader:FRAG_POOL,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
 
-  </section>
+/* ── Volcano geometry ── */
+function volR(y){return(1-y*.55)*2.4+(y<.12?(.12-y)*4.5:0);}
+function bump(th,y){return(Math.sin(th*3.7+y*7)*Math.cos(th*2.1+y*4))*.18;}
+function buildVolcano(count){
+  const pos=new Float32Array(count*3);
+  for(let i=0;i<count;i++){
+    if(Math.random()<0.25){const y=Math.random();const r=volR(y)*Math.random()**.5;const th=Math.random()*Math.PI*2;pos[i*3]=r*Math.cos(th);pos[i*3+1]=y*5.8-1.2;pos[i*3+2]=r*Math.sin(th);}
+    else{const y=Math.random();const th=Math.random()*Math.PI*2;const r=volR(y)*(1+bump(th,y));pos[i*3]=r*Math.cos(th);pos[i*3+1]=y*5.8-1.2;pos[i*3+2]=r*Math.sin(th);}
+  }
+  return pos;
+}
 
-  <!-- ══════════ PROJECTS — desk · character LEFT ══════════ -->
-  <section id="portfolio" data-side="left" aria-labelledby="portfolio-title">
+/* ── Forest ── */
+function placeTrees(){
+  const placed=[];let attempts=0;
+  while(placed.length<280&&attempts<10000){
+    attempts++;
+    const a=Math.random()*Math.PI*2,r=3.8+Math.pow(Math.random(),0.4)*20;
+    const tx=Math.cos(a)*r,tz=Math.sin(a)*r;
+    let ok=true;
+    for(const p of placed){const dx=tx-p[0],dz=tz-p[1];if(dx*dx+dz*dz<MIN_TREE_DIST*MIN_TREE_DIST){ok=false;break;}}
+    if(ok)placed.push([tx,tz,0.9+Math.random()*1.3]);
+  }
+  return placed;
+}
+function treeBrightness(px,pz){
+  const distFar=Math.min(Math.sqrt(px*px+pz*pz)/22,1);
+  const angToText=Math.atan2(px,pz)*180/Math.PI;
+  const behindText=pz<0;
+  const dimB=behindText?Math.max(0,(DIM_BACK-Math.abs(angToText))/DIM_BACK):0;
+  const dimF=!behindText?Math.max(0,(DIM_FRONT-Math.abs(angToText))/DIM_FRONT)*0.3:0;
+  return Math.max(0.06,distFar*0.7+0.3-dimB*0.65-dimF);
+}
+function buildForestCloud(total){
+  const trees=placeTrees();
+  const groundN=Math.floor(total*0.08);
+  const treeN=total-groundN;
+  const perTree=Math.floor(treeN/trees.length);
+  const groups=[[],[],[],[]];
+  const groupBright=[[],[],[],[]];
+  function add(g,px,py,pz){groups[g].push(px,py,pz);groupBright[g].push(treeBrightness(px,pz));}
+  for(let i=0;i<groundN;i++){
+    const a=Math.random()*Math.PI*2,r=3.5+Math.pow(Math.random(),0.4)*22;
+    add(i%4,Math.cos(a)*r,GROUND_Y+Math.random()*0.08,Math.sin(a)*r);
+  }
+  trees.forEach((tr,ti)=>{
+    const [tx,tz,tH]=tr,tBaseR=tH*0.38;
+    const count=ti===trees.length-1?Math.max(0,treeN-ti*perTree):perTree;
+    const grp=ti%4;
+    for(let p=0;p<count;p++){
+      let px,py,pz;
+      if(Math.random()<0.07){
+        const ty=Math.random()*tH*0.3,ta=Math.random()*Math.PI*2,tr2=0.035+Math.random()*0.03;
+        px=tx+Math.cos(ta)*tr2;py=GROUND_Y+ty;pz=tz+Math.sin(ta)*tr2;
+      } else {
+        const layer=Math.floor(Math.random()*3),yOff=layer*tH*0.28;
+        const y=yOff+Math.random()*(tH-yOff);
+        const maxR=tBaseR*(1-(y/tH)*0.88);
+        const pr=Math.random()<0.75?maxR*(0.85+Math.random()*0.15):maxR*Math.random();
+        const ta=Math.random()*Math.PI*2;
+        px=tx+Math.cos(ta)*pr;py=GROUND_Y+y;pz=tz+Math.sin(ta)*pr;
+      }
+      add(grp,px,py,pz);
+    }
+  });
+  return groups.map((g,i)=>({pos:new Float32Array(g),bright:new Float32Array(groupBright[i])}));
+}
 
-    <div class="char-col" aria-hidden="true">
-      <img src="assets/jacob-pose-desk.png" alt="" />
-    </div>
+/* ── Pool (crater bubbles) ── */
+let poolPts0=null,poolPts1=null,poolPhases,poolPhaseSpeed,poolWobbleX,poolWobbleZ,poolBaseX,poolBaseZ;
+function buildPool(){
+  const half=POOL_N/2;
+  poolPhases=new Float32Array(POOL_N);
+  poolPhaseSpeed=new Float32Array(POOL_N);
+  poolWobbleX=new Float32Array(POOL_N);
+  poolWobbleZ=new Float32Array(POOL_N);
+  poolBaseX=new Float32Array(POOL_N);
+  poolBaseZ=new Float32Array(POOL_N);
+  for(let i=0;i<POOL_N;i++){
+    poolPhases[i]=Math.random();
+    poolPhaseSpeed[i]=0.18+Math.random()*0.22;
+    const a=Math.random()*Math.PI*2,r=Math.random()*CRATER_R*0.9;
+    poolBaseX[i]=Math.cos(a)*r;
+    poolBaseZ[i]=Math.sin(a)*r;
+    const wa=Math.random()*Math.PI*2;
+    poolWobbleX[i]=Math.cos(wa);
+    poolWobbleZ[i]=Math.sin(wa);
+  }
+  function mkPoolGeo(start,count){
+    const pos=new Float32Array(count*3),alpha=new Float32Array(count);
+    for(let i=0;i<count;i++){pos[i*3]=poolBaseX[start+i];pos[i*3+1]=CRATER_Y;pos[i*3+2]=poolBaseZ[start+i];alpha[i]=0;}
+    const g=new THREE.BufferGeometry();
+    g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    g.setAttribute('aAlpha',new THREE.BufferAttribute(alpha,1));
+    return g;
+  }
+  const g0=mkPoolGeo(0,half),g1=mkPoolGeo(half,half);
+  const m0=makePoolMat(new THREE.Vector3(1.0,0.84,0.0),TEX0);
+  const m1=makePoolMat(new THREE.Vector3(1.0,0.45,0.0),TEX1);
+  poolPts0=new THREE.Points(g0,m0);poolPts0.renderOrder=2;
+  poolPts1=new THREE.Points(g1,m1);poolPts1.renderOrder=2;
+  scene.add(poolPts0);scene.add(poolPts1);
+}
+function stepPool(dt){
+  const half=POOL_N/2;
+  for(let pi=0;pi<2;pi++){
+    const pts=pi===0?poolPts0:poolPts1;
+    const start=pi===0?0:half;
+    const count=half;
+    const pos=pts.geometry.attributes.position.array;
+    const alpha=pts.geometry.attributes.aAlpha.array;
+    for(let i=0;i<count;i++){
+      poolPhases[start+i]=(poolPhases[start+i]+poolPhaseSpeed[start+i]*dt)%1;
+      const ph=poolPhases[start+i];
+      pos[i*3]=poolBaseX[start+i]+Math.sin(ph*Math.PI*4)*0.07*poolWobbleX[start+i];
+      pos[i*3+1]=CRATER_Y+ph*POOL_RISE;
+      pos[i*3+2]=poolBaseZ[start+i]+Math.sin(ph*Math.PI*4)*0.07*poolWobbleZ[start+i];
+      alpha[i]=Math.sin(ph*Math.PI)*0.9+0.05;
+    }
+    pts.geometry.attributes.position.needsUpdate=true;
+    pts.geometry.attributes.aAlpha.needsUpdate=true;
+  }
+}
 
-    <div class="content-col">
-      <div class="section-header">
-        <div>
-          <div class="section-kicker">Portfolio</div>
-          <h2 class="section-title" id="portfolio-title">Things I've built</h2>
-        </div>
-        <div class="section-caption">Infrastructure, games, bots, and browser tools — all self-hosted.</div>
-      </div>
-      <div class="grid-2">
+/* ── Text positions ── */
+const CH_CV=500;
+function lineWorldY(li,n){return-(((li+1)/(n+1))-.5)*8+2.2;}
+const _tmp=new THREE.Vector3();
+function lineScreenY(li,n){_tmp.set(0,lineWorldY(li,n),0);_tmp.project(camera);return(-_tmp.y*.5+.5)*H;}
+function textToPos(lines,count){
+  const cw=740;const cv=document.createElement('canvas');cv.width=cw;cv.height=CH_CV;
+  const ctx=cv.getContext('2d');
+  const sz=Math.max(16,Math.min(46,Math.floor(CH_CV/(lines.length+1)*1.08)));
+  ctx.font=`bold ${sz}px monospace`;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.fillStyle='#fff';
+  lines.forEach((ln,li)=>{const y=Math.round((li+1)*CH_CV/(lines.length+1));ctx.strokeText(ln,cw/2,y);ctx.fillText(ln,cw/2,y);});
+  const d=ctx.getImageData(0,0,cw,CH_CV).data,cands=[];
+  for(let j=0;j<CH_CV;j++)for(let i=0;i<cw;i++)if(d[(j*cw+i)*4+3]>80)cands.push(i,j);
+  const pos=new Float32Array(count*3),lineIdx=new Int32Array(count),n=lines.length;
+  for(let i=0;i<count;i++){
+    const k=Math.floor(Math.random()*(cands.length/2))*2;
+    const flatX=(cands[k]/cw-.5)*10.5,theta=flatX/CURVE_R;
+    pos[i*3]=CURVE_R*Math.sin(theta);pos[i*3+1]=-(cands[k+1]/CH_CV-.5)*8+2.2;
+    pos[i*3+2]=CURVE_R*(1-Math.cos(theta))+(Math.random()-.5)*.35;
+    let best=-1,bestD=1e9;
+    for(let li=0;li<n;li++){const dd=Math.abs(pos[i*3+1]-lineWorldY(li,n));if(dd<bestD){bestD=dd;best=li;}}
+    lineIdx[i]=best;
+  }
+  return{pos,lineIdx};
+}
+function easeIO(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
 
-        <article class="card">
-          <h3 class="card-title">Hackatoa Games Platform</h3>
-          <p class="card-body">
-            A self-hosted browser games platform — free, no account, no ads. Six original games:
-            <strong>Infinisweeper</strong> (infinite shared Minesweeper with global leaderboard),
-            <strong>1v1 Minesweeper</strong> (competitive head-to-head),
-            <strong>Battleship</strong> (AI + multiplayer),
-            <strong>Cards Against Hackatoa</strong> (browser CAH with voting rounds and community packs),
-            <strong>Sys32 Roulette</strong>, and <strong>Tic-Tac-Toe Online</strong>.
-            All running on the homelab.
-          </p>
-          <div class="link-row">
-            <a class="pill-link" href="https://games.hackatoa.com" target="_blank" rel="noopener noreferrer">All Games</a>
-            <a class="pill-link" href="https://infinisweeper.hackatoa.com/" target="_blank" rel="noopener noreferrer">Infinisweeper</a>
-            <a class="pill-link" href="https://1v1sw.hackatoa.com" target="_blank" rel="noopener noreferrer">1v1 Minesweeper</a>
-            <a class="pill-link" href="https://cah.hackatoa.com" target="_blank" rel="noopener noreferrer">Cards Against Hackatoa</a>
-          </div>
-        </article>
+/* ── State ── */
+let geo0,geo1,pts0,pts1,mat0,mat1;
+let sz0,sz1,sp0,sp1,spreadTarget0,spreadTarget1,lineIdx0=null,lineIdx1=null;
+let volcanoPos0,volcanoPos1,textPositions={};
+let mode='volcano',currentSec=null,hoveredLine=-1;
+let lerpStart=null,lerpFrom0,lerpFrom1,lerpTo0,lerpTo1;
+let forestMats=[],textModeVal=0,textModeTarget=0;
+let ctrl,uTime=0;
 
-        <article class="card">
-          <h3 class="card-title">WikiRoll · Discord Collection Bot</h3>
-          <p class="card-body">
-            A Discord bot where server members roll, claim, and trade characters sourced from
-            Wikipedia and 150+ Fandom wikis — Naruto, Marvel, Pokémon, Elden Ring, and more.
-            Wishlist characters, boost sources for 3× pull weight, vote for bonus rolls.
-            Built with discord.js, SQLite, and the MediaWiki API.
-          </p>
-          <div class="link-row">
-            <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank" rel="noopener noreferrer">Website</a>
-            <a class="pill-link" href="https://discord.com/api/oauth2/authorize?client_id=1343100226537259018&permissions=19456&scope=bot%20applications.commands" target="_blank" rel="noopener noreferrer">Add to Discord</a>
-            <a class="pill-link" href="https://top.gg/bot/1343100226537259018/vote" target="_blank" rel="noopener noreferrer">Vote on top.gg</a>
-            <a class="pill-link" href="https://github.com/Hackatoan/wikiroll" target="_blank" rel="noopener noreferrer">GitHub</a>
-          </div>
-        </article>
+/* ── Init ── */
+function initScene(){
+  const groups=buildForestCloud(FOREST_N);
+  groups.forEach((g,i)=>{
+    const tc=TREE_COLORS[i];
+    const texIdx=i===3?1:0;
+    const g2=new THREE.BufferGeometry();
+    g2.setAttribute('position',new THREE.BufferAttribute(g.pos,3));
+    g2.setAttribute('aBright',new THREE.BufferAttribute(g.bright,1));
+    const mat=makeForestMat(tc[0],tc[1],tc[2],texIdx);
+    forestMats.push(mat);
+    scene.add(new THREE.Points(g2,mat));
+  });
 
-        <article class="card">
-          <h3 class="card-title">Lamar Bot · GTA V AI Discord Bot</h3>
-          <p class="card-body">
-            Lamar Davis from GTA V, living in your Discord server. Powered by Groq's llama-3.3-70b —
-            responds in character with persistent per-user memory so he actually remembers what you
-            said. Attack commands, games, stories, and zero chill.
-          </p>
-          <div class="link-row">
-            <a class="pill-link" href="https://lamar.hackatoa.com" target="_blank" rel="noopener noreferrer">Website</a>
-            <a class="pill-link" href="https://discord.com/oauth2/authorize?client_id=1136636484900888597&permissions=19456&scope=bot" target="_blank" rel="noopener noreferrer">Add to Discord</a>
-            <a class="pill-link" href="https://github.com/Hackatoan/Lamar" target="_blank" rel="noopener noreferrer">GitHub</a>
-          </div>
-        </article>
+  const hv=N/2;
+  volcanoPos0=buildVolcano(hv);volcanoPos1=buildVolcano(hv);
+  sz0=new Float32Array(hv).fill(BASE_SIZE);sz1=new Float32Array(hv).fill(BASE_SIZE);
+  sp0=new Float32Array(hv*2).fill(0);sp1=new Float32Array(hv*2).fill(0);
+  spreadTarget0=new Float32Array(hv*2);spreadTarget1=new Float32Array(hv*2);
 
-        <article class="card">
-          <h3 class="card-title">Canvas Messenger</h3>
-          <p class="card-body">
-            Chrome and Firefox extension that adds Discord-style messaging to Canvas LMS — DMs,
-            group chats, and class-wide channels, all end-to-end encrypted. Built around a Node.js
-            relay backend with WebRTC signaling to work within Canvas's platform restrictions.
-          </p>
-          <div class="link-row">
-            <a class="pill-link" href="https://github.com/Hackatoan/canvas-messenger" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a class="pill-link" href="https://relay.hackatoa.com" target="_blank" rel="noopener noreferrer">Relay</a>
-          </div>
-        </article>
+  geo0=new THREE.BufferGeometry();
+  geo0.setAttribute('position',new THREE.BufferAttribute(volcanoPos0.slice(),3));
+  geo0.setAttribute('aSize',new THREE.BufferAttribute(sz0,1));
+  geo0.setAttribute('aSpread',new THREE.BufferAttribute(sp0,2));
+  geo1=new THREE.BufferGeometry();
+  geo1.setAttribute('position',new THREE.BufferAttribute(volcanoPos1.slice(),3));
+  geo1.setAttribute('aSize',new THREE.BufferAttribute(sz1,1));
+  geo1.setAttribute('aSpread',new THREE.BufferAttribute(sp1,2));
 
-        <article class="card card-wide">
-          <h3 class="card-title">Clip Forge · Browser Video Editor</h3>
-          <p class="card-body">
-            A fully browser-based video editor — no uploads, no server, no account.
-            All rendering happens locally using FFmpeg compiled to WebAssembly.
-            Multi-track timeline with video, audio, text, and shape layers, transitions,
-            voiceover recording, and per-track volume control.
-          </p>
-          <div class="link-row">
-            <a class="pill-link" href="https://clip-forge.hackatoa.com" target="_blank" rel="noopener noreferrer">Open Editor</a>
-            <a class="pill-link" href="https://github.com/Hackatoan/clip-forge" target="_blank" rel="noopener noreferrer">GitHub</a>
-          </div>
-        </article>
+  mat0=makeMat(TEX0);mat1=makeMat(TEX1);
+  pts0=new THREE.Points(geo0,mat0);pts0.renderOrder=1;
+  pts1=new THREE.Points(geo1,mat1);pts1.renderOrder=1;
+  scene.add(pts0);scene.add(pts1);
 
-      </div>
-    </div>
+  buildPool();
 
-  </section>
+  let fpsFrames=0,fpsLast=performance.now(),fpsChecked=false,last=performance.now();
+  function animate(){
+    requestAnimationFrame(animate);
+    const now=performance.now(),dt=(now-last)/1000;last=now;
+    if(!fpsChecked){fpsFrames++;if(now-fpsLast>5000){fpsChecked=true;adapt(fpsFrames/5);}}
+    uTime+=dt;
+    forestMats.forEach(m=>{m.uniforms.uTime.value=uTime;});
+    if(ctrl)ctrl.update();
+    const inVolcano=mode==='volcano';
+    if(poolPts0)poolPts0.visible=inVolcano;
+    if(poolPts1)poolPts1.visible=inVolcano;
+    if(inVolcano)stepPool(dt);
+    textModeVal+=(textModeTarget-textModeVal)*0.055;
+    forestMats.forEach(m=>m.uniforms.uTextMode.value=textModeVal);
+    if(lerpStart!==null){
+      const t=Math.min((now-lerpStart)/1000/LERP_DUR,1),e=easeIO(t);
+      const p0=geo0.attributes.position.array,p1=geo1.attributes.position.array;
+      for(let i=0;i<p0.length;i++)p0[i]=lerpFrom0[i]+(lerpTo0[i]-lerpFrom0[i])*e;
+      for(let i=0;i<p1.length;i++)p1[i]=lerpFrom1[i]+(lerpTo1[i]-lerpFrom1[i])*e;
+      geo0.attributes.position.needsUpdate=true;geo1.attributes.position.needsUpdate=true;
+      if(t>=1)lerpStart=null;
+    }
+    updateHoverSizes();
+    renderer.render(scene,camera);
+  }
+  animate();
 
-  <!-- ══════════ HOMELAB — crouch · character RIGHT ══════════ -->
-  <section id="homelab" data-side="right" aria-labelledby="homelab-title">
+  tryAutoplay();
+}
 
-    <div class="content-col">
-      <div class="section-header">
-        <div>
-          <div class="section-kicker">Infrastructure</div>
-          <h2 class="section-title" id="homelab-title">The homelab</h2>
-        </div>
-        <div class="section-caption">Proxmox bare metal. 20+ self-hosted services. All on my own hardware.</div>
-      </div>
-      <div class="grid-2">
+function updateHoverSizes(){
+  const half=N/2,inText=mode==='text'&&currentSec&&lineIdx0;
+  for(let i=0;i<half;i++){
+    const on0=inText&&lineIdx0[i]===hoveredLine,on1=inText&&lineIdx1[i]===hoveredLine;
+    sz0[i]+=((on0?HOVER_SIZE:BASE_SIZE)-sz0[i])*.12;sz1[i]+=((on1?HOVER_SIZE:BASE_SIZE)-sz1[i])*.12;
+    const s0=on0?SPREAD:0,s1=on1?SPREAD:0;
+    sp0[i*2]+=(spreadTarget0[i*2]*s0-sp0[i*2])*.12;sp0[i*2+1]+=(spreadTarget0[i*2+1]*s0-sp0[i*2+1])*.12;
+    sp1[i*2]+=(spreadTarget1[i*2]*s1-sp1[i*2])*.12;sp1[i*2+1]+=(spreadTarget1[i*2+1]*s1-sp1[i*2+1])*.12;
+  }
+  geo0.attributes.aSize.needsUpdate=true;geo1.attributes.aSize.needsUpdate=true;
+  geo0.attributes.aSpread.needsUpdate=true;geo1.attributes.aSpread.needsUpdate=true;
+}
 
-        <article class="card">
-          <h3 class="card-title">Core Stack</h3>
-          <p class="card-body">
-            Proxmox hypervisor running Debian VMs. Primary Docker host with NPMplus reverse proxy,
-            Cloudflare DNS, and wildcard TLS via Certbot. Everything proxied behind
-            <code style="color:var(--accent)">*.hackatoa.com</code>.
-          </p>
-          <div class="link-row">
-            <span class="chip">Proxmox</span>
-            <span class="chip">Docker</span>
-            <span class="chip">Nginx</span>
-            <span class="chip">Cloudflare</span>
-          </div>
-        </article>
+function adapt(fps){const h=N/2;if(fps<40){geo0.setDrawRange(0,Math.floor(h*.5));geo1.setDrawRange(0,Math.floor(h*.5));}else if(fps<52){geo0.setDrawRange(0,Math.floor(h*.72));geo1.setDrawRange(0,Math.floor(h*.72));}}
 
-        <article class="card">
-          <h3 class="card-title">Self-Hosted Services</h3>
-          <p class="card-body">
-            Matrix/Synapse · Stalwart mail · Nextcloud · Jitsi · Home Assistant with voice pipeline ·
-            Pi-hole DNS · WireGuard VPN · Gitea · Uptime Kuma · TeamSpeak · and more.
-          </p>
-          <div class="link-row">
-            <span class="chip">Matrix</span>
-            <span class="chip">Home Assistant</span>
-            <span class="chip">WireGuard</span>
-            <span class="chip">Pi-hole</span>
-          </div>
-        </article>
+function flushAndLock(pos,tgt){
+  camera.position.copy(pos);ctrl.target.copy(tgt);ctrl.enableDamping=false;ctrl.update();
+  camera.position.copy(pos);ctrl.target.copy(tgt);ctrl.update();ctrl.enableDamping=true;
+}
+function bakeRot(){
+  const yaw=Math.atan2(camera.position.x-ctrl.target.x,camera.position.z-ctrl.target.z);
+  const cos=Math.cos(yaw),sin=Math.sin(yaw);
+  function rotY(arr){for(let i=0;i<arr.length;i+=3){const x=arr[i],z=arr[i+2];arr[i]=x*cos+z*sin;arr[i+2]=-x*sin+z*cos;}}
+  rotY(geo0.attributes.position.array);rotY(geo1.attributes.position.array);
+  geo0.attributes.position.needsUpdate=true;geo1.attributes.position.needsUpdate=true;
+}
 
-        <article class="card card-wide">
-          <h3 class="card-title">Recent GitHub Activity</h3>
-          <p class="card-body">Live feed of commits and contributions pulled directly from GitHub.</p>
-          <div class="github-pinner">
-            <div class="gh-placeholder">Loading recent activity...</div>
-          </div>
-        </article>
+/* ── Nav ── */
+const subNav=document.getElementById('sub-nav');
+const projBtn=document.getElementById('proj-btn');
+let subNavOpen=false;
+projBtn.addEventListener('click',()=>{
+  subNavOpen=!subNavOpen;
+  subNav.style.display=subNavOpen?'flex':'none';
+  if(subNavOpen&&!['bots','games','tools'].includes(currentSec))switchSection('bots');
+});
+document.querySelectorAll('.nb[data-sec]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.sec)));
 
-      </div>
-    </div>
+function updateNav(sec){
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  if(sec==='volcano'){projBtn.classList.remove('active');}
+  else if(['bots','games','tools'].includes(sec)){
+    projBtn.classList.add('active');
+    document.querySelectorAll('.nb.sub').forEach(b=>{if(b.dataset.sec===sec)b.classList.add('active');});
+  } else {
+    const b=document.querySelector(`.nb[data-sec="${sec}"]`);
+    if(b)b.classList.add('active');
+  }
+}
 
-    <div class="char-col" aria-hidden="true">
-      <img src="assets/jacob-pose-crouch.png" alt="" />
-    </div>
+function switchSection(sec){
+  if(sec===mode&&sec!=='volcano')return;
+  hoveredLine=-1;
+  if(sec==='volcano'){
+    mode='volcano';currentSec=null;lineIdx0=null;lineIdx1=null;
+    textModeTarget=0;bakeRot();
+    lerpFrom0=geo0.attributes.position.array.slice();lerpFrom1=geo1.attributes.position.array.slice();
+    lerpTo0=volcanoPos0;lerpTo1=volcanoPos1;lerpStart=performance.now();
+    springCam(HOME_POS,HOME_TGT);
+    if(ctrl)ctrl.autoRotate=true;
+    subNav.style.display='none';subNavOpen=false;
+    updateNav('volcano');
+    history.pushState({},'',SEC_URLS.volcano);
+    return;
+  }
+  if(!textPositions[sec]){
+    const h=N/2,r0=textToPos(sectionContent[sec],h),r1=textToPos(sectionContent[sec],h);
+    const st0=new Float32Array(h*2),st1=new Float32Array(h*2);
+    for(let i=0;i<h;i++){const a=Math.random()*Math.PI*2,d=0.5+Math.random()*.5;st0[i*2]=Math.cos(a)*d;st0[i*2+1]=Math.sin(a)*d;}
+    for(let i=0;i<h;i++){const a=Math.random()*Math.PI*2,d=0.5+Math.random()*.5;st1[i*2]=Math.cos(a)*d;st1[i*2+1]=Math.sin(a)*d;}
+    textPositions[sec]={pos0:r0.pos,pos1:r1.pos,li0:r0.lineIdx,li1:r1.lineIdx,st0,st1};
+  }
+  const td=textPositions[sec];
+  lineIdx0=td.li0;lineIdx1=td.li1;spreadTarget0=td.st0;spreadTarget1=td.st1;
+  mode='text';currentSec=sec;textModeTarget=1;bakeRot();
+  lerpFrom0=geo0.attributes.position.array.slice();lerpFrom1=geo1.attributes.position.array.slice();
+  lerpTo0=td.pos0;lerpTo1=td.pos1;lerpStart=performance.now();
+  springCam(TEXT_POS,TEXT_TGT);
+  if(ctrl)ctrl.autoRotate=false;
+  updateNav(sec);
+  if(SEC_URLS[sec])history.pushState({},'',(SEC_URLS[sec]));
+}
 
-  </section>
+let springFrom,springTo,springTgtFrom,springTgtTo,springStart=null;
+function springCam(pos,tgt){
+  springFrom=camera.position.clone();springTo=pos.clone();
+  springTgtFrom=ctrl.target.clone();springTgtTo=tgt.clone();
+  springStart=performance.now();
+  function step(){
+    if(!springStart)return;
+    const t=Math.min((performance.now()-springStart)/1000/CAM_SPRING_DUR,1),e=easeIO(t);
+    if(t<1){camera.position.copy(springFrom.clone().lerp(springTo,e));ctrl.target.copy(springTgtFrom.clone().lerp(springTgtTo,e));requestAnimationFrame(step);}
+    else{flushAndLock(springTo,springTgtTo);springStart=null;}
+  }
+  requestAnimationFrame(step);
+}
 
-  <!-- ══════════ COMMUNITY — power · character LEFT ══════════ -->
-  <section id="community" data-side="left" aria-labelledby="community-title">
+/* ── Copy toast ── */
+const toast=document.getElementById('copy-toast');
+let toastTimer=null;
+function showToast(){toast.style.opacity='1';if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(()=>{toast.style.opacity='0';},1800);}
 
-    <div class="char-col" aria-hidden="true">
-      <img src="assets/jacob-pose-power.png" alt="" />
-    </div>
+/* ── Pointer ── */
+let dragStart=false,dragMoved=false;
+function onDown(){dragStart=true;dragMoved=false;if(mode==='volcano'&&ctrl)ctrl.autoRotate=false;}
+function onMove(e){
+  if(dragStart)dragMoved=true;
+  if(mode!=='text'||!currentSec)return;
+  const rect=canvas.getBoundingClientRect(),my=e.clientY-rect.top;
+  const lines=sectionContent[currentSec],n=lines.length;
+  let found=-1;
+  for(let li=0;li<n;li++)if(Math.abs(my-lineScreenY(li,n))<14){found=li;break;}
+  hoveredLine=found;
+  const hasCopy=found>=0&&lineCopy[currentSec]&&lineCopy[currentSec][found];
+  const hasLink=found>=0&&lineLinks[currentSec]&&lineLinks[currentSec][found];
+  canvas.style.cursor=(hasCopy||hasLink)?'pointer':'default';
+}
+function onUp(){
+  if(dragMoved&&mode==='volcano'&&ctrl){
+    setTimeout(()=>{if(mode==='volcano')ctrl.autoRotate=true;},2000);
+  } else if(!dragMoved&&mode==='volcano'&&ctrl){
+    ctrl.autoRotate=true;
+  }
+  if(!dragMoved&&mode==='text'&&currentSec&&hoveredLine>=0){
+    const copyAddr=lineCopy[currentSec]&&lineCopy[currentSec][hoveredLine];
+    if(copyAddr){navigator.clipboard.writeText(copyAddr).then(showToast);return;}
+    const url=lineLinks[currentSec]&&lineLinks[currentSec][hoveredLine];
+    if(url)window.open(url,'_blank');
+  }
+  dragStart=false;dragMoved=false;
+}
+canvas.addEventListener('pointermove',onMove);
+canvas.addEventListener('pointerdown',onDown);
+canvas.addEventListener('pointerup',onUp);
+window.addEventListener('resize',()=>{W=wrap.clientWidth;H=wrap.clientHeight;camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);});
 
-    <div class="content-col">
-      <div class="section-header">
-        <div>
-          <div class="section-kicker">Community</div>
-          <h2 class="section-title" id="community-title">Where to find me</h2>
-        </div>
-        <div class="section-caption">Code, streams, servers, and conversation.</div>
-      </div>
-      <div class="grid-2">
-
-        <article class="card">
-          <h3 class="card-title">Orbital Outpost · Discord</h3>
-          <p class="card-body">
-            My Discord community — homelab talk, dev projects, gaming, and general vibes.
-            Drop in if you want to chat, ask questions, or just hang out.
-            WikiRoll and Lamar Bot live here too.
-          </p>
-          <div class="link-row">
-            <a class="pill-link" href="https://discord.gg/7eh3q2u8V" target="_blank" rel="noopener noreferrer">Join Server</a>
-            <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank" rel="noopener noreferrer">WikiRoll Bot</a>
-            <a class="pill-link" href="https://lamar.hackatoa.com" target="_blank" rel="noopener noreferrer">Lamar Bot</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <h3 class="card-title">Code &amp; Content</h3>
-          <p class="card-body">
-            GitHub has all the active projects and source code. YouTube for build write-ups and
-            lab videos when I bother to record. Instagram for everything else.
-          </p>
-          <div class="link-row">
-            <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank" rel="noopener noreferrer">YouTube</a>
-            <a class="pill-link" href="https://instagram.com/hackatoa" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a class="pill-link" href="https://www.linkedin.com/in/jacob-h-554984227" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <h3 class="card-title">Live &amp; Voice</h3>
-          <p class="card-body">
-            Twitch for live sessions — coding, security labs, gaming, whatever's on that day.
-            TeamSpeak is open if you want to drop by. Matrix for decentralized chat.
-          </p>
-          <div class="link-row">
-            <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank" rel="noopener noreferrer">Twitch</a>
-            <a class="pill-link" href="ts3server://ts.hackatoa.com">TeamSpeak · ts.hackatoa.com</a>
-            <a class="pill-link" href="https://matrix.hackatoa.com" target="_blank" rel="noopener noreferrer">Matrix</a>
-          </div>
-        </article>
-
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ══════════ BLOG — paint · character RIGHT ══════════ -->
-  <section id="blog" data-side="right" aria-labelledby="blog-title">
-
-    <div class="content-col">
-      <div class="section-header">
-        <div>
-          <div class="section-kicker">Blog</div>
-          <h2 class="section-title" id="blog-title">Logs &amp; Ramblings</h2>
-        </div>
-        <div class="section-caption">Homelab notes, project updates, and the occasional tangent.</div>
-      </div>
-      <div class="blog-list" id="blog-list"></div>
-    </div>
-
-    <div class="char-col" aria-hidden="true">
-      <img src="assets/jacob-pose-paint.png" alt="" />
-    </div>
-
-  </section>
-
-  <!-- ══════════ CONTACT — point · character LEFT ══════════ -->
-  <section id="contact" data-side="left" aria-labelledby="contact-title">
-
-    <div class="char-col" aria-hidden="true">
-      <img src="assets/jacob-pose-point.png" alt="" />
-    </div>
-
-    <div class="content-col">
-      <div class="section-header">
-        <div>
-          <div class="section-kicker">Contact</div>
-          <h2 class="section-title" id="contact-title">Get in touch</h2>
-        </div>
-        <div class="section-caption">Email, Signal, or show up on TeamSpeak.</div>
-      </div>
-      <div class="grid-2">
-
-        <div class="card">
-          <p class="card-body">
-            Best reached by email at
-            <a href="mailto:jacob@hackatoa.com">jacob@hackatoa.com</a>.
-            Happy to talk infrastructure, security, development, or whatever you've got in mind.
-          </p>
-          <div class="contact-times" aria-label="Local and Hackatoa time">
-            <div class="contact-time-row">
-              <span class="contact-time-label">Your local time</span>
-              <span class="contact-time-value" id="contact-local-time">--:--</span>
-            </div>
-            <div class="contact-time-row">
-              <span class="contact-time-label">Hackatoa time (PT)</span>
-              <span class="contact-time-value" id="contact-pt-time">--:--</span>
-            </div>
-          </div>
-          <form class="contact-form" action="mailto:jacob@hackatoa.com" method="GET">
-            <label class="contact-label" for="contact-message">Send a quick message <span style="color: var(--primary);" aria-hidden="true">*</span><span class="sr-only"> (Required)</span></label>
-            <textarea id="contact-message" name="body" class="contact-input" rows="3"
-              placeholder="Drop a short message and your contact details…" required></textarea>
-            <div class="contact-actions">
-              <button class="button button-primary" type="submit">Open email app</button>
-              <span class="contact-hint">Also on
-                <a href="https://matrix.to/#/@hackatoa:matrix.hackatoa.com" target="_blank" rel="noopener noreferrer">Matrix</a>
-                (<code style="font-size:0.82em">@hackatoa:matrix.hackatoa.com</code>),
-                <a href="https://signal.me/#eu/ZqxSe8D4lgvz9D6rUI0cq7cjTyPXb086bWiagELkPQIsEpzDs2JLeIC1aGF-ByHj" target="_blank" rel="noopener noreferrer">Signal</a>,
-                or TeamSpeak at <a href="ts3server://ts.hackatoa.com">ts.hackatoa.com</a>.
-              </span>
-            </div>
-          </form>
-        </div>
-
-        <div class="card">
-          <h3 class="card-title">Support My Work</h3>
-          <p class="card-body">
-            Everything here is free — no ads, no accounts. If you enjoy the games, bots, or tools
-            and want to help cover hosting costs, a coffee or some XMR goes a long way.
-          </p>
-          <div style="margin-top: 1rem; margin-bottom: 1.5rem;">
-            <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noopener noreferrer">
-              <img src="assets/buymeacoffee.png" alt="Buy Me A Coffee" loading="lazy" />
-            </a>
-          </div>
-          <button type="button" id="copy-wallet-btn" class="wallet-address-box" style="display: block; width: 100%; font-size: 0.8rem; padding: 0.5rem;" aria-label="Copy Monero wallet address" title="Copy XMR address">
-            48KxgziBnPXZzjeUqLmwctEEiaNbCaXc5Dr2ZDvG2pDP6WLJaPMFg3YEY8hmLRD94dYoQs1n3XtkSELVtDscjgqWH44qjnG
-          </button>
-          <div class="wallet-qr-container">
-            <img
-              src="https://api.qrserver.com/v1/create-qr-code/?size=450x450&data=48KxgziBnPXZzjeUqLmwctEEiaNbCaXc5Dr2ZDvG2pDP6WLJaPMFg3YEY8hmLRD94dYoQs1n3XtkSELVtDscjgqWH44qjnG&bgcolor=FFFFFF&color=050816&margin=0"
-              alt="QR code for Monero wallet address" loading="lazy" />
-            <div class="wallet-qr-text">Scan with any XMR wallet app.</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </section>
-
-  <footer class="site-footer" style="position:relative;z-index:1;">
-    <div class="site-footer-row">
-      <div>Built by Preston Harris · Hackatoa (hacker + Krakatoa).</div>
-      <div class="footer-links">
-        <a href="/urls">All Links</a>
-        <!-- hidden: <a href="/resume">Resume</a> -->
-        <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a>
-        <a href="#intro">Back to top</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="blog-data.js" defer></script>
-  <script src="app.js" defer></script>
-  <script src="carousel.js" defer></script>
-
+/* ── OrbitControls ── */
+(function loadControls(){
+  const s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
+  s.onload=()=>{
+    ctrl=new THREE.OrbitControls(camera,renderer.domElement);
+    ctrl.enableDamping=true;ctrl.dampingFactor=0.08;
+    ctrl.target.copy(HOME_TGT);
+    ctrl.autoRotate=true;ctrl.autoRotateSpeed=0.035;
+    ctrl.update();
+    initScene();
+  };
+  document.head.appendChild(s);
+})();
+</script>
 </body>
-
 </html>
