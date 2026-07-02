@@ -95,11 +95,12 @@ let order=[...Array(TRACKS.length).keys()].sort(()=>Math.random()-.5),oi=0;
 function setTrack(i){const t=TRACKS[order[i%order.length]];audio.src=BASE_URL+t[1];const el=document.getElementById('title-scroll');if(el)el.textContent=t[0];}
 function updateUI(p){const b=document.getElementById('pp');if(b)b.textContent=p?'⏸':'▶';}
 audio.addEventListener('ended',()=>{oi++;setTrack(oi);audio.play().then(()=>updateUI(true));});
-function tryAutoplay(){setTrack(0);audio.play().then(()=>updateUI(true)).catch(()=>{updateUI(false);const r=()=>{audio.play().then(()=>updateUI(true));document.removeEventListener('click',r);document.removeEventListener('keydown',r);};document.addEventListener('click',r);document.addEventListener('keydown',r);});}
-const mw=document.getElementById('music-wrap'),mp=document.getElementById('music-panel');
-mw.addEventListener('mouseenter',()=>{mp.style.opacity='1';mp.style.transform='translateX(0)';mp.style.pointerEvents='auto';});
-mw.addEventListener('mouseleave',()=>{mp.style.opacity='0';mp.style.transform='translateX(-6px)';mp.style.pointerEvents='none';});
-document.getElementById('pp').addEventListener('click',()=>{if(audio.paused)audio.play().then(()=>updateUI(true));else{audio.pause();updateUI(false);}});
+function tryAutoplay(){setTrack(0);audio.play().then(()=>updateUI(true)).catch(()=>updateUI(false));}
+const mw=document.getElementById('music-wrap'),mp=document.getElementById('music-panel'),mi=document.getElementById('music-icon');
+let panelOpen=false;
+function setPanelOpen(v){panelOpen=v;mp.style.opacity=v?'1':'0';mp.style.transform=v?'translateX(0)':'translateX(-6px)';mp.style.pointerEvents=v?'auto':'none';}
+mi.addEventListener('click',e=>{e.stopPropagation();if(!panelOpen&&audio.paused){audio.play().then(()=>updateUI(true)).catch(()=>updateUI(false));}setPanelOpen(!panelOpen);});
+document.getElementById('pp').addEventListener('click',()=>{if(audio.paused){audio.play().then(()=>updateUI(true)).catch(()=>updateUI(false));}else{audio.pause();updateUI(false);}});
 document.getElementById('nxt').addEventListener('click',()=>{oi++;setTrack(oi);audio.play().then(()=>updateUI(true));});
 document.getElementById('vol').addEventListener('input',e=>{audio.volume=+e.target.value;});
 
