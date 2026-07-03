@@ -139,7 +139,16 @@ const lineLinks={
 /* ── Three.js setup ── */
 const wrap=document.getElementById('wrap'),canvas=document.getElementById('c');
 let W=wrap.clientWidth,H=wrap.clientHeight;
-const renderer=new THREE.WebGLRenderer({canvas,antialias:false,alpha:false});
+// WebGL not available (blocklisted driver, old device, CDN blocked) → static fallback page
+(function(){
+  if(typeof THREE==='undefined'){location.replace('/urls/');return;}
+  const t=document.createElement('canvas');
+  if(t.getContext('webgl')||t.getContext('experimental-webgl'))return;
+  location.replace('/urls/');
+})();
+let renderer;
+try{renderer=new THREE.WebGLRenderer({canvas,antialias:false,alpha:false});}
+catch(e){location.replace('/urls/');throw e;}
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(W,H);
 renderer.setClearColor(0x040602,1);
 const scene=new THREE.Scene();
