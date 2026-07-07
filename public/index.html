@@ -56,6 +56,7 @@
       <span class="nb sub" data-sec="bots">BOTS</span>
       <span class="nb sub" data-sec="games">GAMES</span>
       <span class="nb sub" data-sec="tools">TOOLS</span>
+      <span class="nb sub" data-sec="apps">APPS</span>
     </div>
     <div style="display:flex;gap:26px;align-items:center">
       <span class="nb" data-sec="about">ABOUT</span>
@@ -111,7 +112,7 @@ const BASE_SIZE=0.22,HOVER_SIZE=0.52,SPREAD=0.28;
 const GROUND_Y=-1.22,FOREST_N=120000,MIN_TREE_DIST=1.6;
 const DIM_BACK=80,DIM_FRONT=60;
 const POOL_N=320,CRATER_Y=4.45,CRATER_R=1.1,POOL_RISE=0.72;
-const SEC_URLS={volcano:'/',about:'/about',bots:'/projects/bots',games:'/projects/games',tools:'/projects/tools',connect:'/connect',support:'/support'};
+const SEC_URLS={volcano:'/',about:'/about',bots:'/projects/bots',games:'/projects/games',tools:'/projects/tools',apps:'/projects/apps',connect:'/connect',support:'/support'};
 const HOME_POS=new THREE.Vector3(0,5,16),HOME_TGT=new THREE.Vector3(0,1,0);
 const BTC_ADDR='3L2oWuxjqZ8cbqgVFNTJzkkPKe2zKeZMif';
 const ETH_ADDR='0x2A7d2849607bC0B95C34CE01062D21bC8A10Bd17';
@@ -124,6 +125,7 @@ const sectionContent={
   bots:['[ WikiRoll ]','collect characters from','Wikipedia + 150 wikis','roll · claim · trade','','[ Lamar ]','GTA V AI on Discord','Gemini · Google Search','responds in character'],
   games:['[ Hackatoa Games ]','','Infinisweeper','infinite minesweeper','','Battleship','multiplayer · vs AI','','Sys32 Roulette','competitive minigames'],
   tools:['[ Clip Forge ]','browser video editor','trim · cut · overlay','no uploads · runs local'],
+  apps:['[ P&N ]','protons & neutrons','dating · verified humans','ID checks · no bots, no AI','swipe · match · chat'],
   connect:['jacob@hackatoa.com','github.com/Hackatoan','twitter · @jhackatoa','youtube · @Hackatoa','twitch · hackatoa','instagram · hackatoa','discord · Orbital Outpost'],
   support:['Buy Me a Coffee','','Bitcoin','3L2oWu...KeZMif','','Ethereum','0x2A7d...0Bd17','','Cronos','0x2A7d...0Bd17'],
 };
@@ -132,6 +134,7 @@ const lineLinks={
   bots:['https://wikiroll.hackatoa.com',null,null,null,null,'https://lamar.hackatoa.com',null,null,null],
   games:['https://games.hackatoa.com',null,'https://infinisweeper.hackatoa.com',null,null,'https://battleship.hackatoa.com',null,null,'https://cah.hackatoa.com',null],
   tools:['https://clip-forge.hackatoa.com',null,null,null],
+  apps:['https://nucleus.hackatoa.com',null,null,null,null],
   connect:['mailto:jacob@hackatoa.com','https://github.com/Hackatoan','https://twitter.com/jhackatoa','https://youtube.com/@Hackatoa','https://twitch.tv/hackatoa','https://instagram.com/hackatoa','https://discord.gg/7eh3q2u8V'],
   support:['https://buymeacoffee.com/hackatoa',null,null,null,null,null,null,null,null,null],
 };
@@ -439,14 +442,14 @@ let subNavOpen=false;
 projBtn.addEventListener('click',()=>{
   subNavOpen=!subNavOpen;
   subNav.style.display=subNavOpen?'flex':'none';
-  if(subNavOpen&&!['bots','games','tools'].includes(currentSec))switchSection('bots');
+  if(subNavOpen&&!['bots','games','tools','apps'].includes(currentSec))switchSection('bots');
 });
 document.querySelectorAll('.nb[data-sec]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.sec)));
 
 function updateNav(sec){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   if(sec==='volcano'){projBtn.classList.remove('active');}
-  else if(['bots','games','tools'].includes(sec)){
+  else if(['bots','games','tools','apps'].includes(sec)){
     projBtn.classList.add('active');
     document.querySelectorAll('.nb.sub').forEach(b=>{if(b.dataset.sec===sec)b.classList.add('active');});
   } else {
