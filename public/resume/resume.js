@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const opt = {
       margin:      [12, 14, 12, 14],
-      filename:    'Jacob_Harris_Resume.pdf',
+      filename:    'Preston_Resume.pdf',
       image:       { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
       jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
