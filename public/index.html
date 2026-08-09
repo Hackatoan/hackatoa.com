@@ -96,23 +96,27 @@
 <script>
 /* ── Music ── */
 const TRACKS=[
-['40kb Memory','Trial%201/40kb%20Memory.mp3'],['Bad Condition','Trial%201/Bad%20Condition.mp3'],
-['Buffer Stream Blue','Trial%201/Buffer%20Stream%20Blue.mp3'],['Cursor Trail','Trial%201/Cursor%20Trail.mp3'],
-['Desktop Meadow','Trial%201/Desktop%20Meadow.mp3'],['Dial-Up Lullaby','Trial%201/Dial-Up%20Lullaby.mp3'],
-['Heart Not Found','Trial%201/Heart%20Not%20Found.mp3'],['Pink Guestbook','Trial%201/Pink%20Guestbook.mp3'],
-['Under Construction Forever','Trial%201/Under%20Construction%20Forever.mp3'],
-['Winamp Visualiser','Trial%201/Winampvisualiser.mp3'],['Half Asleep','Trial%201/Half%20Asleep.mp3'],
-['Slow Scroll','Trial%201/Slow%20Scroll.mp3'],['Rain on the Blue Chair','Trial%201/Rain%20on%20the%20Blue%20Chair.mp3'],
-['Pocket Reset','Trial%201/Pocket%20Reset.mp3'],['Rain On Glass','Trial%201/Rain%20On%20Glass.mp3'],
-['Comic Sans Heart','Wayback%20Machine/Comic%20Sans%20Heart.mp3'],
-['Default Background','Wayback%20Machine/Default%20Background.mp3'],
-['Equalizer Bars','Wayback%20Machine/Equalizer%20Bars.mp3'],
-['Geocities Ghost','Wayback%20Machine/Geocities%20Ghost.mp3'],
-['Last Modified','Wayback%20Machine/Last%20Modified.mp3'],['Loading Forever','Wayback%20Machine/Loading%20Forever.mp3'],
-['Modem Hymn','Wayback%20Machine/Modem%20Hymn.mp3'],['Profile Deactivated','Wayback%20Machine/Profile%20Deactivated.mp3'],
-['Static Room','Wayback%20Machine/Static%20Room.mp3'],['Yellow Tape Sign','Wayback%20Machine/Yellow%20Tape%20Sign.mp3'],
+['The Iron Basilica','album/The%20Iron%20Basilica.mp3'],
+['Found Me Here','album/Found%20Me%20Here.mp3'],
+['One Body','album/One%20Body.mp3'],
+['Valley of Saints','album/Valley%20of%20Saints.mp3'],
+['Known','album/Known.mp3'],
+['You Spoke to the Storm','album/You%20Spoke%20to%20the%20Storm.mp3'],
+['The Wound That Heals','album/The%20Wound%20That%20Heals.mp3'],
+['The Seventh Seal','album/The%20Seventh%20Seal.mp3'],
+['The Shepherd King','album/The%20Shepherd%20King.mp3'],
+['Comic Sans Heart','wayback/Comic%20Sans%20Heart.mp3'],
+['Default Background','wayback/Default%20Background.mp3'],
+['Equalizer Bars','wayback/Equalizer%20Bars.mp3'],
+['Geocities Ghost','wayback/Geocities%20Ghost.mp3'],
+['Last Modified','wayback/Last%20Modified.mp3'],
+['Loading Forever','wayback/Loading%20Forever.mp3'],
+['Modem Hymn','wayback/Modem%20Hymn.mp3'],
+['Profile Deactivated','wayback/Profile%20Deactivated.mp3'],
+['Static Room','wayback/Static%20Room.mp3'],
+['Yellow Tape Sign','wayback/Yellow%20Tape%20Sign.mp3'],
 ];
-const BASE_URL='https://raw.githubusercontent.com/Hackatoan/records/main/';
+const BASE_URL='https://records.hackatoa.com/';
 const audio=new Audio();audio.volume=0.7;
 let order=[...Array(TRACKS.length).keys()].sort(()=>Math.random()-.5),oi=0;
 function setTrack(i){const t=TRACKS[order[i%order.length]];audio.src=BASE_URL+t[1];const el=document.getElementById('title-scroll');if(el)el.textContent=t[0];}
