@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VAULT BREACHED — ▲</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#040602;--gold:#ffd600;--dim:#827717;--red:#ff4d4d;--text:#d8d0a8}
+    body{background:var(--bg);color:var(--text);font-family:monospace;min-height:100vh;display:flex;
+      align-items:center;justify-content:center;padding:2rem;overflow:hidden;text-align:center}
+    .scan{position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,214,0,.03)0,rgba(255,214,0,.03)1px,transparent 1px,transparent 3px);z-index:1}
+    .glow{position:fixed;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,120,0,.14),transparent 60%);z-index:0;animation:pulse 4s ease-in-out infinite}
+    @keyframes pulse{50%{opacity:.6}}
+    .card{position:relative;z-index:2;max-width:620px}
+    h1{color:var(--gold);font-size:1.8rem;letter-spacing:6px;text-shadow:0 0 24px rgba(255,214,0,.5);margin-bottom:.4rem}
+    .sub{color:var(--dim);letter-spacing:3px;font-size:.75rem;margin-bottom:1.6rem}
+    p{font-size:.9rem;line-height:1.8;margin:.7rem 0;color:var(--text)}
+    .gold{color:var(--gold)}.dim{color:var(--dim)}
+    .badge{display:inline-block;margin:1.4rem 0;padding:.6rem 1.2rem;border:1px solid rgba(255,214,0,.4);border-radius:6px;
+      color:var(--gold);letter-spacing:3px;font-size:.85rem;box-shadow:0 0 26px rgba(255,214,0,.15)}
+    a{color:var(--dim);text-decoration:none;letter-spacing:2px;font-size:.75rem}a:hover{color:var(--gold)}
+    #denied{display:none}
+  </style>
+</head>
+<body>
+  <div class="glow"></div><div class="scan"></div>
+  <div class="card" id="win">
+    <h1>▲ VAULT BREACHED</h1>
+    <div class="sub">VOLCANO PROTOCOL · COMPLETE</div>
+    <p>Well, well. You decoded the transmission, chased the fragment through my systems, and cracked the key.</p>
+    <p>Most tourists never make it past the <span class="dim">velvet rope</span>. You walked straight into the caldera.</p>
+    <div class="badge">CLEARANCE GRANTED · OPERATIVE #001</div>
+    <p class="dim">Your reward is still being forged in the magma. For now, consider my respect earned.</p>
+    <p class="dim">— The Operator</p>
+    <p style="margin-top:2rem"><a href="/">return to the surface →</a></p>
+  </div>
+  <div class="card" id="denied">
+    <h1 style="color:var(--red);text-shadow:0 0 24px rgba(255,77,109,.5)">ACCESS DENIED</h1>
+    <div class="sub">the vault does not open for those who skip the work</div>
+    <p class="dim">Nice try. Solve the protocol properly.</p>
+    <p style="margin-top:1.4rem"><a href="/protocol">→ back to the terminal</a></p>
+  </div>
+  <script>
+  (function(){
+    var ok=sessionStorage.getItem('vp_unlocked')==='MELTDOWN';
+    document.getElementById('win').style.display=ok?'block':'none';
+    document.getElementById('denied').style.display=ok?'none':'block';
+    var gold='color:#ffd600;font-family:monospace;font-size:14px;font-weight:bold;text-shadow:0 0 10px rgba(255,214,0,.7)';
+    var dim='color:#827717;font-family:monospace;font-size:12px';
+    if(ok){
+      console.log('%c▲ VOLCANO PROTOCOL — COMPLETE', gold);
+      console.log('%cClearance granted, Operative #001. Reward pending. — The Operator', dim);
+    }else{
+      console.log('%cACCESS DENIED. The vault does not open for shortcuts.', 'color:#ff4d4d;font-family:monospace');
+    }
+  })();
+  </script>
+</body>
+</html>

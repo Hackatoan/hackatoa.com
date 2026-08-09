@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ACCESS TERMINAL — ▲</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#040602;--gold:#ffd600;--dim:#827717;--red:#ff4d4d;--text:#d8d0a8}
+    body{background:var(--bg);color:var(--text);font-family:monospace;min-height:100vh;display:flex;
+      align-items:center;justify-content:center;padding:2rem;overflow:hidden}
+    .scan{position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,214,0,.03)0,rgba(255,214,0,.03)1px,transparent 1px,transparent 3px);z-index:1}
+    .term{max-width:620px;width:100%;border:1px solid rgba(255,214,0,.3);border-radius:8px;padding:2rem;
+      background:rgba(13,10,0,.6);box-shadow:0 0 40px rgba(255,214,0,.08);position:relative;z-index:2}
+    .op{color:var(--gold);font-size:1.1rem;letter-spacing:4px;font-weight:800;text-shadow:0 0 14px rgba(255,214,0,.4);margin-bottom:.2rem}
+    .sub{color:var(--dim);font-size:.72rem;letter-spacing:2px;margin-bottom:1.4rem}
+    p{font-size:.86rem;line-height:1.7;margin:.6rem 0}
+    .red{color:var(--red)}.gold{color:var(--gold)}.dim{color:var(--dim)}
+    .cipher{color:var(--gold);letter-spacing:3px;font-size:1rem;margin:.4rem 0 1rem;text-shadow:0 0 10px rgba(255,214,0,.35)}
+    .row{display:flex;gap:.5rem;margin-top:1.3rem;flex-wrap:wrap}
+    input{flex:1;min-width:180px;background:#0a0900;border:1px solid rgba(255,214,0,.35);border-radius:4px;
+      color:var(--gold);font-family:monospace;font-size:.9rem;letter-spacing:2px;padding:.6rem .8rem;text-transform:uppercase}
+    input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 12px rgba(255,214,0,.25)}
+    button{background:transparent;border:1px solid var(--dim);border-radius:4px;color:var(--dim);font-family:monospace;
+      letter-spacing:2px;font-size:.8rem;padding:.6rem 1.1rem;cursor:pointer;transition:.2s}
+    button:hover{color:var(--gold);border-color:var(--gold)}
+    #msg{margin-top:1rem;font-size:.8rem;min-height:1.2em;letter-spacing:1px}
+    .cursor::after{content:'▋';color:var(--gold);animation:bl 1s steps(2) infinite}@keyframes bl{50%{opacity:0}}
+    a.back{color:var(--dim);font-size:.7rem;letter-spacing:2px;text-decoration:none;position:fixed;top:14px;left:16px;z-index:3}
+    a.back:hover{color:var(--gold)}
+  </style>
+</head>
+<body>
+  <div class="scan"></div>
+  <a class="back" href="/">← abort</a>
+  <div class="term">
+    <div class="op">▲ THE OPERATOR</div>
+    <div class="sub">VOLCANO PROTOCOL · STAGE 2 / 3</div>
+    <p class="dim">You decoded the door. Cute. But the vault key is <span class="red">split</span> and scattered across my systems.</p>
+    <p>The first fragment smolders where <span class="gold">mines never end</span>. Decode my directive <span class="dim">(ROT13)</span>:</p>
+    <div class="cipher">vasvavfjrrcre</div>
+    <p class="dim">Visit that machine. Open its console. It will hand you the <span class="gold">final key</span> — but encoded. Bring it back here.</p>
+    <p>Then speak it: type <span class="gold">unlock('YOUR_KEY')</span> in this console, or use the field below.</p>
+    <div class="row">
+      <input id="key" placeholder="ENTER KEY" autocomplete="off" spellcheck="false" aria-label="Enter the vault key" />
+      <button id="go">TRANSMIT</button>
+    </div>
+    <div id="msg" class="dim cursor">awaiting key…</div>
+  </div>
+  <script>
+  (function(){
+    var EXPECT='MELTDOWN';
+    var msg=document.getElementById('msg');
+    function fail(){msg.className='red';msg.textContent='ACCESS DENIED — the Operator is not amused.';}
+    function win(){
+      msg.className='gold';msg.textContent='KEY ACCEPTED. Vault opening…';
+      sessionStorage.setItem('vp_unlocked','MELTDOWN');
+      setTimeout(function(){location.href='/protocol/complete';},1100);
+    }
+    window.unlock=function(k){
+      if(typeof k==='string' && k.trim().toUpperCase()===EXPECT){win();return 'ACCEPTED';}
+      fail();return 'DENIED';
+    };
+    document.getElementById('go').addEventListener('click',function(){window.unlock(document.getElementById('key').value);});
+    document.getElementById('key').addEventListener('keydown',function(e){if(e.key==='Enter')window.unlock(this.value);});
+    // Stage-2 console directive
+    var gold='color:#ffd600;font-family:monospace;font-size:12px;text-shadow:0 0 6px rgba(255,214,0,.55)';
+    var dim='color:#827717;font-family:monospace;font-size:12px';
+    var red='color:#ff4d4d;font-family:monospace;font-size:12px';
+    console.log('%cSTAGE 2. You found the door. Do not disappoint me now.', dim);
+    console.log('%cThe first fragment burns where mines never end. Decode (ROT13):', red);
+    console.log('%c    vasvavfjrrcre', gold);
+    console.log('%cRead that machine’s console. It surrenders the final key (in hex).', dim);
+    console.log('%cReturn here and run:  unlock(\'THE_DECODED_KEY\')', gold);
+    console.log('%c— The Operator', dim);
+  })();
+  </script>
+</body>
+</html>
