@@ -1,0 +1,31 @@
+# Hackatoa — Preston
+
+> Preston (aka Hackatoa) — developer, homelab engineer, and AI enthusiast. Self-hosted
+> infrastructure, browser games, Discord bots, music, and open-source tools.
+
+## Pages
+- [Home](https://hackatoa.com/): interactive volcano/particle landing
+- [Songs](https://hackatoa.com/songs/): music catalog (streamable + YouTube links)
+- [Resume](https://hackatoa.com/resume/): experience, skills, projects
+- [Cover Letter](https://hackatoa.com/cover-letter/)
+- [Mycology Log](https://hackatoa.com/myco/)
+- [Links](https://hackatoa.com/urls/): all profiles and projects
+
+## Projects
+- Infinisweeper — infinite minesweeper: https://infinisweeper.hackatoa.com
+- Clip Forge — browser video editor: https://clip-forge.hackatoa.com
+- Sys32 Roulette: https://sys32.hackatoa.com
+- Games hub: https://games.hackatoa.com
+
+## Music
+- YouTube: https://www.youtube.com/@Hackatoa
+- Streaming (Wayback Machine): https://distrokid.com/hyperfollow/hackatoa/wayback-machine
+
+## Social
+- GitHub: https://github.com/Hackatoan
+- X: https://x.com/JHackatoa
+- Instagram: https://instagram.com/hackatoa
+- TikTok: https://tiktok.com/@hackatoa
+
+## Contact
+- Email: preston@hackatoa.com
