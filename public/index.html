@@ -51,6 +51,21 @@
     .nb:hover,.nb.active{color:#ffd600;text-shadow:0 0 10px rgba(255,214,0,0.35)}
     .nb.sub{font-size:10px;letter-spacing:2px;color:#3d2e00}
     .nb.sub:hover,.nb.sub.active{color:#ffd600;text-shadow:0 0 8px rgba(255,214,0,0.3)}
+    /* About photo card (framed by particles) */
+    #about-card{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%) scale(.9);z-index:15;
+      display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;
+      opacity:0;pointer-events:none;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1);
+      font-family:monospace;filter:drop-shadow(0 0 26px rgba(255,214,0,.18))}
+    #about-card.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
+    #about-card img{width:min(38vw,240px);aspect-ratio:1;object-fit:cover;border-radius:8px;
+      border:1px solid rgba(255,214,0,.55);box-shadow:0 0 0 4px rgba(4,6,2,.65),0 0 34px rgba(255,214,0,.22);
+      animation:aboutFloat 6s ease-in-out infinite;}
+    #about-card .about-name{color:#ffd600;font-size:1.25rem;letter-spacing:5px;font-weight:800;text-shadow:0 0 18px rgba(255,214,0,.35);margin-top:4px}
+    #about-card .about-aka{color:#9a8a1e;font-size:.72rem;letter-spacing:2px}
+    #about-card .about-gh{color:#827717;font-size:.72rem;letter-spacing:1px;text-decoration:none;pointer-events:auto;transition:color .2s}
+    #about-card .about-gh:hover{color:#ffd600}
+    @keyframes aboutFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    @media (max-width:600px){#about-card img{width:56vw}#about-card .about-name{font-size:1.05rem;letter-spacing:3px}}
   </style>
 </head>
 <body>
@@ -88,6 +103,14 @@
       <span class="nb" data-sec="volcano" style="font-size:15px;letter-spacing:0">↺</span>
     </div>
   </nav>
+
+  <!-- About photo (particles form a frame around it) -->
+  <div id="about-card" aria-hidden="true">
+    <img src="/assets/me-real.png" alt="Preston (Hackatoa)" />
+    <div class="about-name">PRESTON</div>
+    <div class="about-aka">aka Hackatoa · Homelab · AI · Game Dev</div>
+    <a class="about-gh" href="https://github.com/Hackatoan" target="_blank" rel="noopener">github.com/Hackatoan ↗</a>
+  </div>
 
   <canvas id="c"></canvas>
 </div>
@@ -357,6 +380,35 @@ function textToPos(lines,count){
   }
   return{pos,lineIdx};
 }
+// About: particles form a rounded-rect FRAME (photo is an HTML overlay inside it)
+function aboutFramePos(count){
+  const cw=740,ch=CH_CV;
+  const cv=document.createElement('canvas');cv.width=cw;cv.height=ch;
+  const ctx=cv.getContext('2d');
+  ctx.strokeStyle='#fff';ctx.lineWidth=15;
+  const m=120,r=40,x0=m,y0=46,x1=cw-m,y1=ch-46;
+  ctx.beginPath();ctx.moveTo(x0+r,y0);
+  ctx.arcTo(x1,y0,x1,y1,r);ctx.arcTo(x1,y1,x0,y1,r);
+  ctx.arcTo(x0,y1,x0,y0,r);ctx.arcTo(x0,y0,x1,y0,r);
+  ctx.closePath();ctx.stroke();
+  // corner accent ticks for a viewfinder feel
+  ctx.lineWidth=10;const t=34;
+  [[x0,y0,1,1],[x1,y0,-1,1],[x0,y1,1,-1],[x1,y1,-1,-1]].forEach(([cx,cy,sx,sy])=>{
+    ctx.beginPath();ctx.moveTo(cx,cy+sy*t);ctx.lineTo(cx,cy);ctx.lineTo(cx+sx*t,cy);ctx.stroke();
+  });
+  const d=ctx.getImageData(0,0,cw,ch).data,cands=[];
+  for(let j=0;j<ch;j++)for(let i=0;i<cw;i++)if(d[(j*cw+i)*4+3]>80)cands.push(i,j);
+  const pos=new Float32Array(count*3),lineIdx=new Int32Array(count);
+  for(let i=0;i<count;i++){
+    const k=Math.floor(Math.random()*(cands.length/2))*2;
+    const flatX=(cands[k]/cw-.5)*10.5,theta=flatX/CURVE_R;
+    pos[i*3]=CURVE_R*Math.sin(theta);
+    pos[i*3+1]=-(cands[k+1]/ch-.5)*8+2.2;
+    pos[i*3+2]=CURVE_R*(1-Math.cos(theta))+(Math.random()-.5)*.35;
+    lineIdx[i]=0;
+  }
+  return{pos,lineIdx};
+}
 function easeIO(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
 
 /* ── State ── */
@@ -487,6 +539,7 @@ function updateNav(sec){
 function switchSection(sec){
   if(sec===mode&&sec!=='volcano')return;
   hoveredLine=-1;
+  const _ac=document.getElementById('about-card');if(_ac)_ac.classList.toggle('show',sec==='about');
   if(sec==='volcano'){
     mode='volcano';currentSec=null;lineIdx0=null;lineIdx1=null;
     textModeTarget=0;bakeRot();
@@ -500,7 +553,9 @@ function switchSection(sec){
     return;
   }
   if(!textPositions[sec]){
-    const h=N/2,r0=textToPos(sectionContent[sec],h),r1=textToPos(sectionContent[sec],h);
+    const h=N/2;
+    const _mk=sec==='about'?()=>aboutFramePos(h):()=>textToPos(sectionContent[sec],h);
+    const r0=_mk(),r1=_mk();
     const st0=new Float32Array(h*2),st1=new Float32Array(h*2);
     for(let i=0;i<h;i++){const a=Math.random()*Math.PI*2,d=0.5+Math.random()*.5;st0[i*2]=Math.cos(a)*d;st0[i*2+1]=Math.sin(a)*d;}
     for(let i=0;i<h;i++){const a=Math.random()*Math.PI*2,d=0.5+Math.random()*.5;st1[i*2]=Math.cos(a)*d;st1[i*2+1]=Math.sin(a)*d;}
@@ -541,7 +596,7 @@ let dragStart=false,dragMoved=false;
 function onDown(){dragStart=true;dragMoved=false;if(mode==='volcano'&&ctrl)ctrl.autoRotate=false;}
 function onMove(e){
   if(dragStart)dragMoved=true;
-  if(mode!=='text'||!currentSec)return;
+  if(mode!=='text'||!currentSec||currentSec==='about')return;
   const rect=canvas.getBoundingClientRect(),my=e.clientY-rect.top;
   const lines=sectionContent[currentSec],n=lines.length;
   let found=-1;
