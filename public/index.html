@@ -92,25 +92,25 @@
   <canvas id="c"></canvas>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="/assets/vendor/three.min.js"></script>
 <script>
 /* ── Music ── */
 const TRACKS=[
-['40kb Memory','Trial_1/40kb_Memory.mp3'],['Bad Condition','Trial_1/Bad_Condition.mp3'],
-['Buffer Stream Blue','Trial_1/Buffer_Stream_Blue.mp3'],['Cursor Trail','Trial_1/Cursor_Trail.mp3'],
-['Desktop Meadow','Trial_1/Desktop_Meadow.mp3'],['Dial-Up Lullaby','Trial_1/Dial-Up_Lullaby.mp3'],
-['Heart Not Found','Trial_1/Heart_Not_Found.mp3'],['Pink Guestbook','Trial_1/Pink_Guestbook.mp3'],
-['Under Construction Forever','Trial_1/Under_Construction_Forever.mp3'],
-['Winamp Visualiser','Trial_1/Winamp_Visualiser.mp3'],['Half Asleep','Trial_1/Half_Asleep.mp3'],
-['Slow Scroll','Trial_1/Slow_Scroll.mp3'],['Rain on the Blue Chair','Trial_1/Rain_on_the_Blue_Chair.mp3'],
-['Pocket Reset','Trial_1/Pocket_Reset.mp3'],['Rain On Glass','Trial_1/Rain_On_Glass.mp3'],
-['Comic Sans Heart','Wayback_Machine/Comic_Sans_Heart.mp3'],
-['Default Background','Wayback_Machine/Default_Background.mp3'],
-['Equalizer Bars','Wayback_Machine/Equalizer_Bars.mp3'],
-['Geocities Ghost','Wayback_Machine/Geocities_Ghost.mp3'],
-['Last Modified','Wayback_Machine/Last_Modified.mp3'],['Loading Forever','Wayback_Machine/Loading_Forever.mp3'],
-['Modem Hymn','Wayback_Machine/Modem_Hymn.mp3'],['Profile Deactivated','Wayback_Machine/Profile_Deactivated.mp3'],
-['Static Room','Wayback_Machine/Static_Room.mp3'],['Yellow Tape Sign','Wayback_Machine/Yellow_Tape_Sign.mp3'],
+['40kb Memory','Trial%201/40kb%20Memory.mp3'],['Bad Condition','Trial%201/Bad%20Condition.mp3'],
+['Buffer Stream Blue','Trial%201/Buffer%20Stream%20Blue.mp3'],['Cursor Trail','Trial%201/Cursor%20Trail.mp3'],
+['Desktop Meadow','Trial%201/Desktop%20Meadow.mp3'],['Dial-Up Lullaby','Trial%201/Dial-Up%20Lullaby.mp3'],
+['Heart Not Found','Trial%201/Heart%20Not%20Found.mp3'],['Pink Guestbook','Trial%201/Pink%20Guestbook.mp3'],
+['Under Construction Forever','Trial%201/Under%20Construction%20Forever.mp3'],
+['Winamp Visualiser','Trial%201/Winampvisualiser.mp3'],['Half Asleep','Trial%201/Half%20Asleep.mp3'],
+['Slow Scroll','Trial%201/Slow%20Scroll.mp3'],['Rain on the Blue Chair','Trial%201/Rain%20on%20the%20Blue%20Chair.mp3'],
+['Pocket Reset','Trial%201/Pocket%20Reset.mp3'],['Rain On Glass','Trial%201/Rain%20On%20Glass.mp3'],
+['Comic Sans Heart','Wayback%20Machine/Comic%20Sans%20Heart.mp3'],
+['Default Background','Wayback%20Machine/Default%20Background.mp3'],
+['Equalizer Bars','Wayback%20Machine/Equalizer%20Bars.mp3'],
+['Geocities Ghost','Wayback%20Machine/Geocities%20Ghost.mp3'],
+['Last Modified','Wayback%20Machine/Last%20Modified.mp3'],['Loading Forever','Wayback%20Machine/Loading%20Forever.mp3'],
+['Modem Hymn','Wayback%20Machine/Modem%20Hymn.mp3'],['Profile Deactivated','Wayback%20Machine/Profile%20Deactivated.mp3'],
+['Static Room','Wayback%20Machine/Static%20Room.mp3'],['Yellow Tape Sign','Wayback%20Machine/Yellow%20Tape%20Sign.mp3'],
 ];
 const BASE_URL='https://raw.githubusercontent.com/Hackatoan/records/main/';
 const audio=new Audio();audio.volume=0.7;
@@ -569,7 +569,7 @@ window.addEventListener('resize',()=>{W=wrap.clientWidth;H=wrap.clientHeight;cam
 /* ── OrbitControls ── */
 (function loadControls(){
   const s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
+  s.src='/assets/vendor/OrbitControls.js';
   s.onload=()=>{
     ctrl=new THREE.OrbitControls(camera,renderer.domElement);
     ctrl.enableDamping=true;ctrl.dampingFactor=0.08;
