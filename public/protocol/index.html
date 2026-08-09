@@ -10,18 +10,22 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--bg:#040602;--gold:#ffd600;--dim:#827717;--red:#ff4d4d;--text:#d8d0a8}
     body{background:var(--bg);color:var(--text);font-family:monospace;min-height:100vh;display:flex;
-      align-items:center;justify-content:center;padding:2rem;overflow:hidden}
+      align-items:center;justify-content:center;padding:2rem;overflow-x:hidden}
     .scan{position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,214,0,.03)0,rgba(255,214,0,.03)1px,transparent 1px,transparent 3px);z-index:1}
-    .term{max-width:620px;width:100%;border:1px solid rgba(255,214,0,.3);border-radius:8px;padding:2rem;
-      background:rgba(13,10,0,.6);box-shadow:0 0 40px rgba(255,214,0,.08);position:relative;z-index:2}
+    .term{max-width:640px;width:100%;border:1px solid rgba(255,214,0,.3);border-radius:8px;padding:2rem;
+      background:rgba(13,10,0,.6);box-shadow:0 0 40px rgba(255,214,0,.08);position:relative;z-index:2;margin:2rem 0}
     .op{color:var(--gold);font-size:1.1rem;letter-spacing:4px;font-weight:800;text-shadow:0 0 14px rgba(255,214,0,.4);margin-bottom:.2rem}
     .sub{color:var(--dim);font-size:.72rem;letter-spacing:2px;margin-bottom:1.4rem}
     p{font-size:.86rem;line-height:1.7;margin:.6rem 0}
     .red{color:var(--red)}.gold{color:var(--gold)}.dim{color:var(--dim)}
-    .cipher{color:var(--gold);letter-spacing:3px;font-size:1rem;margin:.4rem 0 1rem;text-shadow:0 0 10px rgba(255,214,0,.35)}
+    .seals{list-style:none;margin:1rem 0;border-top:1px solid rgba(255,214,0,.15);border-bottom:1px solid rgba(255,214,0,.15)}
+    .seals li{padding:.7rem .2rem;border-bottom:1px dashed rgba(255,214,0,.12);display:flex;gap:.7rem;align-items:baseline}
+    .seals li:last-child{border-bottom:none}
+    .rn{color:var(--gold);font-weight:800;letter-spacing:2px;min-width:2.6em}
+    .riddle{flex:1}.code{color:var(--dim);font-size:.72rem;letter-spacing:1px;white-space:nowrap}
     .row{display:flex;gap:.5rem;margin-top:1.3rem;flex-wrap:wrap}
     input{flex:1;min-width:180px;background:#0a0900;border:1px solid rgba(255,214,0,.35);border-radius:4px;
-      color:var(--gold);font-family:monospace;font-size:.9rem;letter-spacing:2px;padding:.6rem .8rem;text-transform:uppercase}
+      color:var(--gold);font-family:monospace;font-size:.9rem;letter-spacing:3px;padding:.6rem .8rem;text-transform:uppercase}
     input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 12px rgba(255,214,0,.25)}
     button{background:transparent;border:1px solid var(--dim);border-radius:4px;color:var(--dim);font-family:monospace;
       letter-spacing:2px;font-size:.8rem;padding:.6rem 1.1rem;cursor:pointer;transition:.2s}
@@ -37,43 +41,48 @@
   <a class="back" href="/">← abort</a>
   <div class="term">
     <div class="op">▲ THE OPERATOR</div>
-    <div class="sub">VOLCANO PROTOCOL · STAGE 2 / 3</div>
-    <p class="dim">You decoded the door. Cute. But the vault key is <span class="red">split</span> and scattered across my systems.</p>
-    <p>The first fragment smolders where <span class="gold">mines never end</span>. Decode my directive <span class="dim">(ROT13)</span>:</p>
-    <div class="cipher">vasvavfjrrcre</div>
-    <p class="dim">Visit that machine. Open its console. It will hand you the <span class="gold">final key</span> — but encoded. Bring it back here.</p>
-    <p>Then speak it: type <span class="gold">unlock('YOUR_KEY')</span> in this console, or use the field below.</p>
+    <div class="sub">VOLCANO PROTOCOL · STAGE 2 · THE FOUR SEALS</div>
+    <p class="dim">You decoded the door. Now the real work. The key I named <span class="gold">MELTDOWN</span> lies <span class="red">shattered into four seals</span>, hidden in the consoles of my systems.</p>
+    <p>Find each system, open its console, and take the fragment — each locked in a <span class="gold">different code</span>:</p>
+    <ol class="seals">
+      <li><span class="rn">I</span><span class="riddle">where the <span class="gold">mines never end</span></span><span class="code">hex</span></li>
+      <li><span class="rn">II</span><span class="riddle">the table where the <span class="gold">cards are always against you</span></span><span class="code">binary</span></li>
+      <li><span class="rn">III</span><span class="riddle">the cutting room — <span class="gold">trim · cut · export</span>, nothing uploaded</span><span class="code">base64</span></li>
+      <li><span class="rn">IV</span><span class="riddle">spin the wheel; lose and face <span class="gold">system annihilation</span></span><span class="code">atbash</span></li>
+    </ol>
+    <p class="dim">Decode all four. Assemble them <span class="gold">in order (I→IV)</span> into one word. Then speak it: run <span class="gold">unlock('THE_WORD')</span> here, or use the field.</p>
     <div class="row">
-      <input id="key" placeholder="ENTER KEY" autocomplete="off" spellcheck="false" aria-label="Enter the vault key" />
+      <input id="key" placeholder="ASSEMBLED KEY" autocomplete="off" spellcheck="false" aria-label="Enter the assembled key" />
       <button id="go">TRANSMIT</button>
     </div>
-    <div id="msg" class="dim cursor">awaiting key…</div>
+    <div id="msg" class="dim cursor">awaiting all four seals…</div>
   </div>
   <script>
   (function(){
     var EXPECT='MELTDOWN';
     var msg=document.getElementById('msg');
-    function fail(){msg.className='red';msg.textContent='ACCESS DENIED — the Operator is not amused.';}
+    function fail(){msg.className='red';msg.textContent='ACCESS DENIED — a seal is missing or wrong.';}
     function win(){
       msg.className='gold';msg.textContent='KEY ACCEPTED. Vault opening…';
       sessionStorage.setItem('vp_unlocked','MELTDOWN');
       setTimeout(function(){location.href='/protocol/complete';},1100);
     }
     window.unlock=function(k){
-      if(typeof k==='string' && k.trim().toUpperCase()===EXPECT){win();return 'ACCEPTED';}
+      if(typeof k==='string' && k.replace(/[^a-z]/gi,'').toUpperCase()===EXPECT){win();return 'ACCEPTED';}
       fail();return 'DENIED';
     };
     document.getElementById('go').addEventListener('click',function(){window.unlock(document.getElementById('key').value);});
     document.getElementById('key').addEventListener('keydown',function(e){if(e.key==='Enter')window.unlock(this.value);});
-    // Stage-2 console directive
     var gold='color:#ffd600;font-family:monospace;font-size:12px;text-shadow:0 0 6px rgba(255,214,0,.55)';
     var dim='color:#827717;font-family:monospace;font-size:12px';
     var red='color:#ff4d4d;font-family:monospace;font-size:12px';
-    console.log('%cSTAGE 2. You found the door. Do not disappoint me now.', dim);
-    console.log('%cThe first fragment burns where mines never end. Decode (ROT13):', red);
-    console.log('%c    vasvavfjrrcre', gold);
-    console.log('%cRead that machine’s console. It surrenders the final key (in hex).', dim);
-    console.log('%cReturn here and run:  unlock(\'THE_DECODED_KEY\')', gold);
+    console.log('%cSTAGE 2 — THE FOUR SEALS.', red);
+    console.log('%cMy key MELTDOWN is split across four systems. Collect every fragment.', dim);
+    console.log('%c  I   — where the mines never end .................. (hex)', gold);
+    console.log('%c  II  — the table where the cards are against you .. (binary)', gold);
+    console.log('%c  III — the cutting room: trim, cut, export ........ (base64)', gold);
+    console.log('%c  IV  — spin the wheel, face annihilation .......... (atbash)', gold);
+    console.log('%cAssemble I→IV into one word, then:  unlock(\'THAT_WORD\')', dim);
     console.log('%c— The Operator', dim);
   })();
   </script>
