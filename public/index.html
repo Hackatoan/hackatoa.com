@@ -539,7 +539,12 @@ function updateNav(sec){
 function switchSection(sec){
   if(sec===mode&&sec!=='volcano')return;
   hoveredLine=-1;
-  const _ac=document.getElementById('about-card');if(_ac)_ac.classList.toggle('show',sec==='about');
+  const _ac=document.getElementById('about-card');
+  if(_ac){
+    if(window._aboutShowTimer){clearTimeout(window._aboutShowTimer);window._aboutShowTimer=null;}
+    if(sec==='about'){ window._aboutShowTimer=setTimeout(function(){_ac.classList.add('show');},1400); }
+    else { _ac.classList.remove('show'); }
+  }
   if(sec==='volcano'){
     mode='volcano';currentSec=null;lineIdx0=null;lineIdx1=null;
     textModeTarget=0;bakeRot();
