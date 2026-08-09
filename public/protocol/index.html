@@ -41,30 +41,31 @@
   <a class="back" href="/">← abort</a>
   <div class="term">
     <div class="op">▲ THE OPERATOR</div>
-    <div class="sub">VOLCANO PROTOCOL · STAGE 2 · THE FOUR SEALS</div>
-    <p class="dim">You decoded the door. Now the real work. The key I named <span class="gold">MELTDOWN</span> lies <span class="red">shattered into four seals</span>, hidden in the consoles of my systems.</p>
+    <div class="sub">VOLCANO PROTOCOL · STAGE 2 · THE FIVE SEALS</div>
+    <p class="dim">You decoded the door. Now the real work. My master key lies <span class="red">shattered into five seals</span>, hidden in the consoles of my systems.</p>
     <p>Find each system, open its console, and take the fragment — each locked in a <span class="gold">different code</span>:</p>
     <ol class="seals">
       <li><span class="rn">I</span><span class="riddle">where the <span class="gold">mines never end</span></span><span class="code">hex</span></li>
       <li><span class="rn">II</span><span class="riddle">the table where the <span class="gold">cards are always against you</span></span><span class="code">binary</span></li>
       <li><span class="rn">III</span><span class="riddle">the cutting room — <span class="gold">trim · cut · export</span>, nothing uploaded</span><span class="code">base64</span></li>
       <li><span class="rn">IV</span><span class="riddle">spin the wheel; lose and face <span class="gold">system annihilation</span></span><span class="code">atbash</span></li>
+      <li><span class="rn">V</span><span class="riddle">the grid where <span class="gold">fleets sink</span> — you, versus the machine</span><span class="code">rot13</span></li>
     </ol>
-    <p class="dim">Decode all four. Assemble them <span class="gold">in order (I→IV)</span> into one word. Then speak it: run <span class="gold">unlock('THE_WORD')</span> here, or use the field.</p>
+    <p class="dim">Decode all five. Assemble them <span class="gold">in order (I→V)</span> into one word. Then speak it: run <span class="gold">unlock('THE_WORD')</span> here, or use the field.</p>
     <div class="row">
       <input id="key" placeholder="ASSEMBLED KEY" autocomplete="off" spellcheck="false" aria-label="Enter the assembled key" />
       <button id="go">TRANSMIT</button>
     </div>
-    <div id="msg" class="dim cursor">awaiting all four seals…</div>
+    <div id="msg" class="dim cursor">awaiting all five seals…</div>
   </div>
   <script>
   (function(){
-    var EXPECT='MELTDOWN';
+    var EXPECT='DETONATION';
     var msg=document.getElementById('msg');
     function fail(){msg.className='red';msg.textContent='ACCESS DENIED — a seal is missing or wrong.';}
     function win(){
       msg.className='gold';msg.textContent='KEY ACCEPTED. Vault opening…';
-      sessionStorage.setItem('vp_unlocked','MELTDOWN');
+      sessionStorage.setItem('vp_unlocked','DETONATION');
       setTimeout(function(){location.href='/protocol/complete';},1100);
     }
     window.unlock=function(k){
@@ -76,13 +77,14 @@
     var gold='color:#ffd600;font-family:monospace;font-size:12px;text-shadow:0 0 6px rgba(255,214,0,.55)';
     var dim='color:#827717;font-family:monospace;font-size:12px';
     var red='color:#ff4d4d;font-family:monospace;font-size:12px';
-    console.log('%cSTAGE 2 — THE FOUR SEALS.', red);
-    console.log('%cMy key MELTDOWN is split across four systems. Collect every fragment.', dim);
+    console.log('%cSTAGE 2 — THE FIVE SEALS.', red);
+    console.log('%cMy key is split across five systems. Collect every fragment.', dim);
     console.log('%c  I   — where the mines never end .................. (hex)', gold);
     console.log('%c  II  — the table where the cards are against you .. (binary)', gold);
     console.log('%c  III — the cutting room: trim, cut, export ........ (base64)', gold);
     console.log('%c  IV  — spin the wheel, face annihilation .......... (atbash)', gold);
-    console.log('%cAssemble I→IV into one word, then:  unlock(\'THAT_WORD\')', dim);
+    console.log('%c  V   — the grid where fleets sink, you vs the machine (rot13)', gold);
+    console.log('%cAssemble I→V into one word, then:  unlock(\'THAT_WORD\')', dim);
     console.log('%c— The Operator', dim);
   })();
   </script>

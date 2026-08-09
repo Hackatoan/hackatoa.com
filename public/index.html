@@ -52,20 +52,15 @@
     .nb.sub{font-size:10px;letter-spacing:2px;color:#3d2e00}
     .nb.sub:hover,.nb.sub.active{color:#ffd600;text-shadow:0 0 8px rgba(255,214,0,0.3)}
     /* About photo card (framed by particles) */
-    #about-card{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%) scale(.9);z-index:15;
-      display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;
-      opacity:0;pointer-events:none;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1);
-      font-family:monospace;filter:drop-shadow(0 0 26px rgba(255,214,0,.18))}
-    #about-card.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
-    #about-card img{width:min(38vw,240px);aspect-ratio:1;object-fit:cover;border-radius:8px;
-      border:1px solid rgba(255,214,0,.55);box-shadow:0 0 0 4px rgba(4,6,2,.65),0 0 34px rgba(255,214,0,.22);
-      animation:aboutFloat 6s ease-in-out infinite;}
-    #about-card .about-name{color:#ffd600;font-size:1.25rem;letter-spacing:5px;font-weight:800;text-shadow:0 0 18px rgba(255,214,0,.35);margin-top:4px}
+    #about-card{position:absolute;left:50%;top:82%;transform:translate(-50%,-50%) translateY(10px);z-index:15;
+      display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;
+      opacity:0;pointer-events:none;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1);font-family:monospace}
+    #about-card.show{opacity:1;transform:translate(-50%,-50%) translateY(0);}
+    #about-card .about-name{color:#ffd600;font-size:1.15rem;letter-spacing:5px;font-weight:800;text-shadow:0 0 18px rgba(255,214,0,.35)}
     #about-card .about-aka{color:#9a8a1e;font-size:.72rem;letter-spacing:2px}
     #about-card .about-gh{color:#827717;font-size:.72rem;letter-spacing:1px;text-decoration:none;pointer-events:auto;transition:color .2s}
     #about-card .about-gh:hover{color:#ffd600}
-    @keyframes aboutFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-    @media (max-width:600px){#about-card img{width:56vw}#about-card .about-name{font-size:1.05rem;letter-spacing:3px}}
+    @media (max-width:600px){#about-card{top:84%}#about-card .about-name{font-size:1rem;letter-spacing:3px}}
   </style>
 </head>
 <body>
@@ -79,7 +74,7 @@
       <button id="pp" aria-label="Play or pause music" style="background:none;border:none;color:#ffd600;cursor:pointer;font-size:18px;padding:0;line-height:1">▶</button>
       <div style="overflow:hidden;width:140px"><div id="title-scroll" style="color:#ffd600;font-size:11px;white-space:nowrap;display:inline-block"></div></div>
       <button id="nxt" aria-label="Next track" style="background:none;border:none;color:#ffd600;cursor:pointer;font-size:13px;padding:0">⏭</button>
-      <input id="vol" type="range" min="0" max="1" step="0.05" value="0.7" aria-label="Volume" style="width:54px;accent-color:#ffd600">
+      <input id="vol" type="range" min="0" max="1" step="0.05" value="0.05" aria-label="Volume" style="width:54px;accent-color:#ffd600">
       <a href="/songs" style="color:#827717;font-size:10px;text-decoration:none">♪</a>
     </div>
   </div>
@@ -106,7 +101,6 @@
 
   <!-- About photo (particles form a frame around it) -->
   <div id="about-card" aria-hidden="true">
-    <img src="/assets/me-real.png" alt="Preston (Hackatoa)" />
     <div class="about-name">PRESTON</div>
     <div class="about-aka">aka Hackatoa · Homelab · AI · Game Dev</div>
     <a class="about-gh" href="https://github.com/Hackatoan" target="_blank" rel="noopener">github.com/Hackatoan ↗</a>
@@ -140,7 +134,7 @@ const TRACKS=[
 ['Yellow Tape Sign','wayback/Yellow%20Tape%20Sign.mp3'],
 ];
 const BASE_URL='https://records.hackatoa.com/';
-const audio=new Audio();audio.volume=0.7;
+const audio=new Audio();audio.volume=0.05;
 let order=[...Array(TRACKS.length).keys()].sort(()=>Math.random()-.5),oi=0;
 function setTrack(i){const t=TRACKS[order[i%order.length]];audio.src=BASE_URL+t[1];const el=document.getElementById('title-scroll');if(el)el.textContent=t[0];}
 function updateUI(p){const b=document.getElementById('pp');if(b)b.textContent=p?'⏸':'▶';}
@@ -173,7 +167,7 @@ const sectionContent={
   about:['Preston','aka Hackatoa','','Networking · Homelab · AI','Game Dev · Tool Builder','','homelab · 20+ services','JS · Python · Node · Bash','Proxmox · Docker · Linux','','github.com/Hackatoan'],
   bots:['[ WikiRoll ]','collect characters from','Wikipedia + 150 wikis','roll · claim · trade','','[ Lamar ]','GTA V AI on Discord','Gemini · Google Search','responds in character','','[ Balthazar ]','Discord voice bot','Whisper transcription','30s clip capture'],
   games:['[ Hackatoa Games ]','','Infinisweeper','infinite minesweeper','','Battleship','multiplayer · vs AI','','Sys32 Roulette','competitive minigames'],
-  tools:['[ Clip Forge ]','browser video editor','trim · cut · overlay','no uploads · runs local','','[ Lamar Live ]','Discord → live web pages','/build · AI-generated','deploys itself'],
+  tools:['[ Clip Forge ]','browser video editor','trim · cut · overlay','no uploads · runs local'],
   apps:['[ P&N ]','protons & neutrons','dating · verified humans','ID checks · no bots, no AI','swipe · match · chat'],
   connect:['preston@hackatoa.com','github.com/Hackatoan','x · @JHackatoa','youtube · @Hackatoa','twitch · hackatoa','instagram · hackatoa','tiktok · hackatoa','discord · Orbital Outpost'],
   support:['Buy Me a Coffee','','Bitcoin','3L2oWu...KeZMif','','Ethereum','0x2A7d...0Bd17','','Cronos','0x2A7d...0Bd17'],
@@ -182,7 +176,7 @@ const lineLinks={
   about:[null,null,null,null,null,null,null,null,null,null,'https://github.com/Hackatoan'],
   bots:['https://wikiroll.hackatoa.com',null,null,null,null,'https://lamar.hackatoa.com',null,null,null,null,'https://github.com/Hackatoan/balthazar',null,null,null],
   games:['https://games.hackatoa.com',null,'https://infinisweeper.hackatoa.com',null,null,'https://battleship.hackatoa.com',null,null,'https://cah.hackatoa.com',null],
-  tools:['https://clip-forge.hackatoa.com',null,null,null,null,'https://lamarlive.hackatoa.com',null,null,null],
+  tools:['https://clip-forge.hackatoa.com',null,null,null],
   apps:['https://nucleus.hackatoa.com',null,null,null,null],
   connect:['mailto:preston@hackatoa.com','https://github.com/Hackatoan','https://x.com/JHackatoa','https://youtube.com/@Hackatoa','https://twitch.tv/hackatoa','https://instagram.com/hackatoa','https://tiktok.com/@hackatoa','https://discord.gg/7eh3q2u8V'],
   support:['https://buymeacoffee.com/hackatoa',null,null,null,null,null,null,null,null,null],
@@ -418,6 +412,7 @@ let volcanoPos0,volcanoPos1,textPositions={};
 let mode='volcano',currentSec=null,hoveredLine=-1;
 let lerpStart=null,lerpFrom0,lerpFrom1,lerpTo0,lerpTo1;
 let forestMats=[],textModeVal=0,textModeTarget=0;
+let photoMesh=null,photoMat=null,aboutImgVal=0,aboutImgTarget=0;
 let ctrl,uTime=0;
 
 /* ── Init ── */
@@ -456,6 +451,18 @@ function initScene(){
 
   buildPool();
 
+  // About photo — a textured plane placed in 3D, inside the particle frame
+  (function(){
+    const tex=new THREE.TextureLoader().load('/assets/me-real.png');
+    if(tex.colorSpace!==undefined&&THREE.SRGBColorSpace)tex.colorSpace=THREE.SRGBColorSpace;
+    tex.minFilter=THREE.LinearFilter;
+    photoMat=new THREE.MeshBasicMaterial({map:tex,transparent:true,opacity:0,depthTest:false,depthWrite:false});
+    photoMesh=new THREE.Mesh(new THREE.PlaneGeometry(4.6,4.6),photoMat);
+    photoMesh.position.set(0,2.2,0.4);
+    photoMesh.renderOrder=30;photoMesh.visible=false;
+    scene.add(photoMesh);
+  })();
+
   let fpsFrames=0,fpsLast=performance.now(),fpsChecked=false,last=performance.now();
   function animate(){
     requestAnimationFrame(animate);
@@ -470,6 +477,7 @@ function initScene(){
     if(inVolcano)stepPool(dt);
     textModeVal+=(textModeTarget-textModeVal)*0.055;
     forestMats.forEach(m=>m.uniforms.uTextMode.value=textModeVal);
+    if(photoMat){aboutImgVal+=(aboutImgTarget-aboutImgVal)*0.09;photoMat.opacity=aboutImgVal;if(photoMesh)photoMesh.visible=aboutImgVal>0.01;}
     if(lerpStart!==null){
       const t=Math.min((now-lerpStart)/1000/LERP_DUR,1),e=easeIO(t);
       const p0=geo0.attributes.position.array,p1=geo1.attributes.position.array;
@@ -542,8 +550,13 @@ function switchSection(sec){
   const _ac=document.getElementById('about-card');
   if(_ac){
     if(window._aboutShowTimer){clearTimeout(window._aboutShowTimer);window._aboutShowTimer=null;}
-    if(sec==='about'){ window._aboutShowTimer=setTimeout(function(){_ac.classList.add('show');},1400); }
-    else { _ac.classList.remove('show'); }
+    if(sec==='about'){
+      window._aboutShowTimer=setTimeout(function(){_ac.classList.add('show');aboutImgTarget=1;},1400);
+      if(ctrl)ctrl.enableRotate=false; // keep photo/frame/caption composed
+    } else {
+      _ac.classList.remove('show'); aboutImgTarget=0;
+      if(ctrl)ctrl.enableRotate=true;
+    }
   }
   if(sec==='volcano'){
     mode='volcano';currentSec=null;lineIdx0=null;lineIdx1=null;

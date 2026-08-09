@@ -87,12 +87,12 @@ if (saved && saved.src) {
     shuffleOrder = saved.shuffleOrder || shuffleOrder;
     trackIndex = saved.trackIndex || 0;
     audio.src = saved.src;
-    audio.volume = saved.volume != null ? saved.volume : 0.25;
+    audio.volume = saved.volume != null ? saved.volume : 0.05;
     audio.currentTime = saved.time || 0;
     // If it was playing on main page, keep playing
     if (!saved.paused) audio.play().catch(() => {});
 } else {
-    audio.volume = 0.25;
+    audio.volume = 0.05;
 }
 
 // Build track list grouped by album (newest first, collapsible)
