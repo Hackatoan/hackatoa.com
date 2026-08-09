@@ -2,6 +2,9 @@
   "hosting": {
     "public": "public",
     "cleanUrls": true,
+    "redirects": [
+      { "source": "/wayback-machine", "destination": "/songs/", "type": 301 }
+    ],
     "rewrites": [
       { "source": "/about", "destination": "/index.html" },
       { "source": "/connect", "destination": "/index.html" },
