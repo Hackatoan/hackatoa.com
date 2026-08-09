@@ -1,23 +1,23 @@
 const TRACKS = [
-    { title: 'The Iron Basilica', src: 'https://records.hackatoa.com/album/The%20Iron%20Basilica.mp3', album: 'Latest Release' },
-    { title: 'Found Me Here', src: 'https://records.hackatoa.com/album/Found%20Me%20Here.mp3', album: 'Latest Release' },
-    { title: 'One Body', src: 'https://records.hackatoa.com/album/One%20Body.mp3', album: 'Latest Release' },
-    { title: 'Valley of Saints', src: 'https://records.hackatoa.com/album/Valley%20of%20Saints.mp3', album: 'Latest Release' },
-    { title: 'Known', src: 'https://records.hackatoa.com/album/Known.mp3', album: 'Latest Release' },
-    { title: 'You Spoke to the Storm', src: 'https://records.hackatoa.com/album/You%20Spoke%20to%20the%20Storm.mp3', album: 'Latest Release' },
-    { title: 'The Wound That Heals', src: 'https://records.hackatoa.com/album/The%20Wound%20That%20Heals.mp3', album: 'Latest Release' },
-    { title: 'The Seventh Seal', src: 'https://records.hackatoa.com/album/The%20Seventh%20Seal.mp3', album: 'Latest Release' },
-    { title: 'The Shepherd King', src: 'https://records.hackatoa.com/album/The%20Shepherd%20King.mp3', album: 'Latest Release' },
-    { title: 'Comic Sans Heart', src: 'https://records.hackatoa.com/wayback/Comic%20Sans%20Heart.mp3', album: 'Wayback Machine' },
-    { title: 'Default Background', src: 'https://records.hackatoa.com/wayback/Default%20Background.mp3', album: 'Wayback Machine' },
-    { title: 'Equalizer Bars', src: 'https://records.hackatoa.com/wayback/Equalizer%20Bars.mp3', album: 'Wayback Machine' },
-    { title: 'Geocities Ghost', src: 'https://records.hackatoa.com/wayback/Geocities%20Ghost.mp3', album: 'Wayback Machine' },
-    { title: 'Last Modified', src: 'https://records.hackatoa.com/wayback/Last%20Modified.mp3', album: 'Wayback Machine' },
-    { title: 'Loading Forever', src: 'https://records.hackatoa.com/wayback/Loading%20Forever.mp3', album: 'Wayback Machine' },
-    { title: 'Modem Hymn', src: 'https://records.hackatoa.com/wayback/Modem%20Hymn.mp3', album: 'Wayback Machine' },
-    { title: 'Profile Deactivated', src: 'https://records.hackatoa.com/wayback/Profile%20Deactivated.mp3', album: 'Wayback Machine' },
-    { title: 'Static Room', src: 'https://records.hackatoa.com/wayback/Static%20Room.mp3', album: 'Wayback Machine' },
-    { title: 'Yellow Tape Sign', src: 'https://records.hackatoa.com/wayback/Yellow%20Tape%20Sign.mp3', album: 'Wayback Machine' },
+    { title: 'The Iron Basilica', src: 'https://records.hackatoa.com/album/The%20Iron%20Basilica.mp3', album: 'Latest Release', yt: '9QqKQnFhOwU' },
+    { title: 'Found Me Here', src: 'https://records.hackatoa.com/album/Found%20Me%20Here.mp3', album: 'Latest Release', yt: 'HUxvN3Zb03Y' },
+    { title: 'One Body', src: 'https://records.hackatoa.com/album/One%20Body.mp3', album: 'Latest Release', yt: 'MQh8NSRXD7s' },
+    { title: 'Valley of Saints', src: 'https://records.hackatoa.com/album/Valley%20of%20Saints.mp3', album: 'Latest Release', yt: 'ORYwnjMLCUo' },
+    { title: 'Known', src: 'https://records.hackatoa.com/album/Known.mp3', album: 'Latest Release', yt: 'aveHBQoHZjA' },
+    { title: 'You Spoke to the Storm', src: 'https://records.hackatoa.com/album/You%20Spoke%20to%20the%20Storm.mp3', album: 'Latest Release', yt: 'h8-A_TWjhcs' },
+    { title: 'The Wound That Heals', src: 'https://records.hackatoa.com/album/The%20Wound%20That%20Heals.mp3', album: 'Latest Release', yt: 'kmfZIJzPMG8' },
+    { title: 'The Seventh Seal', src: 'https://records.hackatoa.com/album/The%20Seventh%20Seal.mp3', album: 'Latest Release', yt: 'wU_kXyTqj54' },
+    { title: 'The Shepherd King', src: 'https://records.hackatoa.com/album/The%20Shepherd%20King.mp3', album: 'Latest Release', yt: 'xx3Rio6unWU' },
+    { title: 'Comic Sans Heart', src: 'https://records.hackatoa.com/wayback/Comic%20Sans%20Heart.mp3', album: 'Wayback Machine', yt: '-Cucps3bLg0' },
+    { title: 'Default Background', src: 'https://records.hackatoa.com/wayback/Default%20Background.mp3', album: 'Wayback Machine', yt: 'gYh3ePuZtt8' },
+    { title: 'Equalizer Bars', src: 'https://records.hackatoa.com/wayback/Equalizer%20Bars.mp3', album: 'Wayback Machine', yt: '2tEC0uVieJQ' },
+    { title: 'Geocities Ghost', src: 'https://records.hackatoa.com/wayback/Geocities%20Ghost.mp3', album: 'Wayback Machine', yt: 'brFTEpBVRm4' },
+    { title: 'Last Modified', src: 'https://records.hackatoa.com/wayback/Last%20Modified.mp3', album: 'Wayback Machine', yt: '446AhqP-IC0' },
+    { title: 'Loading Forever', src: 'https://records.hackatoa.com/wayback/Loading%20Forever.mp3', album: 'Wayback Machine', yt: 'DLOUY7xJPfE' },
+    { title: 'Modem Hymn', src: 'https://records.hackatoa.com/wayback/Modem%20Hymn.mp3', album: 'Wayback Machine', yt: '4F9JTw_3Rmk' },
+    { title: 'Profile Deactivated', src: 'https://records.hackatoa.com/wayback/Profile%20Deactivated.mp3', album: 'Wayback Machine', yt: 'o22r2tABL14' },
+    { title: 'Static Room', src: 'https://records.hackatoa.com/wayback/Static%20Room.mp3', album: 'Wayback Machine', yt: 'j7QskVYaZcM' },
+    { title: 'Yellow Tape Sign', src: 'https://records.hackatoa.com/wayback/Yellow%20Tape%20Sign.mp3', album: 'Wayback Machine', yt: 'xm7kYq_bxD0' },
 ];
 
 // --- Shared state via sessionStorage ---
@@ -97,7 +97,7 @@ if (saved && saved.src) {
 
 // Build track list grouped by album (newest first, collapsible)
 const list = document.getElementById('track-list');
-const albums = [...new Set(TRACKS.map(t => t.album))].reverse();
+const albums = [...new Set(TRACKS.map(t => t.album))];
 albums.forEach((album, albumIdx) => {
     const albumTracks = TRACKS.map((t, i) => ({ ...t, i })).filter(t => t.album === album);
     const isOpen = albumIdx === 0; // first album (newest) open by default
@@ -122,6 +122,7 @@ albums.forEach((album, albumIdx) => {
             <div class="track-num">${trackNum + 1}</div>
             <div class="track-eq"><span></span><span></span><span></span></div>
             <div class="track-title">${track.title}</div>
+            <a class="track-btn yt-btn" href="https://youtu.be/${track.yt}" target="_blank" rel="noopener" aria-label="Watch ${track.title} on YouTube" onclick="event.stopPropagation()">YouTube ↗</a>
             <button class="track-btn">▶ Play</button>
         `;
         const btn = row.querySelector('.track-btn');
