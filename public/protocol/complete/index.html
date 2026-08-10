@@ -10,17 +10,20 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--bg:#040602;--gold:#ffd600;--dim:#827717;--red:#ff4d4d;--text:#d8d0a8}
     body{background:var(--bg);color:var(--text);font-family:monospace;min-height:100vh;display:flex;
-      align-items:center;justify-content:center;padding:2rem;overflow:hidden;text-align:center}
+      align-items:center;justify-content:center;padding:2rem;overflow-x:hidden;text-align:center}
     .scan{position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,214,0,.03)0,rgba(255,214,0,.03)1px,transparent 1px,transparent 3px);z-index:1}
-    .glow{position:fixed;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,120,0,.14),transparent 60%);z-index:0;animation:pulse 4s ease-in-out infinite}
+    .glow{position:fixed;inset:0;background:radial-gradient(circle at 50% 65%,rgba(255,120,0,.14),transparent 60%);z-index:0;animation:pulse 4s ease-in-out infinite}
     @keyframes pulse{50%{opacity:.6}}
-    .card{position:relative;z-index:2;max-width:620px}
-    h1{color:var(--gold);font-size:1.8rem;letter-spacing:6px;text-shadow:0 0 24px rgba(255,214,0,.5);margin-bottom:.4rem}
-    .sub{color:var(--dim);letter-spacing:3px;font-size:.75rem;margin-bottom:1.6rem}
-    p{font-size:.9rem;line-height:1.8;margin:.7rem 0;color:var(--text)}
+    .card{position:relative;z-index:2;max-width:520px;margin:2rem 0}
+    h1{color:var(--gold);font-size:1.7rem;letter-spacing:6px;text-shadow:0 0 24px rgba(255,214,0,.5);margin-bottom:.3rem}
+    .sub{color:var(--dim);letter-spacing:3px;font-size:.72rem;margin-bottom:1.2rem}
+    p{font-size:.86rem;line-height:1.7;margin:.6rem 0;color:var(--text)}
     .gold{color:var(--gold)}.dim{color:var(--dim)}
-    .badge{display:inline-block;margin:1.4rem 0;padding:.6rem 1.2rem;border:1px solid rgba(255,214,0,.4);border-radius:6px;
-      color:var(--gold);letter-spacing:3px;font-size:.85rem;box-shadow:0 0 26px rgba(255,214,0,.15)}
+    #badge{width:min(86vw,420px);height:auto;border-radius:10px;margin:1.2rem auto;display:block;box-shadow:0 0 40px rgba(255,214,0,.15)}
+    .btns{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:.4rem}
+    button{background:transparent;border:1px solid var(--gold);border-radius:5px;color:var(--gold);font-family:monospace;
+      letter-spacing:2px;font-size:.82rem;padding:.65rem 1.3rem;cursor:pointer;transition:.2s}
+    button:hover{background:rgba(255,214,0,.1);box-shadow:0 0 18px rgba(255,214,0,.25)}
     a{color:var(--dim);text-decoration:none;letter-spacing:2px;font-size:.75rem}a:hover{color:var(--gold)}
     #denied{display:none}
   </style>
@@ -30,12 +33,14 @@
   <div class="card" id="win">
     <h1>▲ VAULT BREACHED</h1>
     <div class="sub">VOLCANO PROTOCOL · COMPLETE</div>
-    <p>Well, well. You decoded the transmission, chased the fragment through my systems, and cracked the key.</p>
-    <p>Most tourists never make it past the <span class="dim">velvet rope</span>. You walked straight into the caldera.</p>
-    <div class="badge">CLEARANCE GRANTED · OPERATIVE #001</div>
-    <p class="dim">Your reward is still being forged in the magma. For now, consider my respect earned.</p>
-    <p class="dim">— The Operator</p>
-    <p style="margin-top:2rem"><a href="/">return to the surface →</a></p>
+    <p>You decoded the transmission, chased <span class="gold">five seals</span> through my systems, and cracked the key.</p>
+    <canvas id="badge" width="1080" height="1080" role="img" aria-label="Volcano Protocol clearance badge"></canvas>
+    <div class="btns">
+      <button id="dl">⬇ DOWNLOAD BADGE</button>
+      <button id="cp">COPY</button>
+    </div>
+    <p class="dim" style="margin-top:1.3rem">Your proof of clearance, Operative. Wear it. — The Operator</p>
+    <p style="margin-top:1.2rem"><a href="/">return to the surface →</a></p>
   </div>
   <div class="card" id="denied">
     <h1 style="color:var(--red);text-shadow:0 0 24px rgba(255,77,109,.5)">ACCESS DENIED</h1>
@@ -50,12 +55,60 @@
     document.getElementById('denied').style.display=ok?'none':'block';
     var gold='color:#ffd600;font-family:monospace;font-size:14px;font-weight:bold;text-shadow:0 0 10px rgba(255,214,0,.7)';
     var dim='color:#827717;font-family:monospace;font-size:12px';
-    if(ok){
-      console.log('%c▲ VOLCANO PROTOCOL — COMPLETE', gold);
-      console.log('%cClearance granted, Operative #001. Reward pending. — The Operator', dim);
-    }else{
-      console.log('%cACCESS DENIED. The vault does not open for shortcuts.', 'color:#ff4d4d;font-family:monospace');
+    if(!ok){console.log('%cACCESS DENIED. The vault does not open for shortcuts.', 'color:#ff4d4d;font-family:monospace');return;}
+
+    // ── Stable per-visitor operative serial ──
+    var serial=localStorage.getItem('vp_serial');
+    if(!serial){serial='V-'+Math.random().toString(16).slice(2,6).toUpperCase()+'-'+Math.random().toString(16).slice(2,6).toUpperCase();localStorage.setItem('vp_serial',serial);}
+    var dateStr=new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}).toUpperCase();
+
+    var cv=document.getElementById('badge'),c=cv.getContext('2d'),S=1080;
+    function rr(x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+    function ls(s,px){try{c.letterSpacing=px+'px';}catch(e){}}
+    function text(str,y,size,color,weight,spacing){ls(spacing||0);c.fillStyle=color;c.font=(weight||'')+' '+size+'px monospace';c.textAlign='center';c.fillText(str,S/2,y);ls(0);}
+
+    function draw(){
+      // background + ember glow
+      c.fillStyle='#040602';c.fillRect(0,0,S,S);
+      var g=c.createRadialGradient(S/2,S*0.66,60,S/2,S*0.66,S*0.75);
+      g.addColorStop(0,'rgba(255,120,0,0.20)');g.addColorStop(1,'rgba(255,120,0,0)');
+      c.fillStyle=g;c.fillRect(0,0,S,S);
+      // frame + corner ticks (viewfinder motif)
+      c.strokeStyle='rgba(255,214,0,0.55)';c.lineWidth=4;rr(60,60,S-120,S-120,26);c.stroke();
+      c.lineWidth=6;var t=54,m=60;
+      [[m,m,1,1],[S-m,m,-1,1],[m,S-m,1,-1],[S-m,S-m,-1,-1]].forEach(function(p){
+        c.beginPath();c.moveTo(p[0],p[1]+p[3]*t);c.lineTo(p[0],p[1]);c.lineTo(p[0]+p[2]*t,p[1]);c.stroke();});
+      // content
+      text('▲',300,150,'#ffd600','bold',0);
+      c.save();c.shadowColor='rgba(255,214,0,0.5)';c.shadowBlur=24;text('THE VOLCANO PROTOCOL',430,52,'#ffd600','bold',6);c.restore();
+      c.strokeStyle='rgba(255,214,0,0.25)';c.lineWidth=2;c.beginPath();c.moveTo(260,478);c.lineTo(820,478);c.stroke();
+      text('— CLEARANCE GRANTED —',548,30,'#ff7a3c','',5);
+      c.save();c.shadowColor='rgba(255,214,0,0.45)';c.shadowBlur=20;text('VAULT BREACHED',660,76,'#ffd600','bold',3);c.restore();
+      text('OPERATIVE',770,26,'#827717','',6);
+      text(serial,824,46,'#ffd600','bold',6);
+      text('CLEARED '+dateStr,884,24,'#827717','',3);
+      text('ISSUED BY THE OPERATOR',980,22,'#6b5f2a','',3);
+      text('hackatoa.com/protocol',1014,22,'#6b5f2a','',2);
     }
+    // draw once fonts are ready (avoids blank/wrong-font first paint)
+    if(document.fonts&&document.fonts.ready){document.fonts.ready.then(draw);}
+    draw();
+
+    document.getElementById('dl').addEventListener('click',function(){
+      var a=document.createElement('a');a.download='volcano-protocol-badge.png';a.href=cv.toDataURL('image/png');
+      document.body.appendChild(a);a.click();a.remove();
+    });
+    document.getElementById('cp').addEventListener('click',function(btn){
+      var b=this;
+      cv.toBlob(function(blob){
+        if(navigator.clipboard&&window.ClipboardItem){
+          navigator.clipboard.write([new ClipboardItem({'image/png':blob})]).then(function(){b.textContent='COPIED ✓';setTimeout(function(){b.textContent='COPY';},1600);}).catch(function(){b.textContent='PRESS ⬇';});
+        }else{b.textContent='USE ⬇';}
+      });
+    });
+
+    console.log('%c▲ VOLCANO PROTOCOL — COMPLETE', gold);
+    console.log('%cClearance granted, Operative '+serial+'. Badge issued. — The Operator', dim);
   })();
   </script>
 </body>
