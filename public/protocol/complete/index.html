@@ -98,11 +98,23 @@
       text('CLEARED '+dateStr,884,24,'#827717','',3);
       text('ISSUED BY THE OPERATOR',980,22,'#6b5f2a','',3);
       text('hackatoa.com/protocol',1014,22,'#6b5f2a','',2);
+      // QR back to the site (bottom-right, white tile so it scans reliably)
+      if(qrImg.complete && qrImg.naturalWidth){
+        var qs=112, ox=826, oy=826, tw=qs+18;
+        c.fillStyle='#f4f1e0'; rr(ox,oy,tw,tw,12); c.fill();
+        c.strokeStyle='rgba(255,214,0,0.6)'; c.lineWidth=3; rr(ox,oy,tw,tw,12); c.stroke();
+        c.drawImage(qrImg, ox+9, oy+9, qs, qs);
+        ls(3); c.fillStyle='#827717'; c.font='18px monospace'; c.textAlign='center';
+        c.fillText('SCAN', ox+tw/2, oy-14); ls(0);
+      }
     }
     // volcano artwork (same-origin → canvas stays exportable)
     var volImg=new Image();
     volImg.onload=draw; volImg.onerror=draw;
     volImg.src='/assets/volcano.png';
+    var qrImg=new Image();
+    qrImg.onload=draw; qrImg.onerror=draw;
+    qrImg.src='/assets/qr-site.png';
     // draw once fonts are ready (avoids blank/wrong-font first paint)
     if(document.fonts&&document.fonts.ready){document.fonts.ready.then(draw);}
     draw();
