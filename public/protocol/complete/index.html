@@ -101,7 +101,7 @@
       // QR back to the site (bottom-right, white tile so it scans reliably)
       if(qrImg.complete && qrImg.naturalWidth){
         var qs=112, ox=826, oy=826, tw=qs+18;
-        c.fillStyle='#f4f1e0'; rr(ox,oy,tw,tw,12); c.fill();
+        c.fillStyle='#0d0a00'; rr(ox,oy,tw,tw,12); c.fill();
         c.strokeStyle='rgba(255,214,0,0.6)'; c.lineWidth=3; rr(ox,oy,tw,tw,12); c.stroke();
         c.drawImage(qrImg, ox+9, oy+9, qs, qs);
         ls(3); c.fillStyle='#827717'; c.font='18px monospace'; c.textAlign='center';
