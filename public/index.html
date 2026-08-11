@@ -151,7 +151,7 @@ document.getElementById('vol').addEventListener('input',e=>{audio.volume=+e.targ
 /* ── Constants ── */
 const N=66000,LERP_DUR=2.8,CAM_SPRING_DUR=1.1,CURVE_R=15;
 const TEXT_POS=new THREE.Vector3(0,2.5,13),TEXT_TGT=new THREE.Vector3(0,2.5,0);
-const BASE_SIZE=0.22,HOVER_SIZE=0.52,SPREAD=0.28;
+const BASE_SIZE=0.22,HOVER_SIZE=0.34,SPREAD=0.0;
 const GROUND_Y=-1.22,FOREST_N=120000,MIN_TREE_DIST=1.6;
 const DIM_BACK=80,DIM_FRONT=60;
 const POOL_N=320,CRATER_Y=4.45,CRATER_R=1.1,POOL_RISE=0.72;
@@ -619,9 +619,9 @@ function onMove(e){
   const lines=sectionContent[currentSec],n=lines.length;
   let found=-1;
   for(let li=0;li<n;li++)if(Math.abs(my-lineScreenY(li,n))<14){found=li;break;}
-  hoveredLine=found;
   const hasCopy=found>=0&&lineCopy[currentSec]&&lineCopy[currentSec][found];
   const hasLink=found>=0&&lineLinks[currentSec]&&lineLinks[currentSec][found];
+  hoveredLine=(hasCopy||hasLink)?found:-1;
   canvas.style.cursor=(hasCopy||hasLink)?'pointer':'default';
 }
 function onUp(){
@@ -650,6 +650,7 @@ window.addEventListener('resize',()=>{W=wrap.clientWidth;H=wrap.clientHeight;cam
   s.onload=()=>{
     ctrl=new THREE.OrbitControls(camera,renderer.domElement);
     ctrl.enableDamping=true;ctrl.dampingFactor=0.08;
+    ctrl.minDistance=6;ctrl.maxDistance=24;
     ctrl.target.copy(HOME_TGT);
     ctrl.autoRotate=true;ctrl.autoRotateSpeed=0.035;
     ctrl.update();
