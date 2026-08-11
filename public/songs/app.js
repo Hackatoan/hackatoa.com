@@ -1,13 +1,13 @@
 const TRACKS = [
-    { title: 'The Iron Basilica', src: 'https://records.hackatoa.com/album/The%20Iron%20Basilica.mp3', album: 'Latest Release', yt: '9QqKQnFhOwU' },
-    { title: 'Found Me Here', src: 'https://records.hackatoa.com/album/Found%20Me%20Here.mp3', album: 'Latest Release', yt: 'HUxvN3Zb03Y' },
-    { title: 'One Body', src: 'https://records.hackatoa.com/album/One%20Body.mp3', album: 'Latest Release', yt: 'MQh8NSRXD7s' },
-    { title: 'Valley of Saints', src: 'https://records.hackatoa.com/album/Valley%20of%20Saints.mp3', album: 'Latest Release', yt: 'ORYwnjMLCUo' },
-    { title: 'Known', src: 'https://records.hackatoa.com/album/Known.mp3', album: 'Latest Release', yt: 'aveHBQoHZjA' },
-    { title: 'You Spoke to the Storm', src: 'https://records.hackatoa.com/album/You%20Spoke%20to%20the%20Storm.mp3', album: 'Latest Release', yt: 'h8-A_TWjhcs' },
-    { title: 'The Wound That Heals', src: 'https://records.hackatoa.com/album/The%20Wound%20That%20Heals.mp3', album: 'Latest Release', yt: 'kmfZIJzPMG8' },
-    { title: 'The Seventh Seal', src: 'https://records.hackatoa.com/album/The%20Seventh%20Seal.mp3', album: 'Latest Release', yt: 'wU_kXyTqj54' },
-    { title: 'The Shepherd King', src: 'https://records.hackatoa.com/album/The%20Shepherd%20King.mp3', album: 'Latest Release', yt: 'xx3Rio6unWU' },
+    { title: 'The Iron Basilica', src: 'https://records.hackatoa.com/album/The%20Iron%20Basilica.mp3', album: 'The Iron Basilica', yt: '9QqKQnFhOwU' },
+    { title: 'Found Me Here', src: 'https://records.hackatoa.com/album/Found%20Me%20Here.mp3', album: 'The Iron Basilica', yt: 'HUxvN3Zb03Y' },
+    { title: 'One Body', src: 'https://records.hackatoa.com/album/One%20Body.mp3', album: 'The Iron Basilica', yt: 'MQh8NSRXD7s' },
+    { title: 'Valley of Saints', src: 'https://records.hackatoa.com/album/Valley%20of%20Saints.mp3', album: 'The Iron Basilica', yt: 'ORYwnjMLCUo' },
+    { title: 'Known', src: 'https://records.hackatoa.com/album/Known.mp3', album: 'The Iron Basilica', yt: 'aveHBQoHZjA' },
+    { title: 'You Spoke to the Storm', src: 'https://records.hackatoa.com/album/You%20Spoke%20to%20the%20Storm.mp3', album: 'The Iron Basilica', yt: 'h8-A_TWjhcs' },
+    { title: 'The Wound That Heals', src: 'https://records.hackatoa.com/album/The%20Wound%20That%20Heals.mp3', album: 'The Iron Basilica', yt: 'kmfZIJzPMG8' },
+    { title: 'The Seventh Seal', src: 'https://records.hackatoa.com/album/The%20Seventh%20Seal.mp3', album: 'The Iron Basilica', yt: 'wU_kXyTqj54' },
+    { title: 'The Shepherd King', src: 'https://records.hackatoa.com/album/The%20Shepherd%20King.mp3', album: 'The Iron Basilica', yt: 'xx3Rio6unWU' },
     { title: 'Comic Sans Heart', src: 'https://records.hackatoa.com/wayback/Comic%20Sans%20Heart.mp3', album: 'Wayback Machine', yt: '-Cucps3bLg0' },
     { title: 'Default Background', src: 'https://records.hackatoa.com/wayback/Default%20Background.mp3', album: 'Wayback Machine', yt: 'gYh3ePuZtt8' },
     { title: 'Equalizer Bars', src: 'https://records.hackatoa.com/wayback/Equalizer%20Bars.mp3', album: 'Wayback Machine', yt: '2tEC0uVieJQ' },
@@ -69,7 +69,7 @@ function updateUI() {
 
     document.querySelectorAll('.track-row').forEach((row, i) => {
         row.classList.remove('is-playing', 'is-paused');
-        const btn = row.querySelector('.track-btn');
+        const btn = row.querySelector('.play-btn');
         if (i === currentIdx) {
             row.classList.add(audio.paused ? 'is-paused' : 'is-playing');
             if (btn) btn.textContent = audio.paused ? '▶ Resume' : '⏸ Pause';
@@ -122,10 +122,10 @@ albums.forEach((album, albumIdx) => {
             <div class="track-num">${trackNum + 1}</div>
             <div class="track-eq"><span></span><span></span><span></span></div>
             <div class="track-title">${track.title}</div>
-            <a class="track-btn yt-btn" href="https://youtu.be/${track.yt}" target="_blank" rel="noopener" aria-label="Watch ${track.title} on YouTube" onclick="event.stopPropagation()">YouTube ↗</a>
-            <button class="track-btn">▶ Play</button>
+            <a class="track-btn yt-btn" href="https://youtu.be/${track.yt}" target="_blank" rel="noopener" aria-label="Stream ${track.title} on YouTube" onclick="event.stopPropagation()">Stream ↗</a>
+            <button class="track-btn play-btn">▶ Play</button>
         `;
-        const btn = row.querySelector('.track-btn');
+        const btn = row.querySelector('.play-btn');
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (i === currentIdx) {
