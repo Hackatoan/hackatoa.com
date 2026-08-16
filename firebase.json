@@ -50,6 +50,10 @@
             "value": "strict-origin-when-cross-origin"
           },
           {
+            "key": "Permissions-Policy",
+            "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), midi=(), interest-cohort=()"
+          },
+          {
             "key": "Content-Security-Policy",
             "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://alexgama11.github.io https://www.youtube.com https://s.ytimg.com https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline' https://alexgama11.github.io; img-src 'self' https://api.qrserver.com https://www.buymeacoffee.com data:; media-src 'self' https://records.hackatoa.com; frame-src https://player.twitch.tv https://www.youtube.com; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; upgrade-insecure-requests;"
           }

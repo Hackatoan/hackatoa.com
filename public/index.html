@@ -26,19 +26,36 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Preston Harris",
-    "alternateName": "Hackatoa",
-    "url": "https://hackatoa.com",
-    "image": "https://hackatoa.com/assets/me-real.png",
-    "jobTitle": "Developer & Homelab Engineer",
-    "sameAs": [
-      "https://instagram.com/hackatoa",
-      "https://tiktok.com/@hackatoa",
-      "https://youtube.com/@Hackatoa",
-      "https://x.com/JHackatoa",
-      "https://github.com/Hackatoan",
-      "https://linkedin.com/in/preston-h-554984227"
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://hackatoa.com/#person",
+        "name": "Preston Harris",
+        "alternateName": "Hackatoa",
+        "url": "https://hackatoa.com",
+        "image": "https://hackatoa.com/assets/me-real.png",
+        "jobTitle": "Developer & Homelab Engineer",
+        "sameAs": [
+          "https://instagram.com/hackatoa",
+          "https://tiktok.com/@hackatoa",
+          "https://youtube.com/@Hackatoa",
+          "https://x.com/JHackatoa",
+          "https://github.com/Hackatoan",
+          "https://linkedin.com/in/preston-h-554984227"
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://hackatoa.com/#webpage",
+        "url": "https://hackatoa.com/",
+        "name": "Hackatoa — Preston",
+        "description": "Preston (Hackatoa) — developer, homelab engineer, AI enthusiast. Building self-hosted infrastructure, browser games, Discord bots, and open-source tools.",
+        "datePublished": "2024-06-10",
+        "dateModified": "2026-08-16",
+        "inLanguage": "en",
+        "author": { "@id": "https://hackatoa.com/#person" },
+        "publisher": { "@id": "https://hackatoa.com/#person" }
+      }
     ]
   }
   </script>
@@ -64,10 +81,13 @@
   </style>
 </head>
 <body>
-<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Hackatoa — Preston: developer, homelab engineer, and AI enthusiast</h1>
+<header>
+<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;color:#e8e0c0">Hackatoa — Preston: developer, homelab engineer, and AI enthusiast</h1>
+</header>
+<main>
 <!-- The sections below are also rendered as an interactive WebGL particle scene (canvas text isn't crawlable) —
      this block mirrors that content as real, indexable HTML so search engines can read and follow it. -->
-<div style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">
+<div style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;color:#e8e0c0">
   <p>Preston, aka Hackatoa — developer and homelab engineer building self-hosted infrastructure, browser games, Discord bots, and open-source tools. <a href="/resume">Resume</a> · <a href="https://github.com/Hackatoan">github.com/Hackatoan</a></p>
   <h2>Discord Bots</h2>
   <ul>
@@ -147,6 +167,10 @@
 
   <canvas id="c"></canvas>
 </div>
+</main>
+<footer style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;color:#e8e0c0">
+  <p>&copy; 2024–2026 Preston Harris (Hackatoa). <a href="/privacy">Privacy</a> · <a href="/cookies">Cookies</a> · Last updated <time datetime="2026-08-16">August 2026</time>.</p>
+</footer>
 
 <script src="/assets/vendor/three.min.js"></script>
 <script>
