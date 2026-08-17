@@ -588,7 +588,6 @@ function initScene(){
   })();
 
   let fpsFrames=0,fpsLast=performance.now(),fpsChecked=false,last=performance.now();
-  let renderCheckDone=false;const renderCheckStart=performance.now();
   function animate(){
     requestAnimationFrame(animate);
     const now=performance.now(),dt=(now-last)/1000;last=now;
@@ -613,28 +612,6 @@ function initScene(){
     }
     updateHoverSizes();
     renderer.render(scene,camera);
-    // Some browser/GPU/compositor combos (seen: Firefox + NVIDIA + Wayland, a DMA-BUF
-    // WebGL display bug) create a working WebGL context and render without error, but
-    // nothing actually reaches the screen — a black canvas with no console errors. The
-    // fallback above only checks *can a context be created*, not *is anything visible*,
-    // so it never catches this. Sample a few points straight from the drawing buffer
-    // ~0.8s in; if every sample is still just the clear color, assume nothing is
-    // rendering and fall back to the plain link page.
-    if(!renderCheckDone&&now-renderCheckStart>800){
-      renderCheckDone=true;
-      try{
-        const gl=renderer.getContext();
-        const cw=renderer.domElement.width,ch=renderer.domElement.height;
-        const samples=[[.5,.5],[.25,.25],[.75,.25],[.25,.75],[.75,.75],[.5,.2],[.5,.8]];
-        const px=new Uint8Array(4);
-        let hasContent=false;
-        for(const[fx,fy]of samples){
-          gl.readPixels(Math.floor(cw*fx),Math.floor(ch*(1-fy)),1,1,gl.RGBA,gl.UNSIGNED_BYTE,px);
-          if(Math.abs(px[0]-4)>12||Math.abs(px[1]-6)>12||Math.abs(px[2]-2)>12){hasContent=true;break;}
-        }
-        if(!hasContent)location.replace('/urls/');
-      }catch(e){}
-    }
   }
   animate();
 
