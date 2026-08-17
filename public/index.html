@@ -3,6 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+  // /urls/ is the deliberate mobile/lite version of the site — narrow viewports get
+  // sent there instead of loading the full WebGL scene. Runs before anything heavy
+  // is requested. ?full=1 bypasses it (used by the "back to full site" links on /urls/).
+  (function(){
+    if(/(?:^|[?&])full=1(?:&|$)/.test(location.search))return;
+    if(window.innerWidth<=600)location.replace('/urls/');
+  })();
+  </script>
   <title>Hackatoa — Preston Harris | Developer &amp; Homelab Engineer</title>
   <meta name="description" content="Preston (Hackatoa) — developer, homelab engineer, AI enthusiast. Building self-hosted infrastructure, browser games, Discord bots, and open-source tools." />
   <meta name="author" content="Preston" />
