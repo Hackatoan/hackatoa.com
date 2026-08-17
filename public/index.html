@@ -358,16 +358,35 @@ function makeForestMat(r,g,b,texIdx){
 }
 function makePoolMat(col,tex){return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex},uColor:{value:col}},vertexShader:VERT_POOL,fragmentShader:FRAG_POOL,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
 
+/* ── Chunked scheduling ──
+   Particle generation (~186k points total) used to run as one long synchronous
+   block, which blocked the main thread for real (confirmed: ~13.6s TBT on
+   desktop once the canvas was actually sized correctly and doing real work).
+   scheduleChunk() spreads any of these builds across short (<10ms) time slices
+   with yields in between, so no single task blocks input/paint — same final
+   particle counts and positions, just assembled over several frames instead
+   of one. */
+function scheduleChunk(fn){
+  if(window.requestIdleCallback)requestIdleCallback(fn,{timeout:50});
+  else setTimeout(fn,0);
+}
+
 /* ── Volcano geometry ── */
 function volR(y){return(1-y*.55)*2.4+(y<.12?(.12-y)*4.5:0);}
 function bump(th,y){return(Math.sin(th*3.7+y*7)*Math.cos(th*2.1+y*4))*.18;}
-function buildVolcano(count){
+function buildVolcanoChunked(count,onDone){
   const pos=new Float32Array(count*3);
-  for(let i=0;i<count;i++){
-    if(Math.random()<0.25){const y=Math.random();const r=volR(y)*Math.random()**.5;const th=Math.random()*Math.PI*2;pos[i*3]=r*Math.cos(th);pos[i*3+1]=y*5.8-1.2;pos[i*3+2]=r*Math.sin(th);}
-    else{const y=Math.random();const th=Math.random()*Math.PI*2;const r=volR(y)*(1+bump(th,y));pos[i*3]=r*Math.cos(th);pos[i*3+1]=y*5.8-1.2;pos[i*3+2]=r*Math.sin(th);}
+  let i=0;
+  function step(){
+    const start=performance.now();
+    while(i<count&&performance.now()-start<8){
+      if(Math.random()<0.25){const y=Math.random();const r=volR(y)*Math.random()**.5;const th=Math.random()*Math.PI*2;pos[i*3]=r*Math.cos(th);pos[i*3+1]=y*5.8-1.2;pos[i*3+2]=r*Math.sin(th);}
+      else{const y=Math.random();const th=Math.random()*Math.PI*2;const r=volR(y)*(1+bump(th,y));pos[i*3]=r*Math.cos(th);pos[i*3+1]=y*5.8-1.2;pos[i*3+2]=r*Math.sin(th);}
+      i++;
+    }
+    if(i<count)scheduleChunk(step);else onDone(pos);
   }
-  return pos;
+  step();
 }
 
 /* ── Forest ── */
@@ -391,7 +410,7 @@ function treeBrightness(px,pz){
   const dimF=!behindText?Math.max(0,(DIM_FRONT-Math.abs(angToText))/DIM_FRONT)*0.3:0;
   return Math.max(0.06,distFar*0.7+0.3-dimB*0.65-dimF);
 }
-function buildForestCloud(total){
+function buildForestCloudChunked(total,onDone){
   const trees=placeTrees();
   const groundN=Math.floor(total*0.08);
   const treeN=total-groundN;
@@ -399,31 +418,51 @@ function buildForestCloud(total){
   const groups=[[],[],[],[]];
   const groupBright=[[],[],[],[]];
   function add(g,px,py,pz){groups[g].push(px,py,pz);groupBright[g].push(treeBrightness(px,pz));}
-  for(let i=0;i<groundN;i++){
-    const a=Math.random()*Math.PI*2,r=3.5+Math.pow(Math.random(),0.4)*22;
-    add(i%4,Math.cos(a)*r,GROUND_Y+Math.random()*0.08,Math.sin(a)*r);
-  }
-  trees.forEach((tr,ti)=>{
-    const [tx,tz,tH]=tr,tBaseR=tH*0.38;
-    const count=ti===trees.length-1?Math.max(0,treeN-ti*perTree):perTree;
-    const grp=ti%4;
-    for(let p=0;p<count;p++){
-      let px,py,pz;
-      if(Math.random()<0.07){
-        const ty=Math.random()*tH*0.3,ta=Math.random()*Math.PI*2,tr2=0.035+Math.random()*0.03;
-        px=tx+Math.cos(ta)*tr2;py=GROUND_Y+ty;pz=tz+Math.sin(ta)*tr2;
-      } else {
-        const layer=Math.floor(Math.random()*3),yOff=layer*tH*0.28;
-        const y=yOff+Math.random()*(tH-yOff);
-        const maxR=tBaseR*(1-(y/tH)*0.88);
-        const pr=Math.random()<0.75?maxR*(0.85+Math.random()*0.15):maxR*Math.random();
-        const ta=Math.random()*Math.PI*2;
-        px=tx+Math.cos(ta)*pr;py=GROUND_Y+y;pz=tz+Math.sin(ta)*pr;
-      }
-      add(grp,px,py,pz);
+
+  let gi=0;
+  function groundStep(){
+    const start=performance.now();
+    while(gi<groundN&&performance.now()-start<8){
+      const a=Math.random()*Math.PI*2,r=3.5+Math.pow(Math.random(),0.4)*22;
+      add(gi%4,Math.cos(a)*r,GROUND_Y+Math.random()*0.08,Math.sin(a)*r);
+      gi++;
     }
-  });
-  return groups.map((g,i)=>({pos:new Float32Array(g),bright:new Float32Array(groupBright[i])}));
+    if(gi<groundN)scheduleChunk(groundStep);else treeStep();
+  }
+
+  let ti=0;
+  function treeStep(){
+    const start=performance.now();
+    while(ti<trees.length&&performance.now()-start<8){
+      const tr=trees[ti];
+      const [tx,tz,tH]=tr,tBaseR=tH*0.38;
+      const count=ti===trees.length-1?Math.max(0,treeN-ti*perTree):perTree;
+      const grp=ti%4;
+      for(let p=0;p<count;p++){
+        let px,py,pz;
+        if(Math.random()<0.07){
+          const ty=Math.random()*tH*0.3,ta=Math.random()*Math.PI*2,tr2=0.035+Math.random()*0.03;
+          px=tx+Math.cos(ta)*tr2;py=GROUND_Y+ty;pz=tz+Math.sin(ta)*tr2;
+        } else {
+          const layer=Math.floor(Math.random()*3),yOff=layer*tH*0.28;
+          const y=yOff+Math.random()*(tH-yOff);
+          const maxR=tBaseR*(1-(y/tH)*0.88);
+          const pr=Math.random()<0.75?maxR*(0.85+Math.random()*0.15):maxR*Math.random();
+          const ta=Math.random()*Math.PI*2;
+          px=tx+Math.cos(ta)*pr;py=GROUND_Y+y;pz=tz+Math.sin(ta)*pr;
+        }
+        add(grp,px,py,pz);
+      }
+      ti++;
+    }
+    if(ti<trees.length)scheduleChunk(treeStep);else finish();
+  }
+
+  function finish(){
+    onDone(groups.map((g,i)=>({pos:new Float32Array(g),bright:new Float32Array(groupBright[i])})));
+  }
+
+  groundStep();
 }
 
 /* ── Pool (crater bubbles) ── */
@@ -549,83 +588,96 @@ let forestMats=[],textModeVal=0,textModeTarget=0;
 let photoMesh=null,photoMat=null,aboutImgVal=0,aboutImgTarget=0;
 let ctrl,uTime=0;
 
-/* ── Init ── */
+/* ── Init ──
+   Forest + volcano generation are chunked (see scheduleChunk above); the rest
+   of scene setup only runs once both are fully built, in finishInit(). */
 function initScene(){
-  const groups=buildForestCloud(FOREST_N);
-  groups.forEach((g,i)=>{
-    const tc=TREE_COLORS[i];
-    const texIdx=i===3?1:0;
-    const g2=new THREE.BufferGeometry();
-    g2.setAttribute('position',new THREE.BufferAttribute(g.pos,3));
-    g2.setAttribute('aBright',new THREE.BufferAttribute(g.bright,1));
-    const mat=makeForestMat(tc[0],tc[1],tc[2],texIdx);
-    forestMats.push(mat);
-    scene.add(new THREE.Points(g2,mat));
+  buildForestCloudChunked(FOREST_N,function(groups){
+    groups.forEach((g,i)=>{
+      const tc=TREE_COLORS[i];
+      const texIdx=i===3?1:0;
+      const g2=new THREE.BufferGeometry();
+      g2.setAttribute('position',new THREE.BufferAttribute(g.pos,3));
+      g2.setAttribute('aBright',new THREE.BufferAttribute(g.bright,1));
+      const mat=makeForestMat(tc[0],tc[1],tc[2],texIdx);
+      forestMats.push(mat);
+      scene.add(new THREE.Points(g2,mat));
+    });
+
+    const hv=N/2;
+    buildVolcanoChunked(hv,function(vp0){
+      volcanoPos0=vp0;
+      buildVolcanoChunked(hv,function(vp1){
+        volcanoPos1=vp1;
+        finishInit();
+      });
+    });
   });
 
-  const hv=N/2;
-  volcanoPos0=buildVolcano(hv);volcanoPos1=buildVolcano(hv);
-  sz0=new Float32Array(hv).fill(BASE_SIZE);sz1=new Float32Array(hv).fill(BASE_SIZE);
-  sp0=new Float32Array(hv*2).fill(0);sp1=new Float32Array(hv*2).fill(0);
-  spreadTarget0=new Float32Array(hv*2);spreadTarget1=new Float32Array(hv*2);
+  function finishInit(){
+    const hv=N/2;
+    sz0=new Float32Array(hv).fill(BASE_SIZE);sz1=new Float32Array(hv).fill(BASE_SIZE);
+    sp0=new Float32Array(hv*2).fill(0);sp1=new Float32Array(hv*2).fill(0);
+    spreadTarget0=new Float32Array(hv*2);spreadTarget1=new Float32Array(hv*2);
 
-  geo0=new THREE.BufferGeometry();
-  geo0.setAttribute('position',new THREE.BufferAttribute(volcanoPos0.slice(),3));
-  geo0.setAttribute('aSize',new THREE.BufferAttribute(sz0,1));
-  geo0.setAttribute('aSpread',new THREE.BufferAttribute(sp0,2));
-  geo1=new THREE.BufferGeometry();
-  geo1.setAttribute('position',new THREE.BufferAttribute(volcanoPos1.slice(),3));
-  geo1.setAttribute('aSize',new THREE.BufferAttribute(sz1,1));
-  geo1.setAttribute('aSpread',new THREE.BufferAttribute(sp1,2));
+    geo0=new THREE.BufferGeometry();
+    geo0.setAttribute('position',new THREE.BufferAttribute(volcanoPos0.slice(),3));
+    geo0.setAttribute('aSize',new THREE.BufferAttribute(sz0,1));
+    geo0.setAttribute('aSpread',new THREE.BufferAttribute(sp0,2));
+    geo1=new THREE.BufferGeometry();
+    geo1.setAttribute('position',new THREE.BufferAttribute(volcanoPos1.slice(),3));
+    geo1.setAttribute('aSize',new THREE.BufferAttribute(sz1,1));
+    geo1.setAttribute('aSpread',new THREE.BufferAttribute(sp1,2));
 
-  mat0=makeMat(TEX0);mat1=makeMat(TEX1);
-  pts0=new THREE.Points(geo0,mat0);pts0.renderOrder=1;
-  pts1=new THREE.Points(geo1,mat1);pts1.renderOrder=1;
-  scene.add(pts0);scene.add(pts1);
+    mat0=makeMat(TEX0);mat1=makeMat(TEX1);
+    pts0=new THREE.Points(geo0,mat0);pts0.renderOrder=1;
+    pts1=new THREE.Points(geo1,mat1);pts1.renderOrder=1;
+    scene.add(pts0);scene.add(pts1);
 
-  buildPool();
+    buildPool();
 
-  // About photo — a textured plane placed in 3D, inside the particle frame
-  (function(){
-    const tex=new THREE.TextureLoader().load('/assets/me-real.png');
-    if(tex.colorSpace!==undefined&&THREE.SRGBColorSpace)tex.colorSpace=THREE.SRGBColorSpace;
-    tex.minFilter=THREE.LinearFilter;
-    photoMat=new THREE.MeshBasicMaterial({map:tex,transparent:true,opacity:0,depthTest:false,depthWrite:false});
-    photoMesh=new THREE.Mesh(new THREE.PlaneGeometry(4.6,4.6),photoMat);
-    photoMesh.position.set(0,2.2,0.4);
-    photoMesh.renderOrder=30;photoMesh.visible=false;
-    scene.add(photoMesh);
-  })();
+    // About photo — a textured plane placed in 3D, inside the particle frame
+    (function(){
+      const tex=new THREE.TextureLoader().load('/assets/me-real.png');
+      if(tex.colorSpace!==undefined&&THREE.SRGBColorSpace)tex.colorSpace=THREE.SRGBColorSpace;
+      tex.minFilter=THREE.LinearFilter;
+      photoMat=new THREE.MeshBasicMaterial({map:tex,transparent:true,opacity:0,depthTest:false,depthWrite:false});
+      photoMesh=new THREE.Mesh(new THREE.PlaneGeometry(4.6,4.6),photoMat);
+      photoMesh.position.set(0,2.2,0.4);
+      photoMesh.renderOrder=30;photoMesh.visible=false;
+      scene.add(photoMesh);
+    })();
 
-  let fpsFrames=0,fpsLast=performance.now(),fpsChecked=false,last=performance.now();
-  function animate(){
-    requestAnimationFrame(animate);
-    const now=performance.now(),dt=(now-last)/1000;last=now;
-    if(!fpsChecked){fpsFrames++;if(now-fpsLast>5000){fpsChecked=true;adapt(fpsFrames/5);}}
-    uTime+=dt;
-    forestMats.forEach(m=>{m.uniforms.uTime.value=uTime;});
-    if(ctrl)ctrl.update();
-    const inVolcano=mode==='volcano';
-    if(poolPts0)poolPts0.visible=inVolcano;
-    if(poolPts1)poolPts1.visible=inVolcano;
-    if(inVolcano)stepPool(dt);
-    textModeVal+=(textModeTarget-textModeVal)*0.055;
-    forestMats.forEach(m=>m.uniforms.uTextMode.value=textModeVal);
-    if(photoMat){aboutImgVal+=(aboutImgTarget-aboutImgVal)*0.09;photoMat.opacity=aboutImgVal;if(photoMesh)photoMesh.visible=aboutImgVal>0.01;}
-    if(lerpStart!==null){
-      const t=Math.min((now-lerpStart)/1000/LERP_DUR,1),e=easeIO(t);
-      const p0=geo0.attributes.position.array,p1=geo1.attributes.position.array;
-      for(let i=0;i<p0.length;i++)p0[i]=lerpFrom0[i]+(lerpTo0[i]-lerpFrom0[i])*e;
-      for(let i=0;i<p1.length;i++)p1[i]=lerpFrom1[i]+(lerpTo1[i]-lerpFrom1[i])*e;
-      geo0.attributes.position.needsUpdate=true;geo1.attributes.position.needsUpdate=true;
-      if(t>=1)lerpStart=null;
+    let fpsFrames=0,fpsLast=performance.now(),fpsChecked=false,last=performance.now();
+    function animate(){
+      requestAnimationFrame(animate);
+      const now=performance.now(),dt=(now-last)/1000;last=now;
+      if(!fpsChecked){fpsFrames++;if(now-fpsLast>5000){fpsChecked=true;adapt(fpsFrames/5);}}
+      uTime+=dt;
+      forestMats.forEach(m=>{m.uniforms.uTime.value=uTime;});
+      if(ctrl)ctrl.update();
+      const inVolcano=mode==='volcano';
+      if(poolPts0)poolPts0.visible=inVolcano;
+      if(poolPts1)poolPts1.visible=inVolcano;
+      if(inVolcano)stepPool(dt);
+      textModeVal+=(textModeTarget-textModeVal)*0.055;
+      forestMats.forEach(m=>m.uniforms.uTextMode.value=textModeVal);
+      if(photoMat){aboutImgVal+=(aboutImgTarget-aboutImgVal)*0.09;photoMat.opacity=aboutImgVal;if(photoMesh)photoMesh.visible=aboutImgVal>0.01;}
+      if(lerpStart!==null){
+        const t=Math.min((now-lerpStart)/1000/LERP_DUR,1),e=easeIO(t);
+        const p0=geo0.attributes.position.array,p1=geo1.attributes.position.array;
+        for(let i=0;i<p0.length;i++)p0[i]=lerpFrom0[i]+(lerpTo0[i]-lerpFrom0[i])*e;
+        for(let i=0;i<p1.length;i++)p1[i]=lerpFrom1[i]+(lerpTo1[i]-lerpFrom1[i])*e;
+        geo0.attributes.position.needsUpdate=true;geo1.attributes.position.needsUpdate=true;
+        if(t>=1)lerpStart=null;
+      }
+      updateHoverSizes();
+      renderer.render(scene,camera);
     }
-    updateHoverSizes();
-    renderer.render(scene,camera);
-  }
-  animate();
+    animate();
 
-  tryAutoplay();
+    tryAutoplay();
+  }
 }
 
 function updateHoverSizes(){
@@ -679,6 +731,7 @@ function updateNav(sec){
 }
 
 function switchSection(sec){
+  if(!geo0)return; // nav is clickable before chunked particle generation finishes; no-op until ready
   if(sec===mode&&sec!=='volcano')return;
   hoveredLine=-1;
   const _ac=document.getElementById('about-card');
