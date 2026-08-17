@@ -2,7 +2,7 @@
 
 # hackatoa.com
 
-My personal website — portfolio, homelab notes, mycology logs, and a live ambient music player. Built with vanilla HTML/CSS/JS, hosted on Firebase with Cloudflare in front.
+My personal website — portfolio, homelab notes, and a live ambient music player. Built with vanilla HTML/CSS/JS, hosted on Firebase with Cloudflare in front.
 
 **Live:** [hackatoa.com](https://hackatoa.com)
 
@@ -10,7 +10,6 @@ My personal website — portfolio, homelab notes, mycology logs, and a live ambi
 
 - Portfolio and project showcase with live GitHub feed
 - Cybersecurity and homelab research notes
-- Mycology section with photo carousel and YouTube logs
 - Ambient music player with custom playlist
 - Twitch stream embed
 - Contact form (mailto)

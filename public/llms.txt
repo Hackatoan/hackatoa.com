@@ -8,12 +8,12 @@
 - [Songs](https://hackatoa.com/songs/): music catalog (streamable + YouTube links)
 - [Resume](https://hackatoa.com/resume/): experience, skills, projects
 - [Cover Letter](https://hackatoa.com/cover-letter/)
-- [Mycology Log](https://hackatoa.com/myco/)
 - [Links](https://hackatoa.com/urls/): all profiles and projects
 
 ## Projects
 - Infinisweeper — infinite minesweeper: https://infinisweeper.hackatoa.com
 - Clip Forge — browser video editor: https://clip-forge.hackatoa.com
+- Mosaic — photomosaic generator: https://mosaic.hackatoa.com
 - Sys32 Roulette: https://sys32.hackatoa.com
 - Games hub: https://games.hackatoa.com
 
