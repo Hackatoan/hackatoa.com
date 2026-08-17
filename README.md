@@ -2,7 +2,7 @@
 
 # hackatoa.com
 
-My personal website — portfolio, homelab notes, and a live ambient music player. Built with vanilla HTML/CSS/JS, hosted on Firebase with Cloudflare in front.
+My personal website — portfolio, homelab notes, and a live ambient music player. Built with vanilla HTML/CSS/JS, containerized and self-hosted on my homelab (GHCR + Watchtower) behind NPMplus and Cloudflare.
 
 **Live:** [hackatoa.com](https://hackatoa.com)
 
@@ -21,7 +21,7 @@ My personal website — portfolio, homelab notes, and a live ambient music playe
 |---|---|
 | Frontend | HTML5, CSS3, Vanilla JS |
 | Music | YouTube IFrame API |
-| Hosting | Firebase Hosting |
+| Hosting | Docker · GHCR + Watchtower (self-hosted homelab) |
 | DNS / CDN | Cloudflare |
 
 ## Dev
