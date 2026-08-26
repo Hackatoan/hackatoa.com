@@ -1,0 +1,10 @@
+{
+  "origin": "https://hackatoa.com",
+  "locales": ["en", "es", "pt-br", "fr", "de", "vi", "th"],
+  "rootFile": "index.html",
+  "pages": [
+    { "file": "index.html", "urlPath": "/" }
+  ],
+  "internalLinks": { "/": "/" },
+  "keepTerms": ["Hackatoa", "Preston Harris", "Jacob Harris", "WikiRoll", "Balthazar", "Lamar", "Infinisweeper", "Battleship", "Sys32 Roulette", "System 32 Roulette", "Clip Forge", "Nucleus", "Mosaic", "Discord", "Instagram", "GitHub", "Orbital Outpost", "Homelab", "Proxmox", "Docker", "1v1 Minesweeper", "Tic-Tac-Toe", "Cards Against Hackatoa"]
+}
