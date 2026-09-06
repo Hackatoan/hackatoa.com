@@ -206,7 +206,7 @@
     <li><a href="https://twitch.tv/hackatoa">Twitch</a></li>
     <li><a href="https://instagram.com/hackatoa">Instagram</a></li>
     <li><a href="https://tiktok.com/@hackatoa">TikTok</a></li>
-    <li><a href="https://discord.gg/7eh3q2u8V">Discord — Orbital Outpost</a></li>
+    <li><a href="https://discord.gg/nrQFdACWbh">Discord — Orbital Outpost</a></li>
   </ul>
   <p>See the full link list at <a href="/urls">hackatoa.com/urls</a>.</p>
   <h2>FAQ</h2>
@@ -217,7 +217,7 @@
   <h3>Are Hackatoa's projects open source?</h3>
   <p>Most projects are open source and available on GitHub at <a href="https://github.com/Hackatoan">github.com/Hackatoan</a>.</p>
   <h3>How can I contact Hackatoa?</h3>
-  <p>Reach out by email at <a href="mailto:preston@hackatoa.com">preston@hackatoa.com</a>, on X/Twitter <a href="https://x.com/JHackatoa">@JHackatoa</a>, or through the <a href="https://discord.gg/7eh3q2u8V">Orbital Outpost Discord server</a>.</p>
+  <p>Reach out by email at <a href="mailto:preston@hackatoa.com">preston@hackatoa.com</a>, on X/Twitter <a href="https://x.com/JHackatoa">@JHackatoa</a>, or through the <a href="https://discord.gg/nrQFdACWbh">Orbital Outpost Discord server</a>.</p>
 </div>
 <div id="wrap">
 
@@ -331,7 +331,15 @@ const TEXT_POS=new THREE.Vector3(0,2.5,13),TEXT_TGT=new THREE.Vector3(0,2.5,0);
 const BASE_SIZE=0.22,HOVER_SIZE=0.34,SPREAD=0.0;
 const GROUND_Y=-1.22,FOREST_N=120000,MIN_TREE_DIST=1.6;
 const DIM_BACK=80,DIM_FRONT=60;
-const POOL_N=320,CRATER_Y=4.45,CRATER_R=1.1,POOL_RISE=0.72;
+/* Volcano profile (world units; base stays grounded, VS scales it about the base).
+   Concave flanks (V_CONCAVE>1 = steep summit, flared skirt) rising to a narrow
+   summit rim (V_RIM_R), then an inner crater wall dropping V_CRATER_DEPTH into a
+   bowl (V_FLOOR_R). Tune these to reshape the mountain. */
+const VS=1.3;
+const V_BASE_Y=-1.2, V_H=5.6, V_BASE_R=5.20, V_RIM_R=0.45, V_CRATER_DEPTH=0.50, V_FLOOR_R=0.13, V_CONCAVE=2.2, V_LIN=0.80;
+const V_RIM_Y=V_BASE_Y+V_H, V_FLOOR_Y=V_RIM_Y-V_CRATER_DEPTH;
+const POOL_N=650;
+const CRATER_Y=V_BASE_Y+((V_FLOOR_Y+0.06)-V_BASE_Y)*VS, CRATER_R=0.28*VS, POOL_RISE=0.50*VS;
 const SEC_URLS={volcano:'/',about:'/about',bots:'/projects/bots',games:'/projects/games',tools:'/projects/tools',apps:'/projects/apps',connect:'/connect',support:'/support'};
 const HOME_POS=new THREE.Vector3(0,5,16),HOME_TGT=new THREE.Vector3(0,1,0);
 const BTC_ADDR='3L2oWuxjqZ8cbqgVFNTJzkkPKe2zKeZMif';
@@ -355,7 +363,7 @@ const lineLinks={
   games:['https://games.hackatoa.com',null,'https://infinisweeper.hackatoa.com',null,null,'https://battleship.hackatoa.com',null,null,'https://cah.hackatoa.com',null,null,'https://sys32.hackatoa.com',null],
   tools:['https://clip-forge.hackatoa.com',null,null,null,null,'https://mosaic.hackatoa.com',null,null,null],
   apps:['https://nucleus.hackatoa.com',null,null,null,null],
-  connect:['mailto:preston@hackatoa.com','https://github.com/Hackatoan','https://x.com/JHackatoa','https://youtube.com/@Hackatoa','https://twitch.tv/hackatoa','https://instagram.com/hackatoa','https://tiktok.com/@hackatoa','https://discord.gg/7eh3q2u8V'],
+  connect:['mailto:preston@hackatoa.com','https://github.com/Hackatoan','https://x.com/JHackatoa','https://youtube.com/@Hackatoa','https://twitch.tv/hackatoa','https://instagram.com/hackatoa','https://tiktok.com/@hackatoa','https://discord.gg/nrQFdACWbh'],
   support:['https://buymeacoffee.com/hackatoa',null,null,null,null,null,null,null,null,null],
 };
 
@@ -385,8 +393,13 @@ const VERT_V=`attribute float aSize;attribute vec2 aSpread;void main(){vec3 p=po
 const FRAG_V=`uniform sampler2D uTex;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;gl_FragColor=c;}`;
 const VERT_F=`attribute float aBright;uniform float uTextMode;uniform float uTime;varying float vAlpha;void main(){float h=max(0.0,position.y-(-1.22));float phase=position.x*0.37+position.z*0.21;float wx=sin(uTime*0.7+phase)*h*0.055+sin(uTime*1.3+phase*1.7)*h*0.022;float wz=cos(uTime*0.5+phase*0.9)*h*0.018;vec3 p=position+vec3(wx,0.0,wz);vec4 mv=modelViewMatrix*vec4(p,1.0);gl_PointSize=0.14*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vAlpha=mix(1.0,aBright,uTextMode);}`;
 const FRAG_F=`uniform sampler2D uTex;uniform vec3 uColor;varying float vAlpha;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;gl_FragColor=vec4(uColor*vAlpha,c.a*0.55*vAlpha);}`;
-const VERT_POOL=`attribute float aAlpha;varying float vA;void main(){vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=0.28*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vA=aAlpha;}`;
+const VERT_POOL=`attribute float aAlpha;varying float vA;void main(){vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=0.44*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vA=aAlpha;}`;
 const FRAG_POOL=`uniform sampler2D uTex;uniform vec3 uColor;varying float vA;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;gl_FragColor=vec4(uColor*vA,c.a*vA);}`;
+/* Volcano body: colour ramps by height — grey/brown rock at the base up to hot
+   orange lava near the crater. uTextMode fades back to the plain 0/1 glyph colour
+   when the particles morph into section text, so text keeps its original look. */
+const VERT_VOLC=`attribute float aSize;attribute vec2 aSpread;varying float vH;void main(){vH=position.y;vec3 p=position+vec3(aSpread.x,0.0,aSpread.y);vec4 mv=modelViewMatrix*vec4(p,1.0);gl_PointSize=aSize*(300.0/-mv.z);gl_Position=projectionMatrix*mv;}`;
+const FRAG_VOLC=`uniform sampler2D uTex;uniform vec3 uPlain;uniform float uBaseY;uniform float uSpan;uniform float uTextMode;varying float vH;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;float hf=clamp((vH-uBaseY)/uSpan,0.0,1.0);vec3 brown=vec3(0.54,0.36,0.23);vec3 grey=vec3(0.40,0.39,0.41);vec3 rock=mix(brown,grey,smoothstep(0.12,0.66,hf));float lava=smoothstep(0.64,0.98,hf);vec3 lavaCol=vec3(1.7,0.52,0.06);vec3 col=mix(rock,lavaCol,lava);vec3 outC=mix(col,uPlain,uTextMode);float outA=mix(c.a*(0.60+0.85*lava),c.a,uTextMode);gl_FragColor=vec4(outC,outA);}`;
 
 const TREE_COLORS=[[0.28,0.65,0.20],[0.82,0.62,0.04],[0.18,0.55,0.26],[0.70,0.48,0.03]];
 
@@ -395,6 +408,7 @@ const TEX0=mkSprite('0','#ffd600'),TEX1=mkSprite('1','#ffffff');
 const TEXG0=mkSprite('0','#ffffff'),TEXG1=mkSprite('1','#ffffff');
 
 function makeMat(tex){return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex}},vertexShader:VERT_V,fragmentShader:FRAG_V,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
+function makeVolcMat(tex){return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex},uPlain:{value:tex===TEX0?new THREE.Vector3(1.0,0.84,0.0):new THREE.Vector3(1.0,1.0,1.0)},uBaseY:{value:V_BASE_Y},uSpan:{value:V_H*VS},uTextMode:{value:0}},vertexShader:VERT_VOLC,fragmentShader:FRAG_VOLC,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
 function makeForestMat(r,g,b,texIdx){
   const tex=texIdx===1?TEXG1:TEXG0;
   return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex},uColor:{value:new THREE.Vector3(r,g,b)},uTextMode:{value:0},uTime:{value:0}},vertexShader:VERT_F,fragmentShader:FRAG_F,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
@@ -415,16 +429,46 @@ function scheduleChunk(fn){
 }
 
 /* ── Volcano geometry ── */
-function volR(y){return(1-y*.55)*2.4+(y<.12?(.12-y)*4.5:0);}
 function bump(th,y){return(Math.sin(th*3.7+y*7)*Math.cos(th*2.1+y*4))*.18;}
+/* Outer flank radius at fractional height hf∈[0,1]: concave power curve from the
+   flared base (V_BASE_R) up to the narrow summit rim (V_RIM_R). */
+function volOuterR(hf){const t=1-hf;return V_RIM_R+(V_BASE_R-V_RIM_R)*(V_LIN*t+(1-V_LIN)*Math.pow(t,V_CONCAVE));}
+/* Inner crater-wall radius at world height y (between the floor and the rim):
+   the bowl, dropping from the rim in to the small crater floor. */
+function volInnerR(y){const u=(V_RIM_Y-y)/V_CRATER_DEPTH;return V_FLOOR_R+(V_RIM_R-V_FLOOR_R)*Math.pow(Math.max(0,1-u),0.8);}
+/* Low-frequency lobing around the circumference so the cone is a natural, uneven
+   circle (ridges + gullies running down the flanks) rather than a perfect cylinder. */
+function volRidge(th){return 1+0.09*Math.sin(th*3+1.3)+0.05*Math.sin(th*7+4.1)+0.035*Math.sin(th*5-2.0);}
 function buildVolcanoChunked(count,onDone){
   const pos=new Float32Array(count*3);
   let i=0;
   function step(){
     const start=performance.now();
     while(i<count&&performance.now()-start<8){
-      if(Math.random()<0.25){const y=Math.random();const r=volR(y)*Math.random()**.5;const th=Math.random()*Math.PI*2;pos[i*3]=r*Math.cos(th);pos[i*3+1]=y*5.8-1.2;pos[i*3+2]=r*Math.sin(th);}
-      else{const y=Math.random();const th=Math.random()*Math.PI*2;const r=volR(y)*(1+bump(th,y));pos[i*3]=r*Math.cos(th);pos[i*3+1]=y*5.8-1.2;pos[i*3+2]=r*Math.sin(th);}
+      const th=Math.random()*Math.PI*2, rc=Math.random();
+      let r, y;
+      if(rc<0.30){
+        // Solid body: full disc below the crater floor, annulus (rim walls) above,
+        // leaving the crater hollow. Height sampled ∝ cross-section AREA so the whole
+        // cone has uniform volume density (no dense mound, no thin skirt, no gaps).
+        let hf; do{hf=Math.random();}while(Math.random()>Math.pow(volOuterR(hf)/V_BASE_R,2.0));
+        y=V_BASE_Y+hf*V_H;
+        const oR=volOuterR(hf), iR=y>V_FLOOR_Y?volInnerR(y):0;
+        r=Math.sqrt(iR*iR+Math.random()*(oR*oR-iR*iR));
+      } else if(rc<0.85){
+        // Outer flank surface (rocky bump). Height sampled ∝ circumference so the
+        // surface shell is evenly dense top to bottom.
+        let hf; do{hf=Math.random();}while(Math.random()>volOuterR(hf)/V_BASE_R);
+        y=V_BASE_Y+hf*V_H;
+        r=volOuterR(hf)*(1+bump(th,hf));
+      } else {
+        // Inner crater wall surface (the bowl).
+        const u=Math.random(); y=V_RIM_Y-u*V_CRATER_DEPTH;
+        r=volInnerR(y)*(1+bump(th,u)*0.4);
+      }
+      r*=volRidge(th);
+      const ys=V_BASE_Y+(y-V_BASE_Y)*VS, rs=r*VS;
+      pos[i*3]=rs*Math.cos(th); pos[i*3+1]=ys; pos[i*3+2]=rs*Math.sin(th);
       i++;
     }
     if(i<count)scheduleChunk(step);else onDone(pos);
@@ -537,8 +581,8 @@ function buildPool(){
     return g;
   }
   const g0=mkPoolGeo(0,half),g1=mkPoolGeo(half,half);
-  const m0=makePoolMat(new THREE.Vector3(1.0,0.84,0.0),TEX0);
-  const m1=makePoolMat(new THREE.Vector3(1.0,0.45,0.0),TEX1);
+  const m0=makePoolMat(new THREE.Vector3(1.0,0.58,0.05),TEX0);
+  const m1=makePoolMat(new THREE.Vector3(1.0,0.28,0.0),TEX1);
   poolPts0=new THREE.Points(g0,m0);poolPts0.renderOrder=2;
   poolPts1=new THREE.Points(g1,m1);poolPts1.renderOrder=2;
   scene.add(poolPts0);scene.add(poolPts1);
@@ -672,7 +716,7 @@ function initScene(){
     geo1.setAttribute('aSize',new THREE.BufferAttribute(sz1,1));
     geo1.setAttribute('aSpread',new THREE.BufferAttribute(sp1,2));
 
-    mat0=makeMat(TEX0);mat1=makeMat(TEX1);
+    mat0=makeVolcMat(TEX0);mat1=makeVolcMat(TEX1);
     pts0=new THREE.Points(geo0,mat0);pts0.renderOrder=1;
     pts1=new THREE.Points(geo1,mat1);pts1.renderOrder=1;
     scene.add(pts0);scene.add(pts1);
@@ -705,6 +749,7 @@ function initScene(){
       if(inVolcano)stepPool(dt);
       textModeVal+=(textModeTarget-textModeVal)*0.055;
       forestMats.forEach(m=>m.uniforms.uTextMode.value=textModeVal);
+      if(mat0)mat0.uniforms.uTextMode.value=textModeVal;if(mat1)mat1.uniforms.uTextMode.value=textModeVal;
       if(photoMat){aboutImgVal+=(aboutImgTarget-aboutImgVal)*0.09;photoMat.opacity=aboutImgVal;if(photoMesh)photoMesh.visible=aboutImgVal>0.01;}
       if(lerpStart!==null){
         const t=Math.min((now-lerpStart)/1000/LERP_DUR,1),e=easeIO(t);
