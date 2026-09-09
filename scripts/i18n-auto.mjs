@@ -142,5 +142,10 @@ const urls = cfg.pages.flatMap((page) => LOCALES.map((l) => {
     + `\n    <xhtml:link rel="alternate" hreflang="x-default" href="${pageUrl(page, 'en')}"/>`;
   return `  <url>\n    <loc>${pageUrl(page, l)}</loc>\n    <lastmod>${today}</lastmod>\n${alts}\n  </url>`;
 })).join('\n');
-writeFileSync(join(ROOT, 'public/sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls}\n</urlset>\n`);
+// Non-localized, indexable standalone pages (resume, songs, urls, etc.).
+const extraUrls = (cfg.extraUrls || [])
+  .map((p) => `  <url>\n    <loc>${ORIGIN}${p}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`)
+  .join('\n');
+const allUrls = extraUrls ? `${urls}\n${extraUrls}` : urls;
+writeFileSync(join(ROOT, 'public/sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${allUrls}\n</urlset>\n`);
 console.log(`sitemap -> public/sitemap.xml\n${drift ? drift + ' page(s) drifted — inspect!' : 'Done. No structure drift.'}`);

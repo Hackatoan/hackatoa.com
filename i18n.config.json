@@ -5,6 +5,7 @@
   "pages": [
     { "file": "index.html", "urlPath": "/" }
   ],
+  "extraUrls": ["/resume/", "/songs/", "/urls/", "/cover-letter/", "/privacy/", "/cookies/"],
   "internalLinks": { "/": "/" },
   "keepTerms": ["Hackatoa", "Preston Harris", "Jacob Harris", "WikiRoll", "Balthazar", "Lamar", "Infinisweeper", "Battleship", "Sys32 Roulette", "System 32 Roulette", "Clip Forge", "Nucleus", "Mosaic", "Discord", "Instagram", "GitHub", "Orbital Outpost", "Homelab", "Proxmox", "Docker", "1v1 Minesweeper", "Tic-Tac-Toe", "Cards Against Hackatoa"]
 }
