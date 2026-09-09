@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /motd.json
 
 User-agent: GPTBot
 Disallow: /
