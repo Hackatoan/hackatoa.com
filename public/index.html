@@ -332,6 +332,7 @@ document.getElementById('vol').addEventListener('input',e=>{audio.volume=+e.targ
 /* ── Constants ── */
 const N=180000,LERP_DUR=2.8,CAM_SPRING_DUR=1.1,CURVE_R=15;
 const TEXT_POS=new THREE.Vector3(0,2.5,13),TEXT_TGT=new THREE.Vector3(0,2.5,0);
+const ABOUT_POS=new THREE.Vector3(0,2.6,17),ABOUT_TGT=new THREE.Vector3(0,2.6,0);  // pulled back so the photo frame doesn't crowd the caption card
 const BASE_SIZE=0.22,HOVER_SIZE=0.34,SPREAD=0.0;
 const GROUND_Y=-1.22,FOREST_N=200000,MIN_TREE_DIST=0.85;
 const DIM_BACK=80,DIM_FRONT=60;
@@ -940,7 +941,7 @@ function switchSection(sec){
   mode='text';currentSec=sec;textModeTarget=1;bakeRot();
   lerpFrom0=geo0.attributes.position.array.slice();lerpFrom1=geo1.attributes.position.array.slice();
   lerpTo0=td.pos0;lerpTo1=td.pos1;lerpStart=performance.now();
-  springCam(TEXT_POS,TEXT_TGT);
+  springCam(sec==='about'?ABOUT_POS:TEXT_POS,sec==='about'?ABOUT_TGT:TEXT_TGT);
   if(ctrl)ctrl.autoRotate=false;
   updateNav(sec);
   if(SEC_URLS[sec])history.pushState({},'',(SEC_URLS[sec]));
