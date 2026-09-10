@@ -156,15 +156,6 @@
 </head>
 <body>
 <!-- i18n:switcher:start -->
-<nav aria-label="Language" style="position:fixed;top:8px;right:10px;z-index:99999;font-size:12px;font-family:system-ui,-apple-system,sans-serif;background:rgba(6,10,6,.92);border:1px solid #1a3d1a;border-radius:999px;padding:5px 12px;display:flex;gap:9px;box-shadow:0 2px 10px rgba(0,0,0,.5);">
-  <a href="/" hreflang="en" style="color:#8a8;text-decoration:none;">EN</a>
-  <a href="/es/" hreflang="es" aria-current="true" style="color:#fff;font-weight:700;text-decoration:none;">ES</a>
-  <a href="/pt-br/" hreflang="pt-BR" style="color:#8a8;text-decoration:none;">PT</a>
-  <a href="/fr/" hreflang="fr" style="color:#8a8;text-decoration:none;">FR</a>
-  <a href="/de/" hreflang="de" style="color:#8a8;text-decoration:none;">DE</a>
-  <a href="/vi/" hreflang="vi" style="color:#8a8;text-decoration:none;">VI</a>
-  <a href="/th/" hreflang="th" style="color:#8a8;text-decoration:none;">TH</a>
-</nav>
 <!-- i18n:switcher:end -->
 <header>
 <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;color:#e8e0c0">Hackatoa — Preston: desarrollador, ingeniero de homelab y entusiasta de la IA</h1>
@@ -249,6 +240,7 @@
       <span class="nb" id="proj-btn">PROYECTOS</span>
       <span class="nb" data-sec="connect">CONECTAR</span>
       <span class="nb" data-sec="support">SOPORTE</span>
+      <span class="nb" id="lang-btn" aria-label="Language" aria-haspopup="true" style="font-size:15px;letter-spacing:0;position:relative;display:inline-flex;align-items:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="vertical-align:middle"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><ellipse cx="12" cy="12" rx="4" ry="9"/></svg><span id="lang-pop" role="menu" style="display:none;position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);flex-direction:column;gap:9px;background:rgba(6,10,6,.95);border:1px solid #1a3d1a;border-radius:10px;padding:9px 12px;box-shadow:0 4px 16px rgba(0,0,0,.6);font-size:12px;font-family:system-ui,-apple-system,sans-serif;white-space:nowrap;letter-spacing:0"><a href="/" data-lang="en" style="color:#8a8;text-decoration:none">EN · English</a><a href="/es/" data-lang="es" style="color:#8a8;text-decoration:none">ES · Español</a><a href="/pt-br/" data-lang="pt-br" style="color:#8a8;text-decoration:none">PT · Português</a><a href="/fr/" data-lang="fr" style="color:#8a8;text-decoration:none">FR · Français</a><a href="/de/" data-lang="de" style="color:#8a8;text-decoration:none">DE · Deutsch</a><a href="/vi/" data-lang="vi" style="color:#8a8;text-decoration:none">VI · Tiếng Việt</a><a href="/th/" data-lang="th" style="color:#8a8;text-decoration:none">TH · ไทย</a></span></span>
       <span class="nb" data-sec="volcano" style="font-size:15px;letter-spacing:0">↺</span>
     </div>
   </nav>
@@ -760,6 +752,7 @@ projBtn.addEventListener('click',()=>{
   if(subNavOpen&&!['bots','games','tools','apps'].includes(currentSec))switchSection('bots');
 });
 document.querySelectorAll('.nb[data-sec]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.sec)));
+(function(){const lb=document.getElementById('lang-btn'),lp=document.getElementById('lang-pop');if(lb&&lp){const cur=(document.documentElement.lang||'en').toLowerCase();lp.querySelectorAll('a[data-lang]').forEach(a=>{if(a.getAttribute('data-lang')===cur){a.style.color='#fff';a.style.fontWeight='700';}});lb.addEventListener('click',e=>{e.stopPropagation();lp.style.display=lp.style.display==='flex'?'none':'flex';});lp.addEventListener('click',e=>e.stopPropagation());document.addEventListener('click',()=>{lp.style.display='none';});}})();
 
 function updateNav(sec){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
