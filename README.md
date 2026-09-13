@@ -1,38 +1,41 @@
-[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/hackatoa)
-
 # hackatoa.com
 
-My personal website — portfolio, homelab notes, and a live ambient music player. Built with vanilla HTML/CSS/JS, containerized and self-hosted on my homelab (GHCR + Watchtower) behind NPMplus and Cloudflare.
+Personal website of Preston (Hackatoa) — developer, homelab engineer, and AI enthusiast.
 
-**Live:** [hackatoa.com](https://hackatoa.com)
+🔗 **Live:** [hackatoa.com](https://hackatoa.com)   ·   ☕ **Support:** [Buy Me a Coffee](https://buymeacoffee.com/hackatoa)
+
+## Overview
+
+An interactive WebGL landing page built with Three.js: a felt-craft volcano particle scene that renders the site's sections in 3D. All content is also mirrored as real, crawlable HTML so the page stays fully indexable. Narrow-viewport and no-WebGL visitors get a lightweight `/urls/` version; search-engine and social crawlers are never redirected.
 
 ## Features
 
-- Portfolio and project showcase with live GitHub feed
-- Cybersecurity and homelab research notes
-- Ambient music player with custom playlist
-- Twitch stream embed
-- Contact form (mailto)
-- Full SEO — Open Graph, JSON-LD, Twitter cards, sitemap
+- Three.js particle/volcano scene with an accessible HTML content mirror
+- 6-language localization (ES, PT-BR, FR, DE, VI, TH) with hreflang + per-locale URLs
+- Lightweight `/urls/` lite version for mobile / no-WebGL
+- JSON-LD structured data, Open Graph / Twitter cards, web manifest
 
-## Tech stack
+## Tech Stack
 
-| Layer | Tech |
-|---|---|
-| Frontend | HTML5, CSS3, Vanilla JS |
-| Music | YouTube IFrame API |
-| Hosting | Docker · GHCR + Watchtower (self-hosted homelab) |
-| DNS / CDN | Cloudflare |
+Static HTML · Three.js · vanilla JS · nginx · Docker
 
-## Dev
+## Development
 
 ```bash
-git clone https://github.com/Hackatoan/hackatoa.com
-cd hackatoa.com
-# Open public/index.html directly or serve with any static server
-npx serve public
+# serve the static site locally
+cd public && python3 -m http.server 8080
 ```
+
+## Deployment
+
+Self-hosted on the homelab Docker host behind Cloudflare → NPMplus. Pushes to `Main` build `ghcr.io/hackatoan/hackatoa-com` and auto-deploy via Watchtower.
+
+## Support
+
+If this project is useful to you, consider supporting development:
+
+☕ **[Buy Me a Coffee](https://buymeacoffee.com/hackatoa)**
 
 ---
 
-[hackatoa.com](https://hackatoa.com) · [GitHub](https://github.com/Hackatoan) · [Buy Me A Coffee](https://buymeacoffee.com/hackatoa)
+Part of the **[Hackatoa](https://hackatoa.com)** ecosystem — self-hosted apps, browser games, and bots. · [All repositories »](https://github.com/Hackatoan)
