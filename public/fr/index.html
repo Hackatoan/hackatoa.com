@@ -8,6 +8,11 @@
   // sent there instead of loading the full WebGL scene. Runs before anything heavy
   // is requested. ?full=1 bypasses it (used by the "back to full site" links on /urls/).
   (function(){
+    var ua=navigator.userAgent||'';
+    // Never redirect search-engine/social crawlers: the <main> block below mirrors
+    // all content as real HTML, so each URL must stay indexable at its own address.
+    window.__hkBot=/bot|crawl|spider|slurp|mediapartners|bingpreview|google|bing|yandex|baidu|duckduck|facebookexternalhit|embedly|quora|pinterest|slackbot|telegrambot|whatsapp|discordbot|twitterbot|linkedinbot|applebot/i.test(ua);
+    if(window.__hkBot)return;
     if(/(?:^|[?&])full=1(?:&|$)/.test(location.search))return;
     if(window.innerWidth<=600)location.replace('/urls/');
   })();
@@ -385,14 +390,14 @@ const wrap=document.getElementById('wrap'),canvas=document.getElementById('c');
 let W=wrap.clientWidth,H=wrap.clientHeight;
 // WebGL not available (blocklisted driver, old device, CDN blocked) → static fallback page
 (function(){
-  if(typeof THREE==='undefined'){location.replace('/urls/');return;}
+  if(typeof THREE==='undefined'){if(!window.__hkBot)location.replace('/urls/');return;}
   const t=document.createElement('canvas');
   if(t.getContext('webgl')||t.getContext('experimental-webgl'))return;
-  location.replace('/urls/');
+  if(!window.__hkBot)location.replace('/urls/');
 })();
 let renderer;
 try{renderer=new THREE.WebGLRenderer({canvas,antialias:false,alpha:false});}
-catch(e){location.replace('/urls/');throw e;}
+catch(e){if(!window.__hkBot)location.replace('/urls/');throw e;}
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(W,H);
 renderer.setClearColor(0x040602,1);
 const scene=new THREE.Scene();
