@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#e85020" />
   <title>Links — Hackatoa</title>
   <meta name="description" content="All links for Preston (Hackatoa) — browser games, social profiles, homelab projects, GitHub, and more." />
   <meta name="author" content="Preston" />
@@ -21,18 +22,25 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #040602;
-      --surface:  #0a0900;
-      --border:   rgba(130,119,23,0.28);
-      --gold:     #ffd600;
-      --gold-dim: #837817;
-      --text:     #e8e0c0;
-      --muted:    #867734;
-      --hover-bg: #0f0d00;
+      --bg:        #121016;   /* deep plum-black */
+      --bg-2:      #0d0b0f;   /* darker base for gradient */
+      --surface:   #1a161f;   /* card */
+      --surface-2: #221c2a;   /* card hover */
+      --border:    rgba(255,90,31,0.16);
+      --border-hi: rgba(255,157,60,0.55);
+      --ember:     #ff5a1f;   /* primary accent — lava */
+      --ember-lt:  #ff9d3c;   /* warm highlight / glow */
+      --ember-dim: #a85a34;   /* muted ember for idle icons */
+      --text:      #f4eef2;   /* felt-warm off-white */
+      --muted:     #9a8fa3;   /* plum-grey */
     }
 
     body {
-      background: var(--bg);
+      background:
+        radial-gradient(115% 55% at 50% -8%, rgba(255,90,31,0.16), transparent 60%),
+        radial-gradient(90% 40% at 50% -4%, rgba(255,157,60,0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 70%);
+      background-attachment: fixed;
       color: var(--text);
       font-family: monospace;
       min-height: 100vh;
@@ -40,6 +48,7 @@
       flex-direction: column;
       align-items: center;
       padding: 2.5rem 1rem 5rem;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .back-link {
@@ -51,7 +60,7 @@
       margin-bottom: 2.5rem;
       transition: color 0.2s;
     }
-    .back-link:hover { color: var(--gold); }
+    .back-link:hover { color: var(--ember-lt); }
     .back-link::before { content: '← '; }
 
     .page-header {
@@ -60,11 +69,13 @@
     }
 
     .avatar {
-      width: 72px;
-      height: 72px;
+      width: 84px;
+      height: 84px;
       border-radius: 50%;
-      border: 2px solid var(--gold-dim);
-      margin-bottom: 0.9rem;
+      padding: 3px;
+      background: linear-gradient(150deg, var(--ember-lt), var(--ember) 55%, #b8341a);
+      box-shadow: 0 0 26px rgba(255,90,31,0.35);
+      margin-bottom: 0.95rem;
       object-fit: cover;
       display: block;
       margin-left: auto;
@@ -72,18 +83,21 @@
     }
 
     .page-title {
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       font-weight: 700;
       letter-spacing: 4px;
-      color: var(--gold);
-      text-shadow: 0 0 18px rgba(255,214,0,0.25);
+      background: linear-gradient(180deg, var(--ember-lt), var(--ember));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 26px rgba(255,90,31,0.30);
     }
 
     .page-subtitle {
       color: var(--muted);
       font-size: 0.75rem;
       letter-spacing: 2px;
-      margin-top: 0.4rem;
+      margin-top: 0.45rem;
     }
 
     .links-list {
@@ -98,34 +112,49 @@
       font-size: 0.65rem;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--gold-dim);
+      color: var(--ember-lt);
+      opacity: 0.85;
       margin-top: 1.4rem;
       margin-bottom: 0.1rem;
-      padding-left: 0.25rem;
+      padding-left: 0.35rem;
+      border-left: 2px solid var(--ember);
     }
 
     .link-card {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 10px;
       padding: 0.85rem 1.1rem;
       text-decoration: none;
       color: var(--text);
-      transition: background 0.15s, border-color 0.15s, transform 0.12s;
+      transition: background 0.15s, border-color 0.15s, transform 0.12s, box-shadow 0.15s;
     }
 
     .link-card:hover {
-      background: var(--hover-bg);
-      border-color: var(--gold-dim);
-      transform: translateY(-1px);
+      background: var(--surface-2);
+      border-color: var(--border-hi);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255,90,31,0.14);
     }
 
     .link-card.featured {
-      border-color: var(--gold-dim);
+      border-color: rgba(255,90,31,0.45);
+      background:
+        linear-gradient(90deg, rgba(255,90,31,0.12), rgba(255,90,31,0.02) 60%),
+        var(--surface);
+    }
+    .link-card.featured::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 10%; bottom: 10%;
+      width: 3px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, var(--ember-lt), var(--ember));
     }
 
     .link-info { flex: 1; min-width: 0; }
@@ -148,12 +177,13 @@
     }
 
     .link-arrow {
-      color: var(--gold-dim);
+      color: var(--ember-dim);
       font-size: 0.85rem;
       flex-shrink: 0;
+      transition: color 0.15s, transform 0.15s;
     }
 
-    .link-card:hover .link-arrow { color: var(--gold); }
+    .link-card:hover .link-arrow { color: var(--ember-lt); transform: translate(2px,-2px); }
 
     footer {
       margin-top: 3.5rem;
@@ -164,11 +194,12 @@
     }
 
     footer a {
-      color: var(--gold-dim);
+      color: var(--ember-dim);
       text-decoration: none;
+      transition: color 0.2s;
     }
 
-    footer a:hover { color: var(--gold); }
+    footer a:hover { color: var(--ember-lt); }
   </style>
 </head>
 <body>
