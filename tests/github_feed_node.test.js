@@ -121,6 +121,8 @@ function createMockEnv() {
     URL: URL,
     Audio: class { play() { return Promise.resolve(); } pause() {} },
     setTimeout: setTimeout,
+    clearTimeout: clearTimeout,
+    AbortController: AbortController,
     YT: win.YT,
     localStorage: {
         store: {},
