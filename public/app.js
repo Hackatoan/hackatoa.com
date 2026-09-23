@@ -12,10 +12,10 @@ let currentSlideIndex = 0;
 let isSliding = false;
 const SLIDE_DURATION_MS = 550;
 
-/**
- * Adds keyboard support for interactive elements that should trigger a click on Enter or Space.
- * @param {HTMLElement} element The element to add keyboard support to.
- */
+// Not currently wired to an element, but kept as the standard way to add
+// Enter/Space-triggers-click keyboard support to a custom interactive
+// element; covered by its own tests in tests/test_app.js.
+// eslint-disable-next-line no-unused-vars
 function addKeyboardClickSupport(element) {
     if (!element) return;
     element.addEventListener('keydown', (e) => {
@@ -25,7 +25,6 @@ function addKeyboardClickSupport(element) {
         }
     });
 }
-
 
 /**
  * Validates a URL to ensure it uses a safe protocol.
@@ -193,7 +192,9 @@ function saveMusicState() {
             shuffleOrder: shuffleOrder,
             trackIndex: trackIndex,
         }));
-    } catch(e) {}
+    } catch (e) {
+        console.error('Failed to save music state:', e);
+    }
 }
 
 function restoreMusicState() {
@@ -210,7 +211,10 @@ function restoreMusicState() {
         const track = TRACKS.find(t => t.src === s.src);
         if (titleEl && track) titleEl.textContent = track.title;
         return true;
-    } catch(e) { return false; }
+    } catch (e) {
+        console.error('Failed to restore music state:', e);
+        return false;
+    }
 }
 
 function initMusicWidget() {
