@@ -3,6 +3,7 @@
 const musicToggle = document.getElementById('music-toggle');
 const bgToggle = document.getElementById('bg-toggle');
 const slidesTrack = document.querySelector('.slides-track');
+const slidesViewport = document.querySelector('.slides-viewport');
 const slides = slidesTrack
     ? Array.from(slidesTrack.querySelectorAll('.slide:not([data-hidden="true"])'))
     : [];
@@ -62,9 +63,8 @@ function goToSlide(index) {
     currentSlideIndex = clamped;
     isSliding = true;
 
-    const viewport = document.querySelector('.slides-viewport');
-    if (viewport && slidesTrack) {
-        const width = viewport.clientWidth;
+    if (slidesViewport && slidesTrack) {
+        const width = slidesViewport.clientWidth;
         const offset = -currentSlideIndex * width;
         slidesTrack.style.transition = `transform ${SLIDE_DURATION_MS}ms ease`;
         slidesTrack.style.transform = `translateX(${offset}px)`;
@@ -553,8 +553,14 @@ function initGitHubFeed() {
         return;
     }
 
-    fetch('https://api.github.com/users/Hackatoan/events/public')
+    // Abort the request if GitHub's API hangs, so a slow/stalled connection
+    // doesn't leave the feed section waiting indefinitely.
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    fetch('https://api.github.com/users/Hackatoan/events/public', { signal: controller.signal })
         .then(response => {
+            clearTimeout(timeoutId);
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         })
@@ -566,6 +572,7 @@ function initGitHubFeed() {
             renderGitHubEvents(container, events);
         })
         .catch(error => {
+            clearTimeout(timeoutId);
             console.error('Error fetching GitHub events:', error);
             // Fallback to stale cache if API fails
             if (cachedData) {
@@ -745,9 +752,8 @@ window.addEventListener('DOMContentLoaded', () => {
         currentSlideIndex = initIndex >= 0 ? initIndex : 0;
 
         // Apply position instantly (no animation on first load)
-        const viewport = document.querySelector('.slides-viewport');
-        if (viewport && slidesTrack) {
-            const offset = -currentSlideIndex * viewport.clientWidth;
+        if (slidesViewport && slidesTrack) {
+            const offset = -currentSlideIndex * slidesViewport.clientWidth;
             slidesTrack.style.transition = 'none';
             slidesTrack.style.transform = `translateX(${offset}px)`;
         }
