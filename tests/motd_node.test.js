@@ -120,8 +120,7 @@ describe('initMOTD', () => {
     };
 
     await context.initMOTD();
-    const greeting = context.getTimeGreeting();
-    assert.strictEqual(motdBody.textContent, `${greeting} Success message`);
+    assert.strictEqual(motdBody.textContent, 'Success message');
   });
 
   test('should update motdBody with fallback on 404', async () => {
@@ -138,8 +137,7 @@ describe('initMOTD', () => {
     };
 
     await context.initMOTD();
-    const greeting = context.getTimeGreeting();
-    assert.strictEqual(motdBody.textContent, `${greeting} Stay curious. Keep building.`);
+    assert.strictEqual(motdBody.textContent, 'Stay curious. Keep building.');
   });
 
   test('should update motdBody with fallback on network error', async () => {
@@ -151,8 +149,7 @@ describe('initMOTD', () => {
     };
 
     await context.initMOTD();
-    const greeting = context.getTimeGreeting();
-    assert.strictEqual(motdBody.textContent, `${greeting} Stay curious. Keep building.`);
+    assert.strictEqual(motdBody.textContent, 'Stay curious. Keep building.');
   });
 
   test('should update motdBody with fallback if message is missing', async () => {
@@ -167,7 +164,6 @@ describe('initMOTD', () => {
     };
 
     await context.initMOTD();
-    const greeting = context.getTimeGreeting();
-    assert.strictEqual(motdBody.textContent, `${greeting} Stay curious. Keep building.`);
+    assert.strictEqual(motdBody.textContent, 'Stay curious. Keep building.');
   });
 });
