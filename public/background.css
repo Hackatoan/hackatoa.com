@@ -195,9 +195,13 @@ body.is-sunset .win:nth-child(4n+3) {
   z-index: 5;
 }
 
+/* background.js sets .video-bg's background-color as an inline style;
+   only !important can override an inline style from a stylesheet rule. */
+/* eslint-disable css/no-important */
 body.stormy            .video-bg { background-color: #06000e !important; }
 body.is-day.stormy     .video-bg { background-color: #1a1428 !important; }
 body.is-sunset.stormy  .video-bg { background-color: #100818 !important; }
+/* eslint-enable css/no-important */
 body.stormy .cityscape-svg { opacity: 0.75; }
 body.stormy .cloud,
 body.stormy .cloud::before,
