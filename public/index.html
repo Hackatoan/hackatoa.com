@@ -133,7 +133,8 @@
     #wrap{position:relative;width:100%;height:100%;background:#040602;overflow:hidden;font-family:monospace}
     canvas{position:absolute;top:0;left:0;width:100%;height:100%}
     .nb{color:#5a4400;cursor:pointer;font-size:11px;letter-spacing:2.5px;font-family:monospace;transition:color .2s,text-shadow .2s;user-select:none}
-    .nb:hover,.nb.active{color:#ffd600;text-shadow:0 0 10px rgba(255,214,0,0.35)}
+    .nb:hover,.nb.active,.nb:focus-visible{color:#ffd600;text-shadow:0 0 10px rgba(255,214,0,0.35)}
+    .nb:focus-visible{outline:1px dashed #827717;outline-offset:3px}
     .nb.sub{font-size:10px;letter-spacing:2px;color:#3d2e00}
     .nb.sub:hover,.nb.sub.active{color:#ffd600;text-shadow:0 0 8px rgba(255,214,0,0.3)}
     /* About photo card (framed by particles) */
@@ -899,6 +900,14 @@ projBtn.addEventListener('click',()=>{
 });
 document.querySelectorAll('.nb[data-sec]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.sec)));
 (function(){const lb=document.getElementById('lang-btn'),lp=document.getElementById('lang-pop');if(lb&&lp){const cur=(document.documentElement.lang||'en').toLowerCase();lp.querySelectorAll('a[data-lang]').forEach(a=>{if(a.getAttribute('data-lang')===cur){a.style.color='#fff';a.style.fontWeight='700';}});lb.addEventListener('click',e=>{e.stopPropagation();lp.style.display=lp.style.display==='flex'?'none':'flex';});lp.addEventListener('click',e=>e.stopPropagation());document.addEventListener('click',()=>{lp.style.display='none';});}})();
+// These are plain <span> elements activated only via JS click handlers above,
+// which leaves them invisible to keyboard/screen-reader users. Make them behave
+// like real buttons without touching the click-handling logic itself.
+document.querySelectorAll('.nb').forEach(b=>{
+  if(!b.hasAttribute('tabindex'))b.setAttribute('tabindex','0');
+  if(!b.hasAttribute('role'))b.setAttribute('role','button');
+  b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.click();}});
+});
 
 function updateNav(sec){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
