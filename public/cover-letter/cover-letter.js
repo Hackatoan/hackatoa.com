@@ -1,3 +1,24 @@
+// html2pdf.bundle.min.js is ~900KB — only needed once the visitor actually
+// asks for a PDF, so it's fetched on demand instead of blocking every page
+// load. Cached after the first load so repeat clicks don't re-fetch it.
+let html2pdfLoadPromise = null;
+function loadHtml2Pdf() {
+  if (window.html2pdf) return Promise.resolve();
+  if (!html2pdfLoadPromise) {
+    html2pdfLoadPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = '/assets/html2pdf.bundle.min.js';
+      script.onload = () => resolve();
+      script.onerror = () => {
+        html2pdfLoadPromise = null;
+        reject(new Error('Failed to load html2pdf'));
+      };
+      document.head.appendChild(script);
+    });
+  }
+  return html2pdfLoadPromise;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   // Auto-insert today's date
   const dateEl = document.getElementById('letter-date');
@@ -10,9 +31,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const btn = document.getElementById('dl-btn');
   if (!btn) return;
 
-  btn.addEventListener('click', function () {
+  btn.addEventListener('click', async function () {
     btn.disabled = true;
     btn.textContent = 'Generating…';
+
+    try {
+      await loadHtml2Pdf();
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = '⬇ Download PDF';
+      return;
+    }
 
     const el = document.getElementById('pdf-content');
 
