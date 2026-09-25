@@ -616,11 +616,11 @@
 
     <div class="content-col">
       <div class="now-playing">
-        <button class="np-toggle" id="music-toggle" data-state="paused" title="Play/Pause">▶</button>
+        <button class="np-toggle" id="music-toggle" data-state="paused" title="Play/Pause" aria-label="Play or pause music">▶</button>
         <div class="np-meta"><div class="music-title">Loading…</div></div>
-        <button class="np-skip" id="music-skip" title="Skip">⏭</button>
-        <input class="np-vol" id="music-vol" type="range" min="0" max="1" step="0.01" value="0.05" title="Volume" />
-        <a class="np-link" href="/songs" title="All songs">♫</a>
+        <button class="np-skip" id="music-skip" title="Skip" aria-label="Next track">⏭</button>
+        <input class="np-vol" id="music-vol" type="range" min="0" max="1" step="0.01" value="0.05" title="Volume" aria-label="Volume" />
+        <a class="np-link" href="/songs" title="All songs" aria-label="All songs">♫</a>
       </div>
       <div class="card">
         <div class="kicker">Active Development</div>
@@ -667,10 +667,10 @@
           <div class="motd-body" id="motd-body">Loading...</div>
         </div>
         <div class="pill-row">
-          <a class="pill-link" href="https://github.com/Hackatoan" target="_blank">GitHub</a>
-          <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank">YouTube</a>
-          <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank">Twitch</a>
-          <a class="pill-link" href="https://www.linkedin.com/in/preston-h-554984227" target="_blank">LinkedIn</a>
+          <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank" rel="noopener noreferrer">YouTube</a>
+          <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank" rel="noopener noreferrer">Twitch</a>
+          <a class="pill-link" href="https://www.linkedin.com/in/preston-h-554984227" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </div>
       </div>
     </div>
@@ -700,8 +700,8 @@
           <h3>Hackatoa Games Platform</h3>
           <p>Six original browser games — Infinisweeper, 1v1 Minesweeper, Battleship, Cards Against Hackatoa, Sys32 Roulette, Tic-Tac-Toe. Free, no account, no ads.</p>
           <div class="pill-row">
-            <a class="pill-link" href="https://games.hackatoa.com" target="_blank">All Games</a>
-            <a class="pill-link" href="https://infinisweeper.hackatoa.com" target="_blank">Infinisweeper</a>
+            <a class="pill-link" href="https://games.hackatoa.com" target="_blank" rel="noopener noreferrer">All Games</a>
+            <a class="pill-link" href="https://infinisweeper.hackatoa.com" target="_blank" rel="noopener noreferrer">Infinisweeper</a>
           </div>
         </div>
 
@@ -709,8 +709,8 @@
           <h3>WikiRoll · Discord Bot</h3>
           <p>Roll, claim, and trade characters from Wikipedia and 150+ Fandom wikis. Wishlist, boost sources, vote for bonus rolls. discord.js &amp; MediaWiki API.</p>
           <div class="pill-row">
-            <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank">Website</a>
-            <a class="pill-link" href="https://github.com/Hackatoan/wikiroll" target="_blank">GitHub</a>
+            <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank" rel="noopener noreferrer">Website</a>
+            <a class="pill-link" href="https://github.com/Hackatoan/wikiroll" target="_blank" rel="noopener noreferrer">GitHub</a>
           </div>
         </div>
 
@@ -718,8 +718,8 @@
           <h3>Lamar Bot · GTA V AI</h3>
           <p>Lamar Davis in your Discord. Powered by llama-3.3-70b with persistent per-user memory. Attack commands, games, zero chill.</p>
           <div class="pill-row">
-            <a class="pill-link" href="https://lamar.hackatoa.com" target="_blank">Website</a>
-            <a class="pill-link" href="https://github.com/Hackatoan/Lamar" target="_blank">GitHub</a>
+            <a class="pill-link" href="https://lamar.hackatoa.com" target="_blank" rel="noopener noreferrer">Website</a>
+            <a class="pill-link" href="https://github.com/Hackatoan/Lamar" target="_blank" rel="noopener noreferrer">GitHub</a>
           </div>
         </div>
 
@@ -727,8 +727,8 @@
           <h3>Clip Forge · Browser Video Editor</h3>
           <p>Fully client-side video editor — no uploads. FFmpeg.wasm for encoding, Fabric.js for canvas overlays, WaveSurfer.js for waveforms.</p>
           <div class="pill-row">
-            <a class="pill-link" href="https://clip-forge.hackatoa.com" target="_blank">Open Editor</a>
-            <a class="pill-link" href="https://github.com/Hackatoan/clip-forge" target="_blank">GitHub</a>
+            <a class="pill-link" href="https://clip-forge.hackatoa.com" target="_blank" rel="noopener noreferrer">Open Editor</a>
+            <a class="pill-link" href="https://github.com/Hackatoan/clip-forge" target="_blank" rel="noopener noreferrer">GitHub</a>
           </div>
         </div>
 
@@ -736,8 +736,8 @@
           <h3>Canvas Messenger</h3>
           <p>Chrome &amp; Firefox extension — Discord-style messaging in Canvas LMS. DMs, group chats, class channels. E2E encrypted via Node.js relay. Built to work around platform restrictions so students could actually talk in real time.</p>
           <div class="pill-row">
-            <a class="pill-link" href="https://github.com/Hackatoan/canvas-messenger" target="_blank">GitHub</a>
-            <a class="pill-link" href="https://relay.hackatoa.com" target="_blank">Relay Server</a>
+            <a class="pill-link" href="https://github.com/Hackatoan/canvas-messenger" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="pill-link" href="https://relay.hackatoa.com" target="_blank" rel="noopener noreferrer">Relay Server</a>
           </div>
         </div>
 
@@ -837,8 +837,8 @@
           <h3>The Caldera · Discord</h3>
           <p>My community — homelab talk, dev projects, gaming, and general vibes. WikiRoll and Lamar Bot live here. Drop in anytime.</p>
           <div class="pill-row">
-            <a class="pill-link" href="https://discord.gg/nrQFdACWbh" target="_blank">Join Server</a>
-            <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank">WikiRoll</a>
+            <a class="pill-link" href="https://discord.gg/nrQFdACWbh" target="_blank" rel="noopener noreferrer">Join Server</a>
+            <a class="pill-link" href="https://wikiroll.hackatoa.com" target="_blank" rel="noopener noreferrer">WikiRoll</a>
           </div>
         </div>
 
@@ -846,9 +846,9 @@
           <h3>Code &amp; Content</h3>
           <p>GitHub has all active projects and source. YouTube for build write-ups and lab videos when I bother to record. Instagram for everything else.</p>
           <div class="pill-row">
-            <a class="pill-link" href="https://github.com/Hackatoan" target="_blank">GitHub</a>
-            <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank">YouTube</a>
-            <a class="pill-link" href="https://instagram.com/hackatoa" target="_blank">Instagram</a>
+            <a class="pill-link" href="https://github.com/Hackatoan" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="pill-link" href="https://www.youtube.com/@Hackatoa" target="_blank" rel="noopener noreferrer">YouTube</a>
+            <a class="pill-link" href="https://instagram.com/hackatoa" target="_blank" rel="noopener noreferrer">Instagram</a>
           </div>
         </div>
 
@@ -856,9 +856,9 @@
           <h3>Live &amp; Voice</h3>
           <p>Twitch for live sessions — coding, security labs, gaming, whatever's on. TeamSpeak is open if you want to drop by voice. Matrix for decentralized chat.</p>
           <div class="pill-row">
-            <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank">Twitch</a>
+            <a class="pill-link" href="https://www.twitch.tv/hackatoa" target="_blank" rel="noopener noreferrer">Twitch</a>
             <a class="pill-link" href="ts3server://ts.hackatoa.com">TeamSpeak · ts.hackatoa.com</a>
-            <a class="pill-link" href="https://matrix.hackatoa.com" target="_blank">Matrix</a>
+            <a class="pill-link" href="https://matrix.hackatoa.com" target="_blank" rel="noopener noreferrer">Matrix</a>
           </div>
         </div>
 
@@ -941,7 +941,7 @@
           <h3>Support My Work</h3>
           <p>Everything here is free — no ads, no accounts. If you enjoy the games, bots, or tools and want to help cover hosting costs, a coffee or some XMR goes a long way.</p>
           <div style="margin:1rem 0">
-            <a href="https://buymeacoffee.com/hackatoa" target="_blank">
+            <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noopener noreferrer">
               <img src="assets/buymeacoffee.png" alt="Buy Me A Coffee" style="max-width:160px;height:auto" />
             </a>
           </div>
@@ -961,7 +961,7 @@
     <div style="display:flex;gap:1rem">
       <a href="/urls">All Links</a>
       <a href="/resume">Resume</a>
-      <a href="https://buymeacoffee.com/hackatoa" target="_blank">Buy Me a Coffee</a>
+      <a href="https://buymeacoffee.com/hackatoa" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a>
     </div>
   </footer>
 
