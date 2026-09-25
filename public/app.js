@@ -431,9 +431,16 @@ async function initSongs() {
     const container = document.getElementById('songs-container');
     if (!container) return;
 
+    // Abort the request if the Sheets endpoint hangs, so a slow/stalled
+    // connection doesn't leave the songs section waiting indefinitely
+    // (mirrors the same fix applied to the GitHub feed fetch below).
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
     try {
         const response = await fetch(
             'https://docs.google.com/spreadsheets/d/15U8Us6fNfLw9-YbWYnQPUQ6SpYxMbnOj5N6l6WgVvN8/gviz/tq?tqx=out:json&sheet=Songs',
+            { signal: controller.signal },
         );
         if (!response.ok) throw new Error(`Songs fetch failed: ${response.status}`);
         const text = await response.text();
@@ -442,6 +449,8 @@ async function initSongs() {
     } catch (err) {
         console.error('Error loading songs:', err);
         container.innerHTML = '<div class="text-red-400">Unable to load songs right now.</div>';
+    } finally {
+        clearTimeout(timeoutId);
     }
 }
 
