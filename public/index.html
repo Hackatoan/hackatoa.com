@@ -302,45 +302,86 @@
 <script src="/assets/vendor/three.min.js"></script>
 <script>
 /* ── Music ── */
+// records.hackatoa.com (the old homelab audio host) is retired — every track now
+// plays via the YouTube IFrame API using the same video IDs the /songs page's
+// "Stream" buttons already link out to.
 const TRACKS=[
-['The Iron Basilica','album/The%20Iron%20Basilica.mp3'],
-['Found Me Here','album/Found%20Me%20Here.mp3'],
-['One Body','album/One%20Body.mp3'],
-['Valley of Saints','album/Valley%20of%20Saints.mp3'],
-['Known','album/Known.mp3'],
-['You Spoke to the Storm','album/You%20Spoke%20to%20the%20Storm.mp3'],
-['The Wound That Heals','album/The%20Wound%20That%20Heals.mp3'],
-['The Seventh Seal','album/The%20Seventh%20Seal.mp3'],
-['The Shepherd King','album/The%20Shepherd%20King.mp3'],
-['Comic Sans Heart','wayback/Comic%20Sans%20Heart.mp3'],
-['Default Background','wayback/Default%20Background.mp3'],
-['Equalizer Bars','wayback/Equalizer%20Bars.mp3'],
-['Geocities Ghost','wayback/Geocities%20Ghost.mp3'],
-['Last Modified','wayback/Last%20Modified.mp3'],
-['Loading Forever','wayback/Loading%20Forever.mp3'],
-['Modem Hymn','wayback/Modem%20Hymn.mp3'],
-['Profile Deactivated','wayback/Profile%20Deactivated.mp3'],
-['Static Room','wayback/Static%20Room.mp3'],
-['Yellow Tape Sign','wayback/Yellow%20Tape%20Sign.mp3'],
+['The Iron Basilica','9QqKQnFhOwU'],
+['Found Me Here','HUxvN3Zb03Y'],
+['One Body','MQh8NSRXD7s'],
+['Valley of Saints','ORYwnjMLCUo'],
+['Known','aveHBQoHZjA'],
+['You Spoke to the Storm','h8-A_TWjhcs'],
+['The Wound That Heals','kmfZIJzPMG8'],
+['The Seventh Seal','wU_kXyTqj54'],
+['The Shepherd King','xx3Rio6unWU'],
+['Comic Sans Heart','-Cucps3bLg0'],
+['Default Background','gYh3ePuZtt8'],
+['Equalizer Bars','2tEC0uVieJQ'],
+['Geocities Ghost','brFTEpBVRm4'],
+['Last Modified','446AhqP-IC0'],
+['Loading Forever','DLOUY7xJPfE'],
+['Modem Hymn','4F9JTw_3Rmk'],
+['Profile Deactivated','o22r2tABL14'],
+['Static Room','j7QskVYaZcM'],
+['Yellow Tape Sign','xm7kYq_bxD0'],
+['Not a Lofi Track','oUDfV9yTWGY'],
 ];
-const BASE_URL='https://records.hackatoa.com/';
-const audio=new Audio();audio.volume=0.05;
 let order=[...Array(TRACKS.length).keys()].sort(()=>Math.random()-.5),oi=0;
-function setTrack(i){const t=TRACKS[order[i%order.length]];audio.src=BASE_URL+t[1];const el=document.getElementById('title-scroll');if(el)el.textContent=t[0];}
+let ytPlayer=null,ytReady=false,pendingVolume=0.05,wantPlayOnReady=false;
 function updateUI(p){const b=document.getElementById('pp');if(b)b.textContent=p?'⏸':'▶';}
-// Keep the emblem in sync with actual playback state no matter how it changes
-// (autoplay, track-advance, clicks, or browser policy).
-audio.addEventListener('play',()=>updateUI(true));
-audio.addEventListener('pause',()=>updateUI(false));
-audio.addEventListener('ended',()=>{oi++;setTrack(oi);audio.play().then(()=>updateUI(true));});
-function tryAutoplay(){setTrack(0);audio.play().then(()=>updateUI(true)).catch(()=>updateUI(false));}
+function setTrackTitle(i){const el=document.getElementById('title-scroll');if(el)el.textContent=TRACKS[order[i%order.length]][0];}
+function setTrack(i,play){
+  oi=i;setTrackTitle(i);
+  const id=TRACKS[order[i%order.length]][1];
+  if(!ytReady){wantPlayOnReady=play;return;}
+  if(play)ytPlayer.loadVideoById(id);else ytPlayer.cueVideoById(id);
+}
+function playPause(){
+  if(!ytReady)return;
+  const s=ytPlayer.getPlayerState();
+  if(s===1)ytPlayer.pauseVideo();else ytPlayer.playVideo();
+}
+function tryAutoplay(){setTrack(0,true);}
 const mw=document.getElementById('music-wrap'),mp=document.getElementById('music-panel'),mi=document.getElementById('music-icon');
 let panelOpen=false;
 function setPanelOpen(v){panelOpen=v;mp.style.opacity=v?'1':'0';mp.style.transform=v?'translateX(0)':'translateX(-6px)';mp.style.pointerEvents=v?'auto':'none';}
-mi.addEventListener('click',e=>{e.stopPropagation();if(!panelOpen&&audio.paused){audio.play().then(()=>updateUI(true)).catch(()=>updateUI(false));}setPanelOpen(!panelOpen);});
-document.getElementById('pp').addEventListener('click',()=>{if(audio.paused){audio.play().then(()=>updateUI(true)).catch(()=>updateUI(false));}else{audio.pause();updateUI(false);}});
-document.getElementById('nxt').addEventListener('click',()=>{oi++;setTrack(oi);audio.play().then(()=>updateUI(true));});
-document.getElementById('vol').addEventListener('input',e=>{audio.volume=+e.target.value;});
+mi.addEventListener('click',e=>{e.stopPropagation();if(!panelOpen&&ytReady&&ytPlayer.getPlayerState()!==1)ytPlayer.playVideo();setPanelOpen(!panelOpen);});
+document.getElementById('pp').addEventListener('click',playPause);
+document.getElementById('nxt').addEventListener('click',()=>setTrack(oi+1,true));
+document.getElementById('vol').addEventListener('input',e=>{pendingVolume=+e.target.value;if(ytReady)ytPlayer.setVolume(Math.round(pendingVolume*100));});
+
+// YouTube IFrame API — kept out of layout flow but not display:none (some browsers
+// stop <iframe> media entirely once display:none, which would silently kill playback).
+const ytHost=document.createElement('div');
+ytHost.id='yt-audio-host';
+ytHost.style.cssText='position:fixed;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;bottom:0;right:0';
+document.body.appendChild(ytHost);
+window.onYouTubeIframeAPIReady=function(){
+  ytPlayer=new YT.Player('yt-audio-host',{
+    height:'1',width:'1',videoId:TRACKS[order[0]][1],
+    playerVars:{controls:0,disablekb:1,fs:0,modestbranding:1,playsinline:1},
+    events:{
+      onReady:function(){
+        ytReady=true;
+        ytPlayer.setVolume(Math.round(pendingVolume*100));
+        setTrackTitle(0);
+        if(wantPlayOnReady)ytPlayer.playVideo();
+      },
+      onStateChange:function(e){
+        if(e.data===YT.PlayerState.PLAYING)updateUI(true);
+        else if(e.data===YT.PlayerState.PAUSED)updateUI(false);
+        else if(e.data===YT.PlayerState.ENDED)setTrack(oi+1,true);
+      },
+      onError:function(){setTrack(oi+1,true);}
+    }
+  });
+};
+(function(){
+  const s=document.createElement('script');
+  s.src='https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+})();
 
 /* ── Constants ── */
 const N=180000,LERP_DUR=2.8,CAM_SPRING_DUR=1.1,CURVE_R=15;
