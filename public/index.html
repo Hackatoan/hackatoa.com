@@ -859,7 +859,7 @@ function initScene(){
 
     // About photo — a textured plane placed in 3D, inside the particle frame
     (function(){
-      const tex=new THREE.TextureLoader().load('/assets/me-real.png');
+      const tex=new THREE.TextureLoader().load('/assets/me-real.webp');
       if(tex.colorSpace!==undefined&&THREE.SRGBColorSpace)tex.colorSpace=THREE.SRGBColorSpace;
       tex.minFilter=THREE.LinearFilter;
       photoMat=new THREE.MeshBasicMaterial({map:tex,transparent:true,opacity:0,depthTest:false,depthWrite:false});
