@@ -17,7 +17,7 @@ An interactive WebGL landing page built with Three.js: a felt-craft volcano part
 
 ## Tech Stack
 
-Static HTML · Three.js · vanilla JS · nginx · Docker
+Static HTML · Three.js · vanilla JS · Firebase Hosting
 
 ## Development
 
@@ -28,7 +28,7 @@ cd public && python3 -m http.server 8080
 
 ## Deployment
 
-Self-hosted on the homelab Docker host behind Cloudflare → NPMplus. Pushes to `Main` build `ghcr.io/hackatoan/hackatoa-com` and auto-deploy via Watchtower.
+Firebase Hosting. Pushes to `Main` touching `public/`, `firebase.json`, or `.firebaserc` deploy automatically via GitHub Actions (`deploy-hosting.yml`).
 
 ## Support
 
