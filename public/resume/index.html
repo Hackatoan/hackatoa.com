@@ -253,7 +253,7 @@
     <nav class="top-nav">
       <a class="back-link" href="/">HACKATOA.COM</a>
       <div class="nav-right">
-        <button class="btn" id="toggle-clean" onclick="toggleClean()">CLEAN VIEW</button>
+        <button class="btn" id="toggle-clean" onclick="toggleClean()" aria-pressed="false">CLEAN VIEW</button>
         <button class="btn" onclick="window.print()">PRINT / PDF</button>
       </div>
     </nav>
@@ -397,7 +397,9 @@
       const body = document.getElementById('resume-body');
       const btn = document.getElementById('toggle-clean');
       body.classList.toggle('clean');
-      btn.textContent = body.classList.contains('clean') ? 'DARK VIEW' : 'CLEAN VIEW';
+      const isClean = body.classList.contains('clean');
+      btn.textContent = isClean ? 'DARK VIEW' : 'CLEAN VIEW';
+      btn.setAttribute('aria-pressed', String(isClean));
     }
   </script>
 </body>
