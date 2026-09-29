@@ -1061,7 +1061,8 @@ function onUp(){
 canvas.addEventListener('pointermove',onMove);
 canvas.addEventListener('pointerdown',onDown);
 canvas.addEventListener('pointerup',onUp);
-window.addEventListener('resize',()=>{W=wrap.clientWidth;H=wrap.clientHeight;camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);});
+let resizeRAF=null;function onResize(){resizeRAF=null;W=wrap.clientWidth;H=wrap.clientHeight;camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);}
+window.addEventListener('resize',()=>{if(resizeRAF===null)resizeRAF=requestAnimationFrame(onResize);});
 
 /* ── OrbitControls ── */
 (function loadControls(){
