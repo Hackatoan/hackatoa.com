@@ -409,10 +409,13 @@ const LAVA_N=7000, LAVA_TOP_HF=1.0, LAVA_BOT_HF=0.02, LAVA_SPEED=0.009, LAVA_W=0
 const MAGMA_N=1600, MAGMA_R=0.34*VS;
 const SEC_URLS={volcano:'/',about:'/about',bots:'/projects/bots',games:'/projects/games',tools:'/projects/tools',apps:'/projects/apps',connect:'/connect',support:'/support'};
 const HOME_POS=new THREE.Vector3(0,5,16),HOME_TGT=new THREE.Vector3(0,1,0);
-const BTC_ADDR='3L2oWuxjqZ8cbqgVFNTJzkkPKe2zKeZMif';
-const ETH_ADDR='0x2A7d2849607bC0B95C34CE01062D21bC8A10Bd17';
-const CRO_ADDR='0x2A7d2849607bC0B95C34CE01062D21bC8A10Bd17';
-const lineCopy={support:{3:BTC_ADDR,6:ETH_ADDR,9:CRO_ADDR}};
+const BTC_ADDR='bc1qwcgzkwv9x7gvn0hhs44jw92t2mxps2wkql47lk';
+const LN_ADDR='lnbc1p4vsdr8dqdgdshx6pqg9c8qpp5hy8djmmexyf97z5sr6atfrqaq8nny83640n07jx5mxx2kmc7ejrqsp5awky7q7k0mk438pzzvx07496c0n2rkqm3wvuldlefwgmxk5mx0qs9qrsgqcqzp2xqy8ayqrzjqfzhphca8jlc5zznw52mnqxsnymltjgg3lxe4ul82g42vw0jpkgkwp78lgqq8kgqqgqqqqqqqqqqqqqqxqrzjqfrjnu747au57n0sn07m0j3r5na7dsufjlxayy7xjj3vegwz0ja3wz5ym5qq3kgqqcqqqqqqqqqqqqqqxql83u4tfp8p7lzzls3262cx04f9h334q0wl0djzu03jugnsg7xrez6cc2s89uj4rqcss5w3pj678ud2vm4c049zy5w9zp8p68lfk3j3qp59rqtl';
+const SOL_ADDR='A22zt9TJbVTtvdVXTgS4B2TK7RKwno4zRiaA76a6PBMK';
+const ETH_ADDR='0xdc8f1a9cf38d30df1c34c5732ed0c7b59cf263eb';
+const POLY_ADDR='0xdc8f1a9cf38d30df1c34c5732ed0c7b59cf263eb';
+const ARB_ADDR='0xdc8f1a9cf38d30df1c34c5732ed0c7b59cf263eb';
+const lineCopy={support:{3:BTC_ADDR,6:LN_ADDR,9:SOL_ADDR,12:ETH_ADDR,15:POLY_ADDR,18:ARB_ADDR}};
 
 /* ── Section content ── */
 const sectionContent={
@@ -422,7 +425,7 @@ const sectionContent={
   tools:['[ Clip Forge ]','browser video editor','trim · cut · overlay','no uploads · runs local','','[ Mosaic ]','photomosaic generator','upload or pick a topic','built from tiled photos','','[ MovieTimelines ]','franchise watch tracker','films & series in order','watch-time tallied','','[ Canvas Messenger ]','chat for Canvas LMS','DMs · groups · channels','','[ AutoCompressVideo ]','Discord video plugin','fits any upload limit','GPU encode · auto-split'],
   apps:['[ P&N ]','protons & neutrons','dating · verified humans','ID checks · no bots, no AI','swipe · match · chat','','[ Element ]','self-hosted Matrix chat','group + voice rooms','','[ Marginalia ]','scan books · highlight','AI insight · read aloud'],
   connect:['preston@hackatoa.com','github.com/Hackatoan','x · @JHackatoa','youtube · @Hackatoa','twitch · hackatoa','instagram · hackatoa','tiktok · hackatoa','discord · The Caldera','teamspeak · ts.hackatoa.com'],
-  support:['Buy Me a Coffee','','Bitcoin','3L2oWu...KeZMif','','Ethereum','0x2A7d...0Bd17','','Cronos','0x2A7d...0Bd17'],
+  support:['Buy Me a Coffee','','Bitcoin','bc1qwc...ql47lk','','Lightning','lnbc1p4vsd...59rqtl','','USDC (Solana)','A22zt9...a6PBMK','','Ethereum','0xdc8f...f263eb','','Polygon','0xdc8f...f263eb','','Arbitrum','0xdc8f...f263eb'],
 };
 const lineLinks={
   about:[null,null,null,null,null,null,null,null,null,null,'https://github.com/Hackatoan'],
@@ -431,7 +434,7 @@ const lineLinks={
   tools:['https://clip-forge.hackatoa.com',null,null,null,null,'https://mosaic.hackatoa.com',null,null,null,null,'https://timelines.hackatoa.com',null,null,null,null,'https://cm.hackatoa.com',null,null,null,'https://github.com/Hackatoan/vencord-auto-compress-video',null,null,null],
   apps:['https://nucleus.hackatoa.com',null,null,null,null,null,'https://element.hackatoa.com',null,null,null,'https://marginalia.hackatoa.com',null,null],
   connect:['mailto:preston@hackatoa.com','https://github.com/Hackatoan','https://x.com/JHackatoa','https://youtube.com/@Hackatoa','https://twitch.tv/hackatoa','https://instagram.com/hackatoa','https://tiktok.com/@hackatoa','https://discord.gg/nrQFdACWbh','ts3server://ts.hackatoa.com'],
-  support:['https://buymeacoffee.com/hackatoa',null,null,null,null,null,null,null,null,null],
+  support:['https://buymeacoffee.com/hackatoa',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
 };
 
 /* ── Three.js setup ── */
