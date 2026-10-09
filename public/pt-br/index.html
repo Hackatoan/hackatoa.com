@@ -102,7 +102,7 @@
             "name": "What is hosted on hackatoa.com?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "hackatoa.com links to a self-hosted homelab of projects: Discord bots (WikiRoll, Lamar, Balthazar), browser games (Infinisweeper, Battleship, Cards Against Hackatoa, Sys32 Roulette), tools (Clip Forge, Mosaic, MovieTimelines), and apps (P&N)."
+              "text": "hackatoa.com links to a self-hosted homelab of projects: Discord bots (WikiRoll, Lamar, Balthazar), browser games (Infinisweeper, Battleship, Cards Against Hackatoa, Sys32 Roulette), tools (Clip Forge, Mosaic, MovieTimelines, AutoCompressVideo), and apps (P&N, Marginalia)."
             }
           },
           {
@@ -194,11 +194,13 @@
     <li><a href="https://mosaic.hackatoa.com">Mosaic</a> — gerador de photomosaico: reconstrua qualquer imagem a partir de centenas de fotos em mosaico, envie a sua própria ou escolha um tema</li>
     <li><a href="https://timelines.hackatoa.com">MovieTimelines</a> — acompanhe franquias de filmes e TV (Star Wars, UCM, Duna, John Wick e mais) na ordem cronológica do universo, episódio por episódio, com seu tempo de exibição contabilizado</li>
     <li><a href="https://cm.hackatoa.com">Canvas Messenger</a> — Discord-style messaging for Canvas LMS: DMs, group chats, and class channels</li>
+    <li><a href="https://github.com/Hackatoan/vencord-auto-compress-video">AutoCompressVideo</a> — plugin do Vencord/Vesktop que comprime vídeos para caber no limite de upload do Discord usando ffmpeg com aceleração por GPU, e divide clipes longos em partes enviadas automaticamente</li>
   </ul>
   <h2>Aplicativos</h2>
   <ul>
     <li><a href="https://nucleus.hackatoa.com">P&amp;N (Protons &amp; Neutrons)</a> — aplicativo de namoro para humanos verificados, verificação de identidade, sem bots ou IA</li>
     <li><a href="https://element.hackatoa.com">Element / Matrix</a> — self-hosted Matrix chat (Synapse + Element)</li>
+    <li><a href="https://marginalia.hackatoa.com">Marginalia</a> — escâner e marcador de livros com insights de IA: capture páginas pela câmera, captura de tela ou PDF, depois destaque, faça perguntas, ouça a leitura em voz alta e exporte</li>
   </ul>
   <h2>Conectar</h2>
   <ul>
@@ -216,7 +218,7 @@
   <h3>Quem é o Hackatoa?</h3>
   <p>Hackatoa é Preston Harris, um desenvolvedor e engenheiro de homelab que cria infraestrutura auto-hospedada, jogos de navegador, bots do Discord e ferramentas de código aberto.</p>
   <h3>O que está hospedado no hackatoa.com?</h3>
-  <p>O hackatoa.com traz links para um homelab auto-hospedado de projetos: bots do Discord (WikiRoll, Lamar, Balthazar), jogos de navegador (Infinisweeper, Battleship, Cards Against Hackatoa, Sys32 Roulette), ferramentas (Clip Forge, Mosaic) e aplicativos (P&amp;N).</p>
+  <p>O hackatoa.com traz links para um homelab auto-hospedado de projetos: bots do Discord (WikiRoll, Lamar, Balthazar), jogos de navegador (Infinisweeper, Battleship, Cards Against Hackatoa, Sys32 Roulette), ferramentas (Clip Forge, Mosaic, AutoCompressVideo) e aplicativos (P&amp;N, Marginalia).</p>
   <h3>Os projetos do Hackatoa são de código aberto?</h3>
   <p>A maioria dos projetos é de código aberto e está disponível no GitHub em <a href="https://github.com/Hackatoan">github.com/Hackatoan</a>.</p>
   <h3>Como posso entrar em contato com o Hackatoa?</h3>
@@ -374,8 +376,8 @@ const sectionContent={
   about:['Preston','aka Hackatoa','','Networking · Homelab · AI','Game Dev · Tool Builder','','homelab · 20+ services','JS · Python · Node · Bash','Proxmox · Docker · Linux','','github.com/Hackatoan'],
   bots:['[ WikiRoll ]','collect characters from','Wikipedia + 150 wikis','roll · claim · trade','','[ Lamar ]','GTA V AI on Discord','Gemini · Google Search','responds in character','','[ Balthazar ]','Discord voice bot','Whisper transcription','30s clip capture'],
   games:['[ Hackatoa Games ]','','Infinisweeper','infinite minesweeper','','Battleship','multiplayer · vs AI','','Cards Against Hackatoa','party card game','','Sys32 Roulette','competitive minigames','','Tic-Tac-Toe Online','real-time online play','','1v1 Minesweeper','race an opponent live'],
-  tools:['[ Clip Forge ]','browser video editor','trim · cut · overlay','no uploads · runs local','','[ Mosaic ]','photomosaic generator','upload or pick a topic','built from tiled photos','','[ MovieTimelines ]','franchise watch tracker','films & series in order','watch-time tallied','','[ Canvas Messenger ]','chat for Canvas LMS','DMs · groups · channels'],
-  apps:['[ P&N ]','protons & neutrons','dating · verified humans','ID checks · no bots, no AI','swipe · match · chat','','[ Element ]','self-hosted Matrix chat','group + voice rooms'],
+  tools:['[ Clip Forge ]','browser video editor','trim · cut · overlay','no uploads · runs local','','[ Mosaic ]','photomosaic generator','upload or pick a topic','built from tiled photos','','[ MovieTimelines ]','franchise watch tracker','films & series in order','watch-time tallied','','[ Canvas Messenger ]','chat for Canvas LMS','DMs · groups · channels','','[ AutoCompressVideo ]','Discord video plugin','fits any upload limit','GPU encode · auto-split'],
+  apps:['[ P&N ]','protons & neutrons','dating · verified humans','ID checks · no bots, no AI','swipe · match · chat','','[ Element ]','self-hosted Matrix chat','group + voice rooms','','[ Marginalia ]','scan books · highlight','AI insight · read aloud'],
   connect:['preston@hackatoa.com','github.com/Hackatoan','x · @JHackatoa','youtube · @Hackatoa','twitch · hackatoa','instagram · hackatoa','tiktok · hackatoa','discord · The Caldera'],
   support:['Buy Me a Coffee','','Bitcoin','3L2oWu...KeZMif','','Ethereum','0x2A7d...0Bd17','','Cronos','0x2A7d...0Bd17'],
 };
@@ -383,8 +385,8 @@ const lineLinks={
   about:[null,null,null,null,null,null,null,null,null,null,'https://github.com/Hackatoan'],
   bots:['https://wikiroll.hackatoa.com',null,null,null,null,'https://lamar.hackatoa.com',null,null,null,null,'https://github.com/Hackatoan/balthazar',null,null,null],
   games:['https://games.hackatoa.com',null,'https://infinisweeper.hackatoa.com',null,null,'https://battleship.hackatoa.com',null,null,'https://cah.hackatoa.com',null,null,'https://sys32.hackatoa.com',null,null,'https://ttt.hackatoa.com',null,null,'https://1v1sw.hackatoa.com',null],
-  tools:['https://clip-forge.hackatoa.com',null,null,null,null,'https://mosaic.hackatoa.com',null,null,null,null,'https://timelines.hackatoa.com',null,null,null,null,'https://cm.hackatoa.com',null,null],
-  apps:['https://nucleus.hackatoa.com',null,null,null,null,null,'https://element.hackatoa.com',null,null],
+  tools:['https://clip-forge.hackatoa.com',null,null,null,null,'https://mosaic.hackatoa.com',null,null,null,null,'https://timelines.hackatoa.com',null,null,null,null,'https://cm.hackatoa.com',null,null,null,'https://github.com/Hackatoan/vencord-auto-compress-video',null,null,null],
+  apps:['https://nucleus.hackatoa.com',null,null,null,null,null,'https://element.hackatoa.com',null,null,null,'https://marginalia.hackatoa.com',null,null],
   connect:['mailto:preston@hackatoa.com','https://github.com/Hackatoan','https://x.com/JHackatoa','https://youtube.com/@Hackatoa','https://twitch.tv/hackatoa','https://instagram.com/hackatoa','https://tiktok.com/@hackatoa','https://discord.gg/nrQFdACWbh'],
   support:['https://buymeacoffee.com/hackatoa',null,null,null,null,null,null,null,null,null],
 };

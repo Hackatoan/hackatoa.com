@@ -14,6 +14,8 @@
 - Infinisweeper — infinite minesweeper: https://infinisweeper.hackatoa.com
 - Clip Forge — browser video editor: https://clip-forge.hackatoa.com
 - Mosaic — photomosaic generator: https://mosaic.hackatoa.com
+- Marginalia — book scanner and highlighter with AI insight: https://marginalia.hackatoa.com
+- AutoCompressVideo — Vencord/Vesktop plugin that fits videos to Discord's upload limit: https://github.com/Hackatoan/vencord-auto-compress-video
 - Sys32 Roulette: https://sys32.hackatoa.com
 - Games hub: https://games.hackatoa.com
 
