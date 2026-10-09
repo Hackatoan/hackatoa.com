@@ -117,7 +117,7 @@ for (const loc of LOCALES.filter((l) => l !== 'en')) {
     uniq.forEach((v, i) => map.set(v, tr[i]));
     let out = apply(src, map);
     out = out.replace(/<html lang="en">/i, `<html lang="${loc}">`);
-    out = out.replace(/\b(href|src)="(?!https?:|\/|#|data:|mailto:)([^"]+)"/g, (m, a, p) => `${a}="/${p}"`);
+    out = out.replace(/\b(href|src)="(?![a-zA-Z][a-zA-Z0-9+.-]*:|\/|#)([^"]+)"/g, (m, a, p) => `${a}="/${p}"`);
     // self-referential canonical + og:url for the localized page (both attr orders)
     const locUrl = pageUrl(page, loc);
     out = out.replace(/(<link\b[^>]*\brel="canonical"[^>]*\bhref=")[^"]*(")/i, `$1${locUrl}$2`)

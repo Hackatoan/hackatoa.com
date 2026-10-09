@@ -17,7 +17,7 @@
     if(window.innerWidth<=600)location.replace('/urls/');
   })();
   </script>
-  <title>Hackatoa — Preston Harris | Desenvolvedor &amp; Engenheiro de Homelab</title>
+  <title>Hackatoa — Preston Harris | Desenvolvedor e Engenheiro de Homelab</title>
   <meta name="description" content="Preston (Hackatoa) — desenvolvedor, engenheiro de homelab, entusiasta de IA. Criando infraestrutura auto-hospedada, jogos de navegador, bots do Discord e ferramentas de código aberto." />
   <meta name="author" content="Preston" />
   <meta property="og:title" content="Hackatoa — Preston" />
@@ -133,7 +133,8 @@
     #wrap{position:relative;width:100%;height:100%;background:#040602;overflow:hidden;font-family:monospace}
     canvas{position:absolute;top:0;left:0;width:100%;height:100%}
     .nb{color:#5a4400;cursor:pointer;font-size:11px;letter-spacing:2.5px;font-family:monospace;transition:color .2s,text-shadow .2s;user-select:none}
-    .nb:hover,.nb.active{color:#ffd600;text-shadow:0 0 10px rgba(255,214,0,0.35)}
+    .nb:hover,.nb.active,.nb:focus-visible{color:#ffd600;text-shadow:0 0 10px rgba(255,214,0,0.35)}
+    .nb:focus-visible{outline:1px dashed #827717;outline-offset:3px}
     .nb.sub{font-size:10px;letter-spacing:2px;color:#3d2e00}
     .nb.sub:hover,.nb.sub.active{color:#ffd600;text-shadow:0 0 8px rgba(255,214,0,0.3)}
     /* About photo card (framed by particles) */
@@ -171,36 +172,36 @@
 <!-- The sections below are also rendered as an interactive WebGL particle scene (canvas text isn't crawlable) —
      this block mirrors that content as real, indexable HTML so search engines can read and follow it. -->
 <div style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;color:#e8e0c0">
-  <p>Preston, também conhecido como Hackatoa — desenvolvedor e engenheiro de homelab criando infraestrutura auto-hospedada, jogos de navegador, bots do Discord e ferramentas de código aberto. <a href="/resume">Currículo</a> · <a href="https://github.com/Hackatoan">github.com/Hackatoan</a></p>
+  <p>Preston, também conhecido como Hackatoa — desenvolvedor e engenheiro de homelab que cria infraestrutura auto-hospedada, jogos de navegador, bots do Discord e ferramentas de código aberto. <a href="/resume">Currículo</a> · <a href="https://github.com/Hackatoan">github.com/Hackatoan</a></p>
   <h2>Bots do Discord</h2>
   <ul>
-    <li><a href="https://wikiroll.hackatoa.com">WikiRoll</a> — colete personagens da Wikipédia e de mais de 150 wikis; role, resgate e troque</li>
-    <li><a href="https://lamar.hackatoa.com">Lamar</a> — bot do Discord de IA com temática de GTA V, alimentado por Gemini e Google Search</li>
-    <li><a href="https://github.com/Hackatoan/balthazar">Balthazar</a> — bot de voz do Discord com transcrição Whisper e captura de clipes</li>
+    <li><a href="https://wikiroll.hackatoa.com">WikiRoll</a> — colete personagens da Wikipedia e de mais de 150 wikis; role, resgate e troque</li>
+    <li><a href="https://lamar.hackatoa.com">Lamar</a> — bot de IA do Discord com temática de GTA V desenvolvido com Gemini e Google Search</li>
+    <li><a href="https://github.com/Hackatoan/balthazar">Balthazar</a> — bot de voz do Discord com transcrição via Whisper e captura de clipes</li>
   </ul>
   <h2>Jogos de Navegador</h2>
   <ul>
     <li><a href="https://games.hackatoa.com">Hackatoa Games</a> — central de todos os jogos de navegador</li>
-    <li><a href="https://infinisweeper.hackatoa.com">Infinisweeper</a> — campo minado infinito onde você pode rolar e dar zoom para sempre</li>
-    <li><a href="https://battleship.hackatoa.com">Battleship</a> — batalha naval multiplayer, jogue online contra amigos ou contra uma IA</li>
-    <li><a href="https://cah.hackatoa.com">Cards Against Hackatoa</a> — jogo de cartas de festa online gratuito</li>
-    <li><a href="https://sys32.hackatoa.com">Sys32 Roulette</a> — minigame de batalha competitivo 1v1</li>
-    <li><a href="https://ttt.hackatoa.com">Tic-Tac-Toe Online</a> — real-time online tic-tac-toe by room code</li>
-    <li><a href="https://1v1sw.hackatoa.com">1v1 Minesweeper</a> — real-time competitive minesweeper, race an opponent</li>
+    <li><a href="https://infinisweeper.hackatoa.com">Infinisweeper</a> — campo minado infinito e sem fim onde você pode rolar e dar zoom para sempre</li>
+    <li><a href="https://battleship.hackatoa.com">Battleship</a> — batalha naval multijogador, jogue online com amigos ou contra uma IA</li>
+    <li><a href="https://cah.hackatoa.com">Cards Against Hackatoa</a> — jogo de cartas casual online gratuito</li>
+    <li><a href="https://sys32.hackatoa.com">Sys32 Roulette</a> — jogo de combate competitivo 1v1 em minigame</li>
+    <li><a href="https://ttt.hackatoa.com">Tic-Tac-Toe Online</a> — jogo da velha online em tempo real por código de sala</li>
+    <li><a href="https://1v1sw.hackatoa.com">1v1 Minesweeper</a> — campo minado competitivo em tempo real, dispute contra um oponente</li>
   </ul>
   <h2>Ferramentas</h2>
   <ul>
-    <li><a href="https://clip-forge.hackatoa.com">Clip Forge</a> — editor de vídeo gratuito baseado no navegador: corte, apare e sobreponha clipes sem uploads, roda inteiramente no lado do cliente</li>
-    <li><a href="https://mosaic.hackatoa.com">Mosaic</a> — gerador de photomosaico: reconstrua qualquer imagem a partir de centenas de fotos em mosaico, envie a sua própria ou escolha um tema</li>
-    <li><a href="https://timelines.hackatoa.com">MovieTimelines</a> — acompanhe franquias de filmes e TV (Star Wars, UCM, Duna, John Wick e mais) na ordem cronológica do universo, episódio por episódio, com seu tempo de exibição contabilizado</li>
-    <li><a href="https://cm.hackatoa.com">Canvas Messenger</a> — Discord-style messaging for Canvas LMS: DMs, group chats, and class channels</li>
-    <li><a href="https://github.com/Hackatoan/vencord-auto-compress-video">AutoCompressVideo</a> — plugin do Vencord/Vesktop que comprime vídeos para caber no limite de upload do Discord usando ffmpeg com aceleração por GPU, e divide clipes longos em partes enviadas automaticamente</li>
+    <li><a href="https://clip-forge.hackatoa.com">Clip Forge</a> — editor de vídeo gratuito baseado no navegador: corte, apare e aplique sobreposições em clipes sem uploads, roda inteiramente no lado do cliente</li>
+    <li><a href="https://mosaic.hackatoa.com">Mosaic</a> — gerador de fotomosaico: reconstrua qualquer imagem a partir de centenas de fotos em bloco, envie a sua própria ou escolha um tema</li>
+    <li><a href="https://timelines.hackatoa.com">MovieTimelines</a> — acompanhe franquias de filmes e séries (Star Wars, MCU, Dune, John Wick e mais) na ordem cronológica do universo, episódio por episódio, com seu tempo de exibição contabilizado</li>
+    <li><a href="https://cm.hackatoa.com">Canvas Messenger</a> — mensagens estilo Discord para o Canvas LMS: DMs, chats em grupo e canais de turma</li>
+    <li><a href="https://github.com/Hackatoan/vencord-auto-compress-video">AutoCompressVideo</a> — plugin para Vencord/Vesktop que compacta vídeos para caber no limite de upload do Discord usando ffmpeg acelerado por GPU, e divide clipes longos em partes enviadas automaticamente</li>
   </ul>
   <h2>Aplicativos</h2>
   <ul>
     <li><a href="https://nucleus.hackatoa.com">P&amp;N (Protons &amp; Neutrons)</a> — aplicativo de namoro para humanos verificados, verificação de identidade, sem bots ou IA</li>
-    <li><a href="https://element.hackatoa.com">Element / Matrix</a> — self-hosted Matrix chat (Synapse + Element)</li>
-    <li><a href="https://marginalia.hackatoa.com">Marginalia</a> — escâner e marcador de livros com insights de IA: capture páginas pela câmera, captura de tela ou PDF, depois destaque, faça perguntas, ouça a leitura em voz alta e exporte</li>
+    <li><a href="https://element.hackatoa.com">Element / Matrix</a> — chat Matrix auto-hospedado (Synapse + Element)</li>
+    <li><a href="https://marginalia.hackatoa.com">Marginalia</a> — scanner de livros e criador de destaques com insights de IA: capture páginas por câmera, captura de tela ou PDF, depois destaque, faça perguntas, ouça em voz alta e exporte</li>
   </ul>
   <h2>Conectar</h2>
   <ul>
@@ -212,12 +213,13 @@
     <li><a href="https://instagram.com/hackatoa">Instagram</a></li>
     <li><a href="https://tiktok.com/@hackatoa">TikTok</a></li>
     <li><a href="https://discord.gg/nrQFdACWbh">Discord — The Caldera</a></li>
+    <li><a href="ts3server://ts.hackatoa.com">TeamSpeak — ts.hackatoa.com</a></li>
   </ul>
   <p>Veja a lista completa de links em <a href="/urls">hackatoa.com/urls</a>.</p>
   <h2>FAQ</h2>
   <h3>Quem é o Hackatoa?</h3>
   <p>Hackatoa é Preston Harris, um desenvolvedor e engenheiro de homelab que cria infraestrutura auto-hospedada, jogos de navegador, bots do Discord e ferramentas de código aberto.</p>
-  <h3>O que está hospedado no hackatoa.com?</h3>
+  <h3>O que está hospedado em hackatoa.com?</h3>
   <p>O hackatoa.com traz links para um homelab auto-hospedado de projetos: bots do Discord (WikiRoll, Lamar, Balthazar), jogos de navegador (Infinisweeper, Battleship, Cards Against Hackatoa, Sys32 Roulette), ferramentas (Clip Forge, Mosaic, AutoCompressVideo) e aplicativos (P&amp;N, Marginalia).</p>
   <h3>Os projetos do Hackatoa são de código aberto?</h3>
   <p>A maioria dos projetos é de código aberto e está disponível no GitHub em <a href="https://github.com/Hackatoan">github.com/Hackatoan</a>.</p>
@@ -270,7 +272,7 @@
   <!-- About photo (particles form a frame around it) -->
   <div id="about-card" aria-hidden="true">
     <div class="about-name">PRESTON</div>
-    <div class="about-aka">também conhecido como Hackatoa · Homelab · IA · Dev de Jogos</div>
+    <div class="about-aka">também conhecido como Hackatoa · Homelab · IA · Desenvolvedor de Jogos</div>
     <a class="about-gh" href="https://github.com/Hackatoan" target="_blank" rel="noopener">github.com/Hackatoan ↗</a>
     <div class="about-motd" id="motd-body"></div>
   </div>
@@ -303,45 +305,86 @@
 <script src="/assets/vendor/three.min.js"></script>
 <script>
 /* ── Music ── */
+// records.hackatoa.com (the old homelab audio host) is retired — every track now
+// plays via the YouTube IFrame API using the same video IDs the /songs page's
+// "Stream" buttons already link out to.
 const TRACKS=[
-['The Iron Basilica','album/The%20Iron%20Basilica.mp3'],
-['Found Me Here','album/Found%20Me%20Here.mp3'],
-['One Body','album/One%20Body.mp3'],
-['Valley of Saints','album/Valley%20of%20Saints.mp3'],
-['Known','album/Known.mp3'],
-['You Spoke to the Storm','album/You%20Spoke%20to%20the%20Storm.mp3'],
-['The Wound That Heals','album/The%20Wound%20That%20Heals.mp3'],
-['The Seventh Seal','album/The%20Seventh%20Seal.mp3'],
-['The Shepherd King','album/The%20Shepherd%20King.mp3'],
-['Comic Sans Heart','wayback/Comic%20Sans%20Heart.mp3'],
-['Default Background','wayback/Default%20Background.mp3'],
-['Equalizer Bars','wayback/Equalizer%20Bars.mp3'],
-['Geocities Ghost','wayback/Geocities%20Ghost.mp3'],
-['Last Modified','wayback/Last%20Modified.mp3'],
-['Loading Forever','wayback/Loading%20Forever.mp3'],
-['Modem Hymn','wayback/Modem%20Hymn.mp3'],
-['Profile Deactivated','wayback/Profile%20Deactivated.mp3'],
-['Static Room','wayback/Static%20Room.mp3'],
-['Yellow Tape Sign','wayback/Yellow%20Tape%20Sign.mp3'],
+['The Iron Basilica','9QqKQnFhOwU'],
+['Found Me Here','HUxvN3Zb03Y'],
+['One Body','MQh8NSRXD7s'],
+['Valley of Saints','ORYwnjMLCUo'],
+['Known','aveHBQoHZjA'],
+['You Spoke to the Storm','h8-A_TWjhcs'],
+['The Wound That Heals','kmfZIJzPMG8'],
+['The Seventh Seal','wU_kXyTqj54'],
+['The Shepherd King','xx3Rio6unWU'],
+['Comic Sans Heart','-Cucps3bLg0'],
+['Default Background','gYh3ePuZtt8'],
+['Equalizer Bars','2tEC0uVieJQ'],
+['Geocities Ghost','brFTEpBVRm4'],
+['Last Modified','446AhqP-IC0'],
+['Loading Forever','DLOUY7xJPfE'],
+['Modem Hymn','4F9JTw_3Rmk'],
+['Profile Deactivated','o22r2tABL14'],
+['Static Room','j7QskVYaZcM'],
+['Yellow Tape Sign','xm7kYq_bxD0'],
+['Not a Lofi Track','oUDfV9yTWGY'],
 ];
-const BASE_URL='https://records.hackatoa.com/';
-const audio=new Audio();audio.volume=0.05;
 let order=[...Array(TRACKS.length).keys()].sort(()=>Math.random()-.5),oi=0;
-function setTrack(i){const t=TRACKS[order[i%order.length]];audio.src=BASE_URL+t[1];const el=document.getElementById('title-scroll');if(el)el.textContent=t[0];}
+let ytPlayer=null,ytReady=false,pendingVolume=0.05,wantPlayOnReady=false;
 function updateUI(p){const b=document.getElementById('pp');if(b)b.textContent=p?'⏸':'▶';}
-// Keep the emblem in sync with actual playback state no matter how it changes
-// (autoplay, track-advance, clicks, or browser policy).
-audio.addEventListener('play',()=>updateUI(true));
-audio.addEventListener('pause',()=>updateUI(false));
-audio.addEventListener('ended',()=>{oi++;setTrack(oi);audio.play().then(()=>updateUI(true));});
-function tryAutoplay(){setTrack(0);audio.play().then(()=>updateUI(true)).catch(()=>updateUI(false));}
+function setTrackTitle(i){const el=document.getElementById('title-scroll');if(el)el.textContent=TRACKS[order[i%order.length]][0];}
+function setTrack(i,play){
+  oi=i;setTrackTitle(i);
+  const id=TRACKS[order[i%order.length]][1];
+  if(!ytReady){wantPlayOnReady=play;return;}
+  if(play)ytPlayer.loadVideoById(id);else ytPlayer.cueVideoById(id);
+}
+function playPause(){
+  if(!ytReady)return;
+  const s=ytPlayer.getPlayerState();
+  if(s===1)ytPlayer.pauseVideo();else ytPlayer.playVideo();
+}
+function tryAutoplay(){setTrack(0,true);}
 const mw=document.getElementById('music-wrap'),mp=document.getElementById('music-panel'),mi=document.getElementById('music-icon');
 let panelOpen=false;
 function setPanelOpen(v){panelOpen=v;mp.style.opacity=v?'1':'0';mp.style.transform=v?'translateX(0)':'translateX(-6px)';mp.style.pointerEvents=v?'auto':'none';}
-mi.addEventListener('click',e=>{e.stopPropagation();if(!panelOpen&&audio.paused){audio.play().then(()=>updateUI(true)).catch(()=>updateUI(false));}setPanelOpen(!panelOpen);});
-document.getElementById('pp').addEventListener('click',()=>{if(audio.paused){audio.play().then(()=>updateUI(true)).catch(()=>updateUI(false));}else{audio.pause();updateUI(false);}});
-document.getElementById('nxt').addEventListener('click',()=>{oi++;setTrack(oi);audio.play().then(()=>updateUI(true));});
-document.getElementById('vol').addEventListener('input',e=>{audio.volume=+e.target.value;});
+mi.addEventListener('click',e=>{e.stopPropagation();if(!panelOpen&&ytReady&&ytPlayer.getPlayerState()!==1)ytPlayer.playVideo();setPanelOpen(!panelOpen);});
+document.getElementById('pp').addEventListener('click',playPause);
+document.getElementById('nxt').addEventListener('click',()=>setTrack(oi+1,true));
+document.getElementById('vol').addEventListener('input',e=>{pendingVolume=+e.target.value;if(ytReady)ytPlayer.setVolume(Math.round(pendingVolume*100));});
+
+// YouTube IFrame API — kept out of layout flow but not display:none (some browsers
+// stop <iframe> media entirely once display:none, which would silently kill playback).
+const ytHost=document.createElement('div');
+ytHost.id='yt-audio-host';
+ytHost.style.cssText='position:fixed;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;bottom:0;right:0';
+document.body.appendChild(ytHost);
+window.onYouTubeIframeAPIReady=function(){
+  ytPlayer=new YT.Player('yt-audio-host',{
+    height:'1',width:'1',videoId:TRACKS[order[0]][1],
+    playerVars:{controls:0,disablekb:1,fs:0,modestbranding:1,playsinline:1},
+    events:{
+      onReady:function(){
+        ytReady=true;
+        ytPlayer.setVolume(Math.round(pendingVolume*100));
+        setTrackTitle(0);
+        if(wantPlayOnReady)ytPlayer.playVideo();
+      },
+      onStateChange:function(e){
+        if(e.data===YT.PlayerState.PLAYING)updateUI(true);
+        else if(e.data===YT.PlayerState.PAUSED)updateUI(false);
+        else if(e.data===YT.PlayerState.ENDED)setTrack(oi+1,true);
+      },
+      onError:function(){setTrack(oi+1,true);}
+    }
+  });
+};
+(function(){
+  const s=document.createElement('script');
+  s.src='https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+})();
 
 /* ── Constants ── */
 const N=180000,LERP_DUR=2.8,CAM_SPRING_DUR=1.1,CURVE_R=15;
@@ -380,7 +423,7 @@ const sectionContent={
   games:['[ Hackatoa Games ]','','Infinisweeper','infinite minesweeper','','Battleship','multiplayer · vs AI','','Cards Against Hackatoa','party card game','','Sys32 Roulette','competitive minigames','','Tic-Tac-Toe Online','real-time online play','','1v1 Minesweeper','race an opponent live'],
   tools:['[ Clip Forge ]','browser video editor','trim · cut · overlay','no uploads · runs local','','[ Mosaic ]','photomosaic generator','upload or pick a topic','built from tiled photos','','[ MovieTimelines ]','franchise watch tracker','films & series in order','watch-time tallied','','[ Canvas Messenger ]','chat for Canvas LMS','DMs · groups · channels','','[ AutoCompressVideo ]','Discord video plugin','fits any upload limit','GPU encode · auto-split'],
   apps:['[ P&N ]','protons & neutrons','dating · verified humans','ID checks · no bots, no AI','swipe · match · chat','','[ Element ]','self-hosted Matrix chat','group + voice rooms','','[ Marginalia ]','scan books · highlight','AI insight · read aloud'],
-  connect:['preston@hackatoa.com','github.com/Hackatoan','x · @JHackatoa','youtube · @Hackatoa','twitch · hackatoa','instagram · hackatoa','tiktok · hackatoa','discord · The Caldera'],
+  connect:['preston@hackatoa.com','github.com/Hackatoan','x · @JHackatoa','youtube · @Hackatoa','twitch · hackatoa','instagram · hackatoa','tiktok · hackatoa','discord · The Caldera','teamspeak · ts.hackatoa.com'],
   support:['Buy Me a Coffee','','Bitcoin','bc1qwc...ql47lk','','USDC (Solana)','A22zt9...a6PBMK','','Ethereum','0xdc8f...f263eb','','Polygon','0xdc8f...f263eb','','Arbitrum','0xdc8f...f263eb'],
 };
 const lineLinks={
@@ -389,7 +432,7 @@ const lineLinks={
   games:['https://games.hackatoa.com',null,'https://infinisweeper.hackatoa.com',null,null,'https://battleship.hackatoa.com',null,null,'https://cah.hackatoa.com',null,null,'https://sys32.hackatoa.com',null,null,'https://ttt.hackatoa.com',null,null,'https://1v1sw.hackatoa.com',null],
   tools:['https://clip-forge.hackatoa.com',null,null,null,null,'https://mosaic.hackatoa.com',null,null,null,null,'https://timelines.hackatoa.com',null,null,null,null,'https://cm.hackatoa.com',null,null,null,'https://github.com/Hackatoan/vencord-auto-compress-video',null,null,null],
   apps:['https://nucleus.hackatoa.com',null,null,null,null,null,'https://element.hackatoa.com',null,null,null,'https://marginalia.hackatoa.com',null,null],
-  connect:['mailto:preston@hackatoa.com','https://github.com/Hackatoan','https://x.com/JHackatoa','https://youtube.com/@Hackatoa','https://twitch.tv/hackatoa','https://instagram.com/hackatoa','https://tiktok.com/@hackatoa','https://discord.gg/nrQFdACWbh'],
+  connect:['mailto:preston@hackatoa.com','https://github.com/Hackatoan','https://x.com/JHackatoa','https://youtube.com/@Hackatoa','https://twitch.tv/hackatoa','https://instagram.com/hackatoa','https://tiktok.com/@hackatoa','https://discord.gg/nrQFdACWbh','ts3server://ts.hackatoa.com'],
   support:['https://buymeacoffee.com/hackatoa',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
 };
 
@@ -903,6 +946,14 @@ projBtn.addEventListener('click',()=>{
 });
 document.querySelectorAll('.nb[data-sec]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.sec)));
 (function(){const lb=document.getElementById('lang-btn'),lp=document.getElementById('lang-pop');if(lb&&lp){const cur=(document.documentElement.lang||'en').toLowerCase();lp.querySelectorAll('a[data-lang]').forEach(a=>{if(a.getAttribute('data-lang')===cur){a.style.color='#fff';a.style.fontWeight='700';}});lb.addEventListener('click',e=>{e.stopPropagation();lp.style.display=lp.style.display==='flex'?'none':'flex';});lp.addEventListener('click',e=>e.stopPropagation());document.addEventListener('click',()=>{lp.style.display='none';});}})();
+// These are plain <span> elements activated only via JS click handlers above,
+// which leaves them invisible to keyboard/screen-reader users. Make them behave
+// like real buttons without touching the click-handling logic itself.
+document.querySelectorAll('.nb').forEach(b=>{
+  if(!b.hasAttribute('tabindex'))b.setAttribute('tabindex','0');
+  if(!b.hasAttribute('role'))b.setAttribute('role','button');
+  b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.click();}});
+});
 
 function updateNav(sec){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
