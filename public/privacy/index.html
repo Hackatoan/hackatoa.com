@@ -28,36 +28,48 @@
   <div class="wrap">
     <a class="back" href="/">hackatoa.com</a>
     <h1>Privacy Policy</h1>
-    <div class="updated">Last updated: August 9, 2026</div>
+    <div class="updated">Last updated: October 14, 2026</div>
 
-    <p>This site (hackatoa.com and its subdomains) is the personal website of Preston ("Hackatoa"). This policy explains what limited data is collected and how it is used.</p>
+    <p>This policy covers hackatoa.com and the apps, games and tools on its subdomains (together, "the sites"), run by Preston ("Hackatoa"). hackatoa.com itself is a static personal site; some subdomains are apps with sign-in. Where an app has its own policy (for example the <a href="https://casino.hackatoa.com/privacy">Lucky Chips Casino privacy policy</a>) it takes precedence for that app.</p>
 
     <h2>Information collected</h2>
     <ul>
-      <li><strong>Server/hosting logs:</strong> standard request data (IP address, user-agent, timestamp, pages requested) processed by the hosting and CDN providers (Google Firebase Hosting and Cloudflare) for security and reliability.</li>
+      <li><strong>Hosting/security logs:</strong> standard request data (IP address, user-agent, timestamp, pages requested) processed by our hosting and CDN providers (Google Firebase Hosting, Cloudflare, Oracle Cloud, GitHub Pages) for security and reliability.</li>
       <li><strong>Contact:</strong> if you email <a href="mailto:preston@hackatoa.com">preston@hackatoa.com</a>, your message and address are used only to reply.</li>
-      <li>No accounts, sign-ups, or payment information are collected on hackatoa.com.</li>
+      <li><strong>Accounts (apps that have sign-in):</strong> an email address and/or display name plus the data you create in the app (scores, settings, saved items). Sign-in is handled by Google Firebase Authentication (Google or email/password); we never see Google passwords.</li>
+      <li><strong>Payments (apps with paid plans):</strong> handled entirely by Stripe. We receive a customer reference and plan status, never your card number.</li>
+      <li><strong>Leaderboards and games:</strong> nicknames and scores you submit are stored so they can be shown to other players.</li>
+      <li><strong>Content you upload or scan</strong> (for example photos, video or book pages in the tools) is used to provide that feature; some tools send it to Google's Gemini API to generate results. See each app for details.</li>
     </ul>
+    <p>hackatoa.com itself has no accounts and collects no payment information.</p>
 
-    <h2>Advertising &amp; cookies</h2>
-    <p>Some pages display ads via <strong>Google AdSense</strong>. Google and its partners may use cookies and similar technologies to serve and measure ads, including personalized ads based on prior visits. You can opt out of personalized advertising at <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads Settings</a> and learn more at <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">How Google uses cookies in advertising</a>. See the <a href="/cookies/">Cookie Policy</a> for details on cookies used.</p>
+    <h2>Advertising</h2>
+    <p>We do not currently show advertising and do not use advertising or tracking pixels. If that ever changes this page will be updated and consent will be requested before any personalised-ad cookies are used.</p>
+
+    <h2>Analytics and monitoring</h2>
+    <p>Some game sites use Cloudflare Web Analytics (privacy-first, cookieless page-view counts). Some apps use error monitoring (for example Sentry) and Firebase App Check / Google reCAPTCHA to block abuse; these may process technical data such as IP address and browser details.</p>
 
     <h2>Third-party services</h2>
     <ul>
-      <li>Google Firebase Hosting &amp; Cloudflare (hosting, CDN, security)</li>
-      <li>Google AdSense (advertising)</li>
-      <li>Embedded content (e.g. YouTube) may set its own cookies when you interact with it</li>
+      <li>Google Firebase (hosting, authentication, database) and Google Gemini (AI features in some tools)</li>
+      <li>Cloudflare (CDN, DNS, security, analytics) and Oracle Cloud / GitHub (hosting)</li>
+      <li>Stripe (payments) and Google reCAPTCHA (abuse prevention) in apps that use them</li>
+      <li>Embedded content (for example YouTube) may set its own cookies if you play it</li>
     </ul>
+    <p>We do not sell your personal information and do not "share" it for cross-context behavioural advertising.</p>
 
-    <h2>Your choices</h2>
-    <p>You can block or delete cookies in your browser settings and opt out of personalized ads via the links above. Blocking cookies will not break the core content of the site.</p>
+    <h2>Retention</h2>
+    <p>Account and app data are kept while your account exists; logs are kept by the providers for short periods. Ask us to delete your data any time.</p>
+
+    <h2>Your choices and rights</h2>
+    <p>You can block or delete cookies and site data in your browser settings (see the <a href="/cookies/">Cookie Policy</a>; the cookie notice has a "Cookie settings" link), and you can request access, correction, export or deletion of your data by emailing <a href="mailto:preston@hackatoa.com">preston@hackatoa.com</a>. Depending on where you live (for example California under the CCPA/CPRA, or the EU/UK under the GDPR) you may have additional rights, including to complain to a data-protection authority. We honour Global Privacy Control signals. We do not knowingly collect data from children under 13 (16 in the EU) and the apps are not directed at them.</p>
 
     <h2>Contact</h2>
     <p>Questions? Email <a href="mailto:preston@hackatoa.com">preston@hackatoa.com</a>.</p>
-
     <footer>
       <a href="/">Home</a><a href="/cookies/">Cookie Policy</a><a href="/urls/">Links</a>
     </footer>
   </div>
+<script src="/cookie-notice.js" data-mode="essential" data-policy="/cookies/" data-privacy="/privacy/" data-lead="This site only uses essential cookies and local storage (such as remembering this choice). No ads, no analytics, no tracking." data-extra="Embedded videos (e.g. YouTube) may set their own cookies if you play them." defer></script>
 </body>
 </html>

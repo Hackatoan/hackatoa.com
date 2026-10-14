@@ -31,32 +31,42 @@
   <div class="wrap">
     <a class="back" href="/">hackatoa.com</a>
     <h1>Cookie Policy</h1>
-    <div class="updated">Last updated: August 9, 2026</div>
+    <div class="updated">Last updated: October 14, 2026</div>
 
-    <p>Cookies are small files stored by your browser. hackatoa.com uses very few, described below. See the <a href="/privacy/">Privacy Policy</a> for the broader picture.</p>
+    <p>Cookies and similar technologies (local storage, IndexedDB) are small bits of data stored by your browser. hackatoa.com and its apps use few, described below. See the <a href="/privacy/">Privacy Policy</a> for the broader picture.</p>
 
-    <h2>Cookies used</h2>
+    <h2>Used on every site</h2>
     <table>
       <tr><th>Type</th><th>Set by</th><th>Purpose</th></tr>
-      <tr><td>Security</td><td>Cloudflare</td><td>Bot/DDoS protection and routing (e.g. challenge tokens). Strictly functional.</td></tr>
-      <tr><td>Advertising</td><td>Google AdSense</td><td>Serve and measure ads; may personalize ads based on prior visits.</td></tr>
-      <tr><td>Embedded media</td><td>YouTube (Google)</td><td>Set only if you interact with embedded videos.</td></tr>
+      <tr><td>Security</td><td>Cloudflare</td><td>Bot/DDoS protection and routing (e.g. <code>__cf_bm</code>). Strictly functional.</td></tr>
+      <tr><td>Your choice</td><td>This site</td><td>Remembers that you saw the cookie notice (local storage key <code>cookie-consent-v1</code>).</td></tr>
     </table>
-    <p>hackatoa.com itself does not set first-party tracking or analytics cookies.</p>
+
+    <h2>Apps with sign-in, games and tools (subdomains)</h2>
+    <table>
+      <tr><th>Type</th><th>Set by</th><th>Purpose</th></tr>
+      <tr><td>Preferences &amp; progress</td><td>The app (local storage)</td><td>Settings, saved items, game progress, last-used options. Never sent to advertisers.</td></tr>
+      <tr><td>Sign-in</td><td>Google Firebase Authentication (IndexedDB/local storage; Google cookies during Google sign-in)</td><td>Keeps you signed in and completes sign-in.</td></tr>
+      <tr><td>Payments &amp; fraud prevention</td><td>Stripe (<code>__stripe_mid</code>, <code>__stripe_sid</code>) where an app has paid plans</td><td>Process payments and prevent fraud. Strictly necessary for checkout.</td></tr>
+      <tr><td>Abuse prevention</td><td>Google reCAPTCHA / Firebase App Check where used</td><td>Distinguish people from bots.</td></tr>
+      <tr><td>Analytics</td><td>Cloudflare Web Analytics on some game sites</td><td>Cookieless page-view counts; no cross-site tracking.</td></tr>
+      <tr><td>Embedded media</td><td>YouTube (Google)</td><td>Set only if you interact with an embedded video.</td></tr>
+    </table>
+    <p>We do not use advertising or tracking cookies. Lucky Chips Casino has its own <a href="https://casino.hackatoa.com/cookies">cookie policy</a> (its session cookie is <code>sid</code>).</p>
 
     <h2>Managing cookies</h2>
     <ul>
-      <li>Control or delete cookies in your browser settings.</li>
-      <li>Opt out of personalized ads at <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads Settings</a>.</li>
-      <li>More on ad cookies: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google advertising &amp; cookies</a>.</li>
+      <li>Reopen the cookie notice from the "Cookie settings" link where shown, or control/delete cookies and site data in your browser settings.</li>
+      <li>Blocking essential cookies may stop sign-in or checkout from working; core content still loads.</li>
+      <li>We honour the Global Privacy Control signal sent by your browser.</li>
     </ul>
 
     <h2>Contact</h2>
     <p>Questions? Email <a href="mailto:preston@hackatoa.com">preston@hackatoa.com</a>.</p>
-
     <footer>
       <a href="/">Home</a><a href="/privacy/">Privacy Policy</a><a href="/urls/">Links</a>
     </footer>
   </div>
+<script src="/cookie-notice.js" data-mode="essential" data-policy="/cookies/" data-privacy="/privacy/" data-lead="This site only uses essential cookies and local storage (such as remembering this choice). No ads, no analytics, no tracking." data-extra="Embedded videos (e.g. YouTube) may set their own cookies if you play them." defer></script>
 </body>
 </html>
