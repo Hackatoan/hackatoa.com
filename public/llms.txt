@@ -11,6 +11,7 @@
 - [Links](https://hackatoa.com/urls/): all profiles and projects
 
 ## Projects
+- Lucky Chips Casino — free play-money casino, 26 games with a strategy coach: https://casino.hackatoa.com
 - Infinisweeper — infinite minesweeper: https://infinisweeper.hackatoa.com
 - Clip Forge — browser video editor: https://clip-forge.hackatoa.com
 - Mosaic — photomosaic generator: https://mosaic.hackatoa.com
