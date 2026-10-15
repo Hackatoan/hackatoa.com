@@ -93,7 +93,7 @@
         ]
       },
       {
-        "source": "/.well-known/matrix/**",
+        "source": "/.well-known/matrix/*",
         "headers": [
           {
             "key": "Content-Type",
