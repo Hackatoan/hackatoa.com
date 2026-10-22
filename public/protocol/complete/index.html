@@ -26,6 +26,10 @@
     button:hover{background:rgba(255,214,0,.1);box-shadow:0 0 18px rgba(255,214,0,.25)}
     a{color:var(--dim);text-decoration:none;letter-spacing:2px;font-size:.75rem}a:hover{color:var(--gold)}
     #denied{display:none}
+    .seals{list-style:none;margin:1rem 0;border-top:1px solid rgba(255,214,0,.15);border-bottom:1px solid rgba(255,214,0,.15);text-align:left}
+    .seals li{padding:.6rem .2rem;border-bottom:1px dashed rgba(255,214,0,.12);display:flex;gap:.7rem;align-items:baseline;font-size:.82rem;line-height:1.5}
+    .seals li:last-child{border-bottom:none}.rn{color:var(--gold);min-width:1.4em}.riddle{flex:1}.code{color:var(--dim);font-size:.7rem;letter-spacing:1px}
+    .red{color:#ff4d4d}.card{max-width:640px}
   </style>
 </head>
 <body>
@@ -40,6 +44,7 @@
       <button id="cp">COPY</button>
     </div>
     <p class="dim" style="margin-top:1.3rem">Your proof of clearance, Operative. Wear it. — The Operator</p>
+    <div id="stage3" style="text-align:left"></div>
     <p style="margin-top:1.2rem"><a href="/">return to the surface →</a></p>
   </div>
   <div class="card" id="denied">
@@ -48,6 +53,7 @@
     <p class="dim">Nice try. Solve the protocol properly.</p>
     <p style="margin-top:1.4rem"><a href="/protocol">→ back to the terminal</a></p>
   </div>
+  <script src="/protocol/vp.js"></script>
   <script>
   (function(){
     var ok=sessionStorage.getItem('vp_unlocked')==='DETONATION';
@@ -132,6 +138,7 @@
       });
     });
 
+    VP.open('DETONATION','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').then(function(h){document.getElementById('stage3').innerHTML=h;}).catch(function(){});
     console.log('%c▲ VOLCANO PROTOCOL — COMPLETE', gold);
     console.log('%cClearance granted, Operative '+serial+'. Badge issued. — The Operator', dim);
   })();

@@ -86,5 +86,11 @@
   <button class="mini-btn" id="btn-skip" aria-label="Next track">⏭</button>
 </div>
 <script src="/songs/app.js"></script>
+<script>
+;(function(){try{var seq=[38,38,40,40,37,39,37,39,66,65],i=0;
+addEventListener('keydown',function(e){i=(e.keyCode===seq[i])?i+1:(e.keyCode===seq[0]?1:0);
+if(i===seq.length){i=0;var g='color:#ffd600;font-family:monospace;font-size:13px';
+console.log('%c▲ SHARD 04 :: . / .-.',g);console.log('%cThe jukebox remembers. — The Operator','color:#827717;font-family:monospace');}});}catch(e){}})();
+</script>
 </body>
 </html>

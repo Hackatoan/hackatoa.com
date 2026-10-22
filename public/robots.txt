@@ -1,3 +1,4 @@
+# ▲ SHARD 01 :: YMJ
 User-agent: *
 Allow: /
 Disallow: /motd.json

@@ -58,9 +58,10 @@
     </div>
     <div id="msg" class="dim cursor">awaiting all five seals…</div>
   </div>
+  <script src="/protocol/vp.js"></script>
   <script>
   (function(){
-    var EXPECT='DETONATION';
+    var H1='8e170117ae55d549dff8199d61c654ef589d168031c647f6bb74cc93aaa20f72';
     var msg=document.getElementById('msg');
     function fail(){msg.className='red';msg.textContent='ACCESS DENIED — a seal is missing or wrong.';}
     function win(){
@@ -69,8 +70,8 @@
       setTimeout(function(){location.href='/protocol/complete';},1100);
     }
     window.unlock=function(k){
-      if(typeof k==='string' && k.replace(/[^a-z]/gi,'').toUpperCase()===EXPECT){win();return 'ACCEPTED';}
-      fail();return 'DENIED';
+      VP.sha(VP.norm(k)).then(function(h){if(h===H1)win();else fail();});
+      return 'TRANSMITTED';
     };
     document.getElementById('go').addEventListener('click',function(){window.unlock(document.getElementById('key').value);});
     document.getElementById('key').addEventListener('keydown',function(e){if(e.key==='Enter')window.unlock(this.value);});
