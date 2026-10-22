@@ -459,18 +459,22 @@ camera.position.copy(HOME_POS);camera.lookAt(HOME_TGT);
 
 /* ── Shaders ── */
 const UV=`vec2(gl_PointCoord.x,1.0-gl_PointCoord.y)`;
+/* ── Cursor repel (volcano mode): the pointer is raycast onto the volcano and nearby particles are nudged
+   away in 3D along the flank (plus a touch of outward relief), then ease back when it moves on ── */
+const MU={uHit:{value:new THREE.Vector3(1e4,1e4,1e4)},uMouseAmt:{value:0},uMouseR:{value:1.0}};
+const MGL='uniform vec3 uHit;uniform float uMouseAmt;uniform float uMouseR;vec3 mpush(vec3 p){vec3 d=p-uHit;float f=smoothstep(uMouseR,0.0,length(d));return p+(d*0.8+normalize(vec3(p.x,0.6,p.z))*0.3)*f*uMouseAmt;}';
 const VERT_V=`attribute float aSize;attribute vec2 aSpread;void main(){vec3 p=position+vec3(aSpread.x,0.0,aSpread.y);vec4 mv=modelViewMatrix*vec4(p,1.0);gl_PointSize=aSize*(300.0/-mv.z);gl_Position=projectionMatrix*mv;}`;
 const FRAG_V=`uniform sampler2D uTex;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;gl_FragColor=c;}`;
-const VERT_F=`attribute float aBright;uniform float uTextMode;uniform float uTime;varying float vAlpha;void main(){float h=max(0.0,position.y-(-1.22));float phase=position.x*0.37+position.z*0.21;float wx=sin(uTime*0.7+phase)*h*0.055+sin(uTime*1.3+phase*1.7)*h*0.022;float wz=cos(uTime*0.5+phase*0.9)*h*0.018;vec3 p=position+vec3(wx,0.0,wz);vec4 mv=modelViewMatrix*vec4(p,1.0);gl_PointSize=0.14*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vAlpha=mix(1.0,aBright,uTextMode);}`;
+const VERT_F=`${MGL}attribute float aBright;uniform float uTextMode;uniform float uTime;varying float vAlpha;void main(){float h=max(0.0,position.y-(-1.22));float phase=position.x*0.37+position.z*0.21;float wx=sin(uTime*0.7+phase)*h*0.055+sin(uTime*1.3+phase*1.7)*h*0.022;float wz=cos(uTime*0.5+phase*0.9)*h*0.018;vec3 p=mpush(position+vec3(wx,0.0,wz));vec4 mv=modelViewMatrix*vec4(p,1.0);gl_PointSize=0.14*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vAlpha=mix(1.0,aBright,uTextMode);}`;
 const FRAG_F=`uniform sampler2D uTex;uniform vec3 uColor;varying float vAlpha;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;gl_FragColor=vec4(uColor*vAlpha,c.a*0.55*vAlpha);}`;
-const VERT_POOL=`attribute float aAlpha;varying float vA;void main(){vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=0.44*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vA=aAlpha;}`;
-const VERT_LAVA=`attribute float aAlpha;attribute vec3 aCol;varying float vA;varying vec3 vC;void main(){vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=0.5*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vA=aAlpha;vC=aCol;}`;
+const VERT_POOL=`${MGL}attribute float aAlpha;varying float vA;void main(){vec4 mv=modelViewMatrix*vec4(mpush(position),1.0);gl_PointSize=0.44*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vA=aAlpha;}`;
+const VERT_LAVA=`${MGL}attribute float aAlpha;attribute vec3 aCol;varying float vA;varying vec3 vC;void main(){vec4 mv=modelViewMatrix*vec4(mpush(position),1.0);gl_PointSize=0.5*(300.0/-mv.z);gl_Position=projectionMatrix*mv;vA=aAlpha;vC=aCol;}`;
 const FRAG_LAVA=`uniform sampler2D uTex;varying float vA;varying vec3 vC;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;gl_FragColor=vec4(vC,c.a*vA);}`;
 const FRAG_POOL=`uniform sampler2D uTex;uniform vec3 uColor;varying float vA;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;gl_FragColor=vec4(uColor*vA,c.a*vA);}`;
 /* Volcano body: colour ramps by height — grey/brown rock at the base up to hot
    orange lava near the crater. uTextMode fades back to the plain 0/1 glyph colour
    when the particles morph into section text, so text keeps its original look. */
-const VERT_VOLC=`attribute float aSize;attribute vec2 aSpread;varying float vH;void main(){vH=position.y;vec3 p=position+vec3(aSpread.x,0.0,aSpread.y);vec4 mv=modelViewMatrix*vec4(p,1.0);gl_PointSize=aSize*(300.0/-mv.z);gl_Position=projectionMatrix*mv;}`;
+const VERT_VOLC=`${MGL}attribute float aSize;attribute vec2 aSpread;varying float vH;void main(){vH=position.y;vec3 p=mpush(position+vec3(aSpread.x,0.0,aSpread.y));vec4 mv=modelViewMatrix*vec4(p,1.0);gl_PointSize=aSize*(300.0/-mv.z);gl_Position=projectionMatrix*mv;}`;
 const FRAG_VOLC=`uniform sampler2D uTex;uniform vec3 uPlain;uniform float uBaseY;uniform float uSpan;uniform float uTextMode;varying float vH;void main(){vec4 c=texture2D(uTex,${UV});if(c.a<0.05)discard;float hf=clamp((vH-uBaseY)/uSpan,0.0,1.0);vec3 brown=vec3(0.54,0.36,0.23);vec3 grey=vec3(0.40,0.39,0.41);vec3 rock=mix(brown,grey,smoothstep(0.12,0.66,hf));float lava=smoothstep(0.64,0.98,hf);vec3 lavaCol=vec3(1.7,0.52,0.06);vec3 col=mix(rock,lavaCol,lava);vec3 outC=col*mix(1.0,1.7,uTextMode);float outA=mix(c.a*(0.75+0.85*lava),c.a,uTextMode);gl_FragColor=vec4(outC,outA);}`;
 
 const TREE_COLORS=[[0.28,0.65,0.20],[0.82,0.62,0.04],[0.18,0.55,0.26],[0.70,0.48,0.03]];
@@ -479,13 +483,13 @@ function mkSprite(ch,col){const cv=document.createElement('canvas');cv.width=64;
 const TEX0=mkSprite('0','#ffd600'),TEX1=mkSprite('1','#ffffff');
 const TEXG0=mkSprite('0','#ffffff'),TEXG1=mkSprite('1','#ffffff');
 
-function makeMat(tex){return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex}},vertexShader:VERT_V,fragmentShader:FRAG_V,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
-function makeVolcMat(tex){return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex},uPlain:{value:tex===TEX0?new THREE.Vector3(1.0,0.84,0.0):new THREE.Vector3(1.0,1.0,1.0)},uBaseY:{value:V_BASE_Y},uSpan:{value:V_H*VS},uTextMode:{value:0}},vertexShader:VERT_VOLC,fragmentShader:FRAG_VOLC,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
+function makeMat(tex){return new THREE.ShaderMaterial({uniforms:{...MU,uTex:{value:tex}},vertexShader:VERT_V,fragmentShader:FRAG_V,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
+function makeVolcMat(tex){return new THREE.ShaderMaterial({uniforms:{...MU,uTex:{value:tex},uPlain:{value:tex===TEX0?new THREE.Vector3(1.0,0.84,0.0):new THREE.Vector3(1.0,1.0,1.0)},uBaseY:{value:V_BASE_Y},uSpan:{value:V_H*VS},uTextMode:{value:0}},vertexShader:VERT_VOLC,fragmentShader:FRAG_VOLC,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
 function makeForestMat(r,g,b,texIdx){
   const tex=texIdx===1?TEXG1:TEXG0;
-  return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex},uColor:{value:new THREE.Vector3(r,g,b)},uTextMode:{value:0},uTime:{value:0}},vertexShader:VERT_F,fragmentShader:FRAG_F,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+  return new THREE.ShaderMaterial({uniforms:{...MU,uTex:{value:tex},uColor:{value:new THREE.Vector3(r,g,b)},uTextMode:{value:0},uTime:{value:0}},vertexShader:VERT_F,fragmentShader:FRAG_F,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
 }
-function makePoolMat(col,tex){return new THREE.ShaderMaterial({uniforms:{uTex:{value:tex},uColor:{value:col}},vertexShader:VERT_POOL,fragmentShader:FRAG_POOL,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
+function makePoolMat(col,tex){return new THREE.ShaderMaterial({uniforms:{...MU,uTex:{value:tex},uColor:{value:col}},vertexShader:VERT_POOL,fragmentShader:FRAG_POOL,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});}
 
 /* ── Chunked scheduling ──
    Particle generation (~186k points total) used to run as one long synchronous
@@ -684,7 +688,7 @@ function buildLava(){
   lavaGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(LAVA_N*3),3));
   lavaGeo.setAttribute('aAlpha',new THREE.BufferAttribute(new Float32Array(LAVA_N),1));
   lavaGeo.setAttribute('aCol',new THREE.BufferAttribute(new Float32Array(LAVA_N*3),3));
-  const m=new THREE.ShaderMaterial({uniforms:{uTex:{value:TEX0}},vertexShader:VERT_LAVA,fragmentShader:FRAG_LAVA,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+  const m=new THREE.ShaderMaterial({uniforms:{...MU,uTex:{value:TEX0}},vertexShader:VERT_LAVA,fragmentShader:FRAG_LAVA,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
   lavaPts=new THREE.Points(lavaGeo,m);lavaPts.renderOrder=3;scene.add(lavaPts);
 }
 function stepLava(time){
@@ -727,7 +731,7 @@ function buildMagma(){
   magmaGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(MAGMA_N*3),3));
   magmaGeo.setAttribute('aAlpha',new THREE.BufferAttribute(new Float32Array(MAGMA_N),1));
   magmaGeo.setAttribute('aCol',new THREE.BufferAttribute(new Float32Array(MAGMA_N*3),3));
-  const m=new THREE.ShaderMaterial({uniforms:{uTex:{value:TEX0}},vertexShader:VERT_LAVA,fragmentShader:FRAG_LAVA,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+  const m=new THREE.ShaderMaterial({uniforms:{...MU,uTex:{value:TEX0}},vertexShader:VERT_LAVA,fragmentShader:FRAG_LAVA,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
   magmaPts=new THREE.Points(magmaGeo,m);magmaPts.renderOrder=2;scene.add(magmaPts);
 }
 function stepMagma(time){
@@ -879,6 +883,7 @@ function initScene(){
       requestAnimationFrame(animate);
       const now=performance.now(),dt=(now-last)/1000;last=now;
       if(!fpsChecked){fpsFrames++;if(now-fpsLast>5000){fpsChecked=true;adapt(fpsFrames/5);}}
+      updateMouseFX();
       uTime+=dt;
       forestMats.forEach(m=>{m.uniforms.uTime.value=uTime;});
       if(ctrl)ctrl.update();
@@ -1064,6 +1069,31 @@ function onUp(){
   dragStart=false;dragMoved=false;
 }
 canvas.addEventListener('pointermove',onMove);
+let mouseIn=false;const mouseNDC=new THREE.Vector2(0,0),hitT=new THREE.Vector3(),_mo=new THREE.Vector3(),_md=new THREE.Vector3();
+window.addEventListener('pointermove',e=>{
+  if(e.pointerType==='touch'){mouseIn=false;return;}
+  const r=canvas.getBoundingClientRect();
+  mouseNDC.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height*2-1));mouseIn=true;
+});
+document.addEventListener('pointerleave',()=>{mouseIn=false;});
+document.addEventListener('mouseout',e=>{if(!e.relatedTarget)mouseIn=false;});
+/* Where the pointer ray first meets the volcano's outer flank (falls back to the ground plane). */
+function pointerHit(out){
+  _mo.copy(camera.position);_md.set(mouseNDC.x,mouseNDC.y,0.5).unproject(camera).sub(_mo).normalize();
+  const topY=V_BASE_Y+V_H*VS,inside=t=>{const x=_mo.x+_md.x*t,y=_mo.y+_md.y*t,z=_mo.z+_md.z*t;if(y<V_BASE_Y||y>topY)return false;return Math.hypot(x,z)<=volOuterR((y-V_BASE_Y)/(V_H*VS))*VS;};
+  let prev=0.1;
+  for(let t=0.1;t<60;t+=0.15){
+    if(inside(t)){let lo=prev,hi=t;for(let k=0;k<7;k++){const m=(lo+hi)/2;if(inside(m))hi=m;else lo=m;}out.copy(_mo).addScaledVector(_md,hi);return true;}
+    prev=t;
+  }
+  if(_md.y<-1e-3){const t=(GROUND_Y-_mo.y)/_md.y;if(t>0){out.copy(_mo).addScaledVector(_md,t);return true;}}
+  return false;
+}
+function updateMouseFX(){
+  const on=mode==='volcano'&&!dragStart&&mouseIn&&!document.hidden&&pointerHit(hitT);
+  MU.uMouseAmt.value+=((on?1:0)-MU.uMouseAmt.value)*0.1;
+  if(on)MU.uHit.value.lerp(hitT,0.35);
+}
 canvas.addEventListener('pointerdown',onDown);
 canvas.addEventListener('pointerup',onUp);
 let resizeRAF=null;function onResize(){resizeRAF=null;W=wrap.clientWidth;H=wrap.clientHeight;camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);}
