@@ -233,7 +233,7 @@
   <div id="music-wrap" style="position:absolute;top:14px;left:14px;z-index:20;display:flex;align-items:center">
     <div id="music-icon" style="width:30px;height:30px;border-radius:50%;background:#1a1400;border:1px solid #827717;display:flex;align-items:center;justify-content:center;color:#ffd600;font-size:15px;cursor:pointer;flex-shrink:0">♫</div>
     <div id="music-panel" style="position:absolute;top:0;left:36px;opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s;pointer-events:none;background:#0d0a00;border:1px solid #827717;border-radius:6px;padding:6px 10px;white-space:nowrap;display:flex;align-items:center;gap:8px">
-      <button id="pp" aria-label="Reproducir o pausar música" style="background:none;border:none;color:#ffd600;cursor:pointer;font-size:18px;padding:0;line-height:1">▶</button>
+      <button id="pp" aria-label="Reproducir música" aria-pressed="false" style="background:none;border:none;color:#ffd600;cursor:pointer;font-size:18px;padding:0;line-height:1">▶</button>
       <div style="overflow:hidden;width:140px"><div id="title-scroll" style="color:#ffd600;font-size:11px;white-space:nowrap;display:inline-block"></div></div>
       <button id="nxt" aria-label="Siguiente pista" style="background:none;border:none;color:#ffd600;cursor:pointer;font-size:13px;padding:0">⏭</button>
       <input id="vol" type="range" min="0" max="1" step="0.05" value="0.05" aria-label="Volumen" style="width:54px;accent-color:#ffd600">
@@ -333,7 +333,7 @@ const TRACKS=[
 ];
 let order=[...Array(TRACKS.length).keys()].sort(()=>Math.random()-.5),oi=0;
 let ytPlayer=null,ytReady=false,pendingVolume=0.05,wantPlayOnReady=false;
-function updateUI(p){const b=document.getElementById('pp');if(b)b.textContent=p?'⏸':'▶';}
+function updateUI(p){const b=document.getElementById('pp');if(b){b.textContent=p?'⏸':'▶';b.setAttribute('aria-pressed',p?'true':'false');b.setAttribute('aria-label',p?'Pausar música':'Reproducir música');}}
 function setTrackTitle(i){const el=document.getElementById('title-scroll');if(el)el.textContent=TRACKS[order[i%order.length]][0];}
 function setTrack(i,play){
   oi=i;setTrackTitle(i);
