@@ -1028,7 +1028,7 @@ function springCam(pos,tgt){
   function step(){
     if(!springStart)return;
     const t=Math.min((performance.now()-springStart)/1000/CAM_SPRING_DUR,1),e=easeIO(t);
-    if(t<1){camera.position.copy(springFrom.clone().lerp(springTo,e));ctrl.target.copy(springTgtFrom.clone().lerp(springTgtTo,e));requestAnimationFrame(step);}
+    if(t<1){camera.position.copy(springFrom).lerp(springTo,e);ctrl.target.copy(springTgtFrom).lerp(springTgtTo,e);requestAnimationFrame(step);}
     else{flushAndLock(springTo,springTgtTo);springStart=null;}
   }
   requestAnimationFrame(step);
