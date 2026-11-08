@@ -12,10 +12,12 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#040602;--gold:#ffd600;--gold-dim:#827717;--text:#e8e0c0;--muted:#6b5f2a;--rule:rgba(130,119,23,0.2)}
+    :root{--bg:#040602;--gold:#ffd600;--gold-dim:#827717;--text:#e8e0c0;--muted:#9a8a1e;--rule:rgba(130,119,23,0.2)}
     body{background:var(--bg);color:var(--text);font-family:monospace;line-height:1.7;padding:2.5rem 1.5rem 5rem}
     .wrap{max-width:760px;margin:0 auto}
     a{color:var(--gold-dim);text-decoration:none}a:hover{color:var(--gold)}
+    p a,li a,td a{color:#9a8a1e;text-decoration:underline;text-underline-offset:2px}p a:hover,li a:hover,td a:hover{color:var(--gold)}
+    a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
     .back{font-size:.75rem;letter-spacing:2px;color:var(--muted)}.back::before{content:'← '}
     h1{color:var(--gold);font-size:1.5rem;letter-spacing:2px;margin:1.5rem 0 .3rem;text-shadow:0 0 20px rgba(255,214,0,.2)}
     .updated{color:var(--muted);font-size:.72rem;letter-spacing:1px;margin-bottom:1.8rem}
@@ -25,7 +27,7 @@
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <main class="wrap">
     <a class="back" href="/">hackatoa.com</a>
     <h1>Privacy Policy</h1>
     <div class="updated">Last updated: October 14, 2026</div>
@@ -69,7 +71,7 @@
     <footer>
       <a href="/">Home</a><a href="/cookies/">Cookie Policy</a><a href="/urls/">Links</a>
     </footer>
-  </div>
+  </main>
 <script src="/cookie-notice.js" data-mode="essential" data-policy="/cookies/" data-privacy="/privacy/" data-lead="This site only uses essential cookies and local storage (such as remembering this choice). No ads, no analytics, no tracking." data-extra="Embedded videos (e.g. YouTube) may set their own cookies if you play them." defer></script>
 </body>
 </html>
