@@ -10,7 +10,7 @@
   const mode = (me && me.dataset.mode) || 'essential', policy = (me && me.dataset.policy) || '/cookies', privacy = (me && me.dataset.privacy) || '/privacy';
   const KEY = 'cookie-consent-v1';
   const read = () => { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { return null; } };
-  const write = v => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch {} };
+  const write = v => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch { /* storage unavailable (private mode); consent just won't persist */ } };
   const gpc = !!navigator.globalPrivacyControl;                       // "Do Not Sell/Share" signal: treated as a rejection of personalised ads
   const publish = ads => { window.cookieConsent = { ads }; document.dispatchEvent(new CustomEvent('cookie-consent', { detail: { ads } })); };
   const saved = read();

@@ -9,6 +9,10 @@ export default defineConfig([
   { files: ["*.{js,mjs,cjs}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: globals.node } },
   { files: ["**/*.js"], languageOptions: { sourceType: "script" } },
   {
+    files: ["public/songs/*.js"],
+    languageOptions: { globals: { YT: "readonly" } },
+  },
+  {
     files: ["public/resume/*.js", "public/cover-letter/*.js"],
     languageOptions: { globals: { html2pdf: "readonly" } },
   },
