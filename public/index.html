@@ -896,15 +896,25 @@ function initScene(){
   }
 }
 
+/* Per-frame hover easing. Once every size/spread value has reached its target (the common
+   case: volcano mode, or text mode with no hovered line) and none of the inputs changed,
+   skip both the O(N) loop and the four GPU buffer re-uploads until something changes. */
+let _hvSettled=false,_hvIn=false,_hvLine=-1,_hvL0=null,_hvL1=null,_hvS0=null,_hvS1=null;
 function updateHoverSizes(){
-  const half=N/2,inText=mode==='text'&&currentSec&&lineIdx0;
+  const half=N/2,inText=!!(mode==='text'&&currentSec&&lineIdx0);
+  if(_hvSettled&&inText===_hvIn&&hoveredLine===_hvLine&&lineIdx0===_hvL0&&lineIdx1===_hvL1&&spreadTarget0===_hvS0&&spreadTarget1===_hvS1)return;
+  _hvIn=inText;_hvLine=hoveredLine;_hvL0=lineIdx0;_hvL1=lineIdx1;_hvS0=spreadTarget0;_hvS1=spreadTarget1;
+  let changed=false;
   for(let i=0;i<half;i++){
     const on0=inText&&lineIdx0[i]===hoveredLine,on1=inText&&lineIdx1[i]===hoveredLine;
+    const a0=sz0[i],a1=sz1[i],b0=sp0[i*2],b1=sp0[i*2+1],c0=sp1[i*2],c1=sp1[i*2+1];
     sz0[i]+=((on0?HOVER_SIZE:BASE_SIZE)-sz0[i])*.12;sz1[i]+=((on1?HOVER_SIZE:BASE_SIZE)-sz1[i])*.12;
     const s0=on0?SPREAD:0,s1=on1?SPREAD:0;
     sp0[i*2]+=(spreadTarget0[i*2]*s0-sp0[i*2])*.12;sp0[i*2+1]+=(spreadTarget0[i*2+1]*s0-sp0[i*2+1])*.12;
     sp1[i*2]+=(spreadTarget1[i*2]*s1-sp1[i*2])*.12;sp1[i*2+1]+=(spreadTarget1[i*2+1]*s1-sp1[i*2+1])*.12;
+    if(a0!==sz0[i]||a1!==sz1[i]||b0!==sp0[i*2]||b1!==sp0[i*2+1]||c0!==sp1[i*2]||c1!==sp1[i*2+1])changed=true;
   }
+  _hvSettled=!changed;
   geo0.attributes.aSize.needsUpdate=true;geo1.attributes.aSize.needsUpdate=true;
   geo0.attributes.aSpread.needsUpdate=true;geo1.attributes.aSpread.needsUpdate=true;
 }
