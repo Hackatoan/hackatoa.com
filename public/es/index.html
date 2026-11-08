@@ -682,7 +682,14 @@ function stepPool(dt){
 
 /* ── Lava stream (down the twisting canyon, born from the crater lake) ── */
 let lavaPts=null,lavaGeo=null,lavaT,lavaSide,lavaSpd,lavaRad,LAVA_THETA=Math.PI/2;
+/* volTwist() (3 sin per call, called 4x per lava particle per frame) is a pure function of
+   height only, so stepLava reads it from a fine linear-interpolated table instead
+   (8192 samples; max deviation ~5e-7, i.e. float32 rounding). Range covers hf-0.02..hf+0.02. */
+const TW_N=8192,TW_MAX=1.05,TW_K=TW_N/TW_MAX;
+let twTab=null;
+function lavaTwist(h){const x=h*TW_K,k=x|0;return twTab[k]+(twTab[k+1]-twTab[k])*(x-k);}
 function buildLava(){
+  twTab=new Float32Array(TW_N+2);for(let k=0;k<TW_N+2;k++)twTab[k]=volTwist(k/TW_K);
   // Deepest canyon azimuth on the front face (min of the untwisted ridge term).
   let best=1e9;for(let s=0;s<1440;s++){const th=0.42*Math.PI+(s/1440)*(0.30*Math.PI);const v=ridgeN(th);if(v<best){best=v;LAVA_THETA=th;}}
   lavaT=new Float32Array(LAVA_N);lavaSide=new Float32Array(LAVA_N);lavaSpd=new Float32Array(LAVA_N);lavaRad=new Float32Array(LAVA_N);
@@ -703,12 +710,12 @@ function stepLava(time){
     const hf=LAVA_TOP_HF-t*(LAVA_TOP_HF-LAVA_BOT_HF);
     // On the bends, lava on the LEFT bank presses against the valley wall — it stays in the
     // gully (only a small rise), shifting toward the wall and bulging onto it, glowing hotter.
-    const bend=(volTwist(hf-0.02)-volTwist(hf+0.02))/0.04;
+    const bend=(lavaTwist(hf-0.02)-lavaTwist(hf+0.02))/0.04;
     const wall=Math.max(0,-s)*Math.min(1,Math.abs(bend));   // left edge hugging the wall on a bend (0..1)
     const mouth=1+1.3*Math.max(0,1-t/0.16);              // fan the flow wide at the crater mouth
-    const th=LAVA_THETA-volTwist(hf)+s*LAVA_W*mouth-wall*0.05-0.16*Math.pow(1-hf,1.4);   // wide river; nudged toward the wall on bends, drifting right toward the base
+    const th=LAVA_THETA-lavaTwist(hf)+s*LAVA_W*mouth-wall*0.05-0.16*Math.pow(1-hf,1.4);   // wide river; nudged toward the wall on bends, drifting right toward the base
     const hfB=Math.min(1,hf+s*s*0.015+wall*0.03);        // stays in the gully, small rise only
-    const surfR=volOuterR(hfB)*volRidge(th,hfB)*(1+wall*0.05);   // bulge out onto the wall
+    const surfR=volOuterR(hfB)*(1+ridgeN(th+lavaTwist(hfB))*ridgeM(hfB))*(1+wall*0.05);   // bulge out onto the wall
     // Born from the crater lake: first stretch blends from the pool edge/height out onto
     // the flank, so the stream overflows the rim and connects to its source.
     const blend=Math.min(1,t/0.08);
