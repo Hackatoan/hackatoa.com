@@ -132,10 +132,11 @@
     main{height:100%}
     #wrap{position:relative;width:100%;height:100%;background:#040602;overflow:hidden;font-family:monospace}
     canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-    .nb{color:#5a4400;cursor:pointer;font-size:11px;letter-spacing:2.5px;font-family:monospace;transition:color .2s,text-shadow .2s;user-select:none}
+    .nb{position:relative;color:#9a8a1e;cursor:pointer;font-size:11px;letter-spacing:2.5px;font-family:monospace;transition:color .2s,text-shadow .2s;user-select:none}
     .nb:hover,.nb.active,.nb:focus-visible{color:#ffd600;text-shadow:0 0 10px rgba(255,214,0,0.35)}
     .nb:focus-visible{outline:1px dashed #827717;outline-offset:3px}
-    .nb.sub{font-size:10px;letter-spacing:2px;color:#3d2e00}
+    .nb.sub{font-size:10px;letter-spacing:2px;color:#9a8a1e}
+    .nb::after{content:'';position:absolute;inset:-6px -8px}
     .nb.sub:hover,.nb.sub.active{color:#ffd600;text-shadow:0 0 8px rgba(255,214,0,0.3)}
     /* About photo card (framed by particles) */
     #about-card{position:absolute;left:50%;top:82%;transform:translate(-50%,-50%) translateY(10px);z-index:15;
@@ -258,7 +259,7 @@
       <span class="nb" id="proj-btn">PROJETS</span>
       <span class="nb" data-sec="connect">CONTACT</span>
       <span class="nb" data-sec="support">SUPPORT</span>
-      <span class="nb" id="lang-btn" aria-label="Langue" aria-haspopup="true" style="font-size:15px;letter-spacing:0;position:relative;display:inline-flex;align-items:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="vertical-align:middle"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><ellipse cx="12" cy="12" rx="4" ry="9"/></svg><span id="lang-pop" role="menu" style="display:none;position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);flex-direction:column;gap:9px;background:rgba(6,10,6,.95);border:1px solid #1a3d1a;border-radius:10px;padding:9px 12px;box-shadow:0 4px 16px rgba(0,0,0,.6);font-size:12px;font-family:system-ui,-apple-system,sans-serif;white-space:nowrap;letter-spacing:0">
+      <span style="position:relative;display:inline-flex;align-items:center"><span class="nb" id="lang-btn" aria-label="Langue" aria-haspopup="true" aria-expanded="false" aria-controls="lang-pop" style="font-size:15px;letter-spacing:0;position:relative;display:inline-flex;align-items:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="vertical-align:middle" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><ellipse cx="12" cy="12" rx="4" ry="9"/></svg></span><span id="lang-pop" style="display:none;position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);flex-direction:column;gap:9px;background:rgba(6,10,6,.95);border:1px solid #1a3d1a;border-radius:10px;padding:9px 12px;box-shadow:0 4px 16px rgba(0,0,0,.6);font-size:12px;font-family:system-ui,-apple-system,sans-serif;white-space:nowrap;letter-spacing:0">
         <a href="/fr/" data-lang="en" style="color:#8a8;text-decoration:none">EN · English</a>
         <a href="/es/" data-lang="es" style="color:#8a8;text-decoration:none">ES · Español</a>
         <a href="/pt-br/" data-lang="pt-br" style="color:#8a8;text-decoration:none">PT · Português</a>
@@ -267,7 +268,7 @@
         <a href="/vi/" data-lang="vi" style="color:#8a8;text-decoration:none">VI · Tiếng Việt</a>
         <a href="/th/" data-lang="th" style="color:#8a8;text-decoration:none">TH · ไทย</a>
       </span></span>
-      <span class="nb" data-sec="volcano" style="font-size:15px;letter-spacing:0">↺</span>
+      <span class="nb" data-sec="volcano" aria-label="Retour au volcan" style="font-size:15px;letter-spacing:0">↺</span>
     </div>
   </nav>
 
@@ -971,7 +972,7 @@ projBtn.addEventListener('click',()=>{
   if(subNavOpen&&!['bots','games','tools','apps'].includes(currentSec))switchSection('bots');
 });
 document.querySelectorAll('.nb[data-sec]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.sec)));
-(function(){const lb=document.getElementById('lang-btn'),lp=document.getElementById('lang-pop');if(lb&&lp){const cur=(document.documentElement.lang||'en').toLowerCase();lp.querySelectorAll('a[data-lang]').forEach(a=>{if(a.getAttribute('data-lang')===cur){a.style.color='#fff';a.style.fontWeight='700';}});lb.addEventListener('click',e=>{e.stopPropagation();lp.style.display=lp.style.display==='flex'?'none':'flex';});lp.addEventListener('click',e=>e.stopPropagation());document.addEventListener('click',()=>{lp.style.display='none';});}})();
+(function(){const lb=document.getElementById('lang-btn'),lp=document.getElementById('lang-pop');if(lb&&lp){const cur=(document.documentElement.lang||'en').toLowerCase();lp.querySelectorAll('a[data-lang]').forEach(a=>{if(a.getAttribute('data-lang')===cur){a.style.color='#fff';a.style.fontWeight='700';}});const setLang=v=>{lp.style.display=v?'flex':'none';lb.setAttribute('aria-expanded',v?'true':'false');};lb.addEventListener('click',e=>{e.stopPropagation();setLang(lp.style.display!=='flex');});lp.addEventListener('click',e=>e.stopPropagation());document.addEventListener('click',()=>setLang(false));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lp.style.display==='flex'){setLang(false);lb.focus();}});}})();
 // These are plain <span> elements activated only via JS click handlers above,
 // which leaves them invisible to keyboard/screen-reader users. Make them behave
 // like real buttons without touching the click-handling logic itself.
