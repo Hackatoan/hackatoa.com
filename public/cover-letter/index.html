@@ -79,7 +79,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: var(--primary);
+      background: #cc1aa0; /* AA-contrast (4.97:1) variant of --primary for white text */
       color: #fff;
       border: none;
       border-radius: 6px;
@@ -125,6 +125,8 @@
       text-decoration: none;
     }
     .letter-contact a:hover { text-decoration: underline; }
+    .letter-body a { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
+    .btn:focus-visible, .back-link:focus-visible, .letter-contact a:focus-visible, .letter-body a:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 
     .letter-divider {
       height: 1px;
@@ -176,7 +178,7 @@
       .top-nav { display: none; }
       .letter-sender-name, .letter-salutation, .letter-sig { color: #000; }
       .letter-contact, .letter-date, .letter-body p, .letter-closing-word { color: #444; }
-      .letter-contact a { color: #444; }
+      .letter-contact a, .letter-body a { color: #444; }
       .letter-divider { background: #ddd; }
     }
 
