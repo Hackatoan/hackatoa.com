@@ -285,7 +285,7 @@
     <div class="about-motd" id="motd-body"></div>
   </div>
 
-  <canvas id="c"></canvas>
+  <canvas id="c" aria-hidden="true"></canvas>
 </div>
 </main>
 <footer style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;color:#e8e0c0">
@@ -813,6 +813,7 @@ let lerpStart=null,lerpFrom0,lerpFrom1,lerpTo0,lerpTo1;
 let forestMats=[],textModeVal=0,textModeTarget=0;
 let photoMesh=null,photoMat=null,aboutImgVal=0,aboutImgTarget=0;
 let ctrl,uTime=0;
+const REDUCED_MOTION=matchMedia('(prefers-reduced-motion: reduce)').matches; // freeze ambient particle/forest animation
 
 /* ── Init ──
    Forest + volcano generation are chunked (see scheduleChunk above); the rest
@@ -882,7 +883,8 @@ function initScene(){
       const now=performance.now(),dt=(now-last)/1000;last=now;
       if(!fpsChecked){fpsFrames++;if(now-fpsLast>5000){fpsChecked=true;adapt(fpsFrames/5);}}
       updateMouseFX();
-      uTime+=dt;
+      const mdt=REDUCED_MOTION?0:dt;
+      uTime+=mdt;
       forestMats.forEach(m=>{m.uniforms.uTime.value=uTime;});
       if(ctrl)ctrl.update();
       const inVolcano=mode==='volcano';
@@ -890,7 +892,7 @@ function initScene(){
       if(poolPts1)poolPts1.visible=inVolcano;
       if(lavaPts)lavaPts.visible=inVolcano;
       if(magmaPts)magmaPts.visible=inVolcano;
-      if(inVolcano){stepPool(dt);stepLava(uTime);stepMagma(uTime);}
+      if(inVolcano){stepPool(mdt);stepLava(uTime);stepMagma(uTime);}
       textModeVal+=(textModeTarget-textModeVal)*0.055;
       forestMats.forEach(m=>m.uniforms.uTextMode.value=textModeVal);
       if(mat0)mat0.uniforms.uTextMode.value=textModeVal;if(mat1)mat1.uniforms.uTextMode.value=textModeVal;
@@ -1116,7 +1118,7 @@ window.addEventListener('resize',()=>{if(resizeRAF===null)resizeRAF=requestAnima
     ctrl.enableDamping=true;ctrl.dampingFactor=0.08;
     ctrl.minDistance=6;ctrl.maxDistance=24;
     ctrl.target.copy(HOME_TGT);
-    ctrl.autoRotate=true;ctrl.autoRotateSpeed=matchMedia('(prefers-reduced-motion: reduce)').matches?0:0.035;
+    ctrl.autoRotate=true;ctrl.autoRotateSpeed=REDUCED_MOTION?0:0.035;
     ctrl.update();
     initScene();
   };
