@@ -25,7 +25,7 @@
     :root {
       --bg: #040602; --surface: #080a05; --border: rgba(130,119,23,0.28);
       --gold: #ffd600; --gold-dim: #827717; --text: #d8d0a8;
-      --muted: #6a6030; --hover-bg: #0d0f08; --playing-bg: #100f02;
+      --muted: #9a8a1e; --hover-bg: #0d0f08; --playing-bg: #100f02;
     }
     body { background: var(--bg); color: var(--text); font-family: monospace,monospace; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem 6rem; }
     .back-link { align-self: flex-start; display: inline-flex; align-items: center; gap: .4rem; color: var(--muted); text-decoration: none; font-size: .82rem; letter-spacing: 1px; margin-bottom: 2.5rem; transition: color .2s; }
@@ -66,18 +66,24 @@
     .mini-btn:hover { color: var(--text); border-color: var(--gold-dim); }
     .mini-btn.active { color: var(--gold); border-color: var(--gold); }
     .progress-bar-wrap { width: 100%; height: 2px; background: rgba(255,255,255,.06); cursor: pointer; position: absolute; top: 0; left: 0; }
+    .progress-bar-wrap:focus-visible { height: 6px; outline: 2px solid var(--gold); outline-offset: 2px; }
+    .back-link:focus-visible, .track-btn:focus-visible, .mini-btn:focus-visible, .album-header:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { .track-eq span { animation: none; height: 60%; } .progress-bar-fill { transition: none; } }
     .progress-bar-fill { height: 100%; background: var(--gold); width: 0%; transition: width .5s linear; }
+    main { width: 100%; display: flex; flex-direction: column; align-items: center; }
   </style>
 </head>
 <body>
 <a class="back-link" href="/">hackatoa.com</a>
+<main>
 <div class="page-header">
   <h1>Songs</h1>
   <p>all tracks in the player — click any to listen</p>
 </div>
 <div class="track-list" id="track-list"></div>
+</main>
 <div class="mini-player" id="mini-player">
-  <div class="progress-bar-wrap" id="progress-wrap">
+  <div class="progress-bar-wrap" id="progress-wrap" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
     <div class="progress-bar-fill" id="progress-fill"></div>
   </div>
   <div class="mini-player-title" id="mini-title"><strong>No track playing</strong></div>
