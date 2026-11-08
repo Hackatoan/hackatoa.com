@@ -140,8 +140,9 @@
     /* About photo card (framed by particles) */
     #about-card{position:absolute;left:50%;top:82%;transform:translate(-50%,-50%) translateY(10px);z-index:15;
       display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;
-      opacity:0;pointer-events:none;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1);font-family:monospace}
-    #about-card.show{opacity:1;transform:translate(-50%,-50%) translateY(0);}
+      opacity:0;visibility:hidden;pointer-events:none;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1),visibility 0s linear .9s;font-family:monospace}
+    #about-card.show{opacity:1;visibility:visible;transform:translate(-50%,-50%) translateY(0);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1),visibility 0s}
+    #music-icon:focus-visible{outline:1px dashed #ffd600;outline-offset:3px}
     #about-card .about-name{color:#ffd600;font-size:1.15rem;letter-spacing:5px;font-weight:800;text-shadow:0 0 18px rgba(255,214,0,.35)}
     #about-card .about-aka{color:#9a8a1e;font-size:.72rem;letter-spacing:2px}
     #about-card .about-gh{color:#827717;font-size:.72rem;letter-spacing:1px;text-decoration:none;pointer-events:auto;transition:color .2s}
@@ -231,8 +232,8 @@
 
   <!-- Music widget -->
   <div id="music-wrap" style="position:absolute;top:14px;left:14px;z-index:20;display:flex;align-items:center">
-    <div id="music-icon" style="width:30px;height:30px;border-radius:50%;background:#1a1400;border:1px solid #827717;display:flex;align-items:center;justify-content:center;color:#ffd600;font-size:15px;cursor:pointer;flex-shrink:0">♫</div>
-    <div id="music-panel" style="position:absolute;top:0;left:36px;opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s;pointer-events:none;background:#0d0a00;border:1px solid #827717;border-radius:6px;padding:6px 10px;white-space:nowrap;display:flex;align-items:center;gap:8px">
+    <div id="music-icon" role="button" tabindex="0" aria-label="Musikplayer" aria-expanded="false" aria-controls="music-panel" style="width:30px;height:30px;border-radius:50%;background:#1a1400;border:1px solid #827717;display:flex;align-items:center;justify-content:center;color:#ffd600;font-size:15px;cursor:pointer;flex-shrink:0">♫</div>
+    <div id="music-panel" inert style="position:absolute;top:0;left:36px;opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s;pointer-events:none;background:#0d0a00;border:1px solid #827717;border-radius:6px;padding:6px 10px;white-space:nowrap;display:flex;align-items:center;gap:8px">
       <button id="pp" aria-label="Musik abspielen" aria-pressed="false" style="background:none;border:none;color:#ffd600;cursor:pointer;font-size:18px;padding:0;line-height:1">▶</button>
       <div style="overflow:hidden;width:140px"><div id="title-scroll" style="color:#ffd600;font-size:11px;white-space:nowrap;display:inline-block"></div></div>
       <button id="nxt" aria-label="Nächster Titel" style="background:none;border:none;color:#ffd600;cursor:pointer;font-size:13px;padding:0">⏭</button>
@@ -271,7 +272,7 @@
   </nav>
 
   <!-- About photo (particles form a frame around it) -->
-  <div id="about-card" aria-hidden="true">
+  <div id="about-card">
     <div class="about-name">PRESTON</div>
     <div class="about-aka">aka Hackatoa · Homelab · KI · Spieleentwicklung</div>
     <a class="about-gh" href="https://github.com/Hackatoan" target="_blank" rel="noopener">github.com/Hackatoan ↗</a>
@@ -349,8 +350,10 @@ function playPause(){
 function tryAutoplay(){setTrack(0,true);}
 const mw=document.getElementById('music-wrap'),mp=document.getElementById('music-panel'),mi=document.getElementById('music-icon');
 let panelOpen=false;
-function setPanelOpen(v){panelOpen=v;mp.style.opacity=v?'1':'0';mp.style.transform=v?'translateX(0)':'translateX(-6px)';mp.style.pointerEvents=v?'auto':'none';}
+function setPanelOpen(v){panelOpen=v;mp.inert=!v;mi.setAttribute('aria-expanded',v?'true':'false');mp.style.opacity=v?'1':'0';mp.style.transform=v?'translateX(0)':'translateX(-6px)';mp.style.pointerEvents=v?'auto':'none';}
 mi.addEventListener('click',e=>{e.stopPropagation();if(!panelOpen&&ytReady&&ytPlayer.getPlayerState()!==1)ytPlayer.playVideo();setPanelOpen(!panelOpen);});
+mi.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();mi.click();}});
+mw.addEventListener('keydown',e=>{if(e.key==='Escape'&&panelOpen){setPanelOpen(false);mi.focus();}});
 document.getElementById('pp').addEventListener('click',playPause);
 document.getElementById('nxt').addEventListener('click',()=>setTrack(oi+1,true));
 document.getElementById('vol').addEventListener('input',e=>{pendingVolume=+e.target.value;if(ytReady)ytPlayer.setVolume(Math.round(pendingVolume*100));});
@@ -1118,7 +1121,7 @@ window.addEventListener('resize',()=>{if(resizeRAF===null)resizeRAF=requestAnima
     ctrl.enableDamping=true;ctrl.dampingFactor=0.08;
     ctrl.minDistance=6;ctrl.maxDistance=24;
     ctrl.target.copy(HOME_TGT);
-    ctrl.autoRotate=true;ctrl.autoRotateSpeed=0.035;
+    ctrl.autoRotate=true;ctrl.autoRotateSpeed=matchMedia('(prefers-reduced-motion: reduce)').matches?0:0.035;
     ctrl.update();
     initScene();
   };
