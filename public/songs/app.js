@@ -73,9 +73,9 @@ function updateUI() {
         const btn = row.querySelector('.play-btn');
         if (i === currentIdx) {
             row.classList.add(playerPaused ? 'is-paused' : 'is-playing');
-            if (btn) btn.textContent = playerPaused ? '▶ Resume' : '⏸ Pause';
+            if (btn) { btn.textContent = playerPaused ? '▶ Resume' : '⏸ Pause'; btn.setAttribute('aria-label', `${playerPaused ? 'Resume' : 'Pause'} ${TRACKS[i].title}`); }
         } else {
-            if (btn) btn.textContent = '▶ Play';
+            if (btn) { btn.textContent = '▶ Play'; btn.setAttribute('aria-label', `Play ${TRACKS[i].title}`); }
         }
     });
 }
@@ -173,8 +173,18 @@ const fill = document.getElementById('progress-fill');
 setInterval(() => {
     if (!ytReady || playerPaused) return;
     const d = ytPlayer.getDuration();
-    if (d) fill.style.width = `${(ytPlayer.getCurrentTime() / d) * 100}%`;
+    if (d) {
+        const pct = (ytPlayer.getCurrentTime() / d) * 100;
+        fill.style.width = `${pct}%`;
+        document.getElementById('progress-wrap').setAttribute('aria-valuenow', String(Math.round(pct)));
+    }
 }, 500);
+document.getElementById('progress-wrap').addEventListener('keydown', (e) => {
+    if (!ytReady || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+    e.preventDefault();
+    const d = ytPlayer.getDuration();
+    if (d) ytPlayer.seekTo(Math.min(d, Math.max(0, ytPlayer.getCurrentTime() + (e.key === 'ArrowRight' ? 5 : -5))), true);
+});
 document.getElementById('progress-wrap').addEventListener('click', (e) => {
     if (!ytReady) return;
     const rect = e.currentTarget.getBoundingClientRect();
