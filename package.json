@@ -1,6 +1,7 @@
 {
   "scripts": {
     "test": "node --test",
+    "i18n:build": "node scripts/i18n-auto.mjs",
     "i18n:auto": "node scripts/i18n-auto.mjs"
   },
   "dependencies": {

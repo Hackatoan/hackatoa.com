@@ -26,6 +26,16 @@ Static HTML · Three.js · vanilla JS · Firebase Hosting
 cd public && python3 -m http.server 8080
 ```
 
+### Localization
+
+`public/index.html` is the English source; `public/<locale>/index.html` are generated. After editing the English page:
+
+```bash
+npm run i18n:build
+```
+
+Translations come from `i18n.translations.json` (committed cache). With no `GEMINI_API_KEY` the build is offline and deterministic — strings missing from the cache stay English and are listed as warnings; add them to the cache or rerun with a key to translate only the new strings. `npm test` fails if a locale page is out of sync with the English source. JS string literals that need translating go in `scriptStrings` in `i18n.config.json`.
+
 ## Deployment
 
 Firebase Hosting. Pushes to `Main` touching `public/`, `firebase.json`, or `.firebaserc` deploy automatically via GitHub Actions (`deploy-hosting.yml`).

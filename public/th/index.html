@@ -312,7 +312,7 @@
 </div>
 </main>
 <footer style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;color:#e8e0c0">
-  <p>&copy; 2024–2026 Preston Harris (Hackatoa). <a href="/privacy">ความเป็นส่วนตัว</a> · <a href="/cookies">คุกกี้</a> · อัปเดตล่าสุดเมื่อ <time datetime="2026-08-17">สิงหาคม 2026</time>.</p>
+  <p>&copy; 2024–2026 Preston Harris (Hackatoa). <a href="/privacy">ความเป็นส่วนตัว</a> · <a href="/cookies">คุกกี้</a> · <a href="#" data-cookie-settings>การตั้งค่าคุกกี้</a> · อัปเดตล่าสุดเมื่อ <time datetime="2026-08-17">สิงหาคม 2026</time>.</p>
 </footer>
 
 <script src="/assets/vendor/three.min.js"></script>
@@ -1061,7 +1061,7 @@ function springCam(pos,tgt){
   function step(){
     if(!springStart)return;
     const t=Math.min((performance.now()-springStart)/1000/CAM_SPRING_DUR,1),e=easeIO(t);
-    if(t<1){camera.position.copy(springFrom.clone().lerp(springTo,e));ctrl.target.copy(springTgtFrom.clone().lerp(springTgtTo,e));requestAnimationFrame(step);}
+    if(t<1){camera.position.copy(springFrom).lerp(springTo,e);ctrl.target.copy(springTgtFrom).lerp(springTgtTo,e);requestAnimationFrame(step);}
     else{flushAndLock(springTo,springTgtTo);springStart=null;}
   }
   requestAnimationFrame(step);
