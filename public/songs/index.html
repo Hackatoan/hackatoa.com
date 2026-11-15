@@ -70,6 +70,9 @@
     .back-link:focus-visible, .track-btn:focus-visible, .mini-btn:focus-visible, .album-header:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
     @media (prefers-reduced-motion: reduce) { .track-eq span { animation: none; height: 60%; } .progress-bar-fill { transition: none; } }
     .progress-bar-fill { height: 100%; background: var(--gold); width: 0%; transition: width .5s linear; }
+    .page-header .kbd-hint { font-size: .7rem; }
+    .kbd-hint kbd { font-family: inherit; color: var(--text); border: 1px solid var(--border); border-radius: 3px; padding: 0 .3rem; }
+    @media (hover: none) { .page-header .kbd-hint { display: none; } }
     main { width: 100%; display: flex; flex-direction: column; align-items: center; }
   </style>
 </head>
@@ -79,6 +82,7 @@
 <div class="page-header">
   <h1>Songs</h1>
   <p>all tracks in the player — click any to listen</p>
+  <p class="kbd-hint"><kbd>space</kbd> play/pause · <kbd>n</kbd> next · <kbd>p</kbd> previous</p>
 </div>
 <div class="track-list" id="track-list"></div>
 </main>
