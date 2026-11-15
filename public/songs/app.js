@@ -155,17 +155,30 @@ albums.forEach((album, albumIdx) => {
 
 // Mini player controls
 document.getElementById('btn-play').addEventListener('click', playPause);
-document.getElementById('btn-skip').addEventListener('click', () => {
-    const next = (currentIdx + 1) % TRACKS.length;
-    setTrack(next, !playerPaused);
-});
-document.getElementById('btn-prev').addEventListener('click', () => {
+function nextTrack() {
+    setTrack((currentIdx + 1) % TRACKS.length, !playerPaused);
+}
+function prevTrack() {
     if (ytReady && ytPlayer.getCurrentTime() > 3) {
         ytPlayer.seekTo(0, true);
         return;
     }
-    const prev = (currentIdx - 1 + TRACKS.length) % TRACKS.length;
-    setTrack(prev, !playerPaused);
+    setTrack((currentIdx - 1 + TRACKS.length) % TRACKS.length, !playerPaused);
+}
+document.getElementById('btn-skip').addEventListener('click', nextTrack);
+document.getElementById('btn-prev').addEventListener('click', prevTrack);
+
+// Keyboard shortcuts: Space/K play-pause, N next, P previous.
+// Skipped while a control has focus (Space/Enter already activate it) or a
+// modifier is held, so browser shortcuts and the seek slider keep working.
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
+    const t = e.target;
+    if (t && t.closest && t.closest('button, a, input, textarea, select, [role="button"], [role="slider"], [contenteditable]')) return;
+    const k = e.key.toLowerCase();
+    if (k === ' ' || k === 'k') { e.preventDefault(); playPause(); }
+    else if (k === 'n') nextTrack();
+    else if (k === 'p') prevTrack();
 });
 
 // Progress bar — YT has no timeupdate event, so poll while playing.
