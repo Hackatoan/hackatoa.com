@@ -52,12 +52,17 @@ function findTrackIndex(yt) {
 let ytPlayer = null, ytReady = false, playerPaused = true, pendingVolume = 0.05;
 let currentIdx = 0;
 let pendingSeek = 0, pendingAutoplay = false;
+// True from loadVideoById() until the new video buffers/plays. Loading over a
+// playing video fires PAUSED for the outgoing one; without this guard that
+// flips playerPaused while the next track is still starting, so Space/N then
+// act on the wrong state.
+let switchingTrack = false;
 
 function setTrack(idx, play) {
     currentIdx = idx;
     updateUI();
     if (!ytReady) { pendingAutoplay = play; return; }
-    if (play) ytPlayer.loadVideoById(TRACKS[idx].yt);
+    if (play) { switchingTrack = true; ytPlayer.loadVideoById(TRACKS[idx].yt); }
     else ytPlayer.cueVideoById(TRACKS[idx].yt);
     saveState();
 }
@@ -82,8 +87,18 @@ function updateUI() {
 
 function playPause() {
     if (!ytReady) return;
-    if (playerPaused) ytPlayer.playVideo();
-    else ytPlayer.pauseVideo();
+    // Use the player's real state, not the cached flag.
+    const s = ytPlayer.getPlayerState();
+    if (s === YT.PlayerState.PLAYING || s === YT.PlayerState.BUFFERING) {
+        ytPlayer.pauseVideo();
+        // Pausing mid-buffer reports UNSTARTED, not PAUSED, so sync here.
+        switchingTrack = false;
+        playerPaused = true;
+        updateUI();
+        saveState();
+    } else {
+        ytPlayer.playVideo();
+    }
 }
 
 // Restore state (self-referential — carries over across reloads of this page,
@@ -228,8 +243,9 @@ window.onYouTubeIframeAPIReady = function () {
                 updateUI();
             },
             onStateChange: function (e) {
-                if (e.data === YT.PlayerState.PLAYING) { playerPaused = false; updateUI(); saveState(); }
-                else if (e.data === YT.PlayerState.PAUSED) { playerPaused = true; updateUI(); saveState(); }
+                if (e.data === YT.PlayerState.PLAYING) { switchingTrack = false; playerPaused = false; updateUI(); saveState(); }
+                else if (e.data === YT.PlayerState.BUFFERING) { switchingTrack = false; }
+                else if (e.data === YT.PlayerState.PAUSED && !switchingTrack) { playerPaused = true; updateUI(); saveState(); }
                 else if (e.data === YT.PlayerState.ENDED) { setTrack((currentIdx + 1) % TRACKS.length, true); }
             },
             onError: function () { setTrack((currentIdx + 1) % TRACKS.length, true); }
