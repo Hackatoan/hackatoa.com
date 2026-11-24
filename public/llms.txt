@@ -10,6 +10,7 @@
 
 ## Projects
 - Lucky Chips Casino — free play-money casino, 27 games with a strategy coach: https://casino.hackatoa.com
+- Drone Racer — 3D FPV drone racing, PvP and tournaments: https://drone.hackatoa.com
 - Infinisweeper — infinite minesweeper: https://infinisweeper.hackatoa.com
 - Clip Forge — browser video editor: https://clip-forge.hackatoa.com
 - Mosaic — photomosaic generator: https://mosaic.hackatoa.com
