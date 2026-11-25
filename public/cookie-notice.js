@@ -16,6 +16,14 @@
   const saved = read();
   if (saved) publish(!!saved.ads && !gpc); else if (mode !== 'ads') publish(false);
   if (mode === 'ads' && !saved && gpc) { write({ ads: false, gpc: true, ts: Date.now() }); publish(false); return; }
+  const escapeHtml = s => s ? s.replace(/[&<>"']/g, m => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[m]) : '';
+  const validateUrl = u => {
+    if (!u || typeof u !== 'string') return '#';
+    const t = u.trim();
+    return /^(javascript|data|vbscript):/i.test(t) ? '#' : t;
+  };
   const open = () => {
     if (document.getElementById('ck-notice')) return;
     const css = document.createElement('style');
@@ -23,8 +31,8 @@
     const box = document.createElement('div'); box.id = 'ck-notice'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Cookie notice');
     const done = ads => { write({ ads, ts: Date.now() }); publish(ads && !gpc); box.remove(); css.remove(); };
     box.innerHTML = mode === 'ads'
-      ? `We use essential cookies to run this site, and Google AdSense cookies to show ads. You can allow personalised ads or keep only essential cookies (ads then stay non-personalised). ${gpc ? '<br><b>Your browser sends a Global Privacy Control signal, so personalised ads stay off.</b>' : ''} <a href="${policy}">Cookie policy</a> · <a href="${privacy}">Privacy</a><div class="b"><button class="p" data-a="1">Accept all</button><button data-a="0">Essential only</button></div>`
-      : `${lead}${extra ? ' ' + extra : ''} <a href="${policy}">Cookie policy</a> · <a href="${privacy}">Privacy</a><div class="b"><button class="p" data-a="0">OK</button></div>`;
+      ? `We use essential cookies to run this site, and Google AdSense cookies to show ads. You can allow personalised ads or keep only essential cookies (ads then stay non-personalised). ${gpc ? '<br><b>Your browser sends a Global Privacy Control signal, so personalised ads stay off.</b>' : ''} <a href="${validateUrl(policy)}">Cookie policy</a> · <a href="${validateUrl(privacy)}">Privacy</a><div class="b"><button class="p" data-a="1">Accept all</button><button data-a="0">Essential only</button></div>`
+      : `${escapeHtml(lead)}${extra ? ' ' + escapeHtml(extra) : ''} <a href="${validateUrl(policy)}">Cookie policy</a> · <a href="${validateUrl(privacy)}">Privacy</a><div class="b"><button class="p" data-a="0">OK</button></div>`;
     box.addEventListener('click', e => { const b = e.target.closest('button[data-a]'); if (b) done(b.dataset.a === '1'); });
     document.head.append(css); document.body.append(box);
   };
